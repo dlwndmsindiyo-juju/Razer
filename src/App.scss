@@ -1,0 +1,617 @@
+@use "./variables" as *;
+
+main {
+    background-color: $body-bg;
+}
+
+// =========================================================
+// Header
+// =========================================================
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    // 프로모션 바 (40px / black)
+    &__promo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: $promo-bar-height;
+        background-color: $neutral-color-black;
+    }
+
+    &__promo-text {
+        @include caption-12-r;
+        color: $promo-text-color;
+    }
+
+    // GNB (80px / #171717)
+    &__gnb {
+        height: $header-height;
+        background-color: $neutral-color-panel;
+    }
+
+    &__inner {
+        @include container;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    &__logo {
+        a {
+            display: block;
+        }
+
+        img {
+            height: 60px;
+            width: auto;
+        }
+    }
+
+    // 메뉴는 화면 정중앙 고정
+    &__nav {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    &__menu {
+        display: flex;
+        gap: 64px;
+
+        a {
+            @include body-16-m;
+            color: $neutral-color-white;
+        }
+    }
+
+    &__utils {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+    }
+
+    // 유틸 아이콘 (public/search.svg · cart.svg · user.svg)
+    &__icon {
+        display: block;
+        width: 24px;
+        height: 24px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__lang {
+        @include label-14-sb;
+        width: 76px;
+        height: 44px;
+        border: 1px solid $main-primary-color;
+        border-radius: $radius-pill;
+        color: $main-primary-color;
+    }
+}
+
+// =========================================================
+// Footer
+// =========================================================
+// 푸터 (441px / #171717)
+.footer {
+    background-color: $neutral-color-panel;
+
+    &__inner {
+        @include container;
+        padding: 56px 0 50px;
+    }
+
+    // 로고 + 메뉴 그룹
+    &__top {
+        display: flex;
+        min-height: 264px;
+    }
+
+    &__logo {
+        flex-shrink: 0;
+        width: 569px; // 메뉴 그룹 시작 위치 (x=689)
+
+        img {
+            width: 100px;
+            height: auto;
+        }
+    }
+
+    &__groups {
+        display: flex;
+    }
+
+    &__group {
+        width: 311px;
+    }
+
+    &__group-title {
+        @include heading-20-sb;
+        display: block;
+        margin-bottom: 52px;
+    }
+
+    &__submenu {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+
+        a {
+            @include body-14-r;
+            color: $neutral-color-white;
+        }
+    }
+
+    // 카피라이트 · 링크 · SNS
+    &__bottom {
+        display: flex;
+        align-items: center;
+        padding-top: 50px;
+        border-top: 1px solid $neutral-color-200;
+    }
+
+    &__copyright {
+        @include caption-12-r;
+        flex: 1;
+    }
+
+    &__links {
+        display: flex;
+        gap: 24px;
+        margin-right: 290px;
+
+        a {
+            @include body-14-r;
+        }
+    }
+
+    &__sns {
+        display: flex;
+        gap: 20px;
+    }
+
+    &__sns-item {
+        @include caption-12-r;
+        color: $neutral-color-white;
+    }
+}
+
+// =========================================================
+// ProductCard
+// =========================================================
+// 282 x 368 카드
+.product-card {
+    display: flex;
+    flex-direction: column;
+    width: 282px;
+    height: 368px;
+    border-radius: $radius-sm;
+    background-color: $neutral-color-700;
+    overflow: hidden;
+
+    // 상품 이미지 영역
+    &__thumb {
+        position: relative;
+        height: 220px;
+        background-color: $neutral-color-700;
+
+        img {
+            width: 220px;
+            margin: 46px auto 0;
+        }
+    }
+
+    // 찜 (아이콘 확정 전 텍스트)
+    &__heart {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        font-size: 1.25rem;
+        line-height: 1;
+        color: $neutral-color-white;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        padding: 0 14px 20px;
+    }
+
+    &__colors {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    &__color {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #d9d9d9;
+    }
+
+    &__title {
+        @include body-16-sb;
+    }
+
+    &__desc {
+        @include caption-12-r;
+        margin-top: 2px;
+        color: $neutral-color-white;
+    }
+
+    &__price {
+        display: flex;
+        flex-direction: column;
+        margin-top: 18px;
+    }
+
+    &__price-now {
+        @include body-16-sb;
+    }
+
+    &__price-original {
+        @include caption-12-r;
+        color: $neutral-color-200;
+    }
+}
+
+// =========================================================
+// Home
+// =========================================================
+// =========================================================
+// 메인홈 레이아웃 (1920 시안 기준 · 배경/영역 구성)
+// =========================================================
+
+.home {
+    padding-bottom: 90px; // 마지막 섹션 ~ 푸터
+    overflow-x: hidden;   // 가로 스크롤 리스트가 화면 밖으로 넘칠 때
+}
+
+// ---------- 공통 상품 섹션 (x=262 시작) ----------
+.home-section {
+    @include container;
+    padding-left: $inner-offset;
+
+    &__title {
+        @include heading-20-sb;
+    }
+
+    &__products {
+        display: flex;
+        gap: $grid-gutter;
+    }
+}
+
+// ---------- 1. 히어로 (960px) ----------
+.home-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 960px;
+    padding-bottom: 70px;
+
+    &__visual {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    // 대표 이미지 자리 (이미지 확정 전 텍스트)
+    &__placeholder {
+        @include display-44-b;
+        color: $neutral-color-300;
+    }
+
+    &__cta {
+        display: flex;
+        gap: 24px;
+    }
+}
+
+// ---------- 2. 제품 탐색 (카테고리 카드 300 x 416) ----------
+.home-explore {
+    margin-top: 85px;
+
+    .home-section__title {
+        margin-bottom: 14px;
+    }
+
+    &__list {
+        display: flex;
+        gap: $grid-gutter;
+        // 오른쪽은 컨테이너 끝(x=1800)에서 잘림 → 가로 스크롤
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__card {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        height: 416px;
+        border: 1px solid transparent;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+
+        &.is-active {
+            border-color: $main-primary-color;
+
+            .home-explore__more {
+                color: $main-primary-color;
+            }
+        }
+    }
+
+    &__thumb {
+        flex: 1;
+
+        img {
+            width: 144px;
+            margin: 88px auto 0;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        padding: 0 20px 28px;
+    }
+
+    &__category {
+        @include body-16-sb;
+    }
+
+    &__desc {
+        @include caption-12-r;
+        margin-top: 6px;
+        color: $neutral-color-100;
+    }
+
+    &__more {
+        @include label-12-m;
+        margin-top: 14px;
+    }
+}
+
+// ---------- 3. 신상품 ----------
+.home-new {
+    margin-top: 223px;
+
+    &__tabs {
+        display: flex;
+        gap: 24px;
+        margin: 40px 0 24px;
+    }
+
+    &__tab {
+        @include label-14-sb;
+
+        &.is-active {
+            color: $main-primary-color;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+    }
+}
+
+// ---------- 4. 풀폭 프로모션 배너 (100% x 400) ----------
+.home-promo {
+    height: 400px;
+    margin-top: 188px;
+    background: url("/images/home/promo-banner.jpg") center / cover no-repeat;
+}
+
+// ---------- 5. 커스터마이징 배너 (1680 x 560) ----------
+.home-custom-banner {
+    @include container;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 560px;
+    margin-top: 228px;
+    padding: 36px 0 45px;
+    background: url("/images/home/custom-banner.jpg") center / cover no-repeat;
+
+    &__title {
+        @include heading-32-sb;
+    }
+
+    &__btn {
+        @include label-14-sb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 236px;
+        height: 36px;
+        background: $gradient-primary;
+        color: $neutral-color-black;
+    }
+}
+
+// ---------- 6. 가장 많이 사용하는 제품 ----------
+.home-best {
+    margin-top: 190px;
+
+    .home-section__title {
+        margin-bottom: 64px;
+    }
+}
+
+// ---------- 7. 커스터마이저 (좌 3D 영역 / 우 패널 828 x 654) ----------
+.home-customizer {
+    @include container;
+    display: flex;
+    margin-top: 242px;
+
+    &__viewer {
+        flex: 1;
+        min-height: 654px;
+    }
+
+    &__panel {
+        display: flex;
+        flex-direction: column;
+        width: 828px;
+        padding: 55px 80px 60px;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+    }
+
+    &__label {
+        @include label-14-sb;
+    }
+
+    &__progress {
+        height: 8px;
+        margin-top: 16px;
+        border-radius: $radius-pill;
+        background-color: $neutral-color-300;
+        overflow: hidden;
+    }
+
+    &__progress-bar {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background-color: $main-primary-color;
+    }
+
+    &__title {
+        @include heading-24-sb;
+        margin-top: 70px;
+    }
+
+    &__desc {
+        @include body-14-m;
+        margin-top: 12px;
+    }
+
+    &__options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $grid-gutter;
+        margin-top: 24px;
+        padding-bottom: 26px;
+        border-bottom: 1px solid $neutral-color-300;
+    }
+
+    &__option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 110px;
+        padding: 0 24px;
+        border: 1px solid $neutral-color-100;
+        border-radius: $radius-sm;
+    }
+
+    // 옵션 이미지 자리 (이미지 확정 전 텍스트)
+    &__option-thumb {
+        @include caption-12-r;
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        border: 1px solid $neutral-color-500;
+        border-radius: $radius-sm;
+        color: $neutral-color-200;
+    }
+
+    &__option-text {
+        flex: 1;
+
+        strong {
+            @include label-14-sb;
+            display: block;
+        }
+
+        p {
+            @include caption-12-r;
+            margin-top: 4px;
+        }
+    }
+
+    &__radio {
+        flex-shrink: 0;
+        align-self: flex-start;
+        width: 16px;
+        height: 16px;
+        margin-top: 26px;
+        border: 1px solid $neutral-color-white;
+        border-radius: 50%;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 28px;
+        margin-top: auto;
+    }
+}
+
+// ---------- 8. 서비스 안내 카드 (4 x 220) ----------
+.home-features {
+    @include container;
+    margin-top: 175px;
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 70px;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 220px;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+    }
+
+    // 아이콘 자리 (이미지 확정 전 텍스트)
+    &__icon {
+        @include label-14-sb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border: 1px solid $neutral-color-500;
+        border-radius: $radius-sm;
+        color: $neutral-color-200;
+    }
+
+    &__title {
+        @include label-16-sb;
+        margin-top: 32px;
+    }
+
+    &__desc {
+        @include caption-12-r;
+        margin-top: 4px;
+        color: $neutral-color-300;
+    }
+}
+

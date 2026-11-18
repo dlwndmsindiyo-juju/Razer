@@ -1,0 +1,172 @@
+// 공통으로 적용되는 값
+@use "../public/font/font.scss";
+
+// 컬러
+$body-bg: #111111;
+$main-primary-color: #44D62C;
+$neutral-color-white: #ffffff;
+$neutral-color-100: #A5A5A5;
+$neutral-color-200: #888888;
+$neutral-color-300: #666666;
+$neutral-color-500: #444444;
+$neutral-color-700: #222222;
+$neutral-color-panel: #171717;
+$neutral-color-canvas: #282828;
+$neutral-color-black: #000000;
+$promo-text-color: #9AFE7B;     // 프로모션 바 텍스트
+$gradient-primary: linear-gradient(90deg, #44D835 0%, #43EF97 100%); // 커스터마이징 버튼
+
+
+// ---------- Font weight ----------
+$font-weight-regular: 400; // Regular · 기본 정보와 편안하게 읽는 표현
+$font-weight-bold: 700; // Bold · 제목이나 강조가 필요한 핵심 표현
+$font-weight-medium: 500; // Medium · body-small-m 용 (SF Pro Medium)
+
+$font-family-base: "Pretendard", sans-serif;
+
+// 텍스트
+@mixin display-44-b {
+    font-family: $font-family-base;
+    font-size: 2.75rem;
+    font-weight: bold;
+    line-height: 3.25rem;
+    letter-spacing: 0;
+}
+
+@mixin display-32-b {
+    font-family: $font-family-base;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 2.5rem;
+    letter-spacing: 0;
+}
+
+@mixin heading-32-sb {
+    font-family: $font-family-base;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    letter-spacing: 0;
+}
+
+@mixin heading-24-b {
+    font-family: $font-family-base;
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 2rem;
+    letter-spacing: 0;
+}
+
+@mixin heading-24-sb {
+    font-family: $font-family-base;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    letter-spacing: 0;
+}
+
+@mixin heading-20-sb {
+    font-family: $font-family-base;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.75rem;
+    letter-spacing: 0;
+}
+
+@mixin body-16-r {
+    font-family: $font-family-base;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    letter-spacing: 0;
+}
+
+@mixin body-16-m {
+    font-family: $font-family-base;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    letter-spacing: 0;
+}
+
+@mixin body-16-sb {
+    font-family: $font-family-base;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    letter-spacing: 0;
+}
+
+@mixin body-14-m {
+    font-family: $font-family-base;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    letter-spacing: 0;
+}
+
+@mixin body-14-r {
+    font-family: $font-family-base;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.375rem;
+    letter-spacing: 0;
+}
+
+@mixin label-16-sb {
+    font-family: $font-family-base;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    letter-spacing: 0;
+}
+
+@mixin label-14-sb {
+    font-family: $font-family-base;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    letter-spacing: 0;
+}
+
+@mixin label-12-m {
+    font-family: $font-family-base;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin caption-12-r {
+    font-family: $font-family-base;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+// ---------- 둥글기 (용도로 선택) ----------
+$radius-sm: 4px;   // 옵션 썸네일, 작은 요소
+$radius-md: 8px;   // 카드, 패널
+$radius-pill: 999px; // 버튼, 뱃지
+
+
+// ---------- 그리드 (12 Columns · 24 Gutter · 80 Margin) ----------
+
+$page-margin: 120px;            // 좌우 여백 (1920 기준)
+$container-width: 1680px;       // 헤더 · 배너 · 푸터 폭 (1920 - 120*2)
+$grid-gutter: 24px;
+
+// 이너 (히어로 제외 공통 콘텐츠 폭)
+$inner-offset: 142px;           // 상품 섹션은 컨테이너 안쪽 142px에서 시작 (x=262)
+$section-gap: 160px;            // 섹션 사이 간격
+
+// 레이아웃 높이
+$promo-bar-height: 40px;
+$header-height: 80px;
+
+@mixin container {
+    width: 100%;
+    max-width: $container-width;
+    margin: 0 auto;
+}
