@@ -5,10 +5,10 @@ export const Footer = () => {
     return (
         <footer className="footer">
             <div className="footer__inner">
+                {/* 배경 로고 (장식 · public/icons/footer-big-logo.svg) · 컨테이너 기준으로 고정 */}
+                <span className="footer__bg-logo" aria-hidden="true" />
+
                 <div className="footer__top">
-                    <Link to="/" className="footer__logo">
-                        <img src="/icons/logo.svg" alt="Razer" />
-                    </Link>
 
                     <div className="footer__groups">
                         {footerGroups.map((group) => (

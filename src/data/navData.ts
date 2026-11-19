@@ -18,7 +18,7 @@ export const productMenu = {
     categories: [
         { slug: "keyboards", label: "키보드", image: "/images/sub-menu-card/keyboard.webp" },
         { slug: "mice", label: "마우스", image: "/images/sub-menu-card/mouse.webp" },
-        { slug: "mousepads", label: "마우스패드", image: "/images/sub-menu-card/mousepad.webp" },
+        { slug: "mousepads", label: "마우스 패드", image: "/images/sub-menu-card/mousepad.webp" },
         { slug: "audio", label: "오디오", image: "/images/sub-menu-card/audio.webp" },
         { slug: "collab", label: "콜라보", image: "/images/sub-menu-card/collab.webp" },
         { slug: "goods", label: "Razer 굿즈", image: "/images/sub-menu-card/goods.webp" },
@@ -27,7 +27,6 @@ export const productMenu = {
     // 오른쪽 링크: 판매 중인 제품 중 카드에 없는 것 (Razer 스토어 메뉴 기준)
     links: [
         { slug: "new", label: "신제품" },
-        { slug: "laptops", label: "노트북" },
         { slug: "controllers", label: "컨트롤러" },
         { slug: "content-creation", label: "콘텐츠 제작" },
     ] as NavLink[],

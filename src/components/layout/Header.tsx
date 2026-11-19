@@ -2,25 +2,31 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { footerGroups, getGroupPath } from "../../data/footerData";
 import { getCategoryPath, productMenu } from "../../data/navData";
+import { SearchOverlay } from "./SearchOverlay";
 
 export const Header = () => {
     const { pathname } = useLocation();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false); // 제품 서브 메뉴
+    const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색창
 
     // 페이지 이동하면 닫기
     useEffect(() => {
         setIsMenuOpen(false);
+        setIsSearchOpen(false);
     }, [pathname]);
 
     // ESC 로 닫기
     useEffect(() => {
-        if (!isMenuOpen) return;
+        if (!isMenuOpen && !isSearchOpen) return;
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setIsMenuOpen(false);
+            if (e.key === "Escape") {
+                setIsMenuOpen(false);
+                setIsSearchOpen(false);
+            }
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isMenuOpen]);
+    }, [isMenuOpen, isSearchOpen]);
 
     return (
         <header className="header">
@@ -53,7 +59,10 @@ export const Header = () => {
                                                 className={isCurrent || isMenuOpen ? "is-active" : undefined}
                                                 aria-expanded={isMenuOpen}
                                                 aria-controls="product-menu"
-                                                onClick={() => setIsMenuOpen((prev) => !prev)}
+                                                onClick={() => {
+                                                    setIsSearchOpen(false);
+                                                    setIsMenuOpen((prev) => !prev);
+                                                }}
                                             >
                                                 {group.title}
                                             </button>
@@ -73,9 +82,19 @@ export const Header = () => {
                     </nav>
 
                     <div className="header__utils">
-                        <Link to="/search" className="header__icon" aria-label="검색">
+                        <button
+                            type="button"
+                            className="header__icon"
+                            aria-label="검색"
+                            aria-expanded={isSearchOpen}
+                            aria-controls="search-overlay"
+                            onClick={() => {
+                                setIsMenuOpen(false);
+                                setIsSearchOpen((prev) => !prev);
+                            }}
+                        >
                             <img src="/icons/search.svg" alt="" />
-                        </Link>
+                        </button>
                         <Link to="/cart" className="header__icon" aria-label="장바구니">
                             <img src="/icons/cart.svg" alt="" />
                         </Link>
@@ -127,7 +146,7 @@ export const Header = () => {
                                 aria-label="메뉴 닫기"
                                 onClick={() => setIsMenuOpen(false)}
                             >
-                                ✕
+                                <img src="/icons/close.svg" alt="" />
                             </button>
                         </div>
                     </div>
@@ -136,6 +155,9 @@ export const Header = () => {
                     <div className="mega-menu__dim" onClick={() => setIsMenuOpen(false)} />
                 </>
             )}
+
+            {/* 검색창 */}
+            {isSearchOpen && <SearchOverlay onClose={() => setIsSearchOpen(false)} />}
         </header>
     );
 };
