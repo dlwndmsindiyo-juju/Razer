@@ -26,7 +26,7 @@ export const categories: HomeCategory[] = [
     { name: "키보드", image: "/images/sub-menu-card/keyboard.webp", to: "/products/keyboards" },
     { name: "마우스", image: "/images/sub-menu-card/mouse.webp", to: "/products/mice" },
     { name: "마우스패드", image: "/images/sub-menu-card/mousepad.webp", to: "/products/mousepads" },
-    { name: "컨트롤러", image: "/images/home/category/controller.webp", to: "/products/controllers" },
+    { name: "오디오", image: "/images/sub-menu-card/audio.webp", to: "/products/controllers" },
     { name: "Razer 굿즈", image: "/images/sub-menu-card/goods.webp", to: "/products/goods" },
 ];
 
@@ -67,7 +67,7 @@ export const proPicks: ProPick[] = [
         productId: 2018,
         productName: "Razer Viper V4 Pro",
         variant: "Esports Green Edition",
-        playerImage: "/images/home/pro-pick/pick-1-player.webp",
+        playerImage: "/images/home/pro-pick/faker.webp",
         productImage: "/images/home/pro-pick/pick-1-product.webp",
     },
     {
@@ -76,7 +76,7 @@ export const proPicks: ProPick[] = [
         productId: 4025,
         productName: "Razer BlackShark V3 Pro",
         variant: "PlayStation · 블랙",
-        playerImage: "/images/home/pro-pick/pick-2-player.webp",
+        playerImage: "/images/home/pro-pick/shotzzy.webp",
         productImage: "/images/home/pro-pick/pick-2-product.webp",
     },
     {
@@ -85,7 +85,7 @@ export const proPicks: ProPick[] = [
         productId: 1029,
         productName: "Razer Huntsman V3 Pro TKL 8KHz",
         variant: "Esports Green Edition · US",
-        playerImage: "/images/home/pro-pick/pick-3-player.webp",
+        playerImage: "/images/home/pro-pick/zellsis.webp",
         productImage: "/images/home/pro-pick/pick-3-product.webp",
     },
 ];
