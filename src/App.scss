@@ -63,7 +63,8 @@ main {
         display: flex;
         gap: 4rem;
 
-        a {
+        a,
+        button {
             @include body-16-m;
             color: $neutral-color-white;
 
@@ -99,6 +100,131 @@ main {
         border: 1px solid $main-primary-color;
         border-radius: $radius-pill;
         color: $main-primary-color;
+    }
+}
+
+// =========================================================
+// 제품 서브 메뉴 (메가 메뉴 · GNB 아래로 펼침)
+// =========================================================
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    background-color: $neutral-color-panel;
+    border-top: 1px solid $neutral-color-500;
+
+    &__inner {
+        @include container;
+        position: relative;
+        display: flex;
+        gap: 6.75rem;
+        padding: 3.5rem 0 4rem;
+    }
+
+    &__title {
+        @include heading-20-sb;
+        display: block;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 17.5rem);
+        gap: 1.125rem;
+        margin-top: 1.75rem;
+    }
+
+    // 제품 이미지 카드 (누끼 + 배경색)
+    &__tile {
+        display: flex;
+        flex-direction: column;
+        height: 18.25rem;
+        border: 1px solid transparent;
+        border-radius: 1rem;
+        background: radial-gradient(circle at 50% 40%, #333333 0%, $neutral-color-700 70%);
+        overflow: hidden;
+        transition: border-color 0.2s;
+
+        &:hover {
+            border-color: $main-primary-color;
+
+            .mega-menu__label {
+                color: $main-primary-color;
+            }
+
+            .mega-menu__thumb img {
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    &__thumb {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        min-height: 0;
+        padding: 1.75rem 1.75rem 0;
+
+        // 제품 크기를 고르게 (가로형 · 세로형 모두 이 박스 안에 맞춤)
+        img {
+            max-width: 13rem;
+            max-height: 8rem;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+    }
+
+    &__no-image {
+        @include body-14-m;
+        color: $neutral-color-300;
+    }
+
+    &__label {
+        @include body-16-m;
+        padding: 1rem 0 1.5rem;
+        text-align: center;
+    }
+
+    // 오른쪽 링크 (카드에 없는 판매 제품)
+    &__links {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding-top: 3.75rem;
+
+        a {
+            @include body-16-r;
+            color: $neutral-color-100;
+
+            &:hover {
+                color: $main-primary-color;
+            }
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 1.5rem;
+        right: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: $neutral-color-100;
+
+        &:hover {
+            color: $neutral-color-white;
+        }
+    }
+
+    // 메뉴 뒤 어두운 배경
+    &__dim {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-color: rgba(0, 0, 0, 0.6);
     }
 }
 
