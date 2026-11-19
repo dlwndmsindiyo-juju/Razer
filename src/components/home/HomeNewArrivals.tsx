@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { categoryLabels, getProductsByCollection } from "../../data/productData";
 import { toCardProduct } from "../../data/searchData";
 import type { ProductCategory } from "../../types/product";
@@ -17,7 +16,7 @@ export const HomeNewArrivals = () => {
 
     return (
         <section className="home-section home-new">
-            <HomeSectionHeader title="신상품">
+            <HomeSectionHeader title="신상품" to="/products/new">
                 <ul className="home-new__tabs" aria-label="신상품 카테고리">
                     {tabs.map((tab) => (
                         <li key={tab}>
@@ -31,7 +30,6 @@ export const HomeNewArrivals = () => {
                 </ul>
             </HomeSectionHeader>
             <HomeProductList products={products} />
-            <Link to="/products/new" className="search-page__more">신제품 전체 보기</Link>
         </section>
     );
 };

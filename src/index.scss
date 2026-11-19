@@ -24,6 +24,25 @@ a {
     text-decoration: none;
 }
 
+// 밑줄 · 외곽선(포커스 테두리) 전부 제거
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+    text-decoration: none;
+}
+
+*:focus,
+*:focus-visible {
+    outline: none;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0; // Firefox 버튼 안쪽 점선
+}
+
 ul,
 ol {
     list-style: none;

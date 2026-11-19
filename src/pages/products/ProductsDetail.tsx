@@ -6,7 +6,8 @@ import type { Product } from "../../types/product";
 
 const ProductDetails = ({ product }: { product: Product }) => {
     const [imageIndex, setImageIndex] = useState(0);
-    const images = [...new Set([product.image, ...(product.gallery ?? [])])];
+    const gallery = [...new Set(product.gallery?.filter((image) => image !== product.image) ?? [])];
+    const images = gallery.length > 0 ? gallery : [product.image];
 
     return (
         <article className="home-section catalog-detail">

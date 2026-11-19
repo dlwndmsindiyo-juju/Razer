@@ -17,13 +17,22 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         setLiked((prev) => !prev);
     };
 
+    const thumbContent = product.image ? (
+        <img src={product.image} alt={product.name} className="product-card__image" loading="lazy" decoding="async" />
+    ) : (
+        <span className="product-card__no-image">Image</span>
+    );
+
     return (
         <article className="product-card">
             <div className="product-card__thumb">
-                {product.image ? (
-                    <img src={product.image} alt={product.name} className="product-card__image" loading="lazy" decoding="async" />
+                {/* 이미지 영역 전체를 상세 링크로 (상품명 링크와 같은 주소 · 키보드 이동은 상품명 링크 하나로) */}
+                {product.to ? (
+                    <Link to={product.to} className="product-card__thumb-link" tabIndex={-1} aria-hidden="true">
+                        {thumbContent}
+                    </Link>
                 ) : (
-                    <span className="product-card__no-image">Image</span>
+                    thumbContent
                 )}
 
                 {/* 위시리스트 (public/icons/wishlist-normal · wishlist-active .svg) */}
