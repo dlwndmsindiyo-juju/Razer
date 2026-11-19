@@ -35,11 +35,14 @@ export const exploreProductIds = [2018, 2043, 2006, 2041, 2046, 2061];
 export const bestProductIds = [1024, 1049, 1059, 1052, 1050, 1005];
 // 히어로 · 배너 이미지 (없으면 텍스트 표시)
 // promoVideo 가 있으면 홍보배너는 영상으로 재생됩니다.
+// heroVideo · promoVideo 가 있으면 영상으로 재생됩니다.
 export const homeImages: {
     hero?: string;
+    heroVideo?: string;
     promoBanner?: string;
     promoVideo?: string;
 } = {
+    heroVideo: "/videos/hero-video.mp4",
     promoVideo: "/videos/EVA-banner.mp4",
 };
 

@@ -287,12 +287,12 @@ main {
 
     &__inner {
         @include container;
+        position: relative; // 닫기 버튼 기준
         padding: 2.5rem 0 3.5rem;
     }
 
-    // 검색창은 가운데, 닫기 버튼은 그 오른쪽
+    // 검색창은 가운데
     &__form {
-        position: relative;
         max-width: 57.5rem;
         margin: 0 auto;
     }
@@ -309,13 +309,13 @@ main {
         @include search-submit;
     }
 
+    // 닫기 버튼: 컨테이너 오른쪽 끝 (KR 버튼 오른쪽 끝과 같은 선) · 검색창 높이 가운데
     &__close {
         position: absolute;
-        top: 50%;
-        left: calc(100% + 1.5rem);
+        top: 3.5rem; // 위 여백 2.5rem + 검색창 높이 절반 1.75rem - 버튼 절반 0.75rem
+        right: 0;
         width: 1.5rem;
         height: 1.5rem;
-        transform: translateY(-50%);
         opacity: 0.7;
 
         &:hover {
@@ -585,6 +585,22 @@ main {
     height: 47.5rem;
     padding-bottom: 3.6875rem;
     background: $neutral-color-700 center / cover no-repeat; // 이미지는 homeData.homeImages.hero 에서 연결
+    overflow: hidden;
+
+    // 히어로 영상 (public/videos/hero-video.mp4) · 영역을 꽉 채움
+    &__video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    // 제목 · 버튼은 영상 위로
+    &__title,
+    &__btn {
+        position: relative;
+    }
 
     &__no-image {
         @include heading-24-b;
@@ -1055,7 +1071,7 @@ main {
         gap: 0.5rem;
         height: 2.25rem;
         padding: 0 1.25rem;
-        border-radius: $radius-sm;
+        border-radius: $radius-md;
         background-color: $neutral-color-white;
         color: $neutral-color-black;
 
@@ -1085,7 +1101,7 @@ main {
         height: 2.25rem;
         padding: 0 1.25rem;
         border: 1px solid $neutral-color-200;
-        border-radius: $radius-sm;
+        border-radius: $radius-md;
         color: $neutral-color-white;
 
         img {
@@ -1197,7 +1213,7 @@ main {
     &__group {
         margin-top: 3.5rem;
 
-        & + & {
+        &+& {
             margin-top: 4.3125rem;
         }
     }
@@ -1303,7 +1319,10 @@ main {
 
     button {
         border: 1px solid transparent;
-        &[aria-pressed="true"] { border-color: $main-primary-color; }
+
+        &[aria-pressed="true"] {
+            border-color: $main-primary-color;
+        }
     }
 
     img {
@@ -1318,33 +1337,58 @@ main {
     display: grid;
     align-content: start;
     gap: 1rem;
-    h1 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+
+    h1 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
 }
 
 .catalog-detail__specs {
     margin-top: 2rem;
-    h2 { margin-bottom: 1rem; }
-    dl > div {
+
+    h2 {
+        margin-bottom: 1rem;
+    }
+
+    dl>div {
         display: grid;
         grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
         gap: 1rem;
         border-top: 1px solid $neutral-color-500;
         padding: 0.7rem 0;
     }
-    dd { margin: 0; }
+
+    dd {
+        margin: 0;
+    }
 }
 
 @media (max-width: 700px) {
-    .catalog-detail__hero { grid-template-columns: 1fr; }
-    .search-page__toolbar { flex-wrap: wrap; }
+    .catalog-detail__hero {
+        grid-template-columns: 1fr;
+    }
+
+    .search-page__toolbar {
+        flex-wrap: wrap;
+    }
 }
 
 @media (max-width: 1100px) {
-    .home-section__products { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .home-section__products {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 700px) {
-    .home-section__products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .home-new__tabs { flex-wrap: wrap; }
-    .search-page__bar { width: calc(100% - 2rem); }
+    .home-section__products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-new__tabs {
+        flex-wrap: wrap;
+    }
+
+    .search-page__bar {
+        width: calc(100% - 2rem);
+    }
 }
