@@ -23,7 +23,7 @@ main {
 
     &__promo-text {
         @include caption-12-r;
-        color: $promo-text-color;
+        color: $main-primary-color;
     }
 
     // GNB (80px / #171717)
@@ -47,7 +47,7 @@ main {
         }
 
         img {
-            height: 60px;
+            height: 3.75rem;
             width: auto;
         }
     }
@@ -61,7 +61,7 @@ main {
 
     &__menu {
         display: flex;
-        gap: 64px;
+        gap: 4rem;
 
         a {
             @include body-16-m;
@@ -72,14 +72,14 @@ main {
     &__utils {
         display: flex;
         align-items: center;
-        gap: 28px;
+        gap: 1.75rem;
     }
 
-    // 유틸 아이콘 (public/search.svg · cart.svg · user.svg)
+    // 유틸 아이콘 (public/icons/search.svg · cart.svg · user.svg)
     &__icon {
         display: block;
-        width: 24px;
-        height: 24px;
+        width: 1.5rem;
+        height: 1.5rem;
 
         img {
             width: 100%;
@@ -89,10 +89,10 @@ main {
 
     &__lang {
         @include label-14-sb;
-        width: 76px;
-        height: 44px;
+        width: 4.75rem;
+        height: 2.75rem;
         border: 1px solid $main-primary-color;
-        border-radius: $radius-pill;
+        border-radius: $radius-sm;
         color: $main-primary-color;
     }
 }
@@ -106,21 +106,21 @@ main {
 
     &__inner {
         @include container;
-        padding: 56px 0 50px;
+        padding: 3.5rem 0 3.125rem;
     }
 
     // 로고 + 메뉴 그룹
     &__top {
         display: flex;
-        min-height: 264px;
+        min-height: 16.5rem;
     }
 
     &__logo {
         flex-shrink: 0;
-        width: 569px; // 메뉴 그룹 시작 위치 (x=689)
+        width: 35.5625rem; // 메뉴 그룹 시작 위치 (x=689)
 
         img {
-            width: 100px;
+            width: 6.25rem;
             height: auto;
         }
     }
@@ -130,19 +130,19 @@ main {
     }
 
     &__group {
-        width: 311px;
+        width: 19.4375rem;
     }
 
     &__group-title {
         @include heading-20-sb;
         display: block;
-        margin-bottom: 52px;
+        margin-bottom: 3.25rem;
     }
 
     &__submenu {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 1.125rem;
 
         a {
             @include body-14-r;
@@ -154,7 +154,7 @@ main {
     &__bottom {
         display: flex;
         align-items: center;
-        padding-top: 50px;
+        padding-top: 3.125rem;
         border-top: 1px solid $neutral-color-200;
     }
 
@@ -163,36 +163,25 @@ main {
         flex: 1;
     }
 
+    // 링크는 오른쪽 끝 정렬
     &__links {
         display: flex;
-        gap: 24px;
-        margin-right: 290px;
+        gap: 1.5rem;
 
         a {
             @include body-14-r;
         }
     }
-
-    &__sns {
-        display: flex;
-        gap: 20px;
-    }
-
-    &__sns-item {
-        @include caption-12-r;
-        color: $neutral-color-white;
-    }
 }
 
 // =========================================================
-// ProductCard
+// ProductCard (282 x 368)
 // =========================================================
-// 282 x 368 카드
 .product-card {
     display: flex;
     flex-direction: column;
-    width: 282px;
-    height: 368px;
+    width: 17.625rem;
+    height: 23rem;
     border-radius: $radius-sm;
     background-color: $neutral-color-700;
     overflow: hidden;
@@ -200,42 +189,65 @@ main {
     // 상품 이미지 영역
     &__thumb {
         position: relative;
-        height: 220px;
-        background-color: $neutral-color-700;
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        height: 14rem;
 
         img {
-            width: 220px;
-            margin: 46px auto 0;
+            width: 12.5rem;
+            max-height: 10rem;
+            object-fit: contain;
         }
     }
 
-    // 찜 (아이콘 확정 전 텍스트)
+    &__no-image {
+        @include body-14-m;
+        color: $neutral-color-300;
+    }
+
+    // 찜 (아이콘 파일 없음 → 텍스트)
     &__heart {
         position: absolute;
-        top: 10px;
-        right: 14px;
-        font-size: 1.25rem;
+        top: 0.875rem;
+        right: 0.9375rem;
+        font-size: 1.375rem;
         line-height: 1;
-        color: $neutral-color-white;
+        color: $neutral-color-300;
+
+        &.is-active {
+            color: $main-primary-color;
+        }
     }
 
     &__info {
         display: flex;
         flex-direction: column;
-        padding: 0 14px 20px;
+        padding: 0 0.875rem 0.875rem;
     }
 
     &__colors {
         display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
+        gap: 0.5rem;
+        margin-bottom: 0.875rem;
     }
 
     &__color {
-        width: 16px;
-        height: 16px;
+        width: 1rem;
+        height: 1rem;
         border-radius: 50%;
-        background-color: #d9d9d9;
+
+        &.is-selected {
+            border: 1.5px solid $main-primary-color;
+        }
+    }
+
+    &__title,
+    &__desc {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     &__title {
@@ -244,14 +256,13 @@ main {
 
     &__desc {
         @include caption-12-r;
-        margin-top: 2px;
-        color: $neutral-color-white;
+        color: $neutral-color-200;
     }
 
     &__price {
         display: flex;
         flex-direction: column;
-        margin-top: 18px;
+        margin-top: 1.125rem;
     }
 
     &__price-now {
@@ -265,15 +276,11 @@ main {
 }
 
 // =========================================================
-// Home
+// Home (1920 시안 기준)
 // =========================================================
-// =========================================================
-// 메인홈 레이아웃 (1920 시안 기준 · 배경/영역 구성)
-// =========================================================
-
 .home {
-    padding-bottom: 90px; // 마지막 섹션 ~ 푸터
-    overflow-x: hidden;   // 가로 스크롤 리스트가 화면 밖으로 넘칠 때
+    padding-bottom: 5.6875rem; // 마지막 섹션 ~ 푸터
+    overflow-x: hidden;
 }
 
 // ---------- 공통 상품 섹션 (x=262 시작) ----------
@@ -291,46 +298,56 @@ main {
     }
 }
 
-// ---------- 1. 히어로 (960px) ----------
+// ---------- 1. 히어로 (풀폭 x 760 · 커스터마이징 유도) ----------
 .home-hero {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 960px;
-    padding-bottom: 70px;
+    justify-content: flex-end;
+    gap: 2.5rem;
+    height: 47.5rem;
+    padding-bottom: 3.6875rem;
+    background: $neutral-color-700 center / cover no-repeat; // 이미지는 homeData.homeImages.hero 에서 연결
 
-    &__visual {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
-
-    // 대표 이미지 자리 (이미지 확정 전 텍스트)
-    &__placeholder {
-        @include display-44-b;
+    &__no-image {
+        @include heading-24-b;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         color: $neutral-color-300;
     }
 
-    &__cta {
-        display: flex;
-        gap: 24px;
+    &__title {
+        @include heading-32-sb;
+    }
+
+    &__btn {
+        @include label-14-sb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14.75rem;
+        height: 2.75rem;
+        border-radius: $radius-sm;
+        background: $gradient-primary;
+        color: $neutral-color-black;
     }
 }
 
-// ---------- 2. 제품 탐색 (카테고리 카드 300 x 416) ----------
+// ---------- 2. 제품 탐색 (카드 300 x 414 · 가로 스크롤) ----------
 .home-explore {
-    margin-top: 85px;
+    @include container;
+    margin-top: 6.0625rem;
 
     .home-section__title {
-        margin-bottom: 14px;
+        margin-bottom: 1.8125rem;
     }
 
     &__list {
         display: flex;
         gap: $grid-gutter;
-        // 오른쪽은 컨테이너 끝(x=1800)에서 잘림 → 가로 스크롤
         overflow-x: auto;
         scrollbar-width: none;
 
@@ -343,8 +360,8 @@ main {
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
-        width: 300px;
-        height: 416px;
+        width: 18.75rem;
+        height: 25.875rem;
         border: 1px solid transparent;
         border-radius: $radius-sm;
         background-color: $neutral-color-700;
@@ -360,43 +377,119 @@ main {
 
     &__thumb {
         flex: 1;
+        display: flex;
+        justify-content: center;
+        padding-top: 5.125rem;
 
         img {
-            width: 144px;
-            margin: 88px auto 0;
+            height: 9.375rem;
+            width: auto;
         }
+    }
+
+    &__no-image {
+        @include body-14-m;
+        margin-top: 3.75rem;
+        color: $neutral-color-300;
     }
 
     &__info {
         display: flex;
         flex-direction: column;
-        padding: 0 20px 28px;
+        padding: 0 1.25rem 1.5rem;
     }
 
-    &__category {
+    &__colors {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.625rem;
+    }
+
+    &__color {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+
+        &.is-selected {
+            border: 1.5px solid $main-primary-color;
+        }
+    }
+
+    &__name {
         @include body-16-sb;
     }
 
-    &__desc {
-        @include caption-12-r;
-        margin-top: 6px;
+    &__price {
+        @include body-14-r;
+        margin-top: 0.125rem;
         color: $neutral-color-100;
     }
 
     &__more {
         @include label-12-m;
-        margin-top: 14px;
+        margin-top: 0.375rem;
     }
 }
 
-// ---------- 3. 신상품 ----------
+// ---------- 3. 카테고리 (좌 686 x 657 / 우 2x2 475 x 317) ----------
+.home-category {
+    @include container;
+    margin-top: 4.8125rem;
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 42.875rem 1fr 1fr;
+        grid-template-rows: repeat(2, 19.8125rem);
+        gap: 1.4375rem;
+    }
+
+    &__item.is-large {
+        grid-row: span 2;
+    }
+
+    &__link {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 100%;
+        padding: 0 1.625rem 1.5rem 1.5rem;
+        border-radius: 1rem;
+        background-color: $neutral-color-700; // 이미지 없을 때
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+    }
+
+    &__name {
+        @include heading-24-b;
+        color: $neutral-color-white;
+    }
+
+    // 화살표 (아이콘 파일 없음 → 텍스트)
+    &__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid #44D62C; // 시안 값
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.7);
+        font-size: 1.125rem;
+        color: $neutral-color-white;
+    }
+}
+
+// ---------- 4. 신상품 ----------
 .home-new {
-    margin-top: 223px;
+    margin-top: 6.25rem;
 
     &__tabs {
         display: flex;
-        gap: 24px;
-        margin: 40px 0 24px;
+        gap: 1.5rem;
+        margin: 2.5625rem 0 1.3125rem;
     }
 
     &__tab {
@@ -405,73 +498,93 @@ main {
         &.is-active {
             color: $main-primary-color;
             text-decoration: underline;
-            text-underline-offset: 4px;
+            text-underline-offset: 0.25rem;
         }
     }
 }
 
-// ---------- 4. 풀폭 프로모션 배너 (100% x 400) ----------
+// ---------- 5. 풀폭 프로모션 배너 (풀폭 x 476) ----------
 .home-promo {
-    height: 400px;
-    margin-top: 188px;
-    background: url("/images/home/promo-banner.jpg") center / cover no-repeat;
-}
-
-// ---------- 5. 커스터마이징 배너 (1680 x 560) ----------
-.home-custom-banner {
-    @include container;
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height: 560px;
-    margin-top: 228px;
-    padding: 36px 0 45px;
-    background: url("/images/home/custom-banner.jpg") center / cover no-repeat;
+    justify-content: center;
+    height: 29.75rem;
+    margin-top: 11.75rem;
+    background: $neutral-color-700 center / cover no-repeat; // 이미지는 homeData.homeImages 에서 연결
+    overflow: hidden;
 
-    &__title {
-        @include heading-32-sb;
+    // 홍보 영상 (public/videos/EVA-banner.mp4)
+    &__video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    &__btn {
-        @include label-14-sb;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 236px;
-        height: 36px;
-        background: $gradient-primary;
-        color: $neutral-color-black;
+    &__no-image {
+        @include heading-24-b;
+        color: $neutral-color-300;
     }
 }
 
 // ---------- 6. 가장 많이 사용하는 제품 ----------
 .home-best {
-    margin-top: 190px;
+    margin-top: 10.4375rem;
 
     .home-section__title {
-        margin-bottom: 64px;
+        margin-bottom: 5.6875rem;
     }
 }
 
-// ---------- 7. 커스터마이저 (좌 3D 영역 / 우 패널 828 x 654) ----------
+// ---------- 7. 커스터마이저 (좌 소개 / 우 패널 828 x 654) ----------
 .home-customizer {
     @include container;
     display: flex;
-    margin-top: 242px;
+    margin-top: 17.4375rem;
 
-    &__viewer {
+    // 좌측 소개
+    &__intro {
         flex: 1;
-        min-height: 654px;
+        padding: 7.75rem 0 0 10.5rem;
     }
 
+    &__heading {
+        @include display-44-b;
+    }
+
+    &__text {
+        @include body-14-m;
+        margin-top: 2.625rem;
+        line-height: 1.5rem;
+    }
+
+    &__desc-tabs {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 9.75rem;
+
+        li {
+            @include heading-20-sb;
+        }
+    }
+
+    // 우측 패널
     &__panel {
         display: flex;
         flex-direction: column;
-        width: 828px;
-        padding: 55px 80px 60px;
+        width: 51.75rem;
+        height: 40.875rem;
+        padding: 2.5rem 5.875rem 0 5rem;
         border-radius: $radius-sm;
         background-color: $neutral-color-700;
+    }
+
+    &__label,
+    &__title,
+    &__desc {
+        padding-left: 0.375rem;
     }
 
     &__label {
@@ -479,8 +592,8 @@ main {
     }
 
     &__progress {
-        height: 8px;
-        margin-top: 16px;
+        height: 0.625rem;
+        margin-top: 1.75rem;
         border-radius: $radius-pill;
         background-color: $neutral-color-300;
         overflow: hidden;
@@ -494,69 +607,77 @@ main {
     }
 
     &__title {
-        @include heading-24-sb;
-        margin-top: 70px;
+        @include heading-20-sb;
+        margin-top: 4.125rem;
     }
 
     &__desc {
         @include body-14-m;
-        margin-top: 12px;
+        margin-top: 0.25rem;
     }
 
     &__options {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: $grid-gutter;
-        margin-top: 24px;
-        padding-bottom: 26px;
-        border-bottom: 1px solid $neutral-color-300;
+        margin-top: 1.625rem;
+        padding-bottom: 1.625rem;
+        border-bottom: 1px solid $neutral-color-500;
     }
 
     &__option {
         display: flex;
         align-items: center;
-        gap: 12px;
-        height: 110px;
-        padding: 0 24px;
+        gap: 0.75rem;
+        width: 100%;
+        height: 6.875rem;
+        padding: 0 1.5rem 0 1.625rem;
         border: 1px solid $neutral-color-100;
         border-radius: $radius-sm;
+        text-align: left;
+
+        &.is-selected {
+            border-color: $main-primary-color;
+
+            .home-customizer__radio {
+                border-color: $main-primary-color;
+                box-shadow: inset 0 0 0 0.1875rem $neutral-color-700;
+                background-color: $main-primary-color;
+            }
+        }
     }
 
-    // 옵션 이미지 자리 (이미지 확정 전 텍스트)
+    // 옵션 이미지 없음 → 텍스트
     &__option-thumb {
         @include caption-12-r;
-        display: flex;
         flex-shrink: 0;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        height: 60px;
-        border: 1px solid $neutral-color-500;
-        border-radius: $radius-sm;
-        color: $neutral-color-200;
+        width: 3.75rem;
+        text-align: center;
+        color: $neutral-color-300;
     }
 
     &__option-text {
+        display: flex;
         flex: 1;
+        flex-direction: column;
+        gap: 0.25rem;
 
         strong {
             @include label-14-sb;
-            display: block;
         }
 
-        p {
+        span {
             @include caption-12-r;
-            margin-top: 4px;
         }
     }
 
     &__radio {
         flex-shrink: 0;
         align-self: flex-start;
-        width: 16px;
-        height: 16px;
-        margin-top: 26px;
-        border: 1px solid $neutral-color-white;
+        width: 1rem;
+        height: 1rem;
+        margin-top: 1.875rem;
+        border: 1px solid #B1B1B1;
         border-radius: 50%;
     }
 
@@ -564,54 +685,54 @@ main {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        gap: 28px;
-        margin-top: auto;
+        gap: 1.75rem;
+        margin-top: 1.75rem;
     }
 }
 
-// ---------- 8. 서비스 안내 카드 (4 x 220) ----------
+// ---------- 8. 서비스 안내 카드 (4 x 219) ----------
 .home-features {
     @include container;
-    margin-top: 175px;
+    margin-top: 10.9375rem;
 
     &__list {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 70px;
+        gap: 4.4375rem;
     }
 
     &__card {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        height: 220px;
+        height: 13.6875rem;
+        padding-top: 2.0625rem;
         border-radius: $radius-sm;
         background-color: $neutral-color-700;
     }
 
-    // 아이콘 자리 (이미지 확정 전 텍스트)
+    // 아이콘 (public/icons/delivery · exchange · service · inquiry .svg)
     &__icon {
-        @include label-14-sb;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 100px;
-        height: 100px;
-        border: 1px solid $neutral-color-500;
-        border-radius: $radius-sm;
-        color: $neutral-color-200;
+        width: 6.25rem;
+        height: 6.25rem;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
     }
 
     &__title {
         @include label-16-sb;
-        margin-top: 32px;
+        margin-top: 1.6875rem;
     }
 
     &__desc {
         @include caption-12-r;
-        margin-top: 4px;
         color: $neutral-color-300;
     }
 }
-

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ProductCard } from "../product/ProductCard";
+import { homeProducts } from "../../data/homeData";
 
 const tabs = ["Category Title (카테고리 제목)", "Category Title (카테고리 제목)", "Category Title (카테고리 제목)"];
 
@@ -26,9 +27,9 @@ export const HomeNewArrivals = () => {
             </ul>
 
             <ul className="home-section__products">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {homeProducts.map((product, i) => (
                     <li key={i}>
-                        <ProductCard />
+                        <ProductCard product={product} />
                     </li>
                 ))}
             </ul>

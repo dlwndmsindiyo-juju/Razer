@@ -44,14 +44,6 @@ export const Footer = () => {
                         ))}
                     </ul>
 
-                    {/* SNS (아이콘 확정 전 텍스트)
-                    <ul className="footer__sns">
-                        {["SNS", "SNS", "SNS"].map((sns, i) => (
-                            <li key={i}>
-                                <a href="#" className="footer__sns-item">{sns}</a>
-                            </li>
-                        ))}
-                    </ul> */}
                 </div>
             </div>
         </footer>
