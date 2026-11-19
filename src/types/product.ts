@@ -1,13 +1,21 @@
-// Product에 model3d 선택 필드 추가
+// 상품 카테고리 (주소 /products/:category/:productId 의 category)
+export type ProductCategory = "keyboards" | "mice" | "mousepads" | "headphones" | "controllers";
+
+// 카테고리와 별개로 묶어 보여줄 컬렉션 (한 상품이 여러 개에 속할 수 있음)
+export type ProductCollection = "exclusive" | "collab";
 
 // 상품 목록, 상세, 찜 목록에서 공통으로 사용하는 상품 정보
 export interface Product {
-    id: number;
-    title: string;
-    category: string; // 예: "keyboards"
-    series?: string; // 예: "huntsman"
-    price: number;
-    image: string;
+    id: number; // 카테고리별 번호대 (키보드 1000 · 마우스 2000 · 마우스패드 3000 · 헤드폰 4000 · 컨트롤러 5000)
+    title: string; // 사이트 표기 상품명
+    category: ProductCategory;
+    series?: string; // 같은 모델 묶음 (예: "viper-v4-pro")
+    sku?: string; // Razer 상품 코드 (상세 데이터 연결용)
+    price: number | null; // 가격 미표시 상품은 null
+    originalPrice?: number; // 할인 전 가격 (할인 중일 때만)
+    image: string; // 목록 · 카드용 대표 이미지
+    collections?: ProductCollection[]; // 독점 · 콜라보
+    soldOut?: boolean; // 재고 부족 · 재입고 알림
 
     // 3D 모델을 만든 상품에만 추가
     model3d?: {

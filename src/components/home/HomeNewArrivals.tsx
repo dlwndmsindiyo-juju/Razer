@@ -1,38 +1,33 @@
 import { useState } from "react";
-import { ProductCard } from "../product/ProductCard";
-import { homeProducts } from "../../data/homeData";
+import { newArrivals, newArrivalTabs } from "../../data/homeData";
+import { HomeSectionHeader } from "./HomeSectionHeader";
+import { HomeProductList } from "./HomeProductList";
 
-const tabs = ["Category Title (카테고리 제목)", "Category Title (카테고리 제목)", "Category Title (카테고리 제목)"];
-
-// 신상품 (카테고리 탭 + 상품 카드)
+// 신상품 (카테고리 탭 + 상품 목록)
 export const HomeNewArrivals = () => {
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState<(typeof newArrivalTabs)[number]>(newArrivalTabs[0]);
 
     return (
         <section className="home-section home-new">
-            <h2 className="home-section__title">Section Title (섹션 제목) - 신상품</h2>
+            <HomeSectionHeader title="신상품">
+                <ul className="home-new__tabs" role="tablist">
+                    {newArrivalTabs.map((tab) => (
+                        <li key={tab}>
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected={activeTab === tab}
+                                className={`home-new__tab ${activeTab === tab ? "is-active" : ""}`}
+                                onClick={() => setActiveTab(tab)}
+                            >
+                                {tab}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </HomeSectionHeader>
 
-            <ul className="home-new__tabs">
-                {tabs.map((tab, i) => (
-                    <li key={i}>
-                        <button
-                            type="button"
-                            className={`home-new__tab ${activeTab === i ? "is-active" : ""}`}
-                            onClick={() => setActiveTab(i)}
-                        >
-                            {tab}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-
-            <ul className="home-section__products">
-                {homeProducts.map((product, i) => (
-                    <li key={i}>
-                        <ProductCard product={product} />
-                    </li>
-                ))}
-            </ul>
+            <HomeProductList products={newArrivals[activeTab]} />
         </section>
     );
 };
