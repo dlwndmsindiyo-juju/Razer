@@ -4,7 +4,7 @@ import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
-import { Search } from "./pages/Search";
+import { CatalogPage, Search } from "./pages/Search";
 import { Cart } from "./pages/Cart";
 import { Payment } from "./pages/Payment";
 
@@ -33,6 +33,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/products/:catalogSlug" element={<CatalogPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Payment />} />
           <Route

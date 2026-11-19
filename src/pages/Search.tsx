@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { productData } from "../data/productData";
 import type { Product } from "../types/product";
 import {
     applyFilters,
+    getCatalogScope,
+    getFilterGroups,
     recommendedIds,
     sortProducts,
     toCardProduct,
@@ -15,31 +17,34 @@ import { FilterPanel } from "../components/search/FilterPanel";
 import { SortDropdown } from "../components/search/SortDropdown";
 
 // 검색 결과 페이지 (헤더 검색창에서 엔터 → /search?q=검색어)
-export const Search = () => {
+const PAGE_SIZE = 24;
+
+export const CatalogPage = () => {
+    const { catalogSlug } = useParams();
+    const scope = catalogSlug ? getCatalogScope(catalogSlug) : undefined;
+    if (!scope) return <section className="home-section search-page"><h1>상품 목록을 찾을 수 없어요.</h1><Link to="/search">전체 상품 보기</Link></section>;
+    return <Search key={catalogSlug} title={scope.title} products={scope.products} />;
+};
+
+export const Search = ({ title, products = productData }: { title?: string; products?: Product[] }) => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const query = searchParams.get("q") ?? "";
-    const [keyword, setKeyword] = useState(query);
-
-    // 헤더 검색창 · 인기 검색으로 주소가 바뀌면 입력창도 바꾸기
-    useEffect(() => {
-        setKeyword(query);
-    }, [query]);
-
-    // 입력창을 고치면 결과와 주소(q)도 바로 바꾸기
+    const keyword = searchParams.get("q") ?? "";
     const changeKeyword = (value: string) => {
-        setKeyword(value);
-        setSearchParams(value.trim() ? { q: value } : {}, { replace: true });
+        setLimit(PAGE_SIZE);
+        setSearchParams(value ? { q: value } : {}, { replace: true });
     };
     const [sortId, setSortId] = useState<SortId>("recommended");
     const [selected, setSelected] = useState<SelectedFilters>({});
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [limit, setLimit] = useState(PAGE_SIZE);
+    const groups = useMemo(() => getFilterGroups(products), [products]);
 
     // 검색어 → 필터 → 정렬 순서로 적용
     const results = useMemo(() => {
         const word = keyword.trim().toLowerCase();
-        const searched = word ? productData.filter((p) => p.title.toLowerCase().includes(word)) : productData;
-        return sortProducts(applyFilters(searched, selected), sortId).map(toCardProduct);
-    }, [keyword, selected, sortId]);
+        const searched = word ? products.filter((p) => [p.title, p.sku, p.summary].some((text) => text?.toLowerCase().includes(word))) : products;
+        return sortProducts(applyFilters(searched, selected, groups), sortId);
+    }, [keyword, selected, sortId, products, groups]);
 
     const recommended = useMemo(
         () =>
@@ -51,6 +56,7 @@ export const Search = () => {
     );
 
     const toggleFilter = (groupId: string, optionId: string) => {
+        setLimit(PAGE_SIZE);
         setSelected((prev) => {
             const ids = prev[groupId] ?? [];
             const next = ids.includes(optionId) ? ids.filter((id) => id !== optionId) : [...ids, optionId];
@@ -58,11 +64,16 @@ export const Search = () => {
         });
     };
 
-    const closeFilter = useCallback(() => setIsFilterOpen(false), []);
+    const filterButton = useRef<HTMLButtonElement>(null);
+    const closeFilter = useCallback(() => {
+        setIsFilterOpen(false);
+        filterButton.current?.focus();
+    }, []);
     const selectedCount = Object.values(selected).reduce((sum, ids) => sum + ids.length, 0);
 
     return (
         <div className="search-page">
+            {title && <h1 className="search-page__title">{title}</h1>}
             {/* 검색창 */}
             <form className="search-page__bar" role="search" onSubmit={(e) => e.preventDefault()}>
                 <input
@@ -81,29 +92,36 @@ export const Search = () => {
             {/* 검색 결과 */}
             <section className="home-section search-page__results">
                 <div className="search-page__toolbar">
-                    <button type="button" className="search-page__filter-btn" onClick={() => setIsFilterOpen(true)}>
+                    <button ref={filterButton} type="button" className="search-page__filter-btn" aria-haspopup="dialog" aria-expanded={isFilterOpen} onClick={() => setIsFilterOpen(true)}>
                         <img src="/icons/filter.svg" alt="" />
                         모든 필터{selectedCount > 0 && ` (${selectedCount})`}
                     </button>
-                    <SortDropdown value={sortId} onChange={setSortId} />
+                    <SortDropdown value={sortId} onChange={(value) => { setSortId(value); setLimit(PAGE_SIZE); }} />
+                    <span className="search-page__count" aria-live="polite">{results.length}개 상품</span>
                 </div>
 
                 {results.length > 0 ? (
-                    <HomeProductList products={results} />
+                    <HomeProductList products={results.slice(0, limit).map(toCardProduct)} />
                 ) : (
                     <p className="home-section__empty">조건에 맞는 상품이 없어요.</p>
                 )}
             </section>
 
+            {results.length > limit && (
+                <button type="button" className="search-page__more" onClick={() => setLimit((value) => value + PAGE_SIZE)}>상품 더 보기</button>
+            )}
+
             {/* 추천상품 */}
-            <section className="home-section search-page__recommend">
+            {!title && <section className="home-section search-page__recommend">
                 <div className="home-section__header">
                     <h2 className="home-section__title">추천상품</h2>
                 </div>
                 <HomeProductList products={recommended} />
-            </section>
+            </section>}
 
-            <FilterPanel isOpen={isFilterOpen} selected={selected} onToggle={toggleFilter} onClose={closeFilter} />
+            <FilterPanel isOpen={isFilterOpen} groups={groups} selected={selected} onToggle={toggleFilter} onClose={closeFilter} onClear={() => { setSelected({}); setLimit(PAGE_SIZE); }} />
         </div>
     );
 };
+
+

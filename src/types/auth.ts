@@ -1,5 +1,3 @@
-import type { User } from "firebase/auth";
-
 // 사용자와 관련된 타입
 export interface AppUser {
     uid: string;

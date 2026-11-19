@@ -1,5 +1,6 @@
 // 검색 페이지 데이터 (필터 · 정렬 · 추천상품)
-import type { Product } from "../types/product";
+import type { Product, ProductCategory, ProductCollection } from "../types/product";
+import { catalogListings, categoryLabels, collectionLabels, getProductsByCategory, getProductsByCollection } from "./productData";
 import type { HomeProduct } from "./homeData";
 
 // ---------- 필터 ----------
@@ -15,71 +16,113 @@ export interface FilterGroup {
     options: FilterOption[];
 }
 
-export const filterGroups: FilterGroup[] = [
-    {
-        id: "category",
-        title: "카테고리",
-        options: [
-            { id: "mice", label: "마우스", match: (p) => p.category === "mice" },
-            { id: "keyboards", label: "키보드", match: (p) => p.category === "keyboards" },
-            { id: "audio", label: "오디오", match: (p) => p.category === "headphones" },
-            { id: "speakers", label: "스피커", match: () => false }, // 스피커 카테고리 데이터 추가 후 연결
-        ],
-    },
-    {
-        id: "chroma",
-        title: "Chroma RGB",
-        options: [
-            { id: "yes", label: "지원", match: (p) => p.specs?.chroma === true },
-            { id: "no", label: "없음", match: (p) => p.specs?.chroma === false },
-        ],
-    },
-    {
-        id: "weight",
-        title: "무게",
-        options: [
-            { id: "under-80", label: "< 80g", match: (p) => (p.specs?.weight ?? Infinity) < 80 },
-            { id: "80-100", label: "80g - 100g", match: (p) => { const w = p.specs?.weight; return w !== undefined && w >= 80 && w <= 100; } },
-        ],
-    },
-    {
-        id: "sensor",
-        title: "센서",
-        options: [
-            { id: "focus-pro-35k-2", label: "2세대 Focus Pro 35K 옵티컬 센서", match: (p) => p.specs?.sensor === "2세대 Focus Pro 35K 옵티컬 센서" },
-        ],
-    },
-    {
-        id: "connection",
-        title: "연결 방식",
-        options: [
-            { id: "wireless", label: "무선", match: (p) => !!p.specs?.connection?.includes("wireless") },
-            { id: "wired", label: "유선", match: (p) => !!p.specs?.connection?.includes("wired") },
-        ],
-    },
-    {
-        id: "onboard",
-        title: "온보드 메모리",
-        options: [{ id: "profiles-5", label: "프로파일 5개", match: (p) => p.specs?.onboardProfiles === 5 }],
-    },
-    {
-        id: "buttons",
-        title: "프로그래밍 가능 버튼",
-        options: [{ id: "over-10", label: "> 10", match: (p) => (p.specs?.programmableButtons ?? 0) > 10 }],
-    },
-];
+const normalize = (value: string) => value.trim().toLocaleLowerCase("ko-KR");
+const inCategory = (product: Product, category: ProductCategory) =>
+    (product.categories ?? [product.category]).includes(category);
 
-// 선택한 필터 적용: 같은 그룹 안에서는 하나라도 맞으면(OR), 그룹끼리는 모두 맞아야(AND)
+const menuCategories: Record<string, ProductCategory> = {
+    keyboards: "keyboards", mice: "mice", mousepads: "mousepads", audio: "headphones",
+    goods: "merch", controllers: "controllers", "content-creation": "contentCreation",
+};
+
+export const getCatalogScope = (slug: string) => {
+    const category = Object.hasOwn(menuCategories, slug) ? menuCategories[slug] : undefined;
+    if (category) return { title: categoryLabels[category], products: getProductsByCategory(category) };
+    if (slug === "collab" || slug === "new") {
+        return { title: collectionLabels[slug], products: getProductsByCollection(slug) };
+    }
+};
+
+const categoryGroup: FilterGroup = {
+    id: "category", title: "카테고리",
+    options: Object.entries(categoryLabels).map(([id, label]) => ({
+        id, label, match: (p) => inCategory(p, id as ProductCategory),
+    })),
+};
+
+const collectionGroup: FilterGroup = {
+    id: "collection", title: "컬렉션",
+    options: (Object.keys(collectionLabels) as ProductCollection[]).map((id) => ({
+        id, label: collectionLabels[id], match: (p) => p.collections?.includes(id) ?? false,
+    })),
+};
+
+const variantValues = (product: Product, label: RegExp) =>
+    product.selectedOptions?.filter((option) => label.test(option.label)).map((option) => option.value) ?? [];
+
+const readFacet = (product: Product, code: string, label: string): string[] => {
+    const values = product.filters?.flatMap((group) => group.features)
+        .filter((feature) => code.toLowerCase().endsWith("-" + feature.code.toLowerCase()))
+        .flatMap((feature) => feature.values) ?? [];
+    if (/색상|디자인/.test(label)) return [...values, ...(product.specs?.color ?? [])];
+    if (/사이즈|^크기$/.test(label)) return [...values, ...variantValues(product, /사이즈|크기/)];
+    if (label === "연결 방식") return [
+        ...values, ...(product.specs?.connection ?? []).map((item) => item === "wired" ? "유선" : "무선"),
+    ];
+    if (/스위치/.test(label)) return [...values, ...(product.specs?.switches ?? [])];
+    if (code.endsWith("-chroma-rgb") && product.specs?.chroma !== undefined) {
+        return [...values, String(product.specs.chroma)];
+    }
+    return values;
+};
+
+const stockAliases: Record<string, string> = { "재고 있음": "inStock", "품절": "outOfStock", "재고 부족": "lowStock" };
+
+export const getFilterGroups = (products: Product[]): FilterGroup[] => {
+    const activeListings = new Set(products.flatMap((product) => product.listingUrls ?? []));
+    const facets = new Map<string, { label: string; options: Map<string, FilterOption> }>();
+
+    for (const listing of catalogListings) {
+        if (!activeListings.has(listing.url)) continue;
+        for (const facet of listing.filters) {
+            if (facet.code === "category") continue;
+            const id = facet.code === "stockAvailability" ? facet.code : normalize(facet.label);
+            let group = facets.get(id);
+            if (!group) {
+                group = { label: facet.label, options: new Map() };
+                facets.set(id, group);
+            }
+            for (const value of facet.values) {
+                const optionId = normalize(value.label);
+                const previous = group.options.get(optionId);
+                const encoded = value.query?.split(":").at(-1);
+                const decoded = encoded ? new URLSearchParams("value=" + encoded).get("value") : null;
+                const candidates = new Set([optionId, ...(decoded ? [normalize(decoded)] : [])]);
+                group.options.set(optionId, {
+                    id: optionId,
+                    label: value.label,
+                    match: (product) => {
+                        if (previous?.match(product)) return true;
+                        if (!product.listingUrls?.includes(listing.url)) return false;
+                        if (facet.code === "stockAvailability") {
+                            return product.stockStatus === (stockAliases[value.label] ?? decoded);
+                        }
+                        return readFacet(product, facet.code, facet.label).some((item) => candidates.has(normalize(item)));
+                    },
+                });
+            }
+        }
+    }
+
+    return [
+        categoryGroup, collectionGroup,
+        ...Array.from(facets, ([id, group]) => ({ id, title: group.label, options: [...group.options.values()] })),
+    ].map((group) => ({
+        ...group,
+        options: group.options.filter((option) => products.some(option.match)),
+    })).filter((group) => group.options.length > 0);
+};
+
 export type SelectedFilters = Record<string, string[]>;
 
-export const applyFilters = (products: Product[], selected: SelectedFilters) =>
-    products.filter((product) =>
-        filterGroups.every((group) => {
-            const ids = selected[group.id] ?? [];
-            if (ids.length === 0) return true;
-            return group.options.some((option) => ids.includes(option.id) && option.match(product));
-        }),
-    );
+export const applyFilters = (products: Product[], selected: SelectedFilters, groups: FilterGroup[]) => {
+    const activeGroups = groups.flatMap((group) => {
+        const selectedIds = selected[group.id] ?? [];
+        const options = group.options.filter((option) => selectedIds.includes(option.id));
+        return options.length ? [options] : [];
+    });
+    return products.filter((product) => activeGroups.every((options) => options.some((option) => option.match(product))));
+};
 
 // ---------- 정렬 ----------
 export const sortOptions = [
@@ -107,7 +150,7 @@ export const recommendedIds = [2018, 2006, 2026, 2010, 2022, 2019];
 // ---------- 상품 → 카드 표시용 ----------
 export const formatPrice = (product: Product) => {
     if (product.price === null) return product.soldOut ? "품절" : "가격 미정";
-    return `₩${product.price.toLocaleString("ko-KR")}원`;
+    return `${product.price.toLocaleString("ko-KR")}원`;
 };
 
 export const toCardProduct = (product: Product): HomeProduct => ({
@@ -115,6 +158,9 @@ export const toCardProduct = (product: Product): HomeProduct => ({
     name: product.title,
     price: formatPrice(product),
     image: product.image,
+    to: `/products/${product.category}/${product.id}`,
+    originalPrice: product.originalPrice?.toLocaleString("ko-KR"),
+    badge: product.soldOut ? "품절" : product.badge,
 });
 
 // ---------- 인기 검색 (헤더 검색창) ----------
@@ -125,3 +171,4 @@ export const getSearchPath = (keyword: string) => {
     const word = keyword.trim();
     return word ? `/search?q=${encodeURIComponent(word)}` : "/search";
 };
+

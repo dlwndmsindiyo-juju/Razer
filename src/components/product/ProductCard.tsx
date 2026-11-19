@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState, type MouseEvent } from "react";
 import type { HomeProduct } from "../../data/homeData";
 
@@ -20,7 +21,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <article className="product-card">
             <div className="product-card__thumb">
                 {product.image ? (
-                    <img src={product.image} alt={product.name} className="product-card__image" />
+                    <img src={product.image} alt={product.name} className="product-card__image" loading="lazy" decoding="async" />
                 ) : (
                     <span className="product-card__no-image">Image</span>
                 )}
@@ -46,8 +47,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 )}
             </div>
 
-            <strong className="product-card__name">{product.name}</strong>
-            <p className="product-card__price">{product.price}</p>
+            {product.badge && <span className="product-card__badge">{product.badge}</span>}
+            {product.to ? (
+                <Link to={product.to} className="product-card__name">{product.name}</Link>
+            ) : (
+                <strong className="product-card__name">{product.name}</strong>
+            )}
+            <p className="product-card__price">{product.originalPrice && <del>{product.originalPrice}원</del>}{product.price}</p>
         </article>
     );
 };
+

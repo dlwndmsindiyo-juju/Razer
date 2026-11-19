@@ -1,11 +1,14 @@
 // 상품 카테고리 (주소 /products/:category/:productId 의 category)
-export type ProductCategory = "keyboards" | "mice" | "mousepads" | "headphones" | "controllers";
+export type ProductCategory = "keyboards" | "mice" | "mousepads" | "headphones" | "controllers" | "merch" | "contentCreation";
 
 // 카테고리와 별개로 묶어 보여줄 컬렉션 (한 상품이 여러 개에 속할 수 있음)
-export type ProductCollection = "exclusive" | "collab";
+export type ProductCollection = "exclusive" | "collab" | "new";
 
 // 검색 필터에 쓰는 상품 사양
 export interface ProductSpecs {
+    color?: string[];
+    switches?: string[];
+    connectionDetails?: string[];
     chroma?: boolean; // Chroma RGB 지원
     weight?: number; // 무게 (g)
     sensor?: string; // 센서 이름
@@ -15,7 +18,48 @@ export interface ProductSpecs {
 }
 
 // 상품 목록, 상세, 찜 목록에서 공통으로 사용하는 상품 정보
+export interface ProductFeatureGroup {
+    code: string;
+    features: { code: string; label: string; values: string[]; unit?: string }[];
+}
+
+export interface ProductOption {
+    sku: string;
+    options: { label: string; value: string }[];
+    price?: number;
+    stockStatus?: string;
+    url?: string;
+}
+
+export interface CatalogListing {
+    category: ProductCategory;
+    url: string;
+    code?: string;
+    officialCount?: number;
+    apiUniqueCount: number;
+    capturedCount: number;
+    filters: {
+        code: string;
+        label: string;
+        multiSelect?: boolean;
+        values: { label: string; count: number; query?: string }[];
+    }[];
+    sorts: { code: string; label?: string; selected?: boolean }[];
+}
+
 export interface Product {
+    categories?: ProductCategory[];
+    officialImage?: string;
+    productUrl?: string;
+    listingUrls?: string[];
+    badge?: string;
+    summary?: string;
+    stockStatus?: string;
+    gallery?: string[];
+    filters?: ProductFeatureGroup[];
+    technicalSpecifications?: ProductFeatureGroup[];
+    selectedOptions?: ProductOption["options"];
+    options?: ProductOption[];
     id: number; // 카테고리별 번호대 (키보드 1000 · 마우스 2000 · 마우스패드 3000 · 헤드폰 4000 · 컨트롤러 5000)
     title: string; // 사이트 표기 상품명
     category: ProductCategory;
