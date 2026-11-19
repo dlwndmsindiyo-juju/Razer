@@ -1,37 +1,35 @@
 import { useState } from "react";
-import { ProductCard } from "../product/ProductCard";
+import { categoryLabels, getProductsByCollection } from "../../data/productData";
+import { toCardProduct } from "../../data/searchData";
+import type { ProductCategory } from "../../types/product";
+import { HomeSectionHeader } from "./HomeSectionHeader";
+import { HomeProductList } from "./HomeProductList";
 
-const tabs = ["Category Title (카테고리 제목)", "Category Title (카테고리 제목)", "Category Title (카테고리 제목)"];
+const newProducts = getProductsByCollection("new");
+const tabs = (Object.keys(categoryLabels) as ProductCategory[]).filter((category) =>
+    newProducts.some((product) => product.category === category),
+);
 
-// 신상품 (카테고리 탭 + 상품 카드)
 export const HomeNewArrivals = () => {
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(tabs[0]);
+    const products = newProducts.filter((product) => product.category === activeTab).slice(0, 6).map(toCardProduct);
 
     return (
         <section className="home-section home-new">
-            <h2 className="home-section__title">Section Title (섹션 제목) - 신상품</h2>
-
-            <ul className="home-new__tabs">
-                {tabs.map((tab, i) => (
-                    <li key={i}>
-                        <button
-                            type="button"
-                            className={`home-new__tab ${activeTab === i ? "is-active" : ""}`}
-                            onClick={() => setActiveTab(i)}
-                        >
-                            {tab}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-
-            <ul className="home-section__products">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <li key={i}>
-                        <ProductCard />
-                    </li>
-                ))}
-            </ul>
+            <HomeSectionHeader title="신상품" to="/products/new">
+                <ul className="home-new__tabs" aria-label="신상품 카테고리">
+                    {tabs.map((tab) => (
+                        <li key={tab}>
+                            <button type="button" aria-pressed={activeTab === tab}
+                                className={`home-new__tab ${activeTab === tab ? "is-active" : ""}`}
+                                onClick={() => setActiveTab(tab)}>
+                                {categoryLabels[tab]}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </HomeSectionHeader>
+            <HomeProductList products={products} />
         </section>
     );
 };

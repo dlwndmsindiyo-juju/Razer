@@ -16,12 +16,31 @@ body {
 }
 
 body {
-    min-width: 1920px; // 현재 1920 시안 기준 (반응형은 추후)
+    min-width: 120rem; // 현재 1920 시안 기준 (반응형은 추후)
 }
 
 a {
     color: inherit;
     text-decoration: none;
+}
+
+// 밑줄 · 외곽선(포커스 테두리) 전부 제거
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+    text-decoration: none;
+}
+
+*:focus,
+*:focus-visible {
+    outline: none;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0; // Firefox 버튼 안쪽 점선
 }
 
 ul,
@@ -47,30 +66,18 @@ img {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: $radius-pill;
+    border-radius: $radius-sm;
     white-space: nowrap;
-
-    &--lg {
-        @include heading-20-sb;
-        height: 64px;
-        padding: 0 28px;
-    }
 
     &--sm {
         @include label-14-sb;
-        height: 44px;
-        padding: 0 18px;
+        height: 2.75rem;
+        padding: 0 1.125rem;
     }
 
     &--primary {
         background-color: $main-primary-color;
         color: $neutral-color-black;
-    }
-
-    &--secondary {
-        border: 1px solid $main-primary-color;
-        color: $main-primary-color;
-        padding: 0 42px;
     }
 
     &--text {
