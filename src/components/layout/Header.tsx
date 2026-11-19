@@ -1,13 +1,9 @@
-import { Link } from "react-router-dom";
-
-// GNB 메뉴 (확정 전 임시 항목)
-const gnbItems = [
-    { label: "GNB Items", to: "/" },
-    { label: "GNB Items", to: "/" },
-    { label: "GNB Items", to: "/" },
-];
+import { Link, useLocation } from "react-router-dom";
+import { footerGroups, getGroupPath } from "../../data/footerData";
 
 export const Header = () => {
+    const { pathname } = useLocation();
+
     return (
         <header className="header">
             {/* 상단 프로모션 바 */}
@@ -25,10 +21,16 @@ export const Header = () => {
                     </h1>
 
                     <nav className="header__nav">
+                        {/* GNB 메뉴 = 푸터 그룹 타이틀 (footerData 공용) */}
                         <ul className="header__menu">
-                            {gnbItems.map((item, i) => (
-                                <li key={i}>
-                                    <Link to={item.to}>{item.label}</Link>
+                            {footerGroups.map((group) => (
+                                <li key={group.slug}>
+                                    <Link
+                                        to={getGroupPath(group)}
+                                        className={pathname.startsWith(`/info/${group.slug}/`) ? "is-active" : undefined}
+                                    >
+                                        {group.title}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

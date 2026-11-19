@@ -11,6 +11,7 @@ import { Payment } from "./pages/Payment";
 import { useAuthStore } from "./store/useAuthStore";
 import "./App.scss";
 import { ProductsDetail } from "./pages/products/ProductsDetail";
+import { InfoPage } from "./pages/InfoPage";
 
 
 function App() {
@@ -38,6 +39,8 @@ function App() {
             path="/products/:category/:productId"
             element={<ProductsDetail />}
           />
+          {/* 푸터 내부 링크 페이지 */}
+          <Route path="/info/:group/:page" element={<InfoPage />} />
         </Routes>
       </main>
 

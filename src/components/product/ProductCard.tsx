@@ -15,13 +15,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                     <span className="product-card__no-image">Image</span>
                 )}
 
-                {/* 찜 (아이콘 파일 없음 → 텍스트) */}
+                {/* 위시리스트 (public/icons/wishlist-normal · wishlist-active .svg) */}
                 <button
                     type="button"
-                    className={`product-card__heart ${product.liked ? "is-active" : ""}`}
-                    aria-label="찜하기"
+                    className="product-card__heart"
+                    aria-label={product.liked ? "위시리스트에서 빼기" : "위시리스트에 담기"}
+                    aria-pressed={product.liked}
                 >
-                    {product.liked ? "♥" : "♡"}
+                    <img
+                        src={product.liked ? "/icons/wishlist-active.svg" : "/icons/wishlist-normal.svg"}
+                        alt=""
+                    />
                 </button>
             </div>
 
