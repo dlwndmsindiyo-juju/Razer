@@ -721,8 +721,18 @@ main {
         }
     }
 
+    // 큰 카드: 사진 아래쪽을 어둡게 (선수 이름이 잘 보이도록)
+    &__card.is-large &__player::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.85) 100%);
+        pointer-events: none;
+    }
+
     // 큰 카드: 사진 위 선수 이름
     &__player-text {
+        z-index: 1;
         position: absolute;
         left: 2rem;
         bottom: 2rem;
