@@ -3,7 +3,8 @@
 
 // 컬러
 $body-bg: #111111;
-$main-primary-color: #44D62C;
+// $main-primary-color: #44D62C;
+$main-primary-color: #AEFF00;
 $neutral-color-white: #ffffff;
 $neutral-color-100: #A5A5A5;
 $neutral-color-200: #888888;
@@ -13,7 +14,7 @@ $neutral-color-700: #222222;
 $neutral-color-panel: #171717;
 $neutral-color-canvas: #282828;
 $neutral-color-black: #000000;
-$promo-text-color: #9AFE7B;     // 프로모션 바 텍스트
+$promo-text-color: #9AFE7B; // 프로모션 바 텍스트
 $gradient-primary: linear-gradient(90deg, #44D835 0%, #43EF97 100%); // 커스터마이징 버튼
 
 
@@ -146,20 +147,21 @@ $font-family-base: "Pretendard", sans-serif;
 }
 
 // ---------- 둥글기 (용도로 선택) ----------
-$radius-sm: 4px;   // 옵션 썸네일, 작은 요소
-$radius-md: 8px;   // 카드, 패널
+$radius-sm: 4px; // 옵션 썸네일, 작은 요소
+$radius-md: 8px; // 카드, 패널
 $radius-pill: 999px; // 버튼, 뱃지
 
 
 // ---------- 그리드 (12 Columns · 24 Gutter · 80 Margin) ----------
 
-$page-margin: 120px;            // 좌우 여백 (1920 기준)
-$container-width: 1680px;       // 헤더 · 배너 · 푸터 폭 (1920 - 120*2)
+$page-margin: 120px; // 좌우 여백 (1920 기준)
+$container-width: 1680px; // 헤더 · 배너 · 푸터 폭 (1920 - 120*2)
 $grid-gutter: 24px;
 
 // 이너 (히어로 제외 공통 콘텐츠 폭)
-$inner-offset: 142px;           // 상품 섹션은 컨테이너 안쪽 142px에서 시작 (x=262)
-$section-gap: 160px;            // 섹션 사이 간격
+$inner-width: 1680px;
+$inner-offset: 142px; // 상품 섹션은 컨테이너 안쪽 142px에서 시작 (x=262)
+$section-gap: 160px; // 섹션 사이 간격
 
 // 레이아웃 높이
 $promo-bar-height: 40px;
