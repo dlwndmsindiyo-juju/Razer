@@ -291,6 +291,7 @@ export const COLLAB_GRID_COUNT = 8; // 처음 보이는 콜라보 카드 수 (�
 // 프로모션 알아보기 위쪽 대표 컬렉션 (카드 3개)
 export const featuredCollab = {
     slug: "evangelion",
+    hero: "/images/promotion/evangelion-hero.webp", // 프로모션 알아보기 위쪽 큰 이미지 (콜라보 상세는 영상)
     productIds: [4044, 2005, 1002],
 };
 

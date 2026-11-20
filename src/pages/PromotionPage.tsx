@@ -9,14 +9,12 @@ import {
     getCollabCover,
     getCollabHeading,
     getCollabPath,
-    getSectionImage,
     promotionFaq,
 } from "../data/collabData";
 import { getProductById } from "../data/productData";
 import type { Product } from "../types/product";
 import { ImageOrText } from "../components/common/ImageOrText";
 import { TopButton } from "../components/common/TopButton";
-import { CollabHero } from "../components/promotion/CollabHero";
 import { CollabStrip } from "../components/promotion/CollabStrip";
 import { FaqList } from "../components/promotion/FaqList";
 
@@ -34,7 +32,7 @@ export const PromotionPage = () => {
         <div className="promotion">
             {/* 대표 이미지 (누르면 대표 컬렉션 상세) */}
             <Link to={getCollabPath(featured.slug)} className="promotion__hero" aria-label={`${featured.name} 컬렉션 보기`}>
-                <CollabHero collab={featured} />
+                <ImageOrText src={featuredCollab.hero} alt={featured.name} label="Promotion Image" />
             </Link>
             <CollabStrip collab={featured} />
 
@@ -51,7 +49,7 @@ export const PromotionPage = () => {
                             <li key={product.id}>
                                 <Link to={to} className="promotion__card">
                                     <span className="promotion__card-img">
-                                        <ImageOrText src={getSectionImage(featured, product.id) ?? product.gallery?.[0] ?? product.image} alt={product.title} label="Product Image" />
+                                        <ImageOrText src={product.gallery?.[0] ?? product.image} alt={product.title} label="Product Image" />
                                     </span>
                                     <strong className="promotion__card-title">
                                         {model} {edition}
