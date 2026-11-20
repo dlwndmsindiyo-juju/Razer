@@ -12,7 +12,7 @@ const tabs = (Object.keys(categoryLabels) as ProductCategory[]).filter((category
 
 export const HomeNewArrivals = () => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
-    const products = newProducts.filter((product) => product.category === activeTab).slice(0, 6).map(toCardProduct);
+    const products = newProducts.filter((product) => product.category === activeTab).map(toCardProduct);
 
     return (
         <section className="home-section home-new">
@@ -29,7 +29,8 @@ export const HomeNewArrivals = () => {
                     ))}
                 </ul>
             </HomeSectionHeader>
-            <HomeProductList products={products} />
+            {/* 탭을 바꾸면 슬라이드를 처음 위치로 (key) */}
+            <HomeProductList key={activeTab} products={products} slider />
         </section>
     );
 };

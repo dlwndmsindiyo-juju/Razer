@@ -47,6 +47,33 @@ main {
 }
 
 // =========================================================
+// 커스터마이징 시작 버튼 공용 (메인 히어로 · 상품 상세 이미지 위)
+// 그라데이션이 흐르고 은은하게 빛남 (keyframes: hero-btn-flow · hero-btn-glow)
+// =========================================================
+@mixin customize-btn {
+    @include label-14-sb;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14.75rem;
+    height: 2.75rem;
+    border-radius: $radius-sm;
+    // $gradient-primary 색(초록 → 민트)을 왕복으로 이어 붙여 옆으로 흘러가게
+    background: linear-gradient(90deg, #44D62C 0%, #00FFDD 50%, #44D62C 100%);
+    background-size: 200% 100%;
+    color: $neutral-color-black;
+    // 그라데이션 흐름 + 은은하게 빛나는 효과
+    animation:
+        hero-btn-flow 4s linear infinite,
+        hero-btn-glow 2.4s ease-in-out infinite alternate;
+    transition: filter 0.2s;
+
+    &:hover {
+        filter: brightness(1.1);
+    }
+}
+
+// =========================================================
 // Header
 // =========================================================
 .header {
@@ -54,21 +81,21 @@ main {
     top: 0;
     z-index: 100;
 
-    // 프로모션 바 (40px / black)
+    // 프로모션 바 (GNB 아래 · 62px / #222)
     &__promo {
         display: flex;
         align-items: center;
         justify-content: center;
         height: $promo-bar-height;
-        background-color: $neutral-color-black;
+        background-color: $neutral-color-500;
     }
 
     &__promo-text {
-        @include caption-12-r;
-        color: $main-primary-color;
+        @include body-16-r;
+        color: $neutral-color-white;
     }
 
-    // GNB (80px / #171717)
+    // GNB (69px / #171717)
     &__gnb {
         height: $header-height;
         background-color: $neutral-color-panel;
@@ -89,25 +116,24 @@ main {
         }
 
         img {
-            height: 3.75rem;
+            height: 3rem;
             width: auto;
         }
     }
 
-    // 메뉴는 화면 정중앙 고정
+    // 메뉴 시작 위치 고정 (시안 x=749 → 컨테이너 기준 629px)
     &__nav {
         position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 39.3125rem;
     }
 
     &__menu {
         display: flex;
-        gap: 4rem;
+        gap: 6.25rem;
 
         a,
         button {
-            @include body-16-m;
+            @include heading-20-sb;
             color: $neutral-color-white;
 
             &:hover,
@@ -137,7 +163,7 @@ main {
 
     &__lang {
         @include label-14-sb;
-        width: 4.5rem;
+        width: 4.75rem;
         height: 2.25rem;
         border: 1px solid $main-primary-color;
         border-radius: $radius-pill;
@@ -145,7 +171,7 @@ main {
     }
 }
 
-// 유저 아이콘 메뉴 (로그인 상태)
+// 유저 아이콘 메뉴 (로그인 상태 · 264px)
 .user-menu {
     position: relative;
 
@@ -154,27 +180,41 @@ main {
         top: calc(100% + 1.25rem);
         right: -1rem;
         z-index: 120;
-        min-width: 13.75rem;
-        padding: 0.5rem 0;
-        border: 1px solid $neutral-color-500;
-        border-radius: $radius-sm;
-        background-color: $neutral-color-700;
+        width: 16.5rem;
+        padding: 1.5rem 0 1rem;
+        border-radius: $radius-md;
+        background-color: $neutral-color-panel;
         box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
         animation: user-menu-in 0.2s ease-out;
     }
 
-    // 닉네임 · 이메일
+    // 프로필 (이미지 · 별명 > · 아이디)
     &__profile {
         display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0 1.875rem 0.875rem;
+        padding: 0 0 1.25rem;
+        border-bottom: 1px solid $neutral-color-300;
+
+        &:hover strong {
+            color: $main-primary-color;
+        }
+    }
+
+    &__who {
+        display: flex;
         flex-direction: column;
-        gap: 0.25rem;
-        padding: 0.75rem 1.25rem 1rem;
-        margin-bottom: 0.5rem;
-        border-bottom: 1px solid $neutral-color-500;
+        gap: 0.125rem;
+        min-width: 0;
 
         strong {
-            @include label-14-sb;
+            @include body-16-m;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
             color: $neutral-color-white;
+            transition: color 0.2s;
         }
 
         span {
@@ -186,25 +226,55 @@ main {
         }
     }
 
+    // 별명 옆 > (down-arrow.svg 회전)
+    &__chevron {
+        width: 0.875rem;
+        height: 0.875rem;
+        transform: rotate(-90deg);
+    }
+
     &__item {
         @include body-14-r;
         display: block;
         width: 100%;
-        padding: 0.625rem 1.25rem;
-        color: $neutral-color-100;
+        padding: 0.5625rem 1.875rem;
+        color: $neutral-color-white;
         text-align: left;
-        transition: background-color 0.2s, color 0.2s;
+        transition: color 0.2s;
 
         &:hover {
-            background-color: $neutral-color-canvas;
-            color: $neutral-color-white;
+            color: $main-primary-color;
         }
+    }
+}
 
-        &--logout {
-            margin-top: 0.5rem;
-            border-top: 1px solid $neutral-color-500;
-            padding-top: 0.875rem;
-        }
+// 프로필 이미지 (없으면 기본 아이콘)
+.user-avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: $neutral-color-500;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &.is-default .user-avatar__icon {
+        width: 60%;
+        height: 60%;
+        object-fit: contain;
+    }
+
+    &--lg {
+        width: 5rem;
+        height: 5rem;
     }
 }
 
@@ -220,7 +290,7 @@ main {
 // =========================================================
 .mega-menu {
     position: absolute;
-    top: 100%;
+    top: $header-height; // GNB 바로 아래 (프로모션 바 위를 덮음)
     left: 0;
     z-index: 2;
     width: 100%;
@@ -348,7 +418,7 @@ main {
 // =========================================================
 .search-overlay {
     position: absolute;
-    top: 100%;
+    top: $header-height; // GNB 바로 아래 (프로모션 바 위를 덮음)
     left: 0;
     z-index: 2;
     width: 100%;
@@ -485,16 +555,16 @@ main {
     &__group-title {
         @include heading-20-sb;
         display: block;
-        margin-bottom: 3.25rem;
+        margin-bottom: 2.6875rem;
     }
 
     &__submenu {
         display: flex;
         flex-direction: column;
-        gap: 1.125rem;
+        gap: 0.5rem;
 
         a {
-            @include body-14-r;
+            @include body-16-r;
             color: $neutral-color-white;
         }
     }
@@ -593,13 +663,12 @@ main {
     }
 
     &__name {
-        @include caption-12-r;
-        margin-top: 0.75rem;
-        line-height: 1.25rem;
+        @include body-14-m;
+        margin-top: 0.875rem;
     }
 
     &__price {
-        @include label-14-sb;
+        @include body-16-sb;
         margin-top: 0.25rem;
     }
 }
@@ -608,7 +677,7 @@ main {
 // Home (1920 시안 기준)
 // =========================================================
 .home {
-    padding-bottom: 5.6875rem; // 마지막 섹션 ~ 푸터
+    padding-bottom: 6rem; // 마지막 섹션 ~ 푸터
     overflow-x: hidden;
 }
 
@@ -631,7 +700,7 @@ main {
     }
 
     &__more {
-        @include caption-12-r;
+        @include body-14-r;
         color: $neutral-color-100;
 
         &:hover {
@@ -650,6 +719,86 @@ main {
         padding: 6rem 0;
         text-align: center;
         color: $neutral-color-300;
+    }
+}
+
+// ---------- 메인 상품 슬라이드 (한 화면 6개 · 좌우 이동) ----------
+.home-slider {
+    position: relative;
+
+    &__track {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: calc((100% - #{$grid-gutter} * 5) / 6); // 6개가 한 화면
+        gap: $grid-gutter;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none; // 스크롤바 숨김 (Firefox)
+
+        &::-webkit-scrollbar {
+            display: none; // 스크롤바 숨김 (Chrome · Safari)
+        }
+
+        >li {
+            scroll-snap-align: start;
+        }
+
+        // 마우스로 끄는 중: 손을 따라 바로 움직이게
+        &.is-dragging {
+            scroll-snap-type: none;
+            cursor: grabbing;
+            user-select: none;
+        }
+    }
+
+    // 좌우 버튼 (상품 이미지 세로 가운데 · 카드 가장자리에 걸침)
+    &__btn {
+        position: absolute;
+        top: 8.125rem; // 이미지(260)의 절반
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border: 1px solid $neutral-color-500;
+        border-radius: 50%;
+        background-color: rgba(17, 17, 17, 0.9);
+        transition: background-color 0.2s, border-color 0.2s;
+
+        img {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        &:hover {
+            border-color: $neutral-color-100;
+            background-color: $neutral-color-700;
+        }
+
+        // 더 넘길 상품이 없는 쪽
+        &.is-end {
+            opacity: 0.35;
+        }
+
+        &--prev {
+            left: 0;
+            transform: translate(-50%, -50%);
+
+            img {
+                transform: rotate(90deg);
+            }
+        }
+
+        &--next {
+            right: 0;
+            transform: translate(50%, -50%);
+
+            img {
+                transform: rotate(-90deg);
+            }
+        }
     }
 }
 
@@ -691,35 +840,58 @@ main {
     }
 
     &__title {
-        @include heading-32-sb;
+        @include display-44-b;
     }
 
     &__btn {
-        @include label-14-sb;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 14.75rem;
-        height: 2.75rem;
-        border-radius: $radius-sm;
-        background: $gradient-primary;
-        color: $neutral-color-black;
+        @include customize-btn;
+    }
+}
+
+// 커스터마이징 버튼 그라데이션 흐름 (오른쪽 → 왼쪽으로 계속)
+@keyframes hero-btn-flow {
+    from {
+        background-position: 0% 50%;
+    }
+
+    to {
+        background-position: 200% 50%;
+    }
+}
+
+// 커스터마이징 버튼 주변이 초록 ↔ 민트로 은은하게 빛남
+@keyframes hero-btn-glow {
+    from {
+        box-shadow: 0 0 0.5rem rgba(68, 214, 44, 0.25);
+    }
+
+    to {
+        box-shadow: 0 0 1.5rem rgba(0, 255, 221, 0.5);
+    }
+}
+
+// 움직임 줄이기 설정을 켠 사용자는 멈춘 그라데이션
+@media (prefers-reduced-motion: reduce) {
+
+    .home-hero__btn,
+    .pd-gallery__customize {
+        animation: none;
     }
 }
 
 // ---------- 2. 신상품 ----------
 .home-new {
-    margin-top: 6.0625rem;
+    margin-top: 5.6875rem;
 
     &__tabs {
         display: flex;
-        gap: 2.0625rem;
-        margin-top: 1.4375rem;
+        gap: 1.875rem;
+        margin-top: 1.75rem;
     }
 
     &__tab {
-        @include body-14-r;
-        padding-bottom: 0.4375rem;
+        @include body-16-r;
+        padding-bottom: 0.3125rem;
         border-bottom: 2px solid transparent;
         color: $neutral-color-100;
 
@@ -736,41 +908,54 @@ main {
 
 // ---------- 3. 프로게이머 PICK (왼쪽 830 x 498 / 오른쪽 828 x 238 x 2) ----------
 .home-pick {
-    margin-top: 9.25rem;
+    margin-top: 8.75rem;
 
     &__grid {
         display: grid;
-        grid-template-columns: 51.875rem 1fr;
+        grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(2, 14.875rem);
-        gap: 1.375rem;
+        gap: 1.5rem;
     }
 
     &__card {
         display: grid;
-        grid-template-columns: 15rem 1fr 12.5rem;
+        grid-template-columns: 15rem 1fr 15rem;
         border: 1px solid $neutral-color-700;
         border-radius: $radius-md;
-        background-color: $body-bg;
+        background-color: #131313;
         overflow: hidden;
 
         // 왼쪽 큰 카드: 선수 사진 | 상품 정보
         &.is-large {
             grid-row: span 2;
-            grid-template-columns: 1fr 20.625rem;
-            background-color: $neutral-color-black;
+            grid-template-columns: 31rem 1fr;
 
             .home-pick__info {
-                justify-content: flex-end;
-                padding: 2rem 2rem 2.5rem;
+                padding: 2rem;
             }
 
             .home-pick__product {
                 @include heading-20-sb;
             }
 
+            .home-pick__variant {
+                margin-top: 0.25rem;
+            }
+
+            .home-pick__price {
+                margin-top: 0.125rem;
+            }
+
+            .home-pick__btn {
+                margin-top: 2rem;
+            }
+
+            // 상품 이미지는 위쪽, 상품 정보는 아래쪽
             .home-pick__product-img {
-                flex: 1;
-                margin-bottom: 1.5rem;
+                flex: none;
+                height: 16.5rem;
+                margin-bottom: auto;
+                padding: 0;
             }
         }
     }
@@ -804,14 +989,19 @@ main {
     &__player-text {
         z-index: 1;
         position: absolute;
+        pointer-events: none; // 이름 위에서도 사진 컬러 효과 유지
         left: 2rem;
-        bottom: 2rem;
+        bottom: 2.375rem;
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 1.125rem;
 
         .home-pick__name {
-            @include display-32-b;
+            @include display-44-b;
+        }
+
+        .home-pick__game {
+            margin: 0;
         }
     }
 
@@ -819,7 +1009,7 @@ main {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding: 1.0625rem 1.5rem 1.5rem;
+        padding: 1.0625rem 1.5rem 1.125rem;
     }
 
     &__name {
@@ -827,33 +1017,34 @@ main {
     }
 
     &__game {
-        @include caption-12-r;
-        margin-bottom: 1.25rem;
+        @include body-14-r;
+        margin: 0.3125rem 0 0.875rem;
         color: $neutral-color-100;
     }
 
     &__product {
-        @include label-14-sb;
+        @include body-16-sb;
     }
 
     &__variant {
         @include caption-12-r;
-        color: $neutral-color-200;
+        margin-top: 0.1875rem;
+        color: $neutral-color-100;
     }
 
     &__price {
-        @include label-14-sb;
+        @include body-16-sb;
         margin-top: 0.25rem;
     }
 
-    // 제품 자세히 보기 (흰 버튼)
+    // 제품 자세히 보기 (흰 버튼 152 x 48)
     &__btn {
         @include label-12-m;
         display: inline-flex;
         align-items: center;
-        height: 2.25rem;
-        margin-top: 1rem;
-        padding: 0 1.25rem;
+        height: 2rem;
+        margin-top: 0.75rem;
+        padding: 0 0.75rem;
         border-radius: $radius-sm;
         background-color: $neutral-color-white;
         color: $neutral-color-black;
@@ -873,6 +1064,37 @@ main {
             max-height: 100%;
             object-fit: contain;
         }
+    }
+}
+
+// 선수 사진: 흑백 + 마우스 위치만 컬러 (PlayerPhoto.tsx)
+.player-photo {
+    position: absolute;
+    inset: 0;
+
+    img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__gray {
+        filter: grayscale(1);
+    }
+
+    // 마스크(JS가 마우스 위치에 그림)로 보이는 부분만 컬러
+    &__color {
+        mask-image: radial-gradient(circle 0px at 0 0, #000, transparent);
+        pointer-events: none;
+    }
+}
+
+// 마우스가 없는 기기(터치)는 처음부터 컬러로
+@media (hover: none) {
+    .player-photo__color {
+        mask-image: none !important;
     }
 }
 
@@ -903,7 +1125,7 @@ main {
         align-items: flex-end;
         justify-content: space-between;
         height: 100%;
-        padding: 0 1.5rem 1.5rem;
+        padding: 0 1.5rem 1.5rem 1.625rem;
         border-radius: $radius-md;
         // 위는 카드색, 아래로 갈수록 어둡게 (이름 · 화살표가 잘 보이도록)
         background: linear-gradient(180deg, $neutral-color-700 55%, #0b0b0b 100%);
@@ -931,7 +1153,7 @@ main {
     }
 
     &__name {
-        @include heading-24-b;
+        @include display-32-b;
         position: relative;
         color: $neutral-color-white;
     }
@@ -942,12 +1164,12 @@ main {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2rem;
-        height: 2rem;
+        width: 2.75rem;
+        height: 2.75rem;
         border: 1px solid #44D62C; // 시안 값
         border-radius: 50%;
         background-color: rgba(0, 0, 0, 0.7);
-        font-size: 1rem;
+        font-size: 1.25rem;
         color: $neutral-color-white;
     }
 }
@@ -980,7 +1202,7 @@ main {
 
 // ---------- 7. 취향으로 완성하는 셋업 (이미지 1112 x 480 + 오른쪽 컬렉션) ----------
 .home-setup {
-    margin-top: 5rem;
+    margin-top: 5.625rem;
 
     &__body {
         display: grid;
@@ -1072,6 +1294,8 @@ main {
 
     &__collection {
         @include display-44-b;
+        white-space: pre-line; // 데이터의 줄바꿈(\n) 그대로
+        word-break: keep-all;
     }
 
     &__subtitle {
@@ -1168,7 +1392,7 @@ main {
 // ---------- 8. 서비스 안내 카드 (4 x 219) ----------
 .home-features {
     @include container;
-    margin-top: 6.125rem;
+    margin-top: 6rem;
 
     &__list {
         display: grid;
@@ -1537,10 +1761,10 @@ main {
 .search-page__more,
 .filter-panel__reset {
     display: table;
-    margin: 1.5rem auto 0;
+    margin: 10rem auto 0;
     padding: 0.65rem 1rem;
-    border: 1px solid currentColor;
     border-radius: 4px;
+    background: $neutral-color-500;
 }
 
 .filter-panel__reset {
@@ -1553,8 +1777,7 @@ main {
 }
 
 .product-card__name[href]:hover,
-.product-card__name[href]:focus-visible,
-.catalog-detail a {
+.product-card__name[href]:focus-visible {
     color: $main-primary-color;
 }
 
@@ -1563,81 +1786,7 @@ main {
     margin-right: 0.65rem;
 }
 
-.catalog-detail {
-    padding-block: clamp(3rem, 8vw, 8rem);
-}
-
-.catalog-detail__hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: clamp(1.5rem, 5vw, 5rem);
-    margin-block: 2rem 3rem;
-}
-
-.catalog-detail__image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: contain;
-}
-
-.catalog-detail__thumbnails {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
-
-    button {
-        border: 1px solid transparent;
-
-        &[aria-pressed="true"] {
-            border-color: $main-primary-color;
-        }
-    }
-
-    img {
-        display: block;
-        width: 3.5rem;
-        height: 3.5rem;
-        object-fit: contain;
-    }
-}
-
-.catalog-detail__info {
-    display: grid;
-    align-content: start;
-    gap: 1rem;
-
-    h1 {
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-    }
-}
-
-.catalog-detail__specs {
-    margin-top: 2rem;
-
-    h2 {
-        margin-bottom: 1rem;
-    }
-
-    dl>div {
-        display: grid;
-        grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
-        gap: 1rem;
-        border-top: 1px solid $neutral-color-500;
-        padding: 0.7rem 0;
-    }
-
-    dd {
-        margin: 0;
-    }
-}
-
 @media (max-width: 700px) {
-    .catalog-detail__hero {
-        grid-template-columns: 1fr;
-    }
-
     .search-page__toolbar {
         flex-wrap: wrap;
     }
@@ -1662,6 +1811,7 @@ main {
         width: calc(100% - 2rem);
     }
 }
+
 // =========================================================
 // 로그인 · 회원가입 (/login, /signup)
 // =========================================================
@@ -1724,7 +1874,7 @@ $auth-error-color: #FF4646; // 입력 에러 문구
     }
 
     // 회원가입: 소셜 → 구분선 → 폼 순서
-    &__card--signup &__head + .auth-social {
+    &__card--signup &__head+.auth-social {
         margin-top: 1.9375rem;
     }
 
@@ -2073,6 +2223,7 @@ $auth-error-color: #FF4646; // 입력 에러 문구
 }
 
 @keyframes auth-shake {
+
     0%,
     100% {
         transform: translateX(0);
@@ -2091,6 +2242,7 @@ $auth-error-color: #FF4646; // 입력 에러 문구
 
 // 움직임 줄이기 설정을 켠 사용자는 흔들림 없이 빨간 테두리만
 @media (prefers-reduced-motion: reduce) {
+
     .auth-field__box.is-shaking,
     .auth-select.is-shaking,
     .auth-modal,
@@ -2189,36 +2341,1062 @@ $auth-error-color: #FF4646; // 입력 에러 문구
 }
 
 // =========================================================
-// 마이페이지 (/mypage · 기본 정보만)
+// 마이페이지 (/mypage?tab=…)
 // =========================================================
 .mypage {
-    width: 50rem;
+    width: 60rem;
     margin: 0 auto;
-    padding: 7.5rem 0 12.5rem;
+    padding: 6rem 0 12.5rem;
+
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    &__name {
+        @include display-32-b;
+    }
+
+    &__email {
+        @include body-14-r;
+        margin-top: 0.25rem;
+        color: $neutral-color-200;
+    }
+
+    &__tabs {
+        display: flex;
+        gap: 2rem;
+        margin-top: 3rem;
+        border-bottom: 1px solid $neutral-color-500;
+    }
+
+    &__tab {
+        @include body-16-m;
+        margin-bottom: -1px;
+        padding-bottom: 0.875rem;
+        border-bottom: 2px solid transparent;
+        color: $neutral-color-100;
+
+        &:hover {
+            color: $neutral-color-white;
+        }
+
+        &.is-active {
+            border-bottom-color: $main-primary-color;
+            color: $neutral-color-white;
+        }
+    }
+
+    &__panel {
+        padding-top: 2.5rem;
+    }
+
+    &__empty {
+        @include body-16-r;
+        padding: 5rem 0;
+        color: $neutral-color-200;
+        text-align: center;
+    }
+
+    &__list {
+        border-top: 1px solid $neutral-color-500;
+    }
+
+    &__row {
+        @include body-14-r;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid $neutral-color-500;
+
+        a:hover {
+            color: $main-primary-color;
+        }
+    }
+
+    // 프로필 관리
+    &__profile {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+
+    &__avatar-edit {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    &__avatar-btns {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    &__btn {
+        @include label-14-sb;
+        height: 2.75rem;
+        padding: 0 1.25rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-white;
+        color: $neutral-color-black;
+
+        &--ghost {
+            border: 1px solid $neutral-color-500;
+            background-color: transparent;
+            color: $neutral-color-white;
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+    }
+
+    &__field {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        label {
+            @include body-14-m;
+            width: 8rem;
+            color: $neutral-color-100;
+        }
+
+        input {
+            @include body-16-r;
+            width: 20rem;
+            height: 2.75rem;
+            padding: 0 1rem;
+            border: 1px solid $neutral-color-500;
+            border-radius: $radius-sm;
+            background-color: $neutral-color-700;
+            color: $neutral-color-white;
+
+            &:focus {
+                border-color: $neutral-color-200;
+            }
+        }
+    }
+
+    &__info>div {
+        display: flex;
+        padding: 1rem 0;
+        border-top: 1px solid $neutral-color-500;
+
+        dt {
+            @include body-14-m;
+            width: 9rem;
+            color: $neutral-color-100;
+        }
+
+        dd {
+            @include body-14-r;
+        }
+    }
+
+    &__message {
+        @include body-14-r;
+        color: $main-primary-color;
+    }
+}
+
+// =========================================================
+// 상품 상세 (/products/:category/:productId)
+// =========================================================
+$pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
+
+.product-detail {
+    padding-top: 4.25rem;
+
+    // 위: [이미지 | 상품 정보] / 아래: [요약 | (빈칸)]
+    // 오른쪽 정보는 이미지(썸네일까지) 높이에 맞춰 구매 버튼이 썸네일 아랫선에 오도록
+    &__top {
+        @include container;
+        display: grid;
+        grid-template-columns: 51.75rem 1fr;
+        grid-template-areas:
+            "gallery right"
+            "about .";
+        column-gap: 7.5rem;
+        padding-bottom: 2.75rem;
+    }
+
+    &__gallery {
+        grid-area: gallery;
+    }
+
+    &__about {
+        grid-area: about;
+    }
+
+    &__right {
+        grid-area: right;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__summary {
+        @include body-16-r;
+        margin-top: 1.5625rem;
+    }
+
+    &__spec-link {
+        @include caption-12-r;
+        margin-top: 0.8125rem;
+        padding: 0 0.25rem;
+        color: $pd-green;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
+
+    // 상품명 + 배지
+    &__head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1.25rem;
+    }
 
     &__title {
         @include display-32-b;
     }
 
-    &__info {
-        margin: 2.5rem 0;
+    // 배지: 회색 알약 (독점 · 신규 · 사은품 증정 · 품절)
+    &__badge {
+        @include caption-12-r;
+        display: inline-flex;
+        align-items: center;
+        height: 1.75rem;
+        padding: 0 0.75rem;
+        border-radius: $radius-pill;
+        background-color: $neutral-color-500;
+        font-size: 0.6875rem;
+        line-height: 1;
+        color: $neutral-color-white;
+        white-space: nowrap;
+    }
+
+    // 사은품 · 추천 · 수량 · 구매 (오른쪽 맨 아래)
+    &__bottom {
+        margin-top: auto;
+        padding-top: 2.5rem;
+    }
+
+    &__extras {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    &__buy {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1.875rem;
+    }
+
+    &__total {
+        @include heading-20-sb;
+
+        strong {
+            font-weight: inherit;
+        }
+    }
+
+    &__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.625rem;
+        margin-top: 1.875rem;
+
+        button {
+            @include body-16-m;
+            height: 3.25rem;
+            border-radius: 2px;
+            transition: opacity 0.2s, border-color 0.2s;
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &__cart {
+        border: 1px solid $neutral-color-500;
+        color: $neutral-color-white;
+
+        &:hover:not(:disabled) {
+            border-color: $neutral-color-100;
+        }
+    }
+
+    &__purchase {
+        background-color: $main-primary-color;
+        color: $neutral-color-black;
+
+        &:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+    }
+
+    // 상품 상세 (구분선 아래)
+    &__content {
+        padding: 2.3125rem 0 5rem;
         border-top: 1px solid $neutral-color-500;
     }
 
-    &__row {
+    &__content-title {
+        @include heading-20-sb;
+        text-align: center;
+    }
+
+    // 상품이 없을 때
+    &--empty {
+        @include container;
         display: flex;
-        padding: 1.25rem 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 10rem 0;
+
+        h1 {
+            @include heading-24-b;
+        }
+
+        a {
+            color: $main-primary-color;
+        }
+    }
+}
+
+// 공통 작은 화살표 버튼 (30 x 30 · down-arrow.svg 회전)
+.pd-arrow {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 2px;
+    background-color: $neutral-color-canvas;
+    transition: background-color 0.2s;
+
+    img {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .is-prev {
+        transform: rotate(90deg);
+    }
+
+    .is-next {
+        transform: rotate(-90deg);
+    }
+
+    &:hover:not(:disabled) {
+        background-color: $neutral-color-500;
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+}
+
+// 이미지 갤러리 (828 x 716 + 썸네일 118 x 5)
+.pd-gallery {
+    --thumb-size: 7.375rem;
+    --thumb-gap: 1.875rem;
+
+    &__main {
+        position: relative;
+        height: 44.75rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+        overflow: hidden;
+
+        >img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // 이미지 위 버튼 (키보드: 타건음 체험하기 · 커스터마이징 시작)
+    &__actions {
+        position: absolute;
+        right: 1.875rem;
+        bottom: 2.375rem;
+        left: 3.125rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__sound {
+        @include body-16-m;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        color: $neutral-color-white;
+        text-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.6);
+
+        img {
+            width: 1.375rem;
+            height: 1.375rem;
+        }
+
+        &:hover {
+            color: $pd-green;
+        }
+    }
+
+    &__customize {
+        @include customize-btn;
+    }
+
+    &__thumbs {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 2.4375rem;
+    }
+
+    // 썸네일 5개만 보이는 창
+    &__viewport {
+        width: calc(var(--thumb-size) * 5 + var(--thumb-gap) * 4);
+        overflow: hidden;
+    }
+
+    &__list {
+        display: flex;
+        gap: var(--thumb-gap);
+        transition: transform 0.3s ease;
+    }
+
+    &__thumb {
+        display: block;
+        width: var(--thumb-size);
+        height: var(--thumb-size);
+        border: 1px solid transparent;
+        border-radius: $radius-md;
+        background-color: $neutral-color-700;
+        overflow: hidden;
+        opacity: 0.6;
+        transition: opacity 0.2s, border-color 0.2s;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &:hover,
+        &.is-active {
+            opacity: 1;
+        }
+
+        &.is-active {
+            border-color: $pd-green;
+        }
+    }
+}
+
+// 옵션 (색상 / 디자인 · 모델 …)
+.pd-option {
+    margin-top: 1.4375rem;
+
+    &__title {
+        @include heading-20-sb;
+    }
+
+    // 색상 동그라미 (30 · 간격 10)
+    &__swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.625rem;
+        margin-top: 1.3125rem;
+    }
+
+    // 모델 버튼 (200 x 100 · 4개씩)
+    &__buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.625rem;
+        margin-top: 1.3125rem;
+    }
+}
+
+// 작은 옵션 버튼 (자판 유형 · 사이즈 · 스위치 등)
+.pd-option__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.3125rem;
+}
+
+.pd-chip {
+    @include body-14-r;
+    height: 2.15rem;
+    padding: 0 1rem;
+    border: 1px solid $neutral-color-500;
+    border-radius: $radius-pill;
+    color: $neutral-color-200;
+    transition: border-color 0.2s, color 0.2s;
+
+    &:hover {
+        color: $neutral-color-white;
+    }
+
+    &.is-active {
+        @include body-14-m;
+        background: $neutral-color-white;
+        color: $neutral-color-black;
+
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+}
+
+.pd-swatch {
+    display: block;
+    padding: 2px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    transition: border-color 0.2s;
+
+    &__dot {
+        display: block;
+        width: 1.875rem;
+        height: 1.875rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        background-color: $neutral-color-300;
+        overflow: hidden;
+
+        // 색이 정해지지 않은 에디션은 그 상품 이미지를 동그라미에
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.6);
+        }
+    }
+
+    &:hover {
+        border-color: $neutral-color-100;
+    }
+
+    &.is-active {
+        border-color: $pd-green;
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+}
+
+.pd-choice {
+    @include body-14-r;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 6.25rem;
+    padding: 1rem;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background-color: $neutral-color-canvas;
+    color: $neutral-color-200;
+    text-align: center;
+    word-break: keep-all;
+    transition: border-color 0.2s, color 0.2s;
+
+    &:hover {
+        color: $neutral-color-white;
+    }
+
+    &.is-active {
+        border-color: $pd-green;
+        background-color: transparent;
+        color: $neutral-color-white;
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+}
+
+// 사은품 · 추천 상품 (한 개씩 · 좌우 화살표)
+.pd-side {
+    min-width: 0;
+
+    &__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__arrows {
+        display: flex;
+        gap: 0.6875rem;
+    }
+
+    &__item {
+        display: flex;
+        gap: 1.25rem;
+        margin-top: 1.6875rem;
+    }
+
+    &__img {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 5.75rem;
+        height: 5.75rem;
+        background-color: $neutral-color-700;
+
+        img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    &__name {
+        @include body-16-m;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &[href]:hover {
+            color: $main-primary-color;
+        }
+    }
+
+    &__price {
+        @include caption-12-r;
+        margin-top: 0.25rem;
+        font-size: 0.8125rem;
+    }
+
+    &__desc {
+        @include caption-12-r;
+        margin-top: 0.375rem;
+        line-height: 1.375rem;
+        color: $neutral-color-100;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+}
+
+// 수량
+.pd-qty {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    button {
+        @include body-16-m;
+        width: 1.9375rem;
+        height: 1.9375rem;
+        border-radius: 2px;
+        background-color: $neutral-color-canvas;
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+    }
+
+    span {
+        @include heading-20-sb;
+        min-width: 1.5rem;
+        text-align: center;
+    }
+}
+
+// ---------- 상품 상세 내용 (가운데 860 · 커머스 상세 구성) ----------
+.pd-content {
+    width: 53.75rem;
+    margin: 3rem auto 0;
+    background-color: $neutral-color-panel;
+
+    &__hero,
+    &__band,
+    &__feature,
+    &__cards {
+        text-align: center;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+    }
+
+    // 공지 띠
+    &__notice {
+        @include body-16-m;
+        padding: 1.75rem 2rem;
         border-bottom: 1px solid $neutral-color-500;
+        color: $pd-green;
+        text-align: center;
+        word-break: keep-all;
+    }
+
+    // 대표 이미지 + 이름
+    &__hero {
+        padding-bottom: 3.5rem;
+    }
+
+    &__hero-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2.5rem;
+    }
+
+    &__brand {
+        @include label-14-sb;
+        color: $neutral-color-100;
+        letter-spacing: 0.5em;
+    }
+
+    &__name {
+        @include display-44-b;
+    }
+
+    &__summary {
+        @include body-16-r;
+        color: $neutral-color-100;
+    }
+
+    // 핵심 사양 4칸
+    &__chips {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin: 2.5rem 3rem 0;
+
+        li {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            padding-top: 1rem;
+            border-top: 2px solid $pd-green;
+        }
+
+        span {
+            @include caption-12-r;
+            color: $pd-green;
+        }
+
+        strong {
+            @include body-14-m;
+            word-break: keep-all;
+        }
+    }
+
+    // 초록 띠
+    &__band {
+        padding: 3.5rem 3rem;
+        background-color: $pd-green;
+        color: $neutral-color-black;
+
+        h3 {
+            @include display-32-b;
+            letter-spacing: 0.05em;
+        }
+
+        p {
+            @include body-16-m;
+            margin-top: 1rem;
+            word-break: keep-all;
+        }
+    }
+
+    // 특징 (사양 1개 + 이미지)
+    &__feature {
+        padding-top: 5rem;
+
+        &:nth-of-type(odd) {
+            background-color: $body-bg;
+        }
+
+        img {
+            margin-top: 2.5rem;
+        }
+    }
+
+    &__feature-label {
+        @include label-14-sb;
+        display: block;
+        color: $pd-green;
+        letter-spacing: 0.1em;
+    }
+
+    &__feature-value {
+        @include display-32-b;
+        margin: 0.75rem auto 0;
+        max-width: 40rem;
+        word-break: keep-all;
+    }
+
+    // 3칸 카드
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        padding: 5rem 3rem;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+
+        p {
+            @include body-14-r;
+            word-break: keep-all;
+        }
+    }
+
+    &__card-img {
+        width: 100%;
+        aspect-ratio: 1;
+        margin-bottom: 0.5rem;
+        border-radius: 50%;
+        background-color: $neutral-color-700;
+        overflow: hidden;
+
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // 보증 띠
+    &__warranty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2.5rem 3rem;
+        background-color: $pd-green;
+        color: $neutral-color-black;
+
+        strong {
+            @include heading-20-sb;
+            letter-spacing: 0.2em;
+        }
+
+        p {
+            @include body-14-m;
+            margin-top: 0.5rem;
+            word-break: keep-all;
+        }
+    }
+
+    &__warranty-badge {
+        @include heading-20-sb;
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 5.5rem;
+        height: 5.5rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-black;
+        color: $pd-green;
+        text-align: center;
+    }
+
+    // TECH SPECS
+    &__specs {
+        padding: 5rem 3rem;
+
+        h3 {
+            @include display-32-b;
+            color: $pd-green;
+        }
+    }
+
+    &__spec-row {
+        display: grid;
+        grid-template-columns: 10rem 1fr;
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+
+        h4 {
+            @include heading-20-sb;
+        }
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            li {
+                @include body-14-r;
+                padding-left: 1rem;
+                position: relative;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0.6rem;
+                    left: 0;
+                    width: 0.25rem;
+                    height: 0.25rem;
+                    border-radius: 50%;
+                    background-color: $pd-green;
+                }
+            }
+
+            em {
+                font-style: normal;
+                color: $pd-green;
+            }
+        }
+
+        dl>div {
+            display: grid;
+            grid-template-columns: 9rem 1fr;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid $neutral-color-500;
+
+            &:first-child {
+                padding-top: 0;
+            }
+        }
 
         dt {
             @include body-14-m;
-            width: 10rem;
-            color: $neutral-color-200;
+            color: $neutral-color-100;
         }
 
         dd {
-            @include body-16-r;
-            color: $neutral-color-white;
+            @include body-14-r;
+            word-break: keep-all;
         }
+    }
+
+    &__extra+&__extra {
+        margin-top: 0;
+    }
+}
+
+// 모든 사양 보기 팝업
+.pd-spec {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    &__panel {
+        width: 45rem;
+        max-height: 80vh;
+        padding: 2rem;
+        border-radius: $radius-md;
+        background-color: $neutral-color-panel;
+        overflow-y: auto;
+    }
+
+    &__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+
+        h2 {
+            @include heading-24-b;
+        }
+    }
+
+    &__close img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    &__list>div {
+        display: grid;
+        grid-template-columns: 12rem 1fr;
+        gap: 1rem;
+        padding: 0.875rem 0;
+        border-top: 1px solid $neutral-color-500;
+
+        dt {
+            @include body-14-m;
+            color: $neutral-color-100;
+        }
+
+        dd {
+            @include body-14-r;
+        }
+    }
+
+    &__empty {
+        @include body-14-r;
+        color: $neutral-color-100;
+    }
+}
+
+// 장바구니 담기 · 안내 알림
+.pd-toast {
+    @include body-14-r;
+    position: fixed;
+    left: 50%;
+    bottom: 2.5rem;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid $neutral-color-500;
+    border-radius: $radius-sm;
+    background-color: $neutral-color-700;
+    transform: translateX(-50%);
+    animation: pd-toast-in 0.25s ease-out;
+
+    a {
+        @include label-14-sb;
+        color: $pd-green;
+        white-space: nowrap;
+    }
+}
+
+@keyframes pd-toast-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 0.75rem);
     }
 }

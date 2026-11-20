@@ -16,7 +16,7 @@ const stockLabel = (status?: string) => {
 // 취향으로 완성하는 셋업
 // 처음엔 오른쪽에 타이틀 · 서브타이틀만 → + 를 누르면 x 로 돌면서 그 상품 정보가 나타남 → x 를 누르면 사라짐
 export const HomeSetup = () => {
-    const { title, collectionTitle, subtitle, image, hotspots, collectionButton } = setupShowcase;
+    const { title, moreLink, collectionTitle, subtitle, image, hotspots, collectionButton } = setupShowcase;
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     const activeSpot = activeIndex !== null ? hotspots[activeIndex] : null;
@@ -27,13 +27,13 @@ export const HomeSetup = () => {
 
     return (
         <section className="home-section home-setup">
-            <HomeSectionHeader title={title} />
+            <HomeSectionHeader title={title} to={moreLink.to} moreLabel={moreLink.label} />
 
             <div className="home-setup__body">
                 {/* 셋업 이미지 + 상품 표시(+) */}
                 <div className="home-setup__visual">
                     <div className="home-setup__image">
-                        <ImageOrText src={image} alt={collectionTitle} label="Setup Image" />
+                        <ImageOrText src={image} alt={subtitle} label="Setup Image" />
                     </div>
 
                     {hotspots.map((spot, i) => {

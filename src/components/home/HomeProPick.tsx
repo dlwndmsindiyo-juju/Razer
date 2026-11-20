@@ -4,6 +4,7 @@ import { formatPrice } from "../../data/searchData";
 import { proPicks, proPicksMoreLink, type ProPick } from "../../data/homeData";
 import { HomeSectionHeader } from "./HomeSectionHeader";
 import { ImageOrText } from "../common/ImageOrText";
+import { PlayerPhoto } from "./PlayerPhoto";
 
 // 프로게이머 PICK (왼쪽 큰 카드 1 + 오른쪽 카드 2)
 export const HomeProPick = () => {
@@ -40,7 +41,7 @@ const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean 
         <article className={`home-pick__card ${isLarge ? "is-large" : ""}`}>
             {/* 선수 사진 */}
             <div className="home-pick__player">
-                <ImageOrText src={pick.playerImage} alt={pick.player} label="Player Image" className="home-pick__player-img" />
+                <PlayerPhoto src={pick.playerImage} alt={pick.player} />
                 {isLarge && (
                     <div className="home-pick__player-text">
                         <strong className="home-pick__name">{pick.player}</strong>

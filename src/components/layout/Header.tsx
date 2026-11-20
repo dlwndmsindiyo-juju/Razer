@@ -4,6 +4,7 @@ import { footerGroups, getGroupPath } from "../../data/footerData";
 import { getCategoryPath, productMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
 import { UserMenu } from "./UserMenu";
+import { promoBarText } from "../../data/navData";
 
 export const Header = () => {
     const { pathname } = useLocation();
@@ -31,11 +32,6 @@ export const Header = () => {
 
     return (
         <header className="header">
-            {/* 상단 프로모션 바 */}
-            <div className="header__promo">
-                <p className="header__promo-text">Promotion Bar</p>
-            </div>
-
             {/* GNB */}
             <div className="header__gnb">
                 <div className="header__inner">
@@ -103,6 +99,11 @@ export const Header = () => {
                         <button type="button" className="header__lang">KR</button>
                     </div>
                 </div>
+            </div>
+
+            {/* 프로모션 바 (GNB 아래) */}
+            <div className="header__promo">
+                <p className="header__promo-text">{promoBarText}</p>
             </div>
 
             {/* 제품 서브 메뉴 (메가 메뉴) */}

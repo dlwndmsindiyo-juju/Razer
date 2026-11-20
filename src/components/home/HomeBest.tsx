@@ -14,7 +14,7 @@ export const HomeBest = () => {
     return (
         <section className="home-section home-best">
             <HomeSectionHeader title="가장 많이 사용하는 제품" />
-            <HomeProductList products={products} />
+            <HomeProductList products={products} slider />
         </section>
     );
 };

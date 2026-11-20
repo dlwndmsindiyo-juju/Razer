@@ -108,7 +108,7 @@ export const Search = ({ title, products = productData }: { title?: string; prod
             </section>
 
             {results.length > limit && (
-                <button type="button" className="search-page__more" onClick={() => setLimit((value) => value + PAGE_SIZE)}>상품 더 보기</button>
+                <button type="button" className="search-page__more" onClick={() => setLimit((value) => value + PAGE_SIZE)}>더보기</button>
             )}
 
             {/* 추천상품 */}

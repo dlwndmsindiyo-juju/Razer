@@ -122882,7 +122882,74 @@ export const productData: Product[] = [
 export const getProductsByCategory = (category: ProductCategory) =>
     productData.filter((product) => (product.categories ?? [product.category]).includes(category));
 
+// 컬렉션 포함 여부
+// 신상품(new)은 공식 스토어에서 '신규' 배지가 붙은, 실제로 새로 나온 상품만
+// (collections 의 "new" 에는 독점 · 품절 · 기존 상품도 섞여 있어서 배지로 판단)
+export const isInCollection = (product: Product, collection: ProductCollection) =>
+    collection === "new" ? product.badge === "신규" : product.collections?.includes(collection) ?? false;
+
 export const getProductsByCollection = (collection: ProductCollection) =>
-    productData.filter((product) => product.collections?.includes(collection));
+    productData.filter((product) => isInCollection(product, collection));
 
 export const getProductById = (id: number) => productData.find((product) => product.id === id);
+
+// ---------- 상품 상세 ----------
+
+// 같은 모델(series)의 모든 상품 (색상 · 모델 옵션 전환용)
+export const getSeriesProducts = (product: Product) =>
+    product.series ? productData.filter((item) => item.series === product.series) : [product];
+
+// 상세 제목: 같은 모델 상품명들의 공통 앞부분 (예: "Razer DeathAdder V4 Pro")
+export const getSeriesTitle = (product: Product) => {
+    const titles = getSeriesProducts(product).map((item) => item.title.split(" "));
+    if (titles.length < 2) return product.title;
+
+    const common: string[] = [];
+    for (let i = 0; titles.every((words) => words[i] !== undefined && words[i] === titles[0][i]); i++) {
+        common.push(titles[0][i]);
+    }
+    // 끝에 남은 "-", "+" 정리
+    while (common.length && /^[-+|]$/.test(common[common.length - 1])) common.pop();
+    // 옵션 이름(" - 오렌지 스위치" 등)까지 겹치면 모델 이름만 남김
+    return common.length >= 2 ? common.join(" ").split(" - ")[0] : product.title;
+};
+
+// 옵션 그룹 (예: 색상 / 디자인 → [블랙, 화이트 …], 모델 → [...])
+export const getOptionGroups = (product: Product) => {
+    const groups = new Map<string, string[]>();
+    const add = (label: string, value: string) => {
+        const values = groups.get(label) ?? [];
+        if (!values.includes(value)) values.push(value);
+        groups.set(label, values);
+    };
+    // 같은 모델의 모든 상품을 id 순서로 모아서 → 어떤 옵션 페이지에서 봐도 버튼 순서가 같음
+    const family = [...getSeriesProducts(product)].sort((a, b) => a.id - b.id);
+    family.forEach((item) => item.selectedOptions?.forEach(({ label, value }) => add(label, value)));
+    family.forEach((item) =>
+        item.options?.forEach((option) => option.options.forEach(({ label, value }) => add(label, value))),
+    );
+    // 색상 / 디자인을 맨 위로 (시안 순서)
+    return [...groups]
+        .map(([label, values]) => ({ label, values }))
+        .sort((a, b) => Number(b.label.includes("색상")) - Number(a.label.includes("색상")));
+};
+
+// 선택한 옵션 조합에 맞는 상품 찾기 (정확히 맞는 게 없으면 바꾼 옵션이 같고 나머지가 가장 많이 겹치는 상품)
+export const findVariant = (product: Product, label: string, value: string) => {
+    const current = Object.fromEntries((product.selectedOptions ?? []).map((o) => [o.label, o.value]));
+    const wanted = { ...current, [label]: value };
+
+    const score = (item: Product) =>
+        (item.selectedOptions ?? []).reduce((sum, o) => sum + (wanted[o.label] === o.value ? 1 : 0), 0);
+
+    return getSeriesProducts(product)
+        .filter((item) => item.selectedOptions?.some((o) => o.label === label && o.value === value))
+        .sort((a, b) => score(b) - score(a))[0];
+};
+
+// 배지 표기 (데이터 원문 → 화면 문구)
+const badgeLabels: Record<string, string> = {
+    "RAZER 독점": "독점",
+    "무료 선물": "사은품 증정",
+};
+export const getBadgeLabel = (badge?: string) => (badge ? (badgeLabels[badge] ?? badge) : undefined);
