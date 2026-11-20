@@ -212,7 +212,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     // 디스코드 로그인 서버(server 폴더)로 이동 → 끝나면 /login/discord 로 돌아옴
     onDiscordLogin: () => {
         const serverUrl = import.meta.env.VITE_AUTH_SERVER_URL ?? "http://localhost:3000";
-        window.location.assign(`${serverUrl}/api/auth/discord/start`);
+        // 지금 사이트 주소를 넘겨서 로그인 후 같은 주소로 돌아오게 함
+        const origin = encodeURIComponent(window.location.origin);
+        window.location.assign(`${serverUrl}/api/auth/discord/start?origin=${origin}`);
     },
 
     // 서버에서 발급한 Firebase 커스텀 토큰을 받은 뒤 호출 (DiscordCallback 페이지)

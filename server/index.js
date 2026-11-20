@@ -41,6 +41,18 @@ admin.initializeApp({
 // ---------- 공통 ----------
 const app = express();
 const STATE_COOKIE = "discord_oauth_state";
+const ORIGIN_COOKIE = "discord_oauth_origin";
+
+// 돌아갈 사이트 주소 허용 목록: CLIENT_URL + 개발 중 localhost(포트 무관)
+const isAllowedOrigin = (origin) => {
+    try {
+        const url = new URL(origin);
+        if (url.origin === new URL(CLIENT_URL).origin) return true;
+        return ["localhost", "127.0.0.1"].includes(url.hostname);
+    } catch {
+        return false;
+    }
+};
 
 // 쿠키에서 값 하나 읽기
 const readCookie = (req, name) => {
@@ -52,9 +64,14 @@ const readCookie = (req, name) => {
 };
 
 // 사이트 콜백 페이지로 결과 전달 (토큰은 # 뒤에 넣어 서버 로그·Referer에 남지 않게)
-const backToClient = (res, params) => {
+const backToClient = (req, res, params) => {
+    // 버튼을 누른 사이트 주소로 돌아감 (Vite 포트가 5174 등으로 바뀌어도 동작)
+    const savedOrigin = readCookie(req, ORIGIN_COOKIE);
+    const clientOrigin = savedOrigin && isAllowedOrigin(savedOrigin) ? savedOrigin : CLIENT_URL;
+    res.clearCookie(ORIGIN_COOKIE);
+
     const hash = new URLSearchParams(params).toString();
-    res.redirect(`${CLIENT_URL}/login/discord#${hash}`);
+    res.redirect(`${clientOrigin}/login/discord#${hash}`);
 };
 
 // 디스코드 정보로 Firebase 사용자 만들기 / 갱신
@@ -92,6 +109,12 @@ app.get("/api/auth/discord/start", (req, res) => {
     const state = crypto.randomBytes(16).toString("hex");
     res.cookie(STATE_COOKIE, state, { httpOnly: true, sameSite: "lax", maxAge: 10 * 60 * 1000 });
 
+    // 로그인 후 돌아갈 사이트 주소 기억 (?origin=http://localhost:5173)
+    const origin = String(req.query.origin ?? "");
+    if (isAllowedOrigin(origin)) {
+        res.cookie(ORIGIN_COOKIE, new URL(origin).origin, { httpOnly: true, sameSite: "lax", maxAge: 10 * 60 * 1000 });
+    }
+
     const params = new URLSearchParams({
         client_id: DISCORD_CLIENT_ID,
         redirect_uri: DISCORD_REDIRECT_URI,
@@ -107,12 +130,13 @@ app.get("/api/auth/discord/start", (req, res) => {
 // ---------- 2. 디스코드에서 돌아옴 ----------
 app.get("/api/auth/discord/callback", async (req, res) => {
     const { code, state, error } = req.query;
+    console.log("[디스코드] 콜백 도착", error ? `(취소: ${error})` : "");
     const savedState = readCookie(req, STATE_COOKIE);
     res.clearCookie(STATE_COOKIE);
 
     // 사용자가 '취소'를 누른 경우
-    if (error) return backToClient(res, { error: "cancelled" });
-    if (!code || !state || state !== savedState) return backToClient(res, { error: "invalid_state" });
+    if (error) return backToClient(req, res, { error: "cancelled" });
+    if (!code || !state || state !== savedState) return backToClient(req, res, { error: "invalid_state" });
 
     try {
         // 2-1. code → 디스코드 access token
@@ -142,10 +166,10 @@ app.get("/api/auth/discord/callback", async (req, res) => {
         await upsertFirebaseUser(uid, discordUser);
         const firebaseToken = await admin.auth().createCustomToken(uid, { provider: "discord" });
 
-        backToClient(res, { token: firebaseToken });
+        backToClient(req, res, { token: firebaseToken });
     } catch (err) {
         console.error("[디스코드 로그인 실패]", err);
-        backToClient(res, { error: "server" });
+        backToClient(req, res, { error: "server" });
     }
 });
 
