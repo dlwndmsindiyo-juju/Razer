@@ -6,6 +6,7 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { MyPage } from "./pages/MyPage";
+import { DiscordCallback } from "./pages/DiscordCallback";
 import { CatalogPage, Search } from "./pages/Search";
 import { Cart } from "./pages/Cart";
 import { Payment } from "./pages/Payment";
@@ -38,6 +39,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          {/* 디스코드 로그인 서버에서 돌아오는 주소 */}
+          <Route path="/login/discord" element={<DiscordCallback />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/search" element={<Search />} />
           <Route path="/products/:catalogSlug" element={<CatalogPage />} />

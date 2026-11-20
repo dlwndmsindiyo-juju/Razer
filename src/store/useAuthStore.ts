@@ -40,7 +40,9 @@ const registerEmail = async (email: string | null) => {
 const isRegisteredEmail = async (email: string): Promise<boolean | null> => {
     try {
         return (await getDoc(emailRef(email))).exists();
-    } catch {
+    } catch (error) {
+        // 대부분 Firestore 규칙에 registeredEmails 읽기 허용이 없어서 생김
+        console.warn("[로그인] 가입 여부를 확인하지 못했어요. Firestore 규칙의 registeredEmails를 확인하세요.", error);
         return null;
     }
 };
@@ -50,6 +52,7 @@ export const getAuthErrorMessage = (error: unknown): string => {
     const code = (error as { code?: string })?.code ?? "";
     switch (code) {
         case "auth/invalid-credential":
+        case "auth/invalid-login-credentials":
         case "auth/wrong-password":
         case "auth/user-not-found":
             return "이메일 또는 암호가 올바르지 않습니다.";
@@ -162,8 +165,12 @@ export const useAuthStore = create<AuthState>((set) => ({
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
             // 없는 계정인지 틀린 암호인지 가입 이메일 목록으로 구분
-            const code = (error as { code?: string })?.code;
-            if (code === "auth/invalid-credential" && (await isRegisteredEmail(email)) === false) {
+            const code = (error as { code?: string })?.code ?? "";
+            console.info("[로그인] Firebase 에러 코드:", code);
+
+            // 없는 계정·틀린 암호를 구분 못 하는 코드들 (Firebase 버전마다 이름이 다름)
+            const ambiguous = ["auth/invalid-credential", "auth/invalid-login-credentials", "auth/wrong-password"];
+            if (ambiguous.includes(code) && (await isRegisteredEmail(email)) === false) {
                 throw { code: "auth/user-not-found" };
             }
             throw error;
@@ -182,12 +189,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     onTwitchLogin: () =>
         runLogin(() => signInWithPopup(auth, twitchProvider)),
 
-    // 예시: Discord 로그인 서버를 localhost:3000에서 실행하는 경우
+    // 디스코드 로그인 서버(server 폴더)로 이동 → 끝나면 /login/discord 로 돌아옴
     onDiscordLogin: () => {
-        window.location.assign("http://localhost:3000/api/auth/discord/start");
+        const serverUrl = import.meta.env.VITE_AUTH_SERVER_URL ?? "http://localhost:3000";
+        window.location.assign(`${serverUrl}/api/auth/discord/start`);
     },
 
-    // 서버에서 발급한 Firebase 커스텀 토큰을 받은 뒤 호출
+    // 서버에서 발급한 Firebase 커스텀 토큰을 받은 뒤 호출 (DiscordCallback 페이지)
     completeDiscordLogin: (firebaseCustomToken) =>
         runLogin(() => signInWithCustomToken(auth, firebaseCustomToken)),
 

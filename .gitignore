@@ -23,3 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 .env
+# 비밀 키
+.env
+server/serviceAccountKey.json
+
+# 패키지
+node_modules
+server/node_modules

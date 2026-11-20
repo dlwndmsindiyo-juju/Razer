@@ -1,0 +1,18 @@
+{
+  "name": "razer-auth-server",
+  "private": true,
+  "type": "module",
+  "description": "Discord 간편로그인 → Firebase 커스텀 토큰 발급 서버",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^12.7.0"
+  }
+}

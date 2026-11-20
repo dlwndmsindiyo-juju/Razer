@@ -1,0 +1,4 @@
+node_modules
+# Firebase 서비스 계정 키 (절대 깃허브에 올리지 않기)
+serviceAccountKey.json
+*.json.key

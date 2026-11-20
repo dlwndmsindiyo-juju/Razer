@@ -1681,6 +1681,16 @@ $auth-error-color: #FF4646; // 입력 에러 문구
         &--signup {
             padding-bottom: 3.875rem;
         }
+
+        // 디스코드 로그인 처리 중 · 실패 안내
+        &--status {
+            padding-bottom: 3.75rem;
+        }
+    }
+
+    &__logo-img {
+        width: 3.125rem;
+        height: 3.125rem;
     }
 
     // 로고 · 타이틀
@@ -1777,6 +1787,15 @@ $auth-error-color: #FF4646; // 입력 에러 문구
             opacity: 0.6;
             cursor: default;
         }
+    }
+
+    // 링크로 쓰는 버튼 (디스코드 실패 → 로그인으로)
+    &__submit--link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 31.25rem;
+        margin: 2.5rem auto 0;
     }
 
     // 약관
