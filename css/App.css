@@ -3398,8 +3398,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4.5rem;
-  margin-top: 3rem;
+  height: 3.5rem;
   background-color: #000000;
 }
 .collab-strip img {
@@ -3487,10 +3486,7 @@ main {
   padding-bottom: 20rem;
 }
 .promotion__hero {
-  height: calc(min(90rem, 100vw - 2rem) * 700 / 1920);
-}
-.promotion__hero img {
-  height: 100%;
+  height: calc(min(100rem, 100vw - 2rem) * 850 / 1920);
 }
 .promotion__featured {
   padding-top: 6.125rem;
@@ -3725,8 +3721,9 @@ main {
   padding-bottom: 17rem;
 }
 .collab-page__hero {
-  height: auto;
+  height: 50vh;
   margin-top: 2.5rem;
+  background-color: #111111;
 }
 .collab-page__hero video,
 .collab-page__hero img {
