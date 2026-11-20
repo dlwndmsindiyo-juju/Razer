@@ -7,15 +7,16 @@ import {
     findCollab,
     getCollabCopy,
     getCollabCover,
-    getCollabHero,
     getCollabHeading,
     getCollabPath,
+    getSectionImage,
     promotionFaq,
 } from "../data/collabData";
 import { getProductById } from "../data/productData";
 import type { Product } from "../types/product";
 import { ImageOrText } from "../components/common/ImageOrText";
 import { TopButton } from "../components/common/TopButton";
+import { CollabHero } from "../components/promotion/CollabHero";
 import { CollabStrip } from "../components/promotion/CollabStrip";
 import { FaqList } from "../components/promotion/FaqList";
 
@@ -33,7 +34,7 @@ export const PromotionPage = () => {
         <div className="promotion">
             {/* 대표 이미지 (누르면 대표 컬렉션 상세) */}
             <Link to={getCollabPath(featured.slug)} className="promotion__hero" aria-label={`${featured.name} 컬렉션 보기`}>
-                <ImageOrText src={getCollabHero(featured)} alt={featured.name} label="Promotion Image" />
+                <CollabHero collab={featured} />
             </Link>
             <CollabStrip collab={featured} />
 
@@ -50,7 +51,7 @@ export const PromotionPage = () => {
                             <li key={product.id}>
                                 <Link to={to} className="promotion__card">
                                     <span className="promotion__card-img">
-                                        <ImageOrText src={product.gallery?.[0] ?? product.image} alt={product.title} label="Product Image" />
+                                        <ImageOrText src={getSectionImage(featured, product.id) ?? product.gallery?.[0] ?? product.image} alt={product.title} label="Product Image" />
                                     </span>
                                     <strong className="promotion__card-title">
                                         {model} {edition}
@@ -74,16 +75,31 @@ export const PromotionPage = () => {
                     )}
                 </div>
                 <ul className="promotion__grid">
-                    {visibleCollabs.map((collab) => (
-                        <li key={collab.slug}>
-                            <Link to={getCollabPath(collab.slug)} className="promotion__collab">
+                    {visibleCollabs.map((collab) => {
+                        const card = (
+                            <>
                                 <span className="promotion__collab-img">
                                     <ImageOrText src={getCollabCover(collab)} alt={collab.name} label={collab.name} />
+                                    {collab.ended && <span className="promotion__collab-ended">종료된 이벤트 입니다.</span>}
                                 </span>
                                 <strong className="promotion__collab-name">{collab.name}</strong>
-                            </Link>
-                        </li>
-                    ))}
+                            </>
+                        );
+                        return (
+                            <li key={collab.slug}>
+                                {/* 종료된 이벤트는 누를 수 없음 */}
+                                {collab.ended ? (
+                                    <div className="promotion__collab promotion__collab--ended" aria-disabled="true">
+                                        {card}
+                                    </div>
+                                ) : (
+                                    <Link to={getCollabPath(collab.slug)} className="promotion__collab">
+                                        {card}
+                                    </Link>
+                                )}
+                            </li>
+                        );
+                    })}
                 </ul>
             </section>
 

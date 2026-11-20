@@ -10,6 +10,13 @@ export interface CollabFaq {
     a: string;
 }
 
+// 상품 소개 블록 하나 (배너 이미지 기준 · productId 가 있으면 그 상품 상세로 연결)
+export interface CollabSection {
+    image: string; // 1920 x 700 배너
+    model: string; // 상품 데이터가 없을 때 보일 모델 이름
+    productId?: number; // productData 에 있는 같은 에디션 상품
+}
+
 export interface Collab {
     slug: string; // 주소 /promotion/collab/:slug
     name: string; // 카드 · 로고 띠에 보이는 이름 (영문)
@@ -18,6 +25,11 @@ export interface Collab {
     logo?: string; // 로고 이미지 (없으면 이름 글자로 표시)
     cover?: string; // 콜라보 제품 카드 이미지 (342 x 447 · 없으면 첫 상품의 갤러리 이미지)
     hero?: string; // 큰 대표 이미지 (1920 가로 · 없으면 첫 상품 갤러리 → 카드 이미지)
+    video?: string; // 큰 대표 영상 (있으면 이미지 대신 재생 · 이미지는 로딩 전 포스터)
+    collection?: string; // 컬렉션 소개 · 대표 상품 블록 이미지 (전체 구성 컷)
+    thumb?: string; // 대표 상품 블록의 작은 정사각 이미지 (500 x 500)
+    sections?: CollabSection[]; // 상품 소개 블록 (있으면 이 순서대로 · 없으면 상품 데이터로 만듦)
+    ended?: boolean; // 종료된 이벤트 → 카드는 흐리게 · 상세 페이지는 들어갈 수 없음
     headline: string; // 컬렉션 소개 큰 문구 (\n 줄바꿈)
     intro: string; // 컬렉션 소개 설명 (\n 줄바꿈)
     stayTitle: string; // "플레이 뒤에도 남는 …" 블록 제목 (\n 줄바꿈)
@@ -50,6 +62,17 @@ const make = (c: Omit<Collab, "faq">): Collab => ({ ...c, faq: collabFaq(c.ko) }
 export const collabs: Collab[] = [
     make({
         slug: "kuromi",
+        hero: "/images/promotion/kuromi/hero.webp",
+        video: "/videos/collab/kuromi.mp4",
+        collection: "/images/promotion/kuromi/collection.webp",
+        thumb: "/images/promotion/kuromi/kuromi-500x500.webp",
+        sections: [
+            { image: "/images/promotion/kuromi/kraken-kitty-v2-bt.webp", model: "Razer Kraken Kitty V2 BT" },
+            { image: "/images/promotion/kuromi/ornata-v3-tkl.webp", model: "Razer Ornata V3 Tenkeyless" },
+            { image: "/images/promotion/kuromi/leviathan-v2-x.webp", model: "Razer Leviathan V2 X" },
+            { image: "/images/promotion/kuromi/deathadder-essential-goliathus.webp", model: "Razer DeathAdder Essential + Goliathus" },
+            { image: "/images/promotion/kuromi/enki-x.webp", model: "Razer Enki X" },
+        ],
         cover: "/images/promotion/collab/kuromi.webp",
         name: "KUROMI",
         ko: "쿠로미",
@@ -61,12 +84,21 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "evangelion",
+        video: "/videos/collab/evangelion.mp4",
+        thumb: "/images/promotion/evangelion/mouse-stand.webp",
+        sections: [
+            { image: "/images/promotion/evangelion/deathadder-v4-pro.webp", model: "Razer DeathAdder V4 Pro", productId: 2004 },
+            { image: "/images/promotion/evangelion/blackwidow-v4-tkl-hyperspeed.webp", model: "Razer BlackWidow V4 Tenkeyless HyperSpeed", productId: 1002 },
+            { image: "/images/promotion/evangelion/gigantus-v2-xxl.webp", model: "Razer DeathAdder V4 Pro + Gigantus V2 XXL", productId: 2005 },
+            { image: "/images/promotion/evangelion/leviathan-v2-x.webp", model: "Razer Leviathan V2 X", productId: 4044 },
+            { image: "/images/promotion/evangelion/iskur-v2-x.webp", model: "Razer Iskur V2 X" },
+        ],
         name: "EVANGELION (EVA-01)",
         ko: "에반게리온 (EVA-01)",
         match: /Evangelion/i,
         logo: "/images/promotion/evangelion-logo.webp",
         cover: "/images/promotion/collab/evangelion.webp",
-        hero: "/images/promotion/evangelion-hero.webp",
+        hero: "/images/promotion/evangelion/hero.webp",
         headline: "EVA-01의 힘을,\n당신의 셋업으로.",
         intro: "상징적인 퍼플과 그린으로 완성한 게이밍 컬렉션.\nEVA-01의 존재감을 당신의 플레이에 더하세요.",
         stayTitle: "플레이 뒤에도 남는\nEVA-01의 존재감",
@@ -74,6 +106,15 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "honkai-star-rail",
+        hero: "/images/promotion/honkai-star-rail/hero.webp",
+        video: "/videos/collab/honkai-star-rail.mp4",
+        thumb: "/images/promotion/honkai-star-rail/gwp-blackwidow.webp",
+        sections: [
+            { image: "/images/promotion/honkai-star-rail/blackwidow.webp", model: "Razer BlackWidow V4 Tenkeyless HyperSpeed", productId: 1001 },
+            { image: "/images/promotion/honkai-star-rail/viper.webp", model: "Razer Viper V3 Pro SE", productId: 2003 },
+            { image: "/images/promotion/honkai-star-rail/blackshark.webp", model: "Razer BlackShark V3 X HyperSpeed", productId: 4001 },
+            { image: "/images/promotion/honkai-star-rail/iskur.webp", model: "Razer Iskur V2" },
+        ],
         name: "HONKAI: STAR RAIL",
         ko: "붕괴: 스타레일",
         match: /Honkai/i,
@@ -104,6 +145,15 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "minecraft",
+        hero: "/images/promotion/minecraft/hero.webp",
+        video: "/videos/collab/minecraft.mp4",
+        thumb: "/images/promotion/minecraft/kraken-v4-x-500x500.webp",
+        sections: [
+            { image: "/images/promotion/minecraft/blackwidow-v4-x.webp", model: "Razer BlackWidow V4 X", productId: 1048 },
+            { image: "/images/promotion/minecraft/kraken-v4-x.webp", model: "Razer Kraken V4 X", productId: 4049 },
+            { image: "/images/promotion/minecraft/cobra.webp", model: "Razer Cobra", productId: 2049 },
+            { image: "/images/promotion/minecraft/gigantus-v2-m.webp", model: "Razer Gigantus V2 - Medium" },
+        ],
         cover: "/images/promotion/collab/minecraft.webp",
         name: "MINECRAFT",
         ko: "마인크래프트",
@@ -115,6 +165,7 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "pokemon",
+        ended: true, // 종료된 이벤트
         cover: "/images/promotion/collab/pokemon.webp",
         name: "Pokemon",
         ko: "포켓몬",
@@ -126,8 +177,9 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "joola",
+        ended: true, // 종료된 이벤트
         cover: "/images/promotion/collab/joola.webp",
-        name: "줄라",
+        name: "JOOLA",
         ko: "줄라 (JOOLA)",
         match: /JOOLA/i,
         headline: "Performance Pulse,\n당신의 셋업으로.",
@@ -137,6 +189,7 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "keith-haring",
+        ended: true, // 종료된 이벤트
         cover: "/images/promotion/collab/keith-haring.webp",
         name: "KEITH HARING",
         ko: "키스 해링",
@@ -158,6 +211,14 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "pompompurin",
+        hero: "/images/promotion/pompompurin/hero.webp",
+        collection: "/images/promotion/pompompurin/collection.webp",
+        sections: [
+            { image: "/images/promotion/pompompurin/keyboard.webp", model: "Razer Ornata V3 Tenkeyless", productId: 1005 },
+            { image: "/images/promotion/pompompurin/headset.webp", model: "Razer 게이밍 헤드셋" },
+            { image: "/images/promotion/pompompurin/mice.webp", model: "Razer 게이밍 마우스" },
+            { image: "/images/promotion/pompompurin/mouse-mat.webp", model: "Razer 마우스 매트" },
+        ],
         cover: "/images/promotion/collab/pompompurin.webp",
         name: "POMPOMPURIN",
         ko: "폼폼푸린",
@@ -179,6 +240,14 @@ export const collabs: Collab[] = [
     }),
     make({
         slug: "2xko",
+        hero: "/images/promotion/2xko/hero.webp",
+        video: "/videos/collab/2xko.mp4",
+        thumb: "/images/promotion/2xko/kitsune-500x500.webp",
+        sections: [
+            { image: "/images/promotion/2xko/kitsune.webp", model: "Razer Kitsune", productId: 5011 },
+            { image: "/images/promotion/2xko/blackshark-v3-pro-xbox.webp", model: "Razer BlackShark V3 Pro for Xbox" },
+            { image: "/images/promotion/2xko/iskur-v2-x.webp", model: "Razer Iskur V2 X" },
+        ],
         cover: "/images/promotion/collab/2xko.webp",
         name: "2XKO",
         ko: "2XKO",
@@ -265,9 +334,32 @@ export const getCollabCover = (collab: Collab) => {
     return first?.gallery?.[0] ?? first?.image;
 };
 
+// 컬렉션 전체 구성 이미지 (컬렉션 소개 · 대표 상품 블록)
+// (영상이 있으면 대표 이미지는 화면에 안 보이므로 여기에 씀)
+export const getCollabCollection = (collab: Collab) =>
+    collab.collection ??
+    (collab.video ? collab.hero : undefined) ??
+    collab.sections?.[0]?.image ??
+    getCollabProducts(collab)[0]?.gallery?.[2] ??
+    getCollabCover(collab);
+
+// "플레이 뒤에도 남는 …" 블록 큰 이미지 (컬렉션 소개와 겹치지 않게)
+export const getStayImage = (collab: Collab, product?: Product) => {
+    if (collab.collection && collab.video && collab.hero) return collab.hero;
+    const last = collab.sections?.[collab.sections.length - 1]?.image;
+    return last ?? product?.gallery?.[3] ?? product?.image;
+};
+
+// 상품 id 에 맞는 배너 이미지 (프로모션 대표 카드 등)
+export const getSectionImage = (collab: Collab, productId: number) =>
+    collab.sections?.find((s) => s.productId === productId)?.image;
+
 // 큰 대표 이미지 (가로형)
 export const getCollabHero = (collab: Collab) =>
     collab.hero ?? getCollabProducts(collab)[0]?.gallery?.[0] ?? getCollabCover(collab);
+
+// 들어갈 수 있는 콜라보인지 (종료된 이벤트는 X)
+export const isCollabOpen = (collab?: Collab): collab is Collab => !!collab && !collab.ended;
 
 // 모델 이름 (에디션 · 옵션 부분 제외: "Razer Kraken V4 X - Minecraft Edition" → "Razer Kraken V4 X")
 const getModelName = (product: Product) => getSeriesTitle(product).split(" - ")[0];
@@ -277,6 +369,10 @@ export const getCollabHeading = (product: Product, collab: Collab) => ({
     model: getModelName(product).toUpperCase(),
     edition: `${collab.ko} 에디션`,
 });
+
+// 상품 데이터가 없는 블록의 설명 문구
+export const getSectionCopy = (model: string, collab: Collab) =>
+    `${collab.ko}에서 영감을 받은 ${model}로 당신만의 셋업을 완성하세요.`;
 
 // 상품 설명 문구
 export const getCollabCopy = (product: Product, collab: Collab) => {

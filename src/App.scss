@@ -3465,11 +3465,16 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
     background-color: $neutral-color-700;
     overflow: hidden;
 
-    img {
+    img,
+    video {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform 0.4s;
+    }
+
+    video {
+        display: block;
     }
 }
 
@@ -3584,9 +3589,39 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         &:hover .promotion__collab-name {
             color: $main-primary-color;
         }
+
+        // 종료된 이벤트: 이미지 흐리게 + 안내 문구 · 누를 수 없음
+        &--ended {
+            cursor: default;
+
+            img {
+                filter: blur(0.75rem) brightness(0.55);
+                transform: scale(1.06);
+            }
+
+            &:hover img {
+                transform: scale(1.06);
+            }
+
+            &:hover .promotion__collab-name {
+                color: inherit;
+            }
+        }
+    }
+
+    &__collab-ended {
+        @include body-16-r;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: $neutral-color-white;
     }
 
     &__collab-img {
+        position: relative;
         height: 28rem;
 
 
@@ -3626,10 +3661,43 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         word-break: keep-all;
     }
 
+    // + 버튼 (메인 셋업 + 버튼과 같은 모양 · 색만 초록) · 열리면 45도 돌아서 x
     &__icon {
-        font-size: 1.5rem;
-        line-height: 1;
-        color: $main-primary-color;
+        position: relative;
+        flex-shrink: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid $main-primary-color;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.85);
+        transition: background-color 0.2s, border-color 0.2s;
+
+        // 아이콘 모양은 public/icons/plus.svg 그대로 · 색은 background-color
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: $main-primary-color;
+            mask: url("/icons/plus.svg") center / contain no-repeat;
+            transition: transform 0.3s ease, background-color 0.2s;
+        }
+    }
+
+    // 인터랙션도 메인 + 버튼과 같음: 호버 → 회색 배경 · 열림 → 45도 회전
+    &__question:hover .faq__icon {
+        border-color: $neutral-color-white;
+        background-color: $neutral-color-500;
+    }
+
+    &__item.is-open .faq__icon {
+        border-color: $neutral-color-white;
+
+        &::before {
+            transform: rotate(45deg);
+        }
     }
 
     // 프로모션: 회색 박스
@@ -3669,10 +3737,6 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
             @include heading-24-sb;
             width: 4.5rem;
             color: $main-primary-color;
-        }
-
-        .faq__item.is-open .faq__icon {
-            color: $neutral-color-white;
         }
 
         .faq__answer {

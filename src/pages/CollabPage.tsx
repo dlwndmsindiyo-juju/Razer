@@ -1,44 +1,71 @@
 import { Fragment } from "react";
-import { Link, useParams } from "react-router-dom";
-import { categoryLabels } from "../data/productData";
+import { Link, Navigate, useParams } from "react-router-dom";
+import { categoryLabels, getProductById } from "../data/productData";
 import {
     findCollab,
     getCollabCopy,
-    getCollabCover,
-    getCollabHero,
+    getCollabCollection,
     getCollabHeading,
     getCollabNote,
     getCollabProducts,
+    getStayImage,
+    getSectionCopy,
+    isCollabOpen,
     supportPath,
-    type Collab,
 } from "../data/collabData";
 import type { Product } from "../types/product";
 import { ImageOrText } from "../components/common/ImageOrText";
 import { TopButton } from "../components/common/TopButton";
+import { CollabHero } from "../components/promotion/CollabHero";
 import { CollabStrip } from "../components/promotion/CollabStrip";
 import { FaqList } from "../components/promotion/FaqList";
 
 type Layout = "center" | "left" | "right";
 
+// 블록 하나에 들어갈 내용 (상품이 있으면 상품 상세로 연결)
+interface Block {
+    key: string;
+    image?: string;
+    model: string;
+    edition: string;
+    desc: string;
+    note: string;
+    product?: Product;
+}
+
 // 상품 소개 블록 (이미지 + 제목 2줄 + 설명 + 대표 사양)
-const ProductBlock = ({ product, collab, image, layout }: { product: Product; collab: Collab; image?: string; layout: Layout }) => {
-    const { model, edition } = getCollabHeading(product, collab);
-    const to = `/products/${product.category}/${product.id}`;
+const ProductBlock = ({ block, layout }: { block: Block; layout: Layout }) => {
+    const { product } = block;
+    const to = product && `/products/${product.category}/${product.id}`;
+    const title = product?.title ?? block.model;
+    const image = <ImageOrText src={block.image} alt={title} label="Product Image" />;
     return (
         <section className={`collab-block collab-block--${layout}`}>
-            <Link to={to} className="collab-block__img" aria-label={`${product.title} 상세 보기`}>
-                <ImageOrText src={image ?? product.image} alt={product.title} label="Product Image" />
-            </Link>
+            {to ? (
+                <Link to={to} className="collab-block__img" aria-label={`${title} 상세 보기`}>
+                    {image}
+                </Link>
+            ) : (
+                <div className="collab-block__img">{image}</div>
+            )}
             <div className="collab-block__text">
                 <h3 className="collab-block__title">
-                    <Link to={to}>
-                        {model}
-                        <br />
-                        {edition}
-                    </Link>
+                    {to ? (
+                        <Link to={to}>
+                            {block.model}
+                            <br />
+                            {block.edition}
+                        </Link>
+                    ) : (
+                        <>
+                            {block.model}
+                            <br />
+                            {block.edition}
+                        </>
+                    )}
                 </h3>
-                <p className="collab-block__desc">{getCollabCopy(product, collab)}</p>
-                <p className="collab-block__note">{getCollabNote(product)}</p>
+                <p className="collab-block__desc">{block.desc}</p>
+                {block.note && <p className="collab-block__note">{block.note}</p>}
             </div>
         </section>
     );
@@ -59,17 +86,45 @@ export const CollabPage = () => {
         );
     }
 
-    // 같은 모델(번들 등)은 하나만 → 상품 수만큼 블록을 만들고 (최대 5개) 반복하지 않음
-    const products = getCollabProducts(collab).filter(
-        (p, i, list) => list.findIndex((q) => (q.series ?? q.id) === (p.series ?? p.id)) === i,
-    );
-    const [main] = products;
-    const blocks = products.slice(0, 5);
-    const layouts: Layout[] = ["center", "right", "left", "center", "left"];
-    const imageOf = (product: Product | undefined, i: number) => {
-        const gallery = product?.gallery ?? [];
-        return gallery[i % Math.max(gallery.length, 1)] ?? product?.image;
+    // 종료된 이벤트는 들어갈 수 없음 → 프로모션 알아보기로 돌려보냄
+    if (!isCollabOpen(collab)) return <Navigate to="/info/promotion/promotions" replace />;
+
+    const edition = `${collab.ko} 에디션`;
+    const productBlock = (product: Product, image?: string): Block => {
+        const heading = getCollabHeading(product, collab);
+        return {
+            key: `p${product.id}`,
+            image: image ?? product.gallery?.[0] ?? product.image,
+            model: heading.model,
+            edition: heading.edition,
+            desc: getCollabCopy(product, collab),
+            note: getCollabNote(product),
+            product,
+        };
     };
+
+    // 블록: 배너 이미지(sections)가 있으면 그 순서대로 · 없으면 상품 데이터로 (같은 모델은 하나만 · 최대 5개)
+    const blocks: Block[] = (
+        collab.sections
+            ? collab.sections.map((section, i) => {
+                const product = section.productId ? getProductById(section.productId) : undefined;
+                return product
+                    ? productBlock(product, section.image)
+                    : {
+                        key: `s${i}`,
+                        image: section.image,
+                        model: section.model.toUpperCase(),
+                        edition,
+                        desc: getSectionCopy(section.model, collab),
+                        note: "",
+                    };
+            })
+            : getCollabProducts(collab)
+                .filter((p, i, list) => list.findIndex((q) => (q.series ?? q.id) === (p.series ?? p.id)) === i)
+                .map((product, i) => productBlock(product, product.gallery?.[i === 0 ? 1 : 0]))
+    ).slice(0, 5);
+    const main = blocks.find((b) => b.product) ?? blocks[0];
+    const layouts: Layout[] = ["center", "right", "left", "center", "left"];
     // 컬렉션 소개는 2번째 블록 뒤, 대표 상품 블록은 4번째 블록 뒤 (상품이 적으면 끝에)
     const introAfter = Math.min(2, blocks.length);
     const stayAfter = Math.min(4, blocks.length);
@@ -85,31 +140,39 @@ export const CollabPage = () => {
                 </Link>
             </div>
             <div className="collab-intro__img">
-                <ImageOrText src={main ? imageOf(main, 2) : getCollabCover(collab)} alt={collab.name} label="Collection Image" />
+                <ImageOrText src={getCollabCollection(collab)} alt={collab.name} label="Collection Image" />
             </div>
         </section>
     );
 
+    // 대표 상품 블록 (작은 이미지: 정사각 이미지 → 대표 상품 이미지)
+    const mainProduct = main?.product;
     const stay = main && (
         <section key="stay" className="collab-stay promo-container">
             <div className="collab-stay__img">
-                <ImageOrText src={imageOf(main, 3)} alt={main.title} label="Product Image" />
+                <ImageOrText src={getStayImage(collab, mainProduct)} alt={collab.name} label="Product Image" />
             </div>
             <div className="collab-stay__text">
                 <h2 className="collab-stay__title">{collab.stayTitle}</h2>
                 <p className="collab-stay__desc">{collab.stayText}</p>
                 <div className="collab-stay__feature">
                     <span className="collab-stay__thumb">
-                        <ImageOrText src={main.image} alt="" label="" />
+                        <ImageOrText src={collab.thumb ?? mainProduct?.image ?? main.image} alt="" label="" />
                     </span>
                     <div>
-                        <strong>{getCollabHeading(main, collab).edition}</strong>
-                        <p>{getCollabNote(main)}</p>
+                        <strong>{main.edition}</strong>
+                        <p>{main.note || main.model}</p>
                     </div>
                 </div>
-                <Link to={`/products/${main.category}/${main.id}`} className="collab-btn">
-                    {categoryLabels[main.category]} 자세히 보기
-                </Link>
+                {mainProduct ? (
+                    <Link to={`/products/${mainProduct.category}/${mainProduct.id}`} className="collab-btn">
+                        {categoryLabels[mainProduct.category]} 자세히 보기
+                    </Link>
+                ) : (
+                    <Link to={`/search?q=${encodeURIComponent(collab.name.split(" (")[0])}`} className="collab-btn">
+                        컬렉션 살펴보기
+                    </Link>
+                )}
             </div>
         </section>
     );
@@ -117,14 +180,14 @@ export const CollabPage = () => {
     return (
         <div className="collab-page">
             <div className="collab-page__hero">
-                <ImageOrText src={getCollabHero(collab)} alt={collab.name} label="Collab Image" />
+                <CollabHero collab={collab} />
             </div>
             <CollabStrip collab={collab} />
 
             {main ? (
-                blocks.map((product, i) => (
-                    <Fragment key={product.id}>
-                        <ProductBlock product={product} collab={collab} image={imageOf(product, i === 0 ? 1 : 0)} layout={layouts[i]} />
+                blocks.map((block, i) => (
+                    <Fragment key={block.key}>
+                        <ProductBlock block={block} layout={layouts[i]} />
                         {i + 1 === introAfter && intro}
                         {i + 1 === stayAfter && stay}
                     </Fragment>
@@ -139,10 +202,10 @@ export const CollabPage = () => {
             {/* FAQ */}
             <section className="collab-page__faq promo-container">
                 <h2 className="promotion__title">자주 묻는 질문 (FAQ)</h2>
-                <FaqList items={collab.faq} numbered defaultOpen={0} />
+                <FaqList items={collab.faq} numbered />
                 <div className="collab-page__support">
                     <span>원하는 답변을 찾지 못하셨나요?</span>
-                    <Link to={supportPath}>고객지원 문의 ↗</Link>
+                    <Link to={supportPath}>고객지원 문의</Link>
                 </div>
             </section>
 

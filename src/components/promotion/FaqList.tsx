@@ -28,7 +28,7 @@ export const FaqList = ({ items, numbered = false, defaultOpen = null }: FaqList
                         >
                             {numbered && <span className="faq__num">{String(i + 1).padStart(2, "0")}</span>}
                             <span className="faq__text">{item.q}</span>
-                            <span className="faq__icon" aria-hidden="true">{isOpen ? "−" : "+"}</span>
+                            <span className="faq__icon" aria-hidden="true" />
                         </button>
                         {isOpen && (
                             <p id={panelId} className="faq__answer">

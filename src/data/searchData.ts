@@ -149,6 +149,7 @@ export const recommendedIds = [2018, 2006, 2026, 2010, 2022, 2019];
 
 // ---------- 상품 → 카드 표시용 ----------
 export const formatPrice = (product: Product) => {
+    if (product.stockStatus === "unverified") return "판매 정보 미확인";
     if (product.price === null) return product.soldOut ? "품절" : "가격 미정";
     return `${product.price.toLocaleString("ko-KR")}원`;
 };

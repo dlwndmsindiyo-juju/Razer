@@ -52,7 +52,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const isKeyboard = product.category === "keyboards";
 
     const soldOut = isSoldOut(product);
-    const total = product.price == null ? "가격 미정" : `${(product.price * count).toLocaleString("ko-KR")}원`;
+    const unverified = product.stockStatus === "unverified";
+    const purchaseDisabled = soldOut || unverified;
+    const total = unverified ? "판매 정보 미확인" : product.price == null ? "가격 미정" : `${(product.price * count).toLocaleString("ko-KR")}원`;
 
     // 옵션을 바꿔 다른 상품으로 이동하면 수량 초기화 · 타건음 정지
     useEffect(() => {
@@ -125,6 +127,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </div>
 
                     <ProductOptions product={product} />
+                    {unverified && product.productUrl && <a href={product.productUrl}>Razer 공식 소개 보기</a>}
 
                     <div className="product-detail__bottom">
                         <div className="product-detail__extras">
@@ -148,11 +151,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         </div>
 
                         <div className="product-detail__actions">
-                            <button type="button" className="product-detail__cart" disabled={soldOut} onClick={addToCart}>
+                            <button type="button" className="product-detail__cart" disabled={purchaseDisabled} onClick={addToCart}>
                                 장바구니에 추가
                             </button>
-                            <button type="button" className="product-detail__purchase" disabled={soldOut} onClick={buyNow}>
-                                {soldOut ? "품절" : product.stockStatus === "preOrderStock" ? "예약 구매하기" : "구매하기"}
+                            <button type="button" className="product-detail__purchase" disabled={purchaseDisabled} onClick={buyNow}>
+                                {unverified ? "판매 정보 미확인" : soldOut ? "품절" : product.stockStatus === "preOrderStock" ? "예약 구매하기" : "구매하기"}
                             </button>
                         </div>
                     </div>
