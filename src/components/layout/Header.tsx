@@ -45,7 +45,8 @@ export const Header = () => {
                         {/* GNB 메뉴 = 푸터 그룹 타이틀 (footerData 공용) */}
                         <ul className="header__menu">
                             {footerGroups.map((group) => {
-                                const isCurrent = pathname.startsWith(`/info/${group.slug}/`);
+                                const isCurrent =
+                                    pathname === `/info/${group.slug}` || pathname.startsWith(`/info/${group.slug}/`);
 
                                 // 제품: 서브 메뉴 열기
                                 if (group.slug === "product") {

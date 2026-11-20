@@ -58,7 +58,8 @@ export const footerCompany: FooterGroup = {
 export const getFooterPath = (groupSlug: string, pageSlug: string) => `/info/${groupSlug}/${pageSlug}`;
 
 // 그룹 대표 주소 (첫 번째 페이지) — GNB 메뉴에서 사용
-export const getGroupPath = (group: FooterGroup) => getFooterPath(group.slug, group.pages[0].slug);
+// (그룹 메뉴만 보이는 페이지 /info/:group → 왼쪽 메뉴에서 페이지 선택)
+export const getGroupPath = (group: FooterGroup) => `/info/${group.slug}`;
 
 // 주소로 그룹 · 페이지 찾기 (없으면 undefined)
 export const findFooterPage = (groupSlug?: string, pageSlug?: string) => {

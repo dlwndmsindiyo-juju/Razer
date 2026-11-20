@@ -15,6 +15,8 @@ import { useAuthStore } from "./store/useAuthStore";
 import "./App.scss";
 import { ProductsDetail } from "./pages/products/ProductsDetail";
 import { InfoPage } from "./pages/InfoPage";
+import { CollabPage } from "./pages/CollabPage";
+import { PromotionPage } from "./pages/PromotionPage";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 
 
@@ -51,6 +53,11 @@ function App() {
             element={<ProductsDetail />}
           />
           {/* 푸터 내부 링크 페이지 */}
+          {/* 그룹 메뉴 페이지 (헤더 메뉴 → 왼쪽 메뉴만) */}
+          <Route path="/info/:group" element={<InfoPage />} />
+          {/* 프로모션 알아보기 (PDF 화면) · 콜라보 상세 (콜라보 카드에서 이동) */}
+          <Route path="/info/promotion/promotions" element={<PromotionPage />} />
+          <Route path="/promotion/collab/:collabSlug" element={<CollabPage />} />
           <Route path="/info/:group/:page" element={<InfoPage />} />
         </Routes>
       </main>

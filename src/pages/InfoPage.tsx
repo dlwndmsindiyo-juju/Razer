@@ -6,7 +6,8 @@ export const InfoPage = () => {
     const { group: groupSlug, page: pageSlug } = useParams();
     const { group, page } = findFooterPage(groupSlug, pageSlug);
 
-    if (!group || !page) {
+    // 그룹 주소(/info/:group)는 메뉴만, 없는 페이지 주소는 안내
+    if (!group || (pageSlug && !page)) {
         return (
             <section className="info-page info-page--empty">
                 <h1 className="info-page__title">페이지를 찾을 수 없어요</h1>
@@ -35,11 +36,6 @@ export const InfoPage = () => {
                         ))}
                     </ul>
                 </nav>
-
-                <div className="info-page__content">
-                    <h1 className="info-page__title">{page.label}</h1>
-                    <p className="info-page__text">콘텐츠 준비 중입니다.</p>
-                </div>
             </div>
         </section>
     );

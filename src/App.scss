@@ -3401,3 +3401,584 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         transform: translate(-50%, 0.75rem);
     }
 }
+// =========================================================
+// 프로모션 알아보기 · 콜라보 상세 (가운데 1440 · 시안 x=240)
+// =========================================================
+.promo-container {
+    width: 90rem;
+    max-width: calc(100% - 2rem);
+    margin: 0 auto;
+}
+
+// 큰 이미지 아래 검정 띠 (콜라보 로고)
+.collab-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    background-color: $neutral-color-black;
+
+    img {
+        max-height: 1.25rem;
+    }
+
+    // 로고 파일이 없을 때 이름 글자
+    .image-or-text {
+        @include caption-12-r;
+        color: $neutral-color-white;
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        letter-spacing: 0.15em;
+    }
+}
+
+// 공통 흰 버튼 (컬렉션 살펴보기 · 자세히 보기)
+.collab-btn {
+    @include label-12-m;
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    padding: 0 1.125rem;
+    border-radius: $radius-sm;
+    background-color: $neutral-color-white;
+    color: $neutral-color-black;
+    font-weight: 600;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+// 이미지 공통 (꽉 채움 · 없으면 글자)
+.promotion__hero,
+.promotion__card-img,
+.promotion__collab-img,
+.collab-page__hero,
+.collab-block__img,
+.collab-intro__img,
+.collab-stay__img,
+.collab-stay__thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $neutral-color-700;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s;
+    }
+}
+
+// ---------- 프로모션 알아보기 ----------
+.promotion {
+    padding-bottom: 20rem;
+
+    &__hero {
+        height: 58.5rem;
+    }
+
+    &__featured {
+        padding-top: 6.125rem;
+    }
+
+    // 대표 컬렉션 이름 알약
+    &__badge {
+        @include caption-12-r;
+        display: inline-flex;
+        align-items: center;
+        height: 2.25rem;
+        padding: 0 1rem;
+
+        img {
+            height: 1.25rem;
+            width: auto;
+        }
+
+        border-radius: $radius-pill;
+        background-color: $neutral-color-500;
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        letter-spacing: 0.05em;
+    }
+
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 1.25rem;
+    }
+
+    &__card {
+        display: block;
+
+        &:hover .promotion__card-img {
+            border-color: $main-primary-color;
+        }
+
+        &:hover img {
+            transform: scale(1.03);
+        }
+    }
+
+    &__card-img {
+        height: 16.75rem;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+    }
+
+    &__card-title {
+        @include heading-24-b;
+        display: block;
+        margin-top: 1.5rem;
+        word-break: keep-all;
+    }
+
+    &__card-desc {
+        @include caption-12-r;
+        margin-top: 1.75rem;
+        color: $neutral-color-100;
+        word-break: keep-all;
+    }
+
+    &__collabs {
+        margin-top: 12.25rem;
+    }
+
+    &__head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+
+    &__title {
+        @include display-44-b;
+    }
+
+    &__more {
+        @include caption-12-r;
+        color: $neutral-color-white;
+
+        &:hover {
+            color: $main-primary-color;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3.75rem 1.5rem;
+        margin-top: 5.75rem;
+    }
+
+    &__collab {
+        display: block;
+
+        &:hover img {
+            transform: scale(1.04);
+        }
+
+        &:hover .promotion__collab-name {
+            color: $main-primary-color;
+        }
+    }
+
+    &__collab-img {
+        height: 28rem;
+
+
+        .image-or-text {
+            @include heading-20-sb;
+        }
+    }
+
+    &__collab-name {
+        @include heading-24-b;
+        display: block;
+        margin-top: 1rem;
+        transition: color 0.2s;
+    }
+
+    &__faq {
+        margin-top: 20rem;
+
+        .faq {
+            margin-top: 7rem;
+        }
+    }
+}
+
+// ---------- FAQ ----------
+.faq {
+    &__question {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        text-align: left;
+    }
+
+    &__text {
+        @include heading-24-sb;
+        flex: 1;
+        word-break: keep-all;
+    }
+
+    &__icon {
+        font-size: 1.5rem;
+        line-height: 1;
+        color: $main-primary-color;
+    }
+
+    // 프로모션: 회색 박스
+    &--boxed {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+
+        .faq__item {
+            background-color: $neutral-color-panel;
+        }
+
+        .faq__question {
+            min-height: 7.375rem;
+            padding: 0 8rem 0 7.625rem;
+        }
+
+        .faq__answer {
+            @include body-16-r;
+            padding: 0 8rem 2.5rem 7.625rem;
+            color: $neutral-color-100;
+        }
+    }
+
+    // 콜라보: 01 02 번호 + 아래 선
+    &--numbered {
+        .faq__item {
+            border-bottom: 1px solid $neutral-color-500;
+        }
+
+        .faq__question {
+            min-height: 7.5rem;
+            padding: 0 5.5rem 0 5.375rem;
+        }
+
+        .faq__num {
+            @include heading-24-sb;
+            width: 4.5rem;
+            color: $main-primary-color;
+        }
+
+        .faq__item.is-open .faq__icon {
+            color: $neutral-color-white;
+        }
+
+        .faq__answer {
+            @include heading-20-sb;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem 4.4375rem;
+            border-radius: $radius-sm;
+            background-color: $neutral-color-panel;
+            font-weight: 500;
+            word-break: keep-all;
+        }
+    }
+}
+
+// ---------- 콜라보 상세 ----------
+.collab-page {
+    padding-bottom: 17rem;
+
+    &__hero {
+        height: 43.75rem;
+    }
+
+    &__empty {
+        @include body-16-r;
+        padding: 10rem 0;
+        text-align: center;
+        color: $neutral-color-200;
+    }
+
+    &__faq {
+        margin-top: 10.5rem;
+
+        .faq {
+            margin-top: 3.5rem;
+        }
+    }
+
+    // 원하는 답변을 찾지 못하셨나요? · 고객지원 문의
+    &__support {
+        @include body-16-r;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 2rem;
+
+        a {
+            color: $main-primary-color;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+
+    &--empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 10rem 0;
+
+        h1 {
+            @include heading-24-b;
+        }
+
+        a {
+            color: $main-primary-color;
+        }
+    }
+}
+
+// 상품 소개 블록 (center: 풀폭 이미지 + 가운데 글 / right: 이미지 왼쪽 + 글 오른쪽 / left: 글 왼쪽 + 이미지 오른쪽)
+.collab-block {
+    margin-top: 12rem;
+
+    &__title {
+        font-size: 2.1875rem;
+        font-weight: 700;
+        line-height: 2.625rem;
+        word-break: keep-all;
+
+        a:hover {
+            color: $main-primary-color;
+        }
+    }
+
+    &__desc {
+        margin-top: 1rem;
+        font-size: 0.8125rem;
+        line-height: 1.1875rem;
+        word-break: keep-all;
+    }
+
+    &__note {
+        margin-top: 5rem;
+        font-size: 0.8125rem;
+        color: $neutral-color-100;
+    }
+
+    &__img:hover img {
+        transform: scale(1.02);
+    }
+
+    &--center {
+        margin-top: 6.625rem;
+        text-align: center;
+
+        .collab-block__img {
+            height: 32.75rem;
+        }
+
+        .collab-block__text {
+            width: 30rem;
+            margin: 2.25rem auto 0;
+        }
+    }
+
+    &--right,
+    &--left {
+        display: grid;
+        gap: 1.5rem;
+        width: 90rem;
+        max-width: calc(100% - 2rem);
+        margin-right: auto;
+        margin-left: auto;
+
+        .collab-block__img {
+            height: 31.625rem;
+            border-radius: $radius-sm;
+        }
+
+        .collab-block__text {
+            display: flex;
+            flex-direction: column;
+            padding: 2.625rem 0 5.375rem;
+        }
+
+        .collab-block__desc {
+            max-width: 30rem;
+        }
+
+        .collab-block__note {
+            margin-top: auto;
+        }
+    }
+
+    // 이미지 왼쪽 · 글 오른쪽(오른쪽 정렬)
+    &--right {
+        grid-template-columns: 51.875rem 1fr;
+
+        .collab-block__text {
+            align-items: flex-end;
+            text-align: right;
+        }
+    }
+
+    // 글 왼쪽 · 이미지 오른쪽
+    &--left {
+        grid-template-columns: 1fr 51.875rem;
+
+        .collab-block__img {
+            order: 2;
+            height: 26.875rem;
+        }
+    }
+}
+
+// 컬렉션 소개 (글 왼쪽 · 이미지 오른쪽)
+.collab-intro {
+    display: grid;
+    grid-template-columns: 1fr 50.625rem;
+    gap: 1.5rem;
+    margin-top: 10.875rem;
+
+    &__text {
+        padding-top: 6.25rem;
+    }
+
+    &__title {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 3.6875rem;
+        white-space: pre-line;
+        word-break: keep-all;
+    }
+
+    &__desc {
+        margin: 2.75rem 0 2.5rem;
+        font-size: 0.9375rem;
+        line-height: 1.3125rem;
+        color: $neutral-color-100;
+        white-space: pre-line;
+    }
+
+    &__img {
+        height: 31.125rem;
+        border-radius: $radius-md;
+    }
+}
+
+// 플레이 뒤에도 남는 … (이미지 왼쪽 · 글 오른쪽)
+.collab-stay {
+    display: grid;
+    grid-template-columns: 50.5rem 1fr;
+    gap: 5.375rem;
+    margin-top: 11rem;
+
+    &__img {
+        height: 30.5rem;
+        border-radius: 1rem;
+    }
+
+    &__text {
+        padding-top: 2.25rem;
+    }
+
+    &__title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        line-height: 2.625rem;
+        white-space: pre-line;
+        word-break: keep-all;
+    }
+
+    &__desc {
+        margin-top: 2.25rem;
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        color: $neutral-color-100;
+        white-space: pre-line;
+    }
+
+    &__feature {
+        display: flex;
+        gap: 1.25rem;
+        margin: 1.75rem 0 1.5rem;
+
+        strong {
+            @include body-16-sb;
+        }
+
+        p {
+            margin-top: 0.75rem;
+            font-size: 0.8125rem;
+            line-height: 1.25rem;
+            color: $neutral-color-100;
+            word-break: keep-all;
+        }
+    }
+
+    &__thumb {
+        flex-shrink: 0;
+        width: 9rem;
+        height: 8.75rem;
+
+        img {
+            object-fit: contain;
+            padding: 0.75rem;
+        }
+    }
+}
+
+// TOP 버튼 (위: 초록 TOP / 아래: 로고)
+$top-green: #44D62C;
+
+.top-button {
+    position: fixed;
+    right: max(2rem, calc(50vw - 960px + 12.0625rem)); // 1920 화면 기준 시안 위치
+    bottom: 2.5rem;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    width: 4.375rem;
+    height: 4.375rem;
+    border: 2px solid $top-green;
+    border-radius: 50%;
+    background-color: $body-bg;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1rem);
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+
+    &.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+
+    &__text {
+        @include label-12-m;
+        display: flex;
+        flex: 1;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 0.25rem;
+        background-color: $top-green;
+        color: $neutral-color-black;
+        font-weight: 700;
+    }
+
+    &__logo {
+        flex: 1;
+        width: 1.5rem;
+        margin: 0 auto;
+        padding: 0.25rem 0 0.375rem;
+        object-fit: contain;
+    }
+}
