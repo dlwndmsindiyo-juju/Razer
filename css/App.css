@@ -2957,6 +2957,7 @@ main {
   color: #A5A5A5;
   display: -webkit-box;
   overflow: hidden;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
