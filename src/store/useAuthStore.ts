@@ -65,6 +65,14 @@ export const getAuthErrorMessage = (error: unknown): string => {
             return "암호는 6자 이상 입력하세요";
         case "auth/too-many-requests":
             return "시도 횟수가 많아 잠시 후 다시 시도해주세요.";
+        case "auth/popup-blocked":
+            return "브라우저가 로그인 창을 막았습니다. 팝업 차단을 해제해주세요.";
+        case "auth/account-exists-with-different-credential":
+            return "같은 이메일로 다른 방법(이메일·구글 등)으로 가입된 계정이 있습니다. 그 방법으로 로그인해주세요.";
+        case "auth/unauthorized-domain":
+            return "로그인이 허용되지 않은 주소입니다. Firebase 승인된 도메인을 확인해주세요.";
+        case "auth/operation-not-allowed":
+            return "이 로그인 방식이 Firebase에서 꺼져 있습니다.";
         case "auth/network-request-failed":
             return "네트워크 연결을 확인해주세요.";
         default:
@@ -73,12 +81,19 @@ export const getAuthErrorMessage = (error: unknown): string => {
 };
 
 // Firebase 인증 성공 여부를 로그인 화면에 반환
+// 사용자가 직접 창을 닫거나 취소한 경우 (오류가 아니므로 알림 없음)
+const cancelledCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request", "auth/user-cancelled"];
+
 const runLogin = async (login: () => Promise<unknown>): Promise<boolean> => {
     try {
         await login();
         return true;
     } catch (error) {
-        alert(error instanceof Error ? error.message : "로그인에 실패했어요.");
+        const code = (error as { code?: string })?.code ?? "";
+        if (cancelledCodes.includes(code)) return false;
+
+        console.error("[간편로그인 실패]", code, error);
+        alert(getAuthErrorMessage(error));
         return false;
     }
 };
