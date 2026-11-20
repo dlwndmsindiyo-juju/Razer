@@ -37,9 +37,6 @@ export const PromotionPage = () => {
 
             {/* 대표 컬렉션 상품 3개 */}
             <section className="promotion__featured promo-container">
-                <Link to={getCollabPath(featured.slug)} className="promotion__badge" aria-label={featured.name}>
-                    <ImageOrText src={featured.logo} alt={featured.name} label={featured.name} />
-                </Link>
                 <ul className="promotion__cards">
                     {featuredProducts.map((product) => {
                         const { model, edition } = getCollabHeading(product, featured);

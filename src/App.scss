@@ -3416,11 +3416,12 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 2.5rem;
+    height: 4.5rem;
     background-color: $neutral-color-black;
 
+    // 로고가 잘 보이게 크게
     img {
-        max-height: 1.25rem;
+        max-height: 2.75rem;
     }
 
     // 로고 파일이 없을 때 이름 글자
@@ -3483,38 +3484,19 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
 .promotion {
     padding-bottom: 20rem;
 
+    // 콜라보 상세 히어로 영상(이너 너비 · 1920 x 700 비율)과 같은 높이
     &__hero {
-        height: 60vh;
+        height: calc(min(90rem, 100vw - 2rem) * 700 / 1920 + 3rem); // 콜라보 상세 영상 높이 + 3rem
     }
 
     &__featured {
         padding-top: 6.125rem;
     }
 
-    // 대표 컬렉션 이름 알약
-    &__badge {
-        @include caption-12-r;
-        display: inline-flex;
-        align-items: center;
-        height: 2.25rem;
-        padding: 0 1rem;
-
-        img {
-            height: 1.25rem;
-            width: auto;
-        }
-
-        border-radius: $radius-pill;
-        background-color: $neutral-color-500;
-        font-style: italic;
-        letter-spacing: 0.05em;
-    }
-
     &__cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
-        margin-top: 1.25rem;
     }
 
     &__card {
@@ -3586,10 +3568,6 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
             transform: scale(1.04);
         }
 
-        &:hover .promotion__collab-name {
-            color: $main-primary-color;
-        }
-
         // 종료된 이벤트: 이미지 흐리게 + 안내 문구 · 누를 수 없음
         &--ended {
             cursor: default;
@@ -3603,9 +3581,6 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
                 transform: scale(1.06);
             }
 
-            &:hover .promotion__collab-name {
-                color: inherit;
-            }
         }
     }
 
@@ -3755,8 +3730,21 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
 .collab-page {
     padding-bottom: 17rem;
 
+    // 히어로 영상: 이너(90rem) 너비에 맞추고 높이는 영상 비율대로 → 잘리지 않고 전체가 보임
     &__hero {
-        height: 70vh;
+        height: auto;
+        margin-top: 2.5rem;
+
+        video,
+        img {
+            height: auto;
+            object-fit: contain;
+        }
+
+        .image-or-text {
+            width: 100%;
+            aspect-ratio: 1920 / 700;
+        }
     }
 
     &__empty {

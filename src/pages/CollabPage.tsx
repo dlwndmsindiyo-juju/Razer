@@ -189,7 +189,7 @@ export const CollabPage = () => {
 
     return (
         <div className="collab-page">
-            <div className="collab-page__hero">
+            <div className="collab-page__hero promo-container">
                 <CollabHero collab={collab} />
             </div>
 
