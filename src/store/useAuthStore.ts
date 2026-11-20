@@ -7,6 +7,7 @@ import {
     signInWithEmailAndPassword,
     signInWithCustomToken,
     signInWithPopup,
+    getAdditionalUserInfo,
     signOut,
     updateProfile,
 } from "firebase/auth";
@@ -186,8 +187,27 @@ export const useAuthStore = create<AuthState>((set) => ({
     onGoogleLogin: () =>
         runLogin(() => signInWithPopup(auth, googleProvider)),
 
+    // 트위치는 Firebase가 닉네임·이메일을 계정에 자동으로 채우지 않아서 직접 저장
     onTwitchLogin: () =>
-        runLogin(() => signInWithPopup(auth, twitchProvider)),
+        runLogin(async () => {
+            const result = await signInWithPopup(auth, twitchProvider);
+            const claims = (getAdditionalUserInfo(result)?.profile ?? {}) as {
+                preferred_username?: string;
+                email?: string;
+                picture?: string;
+            };
+            const name = result.user.displayName || claims.preferred_username || null;
+            const email = result.user.email || claims.email?.toLowerCase() || null;
+
+            if (!result.user.displayName && name) {
+                await updateProfile(result.user, { displayName: name, photoURL: claims.picture ?? null });
+            }
+            await setDoc(doc(db, "users", result.user.uid), { uid: result.user.uid, name, email }, { merge: true });
+            await registerEmail(email);
+
+            // initAuth가 먼저 불러온 프로필에도 반영
+            set((state) => (state.user?.uid === result.user.uid ? { user: { ...state.user, name, email } } : {}));
+        }),
 
     // 디스코드 로그인 서버(server 폴더)로 이동 → 끝나면 /login/discord 로 돌아옴
     onDiscordLogin: () => {

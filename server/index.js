@@ -98,6 +98,8 @@ app.get("/api/auth/discord/start", (req, res) => {
         response_type: "code",
         scope: "identify email",
         state,
+        // 매번 디스코드 권한 허용 화면 표시 ('본인이 아닌가요?'로 계정 전환 가능)
+        prompt: "consent",
     });
     res.redirect(`https://discord.com/oauth2/authorize?${params}`);
 });
