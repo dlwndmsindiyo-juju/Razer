@@ -6,6 +6,7 @@ $body-bg: #111111;
 // $main-primary-color: #44D62C;
 $main-primary-color: #AEFF00;
 $neutral-color-white: #ffffff;
+$neutral-color-100: #E4E4E4;
 $neutral-color-100: #A5A5A5;
 $neutral-color-200: #888888;
 $neutral-color-300: #666666;
@@ -164,8 +165,8 @@ $inner-offset: 8.875rem; // 상품 섹션은 컨테이너 안쪽 142px에서 시
 $section-gap: 10rem; // 섹션 사이 간격
 
 // 레이아웃 높이
-$promo-bar-height: 2.5rem;
-$header-height: 5rem;
+$promo-bar-height: 3.875rem; // 헤더 아래 프로모션 바 (62px)
+$header-height: 4.3125rem; // GNB (69px)
 
 @mixin container {
     width: 100%;

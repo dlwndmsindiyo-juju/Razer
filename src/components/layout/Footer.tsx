@@ -27,7 +27,7 @@ export const Footer = () => {
                 </div>
 
                 <div className="footer__bottom">
-                    <p className="footer__copyright">@Copyright</p>
+                    <p className="footer__copyright">Copyright © 2026 Razer Inc. All rights reserved.</p>
 
                     {/* 회사 관련 링크 */}
                     <ul className="footer__links">

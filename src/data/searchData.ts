@@ -1,6 +1,6 @@
 // 검색 페이지 데이터 (필터 · 정렬 · 추천상품)
 import type { Product, ProductCategory, ProductCollection } from "../types/product";
-import { catalogListings, categoryLabels, collectionLabels, getProductsByCategory, getProductsByCollection } from "./productData";
+import { catalogListings, categoryLabels, collectionLabels, getProductsByCategory, getBadgeLabel, getProductsByCollection, isInCollection } from "./productData";
 import type { HomeProduct } from "./homeData";
 
 // ---------- 필터 ----------
@@ -43,7 +43,7 @@ const categoryGroup: FilterGroup = {
 const collectionGroup: FilterGroup = {
     id: "collection", title: "컬렉션",
     options: (Object.keys(collectionLabels) as ProductCollection[]).map((id) => ({
-        id, label: collectionLabels[id], match: (p) => p.collections?.includes(id) ?? false,
+        id, label: collectionLabels[id], match: (p) => isInCollection(p, id),
     })),
 };
 
@@ -149,6 +149,7 @@ export const recommendedIds = [2018, 2006, 2026, 2010, 2022, 2019];
 
 // ---------- 상품 → 카드 표시용 ----------
 export const formatPrice = (product: Product) => {
+    if (product.stockStatus === "unverified") return "판매 정보 미확인";
     if (product.price === null) return product.soldOut ? "품절" : "가격 미정";
     return `${product.price.toLocaleString("ko-KR")}원`;
 };
@@ -160,7 +161,7 @@ export const toCardProduct = (product: Product): HomeProduct => ({
     image: product.image,
     to: `/products/${product.category}/${product.id}`,
     originalPrice: product.originalPrice?.toLocaleString("ko-KR"),
-    badge: product.soldOut ? "품절" : product.badge,
+    badge: product.soldOut ? "품절" : getBadgeLabel(product.badge),
 });
 
 // ---------- 인기 검색 (헤더 검색창) ----------

@@ -33,3 +33,6 @@ export const productMenu = {
 };
 
 export const getCategoryPath = (slug: string) => `/products/${slug}`;
+
+// 헤더 아래 프로모션 바 문구
+export const promoBarText = "동안 ₩139,900 이상의 모든 주문은 대한민국으로의 무료 표준 배송 혜택을 누릴 수 있습니다.";

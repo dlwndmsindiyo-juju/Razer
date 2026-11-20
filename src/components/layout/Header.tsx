@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { footerGroups, getGroupPath } from "../../data/footerData";
 import { getCategoryPath, productMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
+import { UserMenu } from "./UserMenu";
+import { promoBarText } from "../../data/navData";
 
 export const Header = () => {
     const { pathname } = useLocation();
@@ -30,11 +32,6 @@ export const Header = () => {
 
     return (
         <header className="header">
-            {/* 상단 프로모션 바 */}
-            <div className="header__promo">
-                <p className="header__promo-text">Promotion Bar</p>
-            </div>
-
             {/* GNB */}
             <div className="header__gnb">
                 <div className="header__inner">
@@ -48,7 +45,8 @@ export const Header = () => {
                         {/* GNB 메뉴 = 푸터 그룹 타이틀 (footerData 공용) */}
                         <ul className="header__menu">
                             {footerGroups.map((group) => {
-                                const isCurrent = pathname.startsWith(`/info/${group.slug}/`);
+                                const isCurrent =
+                                    pathname === `/info/${group.slug}` || pathname.startsWith(`/info/${group.slug}/`);
 
                                 // 제품: 서브 메뉴 열기
                                 if (group.slug === "product") {
@@ -98,12 +96,15 @@ export const Header = () => {
                         <Link to="/cart" className="header__icon" aria-label="장바구니">
                             <img src="/icons/cart.svg" alt="" />
                         </Link>
-                        <Link to="/login" className="header__icon" aria-label="로그인">
-                            <img src="/icons/user.svg" alt="" />
-                        </Link>
+                        <UserMenu />
                         <button type="button" className="header__lang">KR</button>
                     </div>
                 </div>
+            </div>
+
+            {/* 프로모션 바 (GNB 아래) */}
+            <div className="header__promo">
+                <p className="header__promo-text">{promoBarText}</p>
             </div>
 
             {/* 제품 서브 메뉴 (메가 메뉴) */}
