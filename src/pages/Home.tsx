@@ -1,22 +1,23 @@
 import { HomeHero } from "../components/home/HomeHero";
-import { HomeExplore } from "../components/home/HomeExplore";
 import { HomeNewArrivals } from "../components/home/HomeNewArrivals";
-import { HomePromoBanner } from "../components/home/HomePromoBanner";
-import { HomeCustomBanner } from "../components/home/HomeCustomBanner";
+import { HomeProPick } from "../components/home/HomeProPick";
 import { HomeBest } from "../components/home/HomeBest";
-import { HomeCustomizer } from "../components/home/HomeCustomizer";
+import { HomeCategory } from "../components/home/HomeCategory";
+import { HomePromoBanner } from "../components/home/HomePromoBanner";
+import { HomeSetup } from "../components/home/HomeSetup";
 import { HomeFeatures } from "../components/home/HomeFeatures";
 
+// 메인홈 (시안 순서)
 export const Home = () => {
     return (
         <div className="home">
             <HomeHero />
-            <HomeExplore />
             <HomeNewArrivals />
-            <HomePromoBanner />
-            <HomeCustomBanner />
+            <HomeProPick />
             <HomeBest />
-            <HomeCustomizer />
+            <HomeCategory />
+            <HomePromoBanner />
+            <HomeSetup />
             <HomeFeatures />
         </div>
     );

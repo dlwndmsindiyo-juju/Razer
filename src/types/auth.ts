@@ -1,5 +1,3 @@
-import type { User } from "firebase/auth";
-
 // 사용자와 관련된 타입
 export interface AppUser {
     uid: string;
@@ -8,14 +6,28 @@ export interface AppUser {
     email: string | null;
     phone: string | null;
     profile: string;
+    birth?: string; // 생년월일 (YYYY/MM/DD)
+    location?: string; // 위치(국가)
+}
+
+// 회원가입 폼 입력값
+export interface SignupForm {
+    nickname: string; // Razer ID (게이머 명)
+    password: string;
+    birth: string;
+    email: string;
+    location: string;
 }
 
 export interface AuthState {
     user: AppUser | null;
     authReady: boolean;
     initAuth: () => () => void;
-    onMember: (form: AppUser) => Promise<void>;
+    // 이메일 회원가입·로그인 (실패 시 에러를 던짐 → 화면에서 문구 표시)
+    onMember: (form: SignupForm) => Promise<void>;
     onLogin: (email: string, password: string) => Promise<void>;
+    // 암호 재설정 메일 발송
+    onResetPassword: (email: string) => Promise<void>;
     // 구글·트위치 팝업 로그인 성공 여부를 반환
     onGoogleLogin: () => Promise<boolean>;
     onTwitchLogin: () => Promise<boolean>;
