@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
+import { TopButton } from "./components/common/TopButton";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
@@ -63,6 +64,8 @@ function App() {
       </main>
 
       <Footer />
+      {/* TOP 버튼: 메인부터 모든 페이지에 항상 표시 */}
+      <TopButton />
     </>
   );
 }

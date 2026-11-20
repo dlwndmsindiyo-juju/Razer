@@ -892,7 +892,7 @@ main {
     &__tab {
         @include body-16-r;
         padding-bottom: 0.3125rem;
-        border-bottom: 2px solid transparent;
+        border-bottom: 1px solid transparent;
         color: $neutral-color-100;
 
         &:hover {
@@ -900,8 +900,8 @@ main {
         }
 
         &.is-active {
-            border-bottom-color: #44D62C; // 시안 값
-            color: #44D62C;
+            border-bottom-color: $main-primary-color; // 시안 값
+            color: $main-primary-color;
         }
     }
 }
@@ -3401,6 +3401,7 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         transform: translate(-50%, 0.75rem);
     }
 }
+
 // =========================================================
 // 프로모션 알아보기 · 콜라보 상세 (가운데 1440 · 시안 x=240)
 // =========================================================
@@ -3483,7 +3484,7 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
     padding-bottom: 20rem;
 
     &__hero {
-        height: 58.5rem;
+        height: 60vh;
     }
 
     &__featured {
@@ -3505,7 +3506,6 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
 
         border-radius: $radius-pill;
         background-color: $neutral-color-500;
-        font-family: Georgia, "Times New Roman", serif;
         font-style: italic;
         letter-spacing: 0.05em;
     }
@@ -3756,7 +3756,7 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
     padding-bottom: 17rem;
 
     &__hero {
-        height: 43.75rem;
+        height: 70vh;
     }
 
     &__empty {
@@ -3840,17 +3840,33 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         transform: scale(1.02);
     }
 
+    // 가운데: 풀폭 이미지 + 아래 글 (배너 비율 그대로 → 제품이 잘리지 않음)
     &--center {
         margin-top: 6.625rem;
         text-align: center;
 
         .collab-block__img {
-            height: 32.75rem;
+            aspect-ratio: 1920 / 700;
+
+            img {
+                object-fit: contain;
+            }
         }
 
         .collab-block__text {
-            width: 30rem;
+            width: 38rem;
             margin: 2.25rem auto 0;
+        }
+    }
+
+    // 히어로 영상 바로 아래 글만 (가운데)
+    &--caption {
+        margin-top: 4rem;
+        text-align: center;
+
+        .collab-block__text {
+            width: 38rem;
+            margin: 0 auto;
         }
     }
 
@@ -3969,10 +3985,18 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         white-space: pre-line;
     }
 
+    // 큰 정사각 이미지 (박스 없이) + 오른쪽에 에디션 · 모델 · 버튼
     &__feature {
         display: flex;
-        gap: 1.25rem;
-        margin: 1.75rem 0 1.5rem;
+        gap: 2rem;
+        margin-top: 1.75rem;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 0.5rem;
 
         strong {
             @include body-16-sb;
@@ -3985,27 +4009,32 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
             color: $neutral-color-100;
             word-break: keep-all;
         }
+
+        .collab-btn {
+            margin-top: auto;
+        }
     }
 
     &__thumb {
         flex-shrink: 0;
-        width: 9rem;
-        height: 8.75rem;
+        width: 14rem;
+        height: 14rem;
+        background-color: transparent;
 
         img {
             object-fit: contain;
-            padding: 0.75rem;
         }
     }
 }
 
 // TOP 버튼 (위: 초록 TOP / 아래: 로고)
-$top-green: #44D62C;
+$top-green: $main-primary-color;
 
 .top-button {
     position: fixed;
-    right: max(2rem, calc(50vw - 960px + 12.0625rem)); // 1920 화면 기준 시안 위치
-    bottom: 2.5rem;
+    // 콘텐츠(90rem) 오른쪽 바깥 여백 안쪽 (여백이 좁으면 화면 끝에서 1rem)
+    right: max(1rem, calc((100vw - 90rem) * 0.29 - 2.1875rem));
+    bottom: 2.5rem; // 푸터가 보이면 TopButton 에서 그만큼 올림
     z-index: 90;
     display: flex;
     flex-direction: column;

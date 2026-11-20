@@ -15,6 +15,7 @@ export interface CollabSection {
     image: string; // 1920 x 700 배너
     model: string; // 상품 데이터가 없을 때 보일 모델 이름
     productId?: number; // productData 에 있는 같은 에디션 상품
+    layout?: "center" | "left" | "right"; // 기본 순서(가운데 · 오른쪽 · 왼쪽 …) 대신 쓸 배치
 }
 
 export interface Collab {
@@ -28,7 +29,8 @@ export interface Collab {
     video?: string; // 큰 대표 영상 (있으면 이미지 대신 재생 · 이미지는 로딩 전 포스터)
     collection?: string; // 컬렉션 소개 · 대표 상품 블록 이미지 (전체 구성 컷)
     thumb?: string; // 대표 상품 블록의 작은 정사각 이미지 (500 x 500)
-    sections?: CollabSection[]; // 상품 소개 블록 (있으면 이 순서대로 · 없으면 상품 데이터로 만듦)
+    sections?: CollabSection[]; // 상품 소개 블록 (있으면 이 순서대로 · 3장 이상이면 마지막 장은 "플레이 뒤에도 남는" 이미지)
+    stayAfter?: number; // "플레이 뒤에도 남는 …" 블록을 몇 번째 상품 블록 뒤에 둘지 (기본 4)
     ended?: boolean; // 종료된 이벤트 → 카드는 흐리게 · 상세 페이지는 들어갈 수 없음
     headline: string; // 컬렉션 소개 큰 문구 (\n 줄바꿈)
     intro: string; // 컬렉션 소개 설명 (\n 줄바꿈)
@@ -67,11 +69,11 @@ export const collabs: Collab[] = [
         collection: "/images/promotion/kuromi/collection.webp",
         thumb: "/images/promotion/kuromi/kuromi-500x500.webp",
         sections: [
-            { image: "/images/promotion/kuromi/kraken-kitty-v2-bt.webp", model: "Razer Kraken Kitty V2 BT" },
+            { image: "/images/promotion/kuromi/enki-x.webp", model: "Razer Enki X" },
             { image: "/images/promotion/kuromi/ornata-v3-tkl.webp", model: "Razer Ornata V3 Tenkeyless" },
             { image: "/images/promotion/kuromi/leviathan-v2-x.webp", model: "Razer Leviathan V2 X" },
             { image: "/images/promotion/kuromi/deathadder-essential-goliathus.webp", model: "Razer DeathAdder Essential + Goliathus" },
-            { image: "/images/promotion/kuromi/enki-x.webp", model: "Razer Enki X" },
+            { image: "/images/promotion/kuromi/kraken-kitty-v2-bt.webp", model: "Razer Kraken Kitty V2 BT" },
         ],
         cover: "/images/promotion/collab/kuromi.webp",
         name: "KUROMI",
@@ -85,6 +87,7 @@ export const collabs: Collab[] = [
     make({
         slug: "evangelion",
         video: "/videos/collab/evangelion.mp4",
+        collection: "/images/promotion/evangelion-hero.webp",
         thumb: "/images/promotion/evangelion/mouse-stand.webp",
         sections: [
             { image: "/images/promotion/evangelion/deathadder-v4-pro.webp", model: "Razer DeathAdder V4 Pro", productId: 2004 },
@@ -179,7 +182,7 @@ export const collabs: Collab[] = [
         slug: "joola",
         ended: true, // 종료된 이벤트
         cover: "/images/promotion/collab/joola.webp",
-        name: "JOOLA",
+        name: "줄라",
         ko: "줄라 (JOOLA)",
         match: /JOOLA/i,
         headline: "Performance Pulse,\n당신의 셋업으로.",
@@ -212,6 +215,7 @@ export const collabs: Collab[] = [
     make({
         slug: "pompompurin",
         hero: "/images/promotion/pompompurin/hero.webp",
+        video: "/videos/collab/pompompurin.mp4",
         collection: "/images/promotion/pompompurin/collection.webp",
         sections: [
             { image: "/images/promotion/pompompurin/keyboard.webp", model: "Razer Ornata V3 Tenkeyless", productId: 1005 },
@@ -336,19 +340,18 @@ export const getCollabCover = (collab: Collab) => {
 };
 
 // 컬렉션 전체 구성 이미지 (컬렉션 소개 · 대표 상품 블록)
-// (영상이 있으면 대표 이미지는 화면에 안 보이므로 여기에 씀)
 export const getCollabCollection = (collab: Collab) =>
     collab.collection ??
-    (collab.video ? collab.hero : undefined) ??
     collab.sections?.[0]?.image ??
     getCollabProducts(collab)[0]?.gallery?.[2] ??
     getCollabCover(collab);
 
 // "플레이 뒤에도 남는 …" 블록 큰 이미지 (컬렉션 소개와 겹치지 않게)
+// 배너가 3장 이상이면 마지막 배너 (블록에서는 빠짐)
 export const getStayImage = (collab: Collab, product?: Product) => {
-    if (collab.collection && collab.video && collab.hero) return collab.hero;
-    const last = collab.sections?.[collab.sections.length - 1]?.image;
-    return last ?? product?.gallery?.[3] ?? product?.image;
+    const sections = collab.sections ?? [];
+    if (sections.length >= 3) return sections[sections.length - 1].image;
+    return product?.gallery?.[3] ?? product?.image;
 };
 
 // 상품 id 에 맞는 배너 이미지 (프로모션 대표 카드 등)

@@ -14,7 +14,6 @@ import {
 import { getProductById } from "../data/productData";
 import type { Product } from "../types/product";
 import { ImageOrText } from "../components/common/ImageOrText";
-import { TopButton } from "../components/common/TopButton";
 import { CollabStrip } from "../components/promotion/CollabStrip";
 import { FaqList } from "../components/promotion/FaqList";
 
@@ -107,7 +106,6 @@ export const PromotionPage = () => {
                 <FaqList items={promotionFaq} />
             </section>
 
-            <TopButton />
         </div>
     );
 };
