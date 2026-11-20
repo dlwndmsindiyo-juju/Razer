@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link, NavLink, useParams } from "react-router-dom";
 import { findFooterPage, getFooterPath } from "../data/footerData";
 
@@ -6,11 +5,6 @@ import { findFooterPage, getFooterPath } from "../data/footerData";
 export const InfoPage = () => {
     const { group: groupSlug, page: pageSlug } = useParams();
     const { group, page } = findFooterPage(groupSlug, pageSlug);
-
-    // 페이지가 바뀌면 맨 위로
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [groupSlug, pageSlug]);
 
     if (!group || !page) {
         return (

@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { footerGroups, getGroupPath } from "../../data/footerData";
 import { getCategoryPath, productMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
+import { UserMenu } from "./UserMenu";
 
 export const Header = () => {
     const { pathname } = useLocation();
@@ -98,9 +99,7 @@ export const Header = () => {
                         <Link to="/cart" className="header__icon" aria-label="장바구니">
                             <img src="/icons/cart.svg" alt="" />
                         </Link>
-                        <Link to="/login" className="header__icon" aria-label="로그인">
-                            <img src="/icons/user.svg" alt="" />
-                        </Link>
+                        <UserMenu />
                         <button type="button" className="header__lang">KR</button>
                     </div>
                 </div>

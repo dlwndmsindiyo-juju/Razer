@@ -145,6 +145,76 @@ main {
     }
 }
 
+// 유저 아이콘 메뉴 (로그인 상태)
+.user-menu {
+    position: relative;
+
+    &__panel {
+        position: absolute;
+        top: calc(100% + 1.25rem);
+        right: -1rem;
+        z-index: 120;
+        min-width: 13.75rem;
+        padding: 0.5rem 0;
+        border: 1px solid $neutral-color-500;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+        animation: user-menu-in 0.2s ease-out;
+    }
+
+    // 닉네임 · 이메일
+    &__profile {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.75rem 1.25rem 1rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid $neutral-color-500;
+
+        strong {
+            @include label-14-sb;
+            color: $neutral-color-white;
+        }
+
+        span {
+            @include caption-12-r;
+            overflow: hidden;
+            color: $neutral-color-200;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    &__item {
+        @include body-14-r;
+        display: block;
+        width: 100%;
+        padding: 0.625rem 1.25rem;
+        color: $neutral-color-100;
+        text-align: left;
+        transition: background-color 0.2s, color 0.2s;
+
+        &:hover {
+            background-color: $neutral-color-canvas;
+            color: $neutral-color-white;
+        }
+
+        &--logout {
+            margin-top: 0.5rem;
+            border-top: 1px solid $neutral-color-500;
+            padding-top: 0.875rem;
+        }
+    }
+}
+
+@keyframes user-menu-in {
+    from {
+        opacity: 0;
+        transform: translateY(-0.5rem);
+    }
+}
+
 // =========================================================
 // 제품 서브 메뉴 (메가 메뉴 · GNB 아래로 펼침)
 // =========================================================
@@ -908,7 +978,7 @@ main {
     }
 }
 
-// ---------- 7. 취향으로 완성하는 셋업 (이미지 1112 x 476 + 오른쪽 컬렉션) ----------
+// ---------- 7. 취향으로 완성하는 셋업 (이미지 1112 x 480 + 오른쪽 컬렉션) ----------
 .home-setup {
     margin-top: 5rem;
 
@@ -923,7 +993,7 @@ main {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 29.75rem;
+        height: 30rem;
         border-radius: $radius-md;
         background-color: $neutral-color-700;
         overflow: hidden;
@@ -943,29 +1013,38 @@ main {
         }
     }
 
-    // 이미지 위 + 표시
+    // 이미지 위 + 버튼 (누르면 x 로 회전)
     &__hotspot {
         position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2rem;
-        height: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
         border: 1px solid rgba(255, 255, 255, 0.7);
         border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: rgba(0, 0, 0, 0.85);
         transform: translate(-50%, -50%);
         transition: background-color 0.2s, border-color 0.2s;
 
-        // 플러스 아이콘 (public/icons/plus.svg)
+        // 플러스 아이콘 (public/icons/plus.svg) · 45도 돌면 x
         img {
             width: 1.25rem;
             height: 1.25rem;
+            transition: transform 0.3s ease;
         }
 
         &:hover {
             border-color: $neutral-color-white;
             background-color: $neutral-color-500;
+        }
+
+        &.is-open {
+            border-color: $neutral-color-white;
+
+            img {
+                transform: rotate(45deg);
+            }
         }
     }
 
@@ -983,27 +1062,30 @@ main {
         color: $neutral-color-white;
     }
 
-    // 오른쪽: 컬렉션 소개 + 대표 상품
+    // 오른쪽: 타이틀 · 서브타이틀 (항상) + 상품 정보 (+ 를 눌렀을 때만)
     &__side {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding-bottom: 3rem;
+        padding-bottom: 1rem;
     }
 
     &__collection {
-        @include display-32-b;
+        @include display-44-b;
     }
 
     &__subtitle {
-        @include heading-24-sb;
-        margin-top: 0.5rem;
+        @include heading-20-sb;
+        margin-top: 1rem;
+        line-height: 2rem;
+        word-break: keep-all; // 한글이 단어 중간에서 끊기지 않게
     }
 
     &__product {
         display: flex;
         align-items: center;
-        gap: 2rem;
+        gap: 1.25rem;
+        animation: setup-product-in 0.35s ease;
     }
 
     &__product-img {
@@ -1011,8 +1093,8 @@ main {
         flex-shrink: 0;
         align-items: center;
         justify-content: center;
-        width: 14.625rem;
-        height: 10.625rem;
+        width: 16.5rem;
+        height: 13rem;
 
         img {
             max-width: 100%;
@@ -1029,17 +1111,51 @@ main {
 
     &__product-name {
         @include heading-20-sb;
+        font-size: 1.125rem;
+        word-break: keep-all;
     }
 
     &__product-variant {
         @include caption-12-r;
-        margin-top: 0.25rem;
+        margin-top: 0.5rem;
         color: $neutral-color-100;
     }
 
     &__product-price {
         @include label-14-sb;
+        margin-top: 0.375rem;
+    }
+
+    &__product-stock {
+        @include caption-12-r;
         margin-top: 0.25rem;
+        color: $neutral-color-100;
+    }
+
+    // 제품 자세히 보기 (초록 그라데이션 버튼)
+    &__product-btn {
+        @include label-14-sb;
+        display: inline-flex;
+        align-items: center;
+        height: 2.9375rem;
+        margin-top: 1.5rem;
+        padding: 0 1.5rem;
+        border-radius: $radius-sm;
+        background: $gradient-primary;
+        color: $neutral-color-black;
+    }
+}
+
+// 상품 정보가 나타날 때 (아래에서 살짝 올라오며)
+@keyframes setup-product-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.75rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -1544,5 +1660,546 @@ main {
 
     .search-page__bar {
         width: calc(100% - 2rem);
+    }
+}
+// =========================================================
+// 로그인 · 회원가입 (/login, /signup)
+// =========================================================
+$auth-error-color: #FF4646; // 입력 에러 문구
+
+.auth {
+    padding: 7.5rem 0 12.5rem;
+
+    &__card {
+        width: 50rem;
+        margin: 0 auto;
+        padding: 3.75rem 0 6.5rem;
+        background-color: $body-bg;
+        box-shadow: 0 0 1rem rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.02);
+        border-radius: $radius-md;
+
+        &--signup {
+            padding-bottom: 3.875rem;
+        }
+    }
+
+    // 로고 · 타이틀
+    &__head {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    &__logo img {
+        width: 3.125rem;
+        height: 3.125rem;
+    }
+
+    &__title {
+        @include body-14-r;
+        margin-top: 1.375rem;
+        color: $neutral-color-100;
+    }
+
+    &__desc {
+        @include caption-12-r;
+        margin-top: 0.75rem;
+        color: $neutral-color-100;
+    }
+
+    &__form {
+        width: 31.25rem;
+        margin: 2rem auto 0;
+    }
+
+    // 회원가입: 소셜 → 구분선 → 폼 순서
+    &__card--signup &__head + .auth-social {
+        margin-top: 1.9375rem;
+    }
+
+    &__card--signup .auth-divider {
+        margin-top: 1.8125rem;
+    }
+
+    &__card--signup &__form {
+        margin-top: 2.125rem;
+    }
+
+    &__required {
+        @include body-14-r;
+        margin-bottom: 1.3125rem;
+        color: $neutral-color-white;
+    }
+
+    // Razer ID 만들기 | 비밀번호 찾기
+    &__links {
+        @include caption-12-r;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        margin-top: 0.5rem;
+
+        a,
+        button {
+            color: $neutral-color-white;
+            transition: color 0.2s;
+
+            &:hover {
+                color: $main-primary-color;
+            }
+        }
+    }
+
+    &__notice {
+        @include caption-12-r;
+        margin-top: 0.75rem;
+        color: $main-primary-color;
+        text-align: center;
+    }
+
+    &__submit {
+        @include body-16-r;
+        width: 100%;
+        height: 3.125rem;
+        margin-top: 1.5rem;
+        border-radius: $radius-sm;
+        background-color: $main-primary-color;
+        color: $neutral-color-black;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 0.9;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+    }
+
+    // 약관
+    &__terms {
+        @include caption-12-r;
+        color: $neutral-color-100;
+
+        p {
+            margin-top: 0.625rem;
+        }
+
+        span {
+            display: block;
+        }
+    }
+
+    &__terms-title {
+        @include body-14-r;
+        margin-bottom: 0.75rem;
+        color: $neutral-color-white;
+    }
+
+    // 회원가입 버튼 + 버튼 위 에러 문구
+    &__submit-wrap {
+        position: relative;
+        margin-top: 6.4375rem;
+
+        .auth__submit {
+            margin-top: 0;
+        }
+    }
+
+    &__form-error {
+        @include caption-12-r;
+        position: absolute;
+        bottom: calc(100% + 0.6875rem);
+        left: 0;
+        width: 100%;
+        color: $auth-error-color;
+        text-align: center;
+    }
+
+    // 이미 계정이 있으신가요? 로그인
+    &__switch {
+        margin-top: 0.75rem;
+        text-align: center;
+
+        p {
+            @include body-14-r;
+            color: $neutral-color-white;
+        }
+
+        a {
+            @include body-16-r;
+            display: inline-block;
+            margin-top: 0.25rem;
+            color: $main-primary-color;
+        }
+    }
+}
+
+// 입력칸 (에러 문구 자리를 미리 확보해 칸 간격 고정)
+.auth-field {
+    position: relative;
+    padding-bottom: 2.875rem;
+
+    &--select {
+        padding-bottom: 1.9375rem;
+    }
+
+    &__box {
+        position: relative;
+    }
+
+    // 양식에 맞지 않을 때 좌우로 살짝 흔들림
+    &__box.is-shaking,
+    .auth-select.is-shaking {
+        animation: auth-shake 0.4s ease-in-out;
+    }
+
+    &__input {
+        @include body-16-r;
+        width: 100%;
+        height: 3.125rem;
+        padding: 0 1.25rem;
+        border: 1px solid transparent;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+        color: $neutral-color-white;
+        transition: border-color 0.2s;
+
+        &::placeholder {
+            color: $neutral-color-100;
+        }
+
+        &:focus {
+            border-color: $neutral-color-300;
+        }
+
+        // 브라우저 자동완성 배경색 덮기
+        &:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 100px $neutral-color-700 inset;
+            -webkit-text-fill-color: $neutral-color-white;
+            caret-color: $neutral-color-white;
+        }
+    }
+
+    // 양식에 맞지 않으면 빨간 테두리 (오류 박스)
+    &.has-error &__input,
+    &.has-error .auth-select__button {
+        border-color: $auth-error-color;
+    }
+
+    // 암호 입력칸은 눈 아이콘 자리만큼 오른쪽 여백
+    &__input--password {
+        padding-right: 4rem;
+    }
+
+    &__toggle {
+        position: absolute;
+        top: 50%;
+        right: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        transform: translateY(-50%);
+        opacity: 0.8;
+        transition: opacity 0.2s;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
+        &:hover,
+        &.is-visible {
+            opacity: 1;
+        }
+
+        &.is-visible img {
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    &__error {
+        @include caption-12-r;
+        position: absolute;
+        top: calc(3.125rem + 0.625rem);
+        left: 0;
+        color: $auth-error-color;
+    }
+}
+
+// "또는" 구분선
+.auth-divider {
+    @include caption-12-r;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 31.25rem;
+    margin: 1.6875rem auto 0;
+    color: $neutral-color-200;
+
+    &::before,
+    &::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: $neutral-color-200;
+    }
+}
+
+// 간편 로그인 버튼 (기본은 모두 회색, 호버 시 초록)
+.auth-social {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1.9375rem;
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-canvas;
+        transition: background-color 0.2s;
+
+        img {
+            width: 1.5rem;
+            height: 1.5rem;
+            filter: brightness(0) invert(1); // 아이콘 흰색
+            transition: filter 0.2s;
+        }
+
+        &:hover,
+        &:focus-visible {
+            background-color: $main-primary-color;
+
+            img {
+                filter: brightness(0); // 아이콘 검정
+            }
+        }
+    }
+}
+
+// 회원가입 선택 박스 (검색 정렬 드롭다운 스타일)
+.auth-select {
+    position: relative;
+
+    &__button {
+        @include body-16-r;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 3.125rem;
+        padding: 0 1.5rem 0 1.25rem;
+        border: 1px solid $neutral-color-200;
+        border-radius: $radius-md;
+        color: $neutral-color-white;
+        text-align: left;
+        transition: border-color 0.2s;
+
+        &.is-empty {
+            color: $neutral-color-100;
+        }
+
+        &:hover,
+        &.is-open {
+            border-color: $neutral-color-100;
+        }
+
+        img {
+            width: 1.25rem;
+            height: 1.25rem;
+            transition: transform 0.2s;
+        }
+
+        &.is-open img {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__list {
+        position: absolute;
+        top: calc(100% + 0.25rem);
+        left: 0;
+        z-index: 10;
+        width: 100%;
+        max-height: 15rem;
+        overflow-y: auto;
+        padding: 0.375rem 0;
+        border: 1px solid $neutral-color-500;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+
+        button {
+            @include body-14-r;
+            width: 100%;
+            padding: 0.625rem 1.25rem;
+            text-align: left;
+            color: $neutral-color-100;
+
+            &:hover {
+                background-color: $neutral-color-canvas;
+                color: $neutral-color-white;
+            }
+
+            &.is-selected {
+                color: $main-primary-color;
+            }
+        }
+    }
+}
+
+@keyframes auth-shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-0.375rem);
+    }
+
+    40%,
+    80% {
+        transform: translateX(0.375rem);
+    }
+}
+
+// 움직임 줄이기 설정을 켠 사용자는 흔들림 없이 빨간 테두리만
+@media (prefers-reduced-motion: reduce) {
+    .auth-field__box.is-shaking,
+    .auth-select.is-shaking,
+    .auth-modal,
+    .auth-modal__panel {
+        animation: none;
+    }
+}
+
+// 로그인 안내 팝업 (회원 정보 없음 등)
+.auth-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 300; // 헤더(100) · 필터 패널(200) 위
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: auth-modal-fade 0.2s ease-out;
+
+    &__panel {
+        width: 25rem;
+        padding: 2.5rem 2rem 2rem;
+        border-radius: $radius-md;
+        background-color: $neutral-color-panel;
+        box-shadow: 0 0 1rem rgba(255, 255, 255, 0.1);
+        text-align: center;
+        animation: auth-modal-in 0.25s ease-out;
+    }
+
+    &__title {
+        @include heading-20-sb;
+        color: $neutral-color-white;
+    }
+
+    &__text {
+        @include body-14-r;
+        margin-top: 1rem;
+        color: $neutral-color-100;
+        word-break: keep-all;
+
+        strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: $main-primary-color;
+            font-weight: $font-weight-medium;
+            word-break: break-all;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    &__btn {
+        @include label-14-sb;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        height: 2.75rem;
+        border: 1px solid $neutral-color-300;
+        border-radius: $radius-sm;
+        color: $neutral-color-white;
+        transition: border-color 0.2s, opacity 0.2s;
+
+        &:hover {
+            border-color: $neutral-color-100;
+        }
+
+        &--primary {
+            border-color: $main-primary-color;
+            background-color: $main-primary-color;
+            color: $neutral-color-black;
+
+            &:hover {
+                border-color: $main-primary-color;
+                opacity: 0.9;
+            }
+        }
+    }
+}
+
+@keyframes auth-modal-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes auth-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.75rem);
+    }
+}
+
+// =========================================================
+// 마이페이지 (/mypage · 기본 정보만)
+// =========================================================
+.mypage {
+    width: 50rem;
+    margin: 0 auto;
+    padding: 7.5rem 0 12.5rem;
+
+    &__title {
+        @include display-32-b;
+    }
+
+    &__info {
+        margin: 2.5rem 0;
+        border-top: 1px solid $neutral-color-500;
+    }
+
+    &__row {
+        display: flex;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid $neutral-color-500;
+
+        dt {
+            @include body-14-m;
+            width: 10rem;
+            color: $neutral-color-200;
+        }
+
+        dd {
+            @include body-16-r;
+            color: $neutral-color-white;
+        }
     }
 }

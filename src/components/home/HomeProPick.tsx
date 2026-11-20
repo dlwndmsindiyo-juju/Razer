@@ -5,15 +5,6 @@ import { proPicks, proPicksMoreLink, type ProPick } from "../../data/homeData";
 import { HomeSectionHeader } from "./HomeSectionHeader";
 import { ImageOrText } from "../common/ImageOrText";
 
-// 상품 가격 · 상세 주소 (productData 기준)
-const productInfo = (pick: ProPick) => {
-    const product = getProductById(pick.productId);
-    return {
-        price: product ? formatPrice(product) : "",
-        to: product ? `/products/${product.category}/${product.id}` : "/",
-    };
-};
-
 // 프로게이머 PICK (왼쪽 큰 카드 1 + 오른쪽 카드 2)
 export const HomeProPick = () => {
     const [featured, ...others] = proPicks;
@@ -33,7 +24,17 @@ export const HomeProPick = () => {
 };
 
 const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean }) => {
-    const { price, to } = productInfo(pick);
+    // 가격 · 상품 이미지 · 상세 주소는 productData 기준
+    const product = getProductById(pick.productId);
+    const price = product ? formatPrice(product) : "";
+    const to = product ? `/products/${product.category}/${product.id}` : "/";
+
+    // 상품 이미지 (누르면 상세로)
+    const productImage = (
+        <Link to={to} className="home-pick__product-img" aria-label={`${pick.productName} 상세 보기`}>
+            <ImageOrText src={product?.image} alt={pick.productName} label="Product Image" />
+        </Link>
+    );
 
     return (
         <article className={`home-pick__card ${isLarge ? "is-large" : ""}`}>
@@ -56,11 +57,7 @@ const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean 
                         <span className="home-pick__game">{pick.game}</span>
                     </>
                 )}
-                {isLarge && (
-                    <div className="home-pick__product-img">
-                        <ImageOrText src={pick.productImage} alt={pick.productName} label="Product Image" />
-                    </div>
-                )}
+                {isLarge && productImage}
                 <strong className="home-pick__product">{pick.productName}</strong>
                 <span className="home-pick__variant">{pick.variant}</span>
                 <span className="home-pick__price">{price}</span>
@@ -70,11 +67,7 @@ const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean 
             </div>
 
             {/* 상품 이미지 (오른쪽 작은 카드) */}
-            {!isLarge && (
-                <div className="home-pick__product-img">
-                    <ImageOrText src={pick.productImage} alt={pick.productName} label="Product Image" />
-                </div>
-            )}
+            {!isLarge && productImage}
         </article>
     );
 };

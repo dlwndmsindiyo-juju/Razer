@@ -1,0 +1,80 @@
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
+
+// 헤더 유저 아이콘
+// - 로그아웃 상태: 누르면 로그인 페이지
+// - 로그인 상태: 누르면 마이페이지 · 장바구니 · 로그아웃 메뉴
+export const UserMenu = () => {
+    const { pathname } = useLocation();
+    const navigate = useNavigate();
+    const { user, onLogout } = useAuthStore();
+    const [isOpen, setIsOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    // 페이지 이동하면 닫기
+    useEffect(() => {
+        setIsOpen(false);
+    }, [pathname]);
+
+    // 바깥 클릭 · Esc로 닫기
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleClick = (e: MouseEvent) => {
+            if (!ref.current?.contains(e.target as Node)) setIsOpen(false);
+        };
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setIsOpen(false);
+        };
+        document.addEventListener("mousedown", handleClick);
+        document.addEventListener("keydown", handleKey);
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+            document.removeEventListener("keydown", handleKey);
+        };
+    }, [isOpen]);
+
+    if (!user) {
+        return (
+            // 로그인 후 지금 보던 페이지로 돌아오도록 경로 전달
+            <Link to="/login" state={{ from: pathname }} className="header__icon" aria-label="로그인">
+                <img src="/icons/user.svg" alt="" />
+            </Link>
+        );
+    }
+
+    const handleLogout = async () => {
+        setIsOpen(false);
+        await onLogout();
+        navigate("/");
+    };
+
+    return (
+        <div className="user-menu" ref={ref}>
+            <button
+                type="button"
+                className="header__icon"
+                aria-label="내 계정 메뉴"
+                aria-haspopup="menu"
+                aria-expanded={isOpen}
+                onClick={() => setIsOpen((prev) => !prev)}
+            >
+                <img src="/icons/user.svg" alt="" />
+            </button>
+
+            {isOpen && (
+                <div className="user-menu__panel" role="menu">
+                    <div className="user-menu__profile">
+                        <strong>{user.nickname || user.name || "Razer 회원"}</strong>
+                        {user.email && <span>{user.email}</span>}
+                    </div>
+                    <Link to="/mypage" className="user-menu__item" role="menuitem">마이페이지</Link>
+                    <Link to="/cart" className="user-menu__item" role="menuitem">장바구니</Link>
+                    <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={handleLogout}>
+                        로그아웃
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};

@@ -4,6 +4,8 @@ import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
+import { MyPage } from "./pages/MyPage";
 import { CatalogPage, Search } from "./pages/Search";
 import { Cart } from "./pages/Cart";
 import { Payment } from "./pages/Payment";
@@ -12,6 +14,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import "./App.scss";
 import { ProductsDetail } from "./pages/products/ProductsDetail";
 import { InfoPage } from "./pages/InfoPage";
+import { ScrollToTop } from "./components/common/ScrollToTop";
 
 
 function App() {
@@ -25,6 +28,8 @@ function App() {
 
   return (
     <>
+      {/* 페이지 이동 시 맨 위로 */}
+      <ScrollToTop />
       <Header />
 
       {/* 주소에 따라 메인 영역의 페이지만 변경 */}
@@ -32,6 +37,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/search" element={<Search />} />
           <Route path="/products/:catalogSlug" element={<CatalogPage />} />
           <Route path="/cart" element={<Cart />} />
