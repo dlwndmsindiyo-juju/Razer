@@ -91,7 +91,7 @@ main {
     }
 
     &__promo-text {
-        @include body-16-r;
+        @include body-14-r;
         color: $neutral-color-white;
     }
 
@@ -131,16 +131,25 @@ main {
         display: flex;
         gap: 6.25rem;
 
-        a,
-        button {
-            @include heading-20-sb;
-            color: $neutral-color-white;
+        li {
+            width: 6rem;
+            text-align: center;
 
-            &:hover,
-            &.is-active {
-                color: $main-primary-color;
+            a,
+            button {
+                @include heading-20-sb;
+                color: $neutral-color-white;
+                width: 100%;
+
+                &:hover,
+                &.is-active {
+                    width: 100%;
+                    color: $main-primary-color;
+                }
             }
         }
+
+
     }
 
     &__utils {
@@ -2800,27 +2809,379 @@ $auth-error-color: #FF4646; // 입력 에러 문구
         gap: 2.5rem;
         margin-top: 1.5rem;
     }
+}
 
-    // ---------- 계정 관리 ----------
-    &__account {
-        margin-top: 1.75rem;
-        border-top: 1px solid $neutral-color-700;
+// 계정 관리 (/mypage?tab=account&section=…) · 왼쪽 메뉴 + 오른쪽 내용
+.account {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    gap: 4rem;
+
+    // ---------- 왼쪽 메뉴 ----------
+    &__nav ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
-    &__account-row {
+    &__nav-item {
+        @include body-16-r;
         display: flex;
-        padding: 1.5rem 0;
-        border-bottom: 1px solid $neutral-color-700;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        height: 3rem;
+        padding: 0 1rem;
+        border-radius: $radius-md;
+        color: $neutral-color-100;
+        transition: background-color 0.2s, color 0.2s;
 
-        dt {
+        &:hover {
+            color: $neutral-color-white;
+        }
+
+        &.is-active {
+            background-color: $neutral-color-700;
+            color: $main-primary-color;
+        }
+    }
+
+    &__nav-icon,
+    &__row-icon {
+        display: inline-flex;
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        color: $neutral-color-white;
+
+        img,
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__logout {
+        margin-top: 1rem;
+    }
+
+    // ---------- 오른쪽 ----------
+    &__content {
+        min-width: 0;
+    }
+
+    &__rows {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 1.75rem;
+    }
+
+    // 회색 한 줄 (아이콘 · 제목 · 내용 · 버튼)
+    &__row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-height: 6.875rem;
+        padding: 1.5rem;
+        border-radius: $radius-md;
+        background-color: $neutral-color-700;
+
+        &--notice {
+            min-height: 0;
+        }
+    }
+
+    &__row-text {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-width: 0;
+
+        strong {
+            @include heading-20-sb;
+            font-weight: $font-weight-medium;
+        }
+
+        span {
             @include body-16-r;
-            width: 10rem;
-            color: $neutral-color-200;
+            color: $neutral-color-100;
+            word-break: keep-all;
+        }
+    }
+
+    &__row--notice &__row-text strong {
+        @include body-16-sb;
+    }
+
+    // 회색 버튼 (변경 · 설정하기 · 기기 관리)
+    &__btn {
+        @include label-14-sb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 8.25rem;
+        height: 2.75rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-500;
+        color: $neutral-color-white;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: $neutral-color-300;
+        }
+    }
+
+    &__input {
+        @include body-16-r;
+        width: 20rem;
+        max-width: 100%;
+        height: 2.5rem;
+        padding: 0 1rem;
+        border: 1px solid $neutral-color-300;
+        border-radius: $radius-sm;
+        background-color: $body-bg;
+        color: $neutral-color-white;
+
+        &:focus {
+            border-color: $neutral-color-100;
+            outline: none;
+        }
+    }
+
+    &__message {
+        @include body-14-r;
+        margin-top: 1rem;
+        color: $main-primary-color;
+    }
+
+    &__leave {
+        margin-top: 1rem;
+    }
+
+    // ---------- 프로필 설정 ----------
+    &__profile {
+        display: flex;
+        align-items: center;
+        gap: 5rem;
+        margin-top: 2.75rem;
+        padding-left: 1rem;
+    }
+
+    &__preview {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        background-color: $neutral-color-700;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        dd {
-            @include body-16-m;
+        .account__preview-default {
+            width: 40%;
+            height: 40%;
+            object-fit: contain;
         }
+    }
+
+    &__avatars {
+        display: grid;
+        grid-template-columns: repeat(3, 5rem);
+        gap: 1.5rem 2.25rem;
+    }
+
+    &__avatar {
+        display: block;
+        width: 5rem;
+        height: 5rem;
+        padding: 0.1875rem;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        transition: border-color 0.2s;
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        &:hover {
+            border-color: $neutral-color-300;
+        }
+
+        &.is-selected {
+            border-color: $main-primary-color;
+        }
+    }
+
+    &__actions {
+        margin-top: 2.75rem;
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+    }
+
+    // ---------- 배송지 · 결제 ----------
+    &__panels {
+        .mypage__panel {
+            background-color: $neutral-color-700;
+        }
+    }
+
+    &__panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__default {
+        @include caption-12-r;
+        margin-top: 1.5rem;
+        color: $main-primary-color;
+    }
+
+    &__address-name {
+        @include heading-20-sb;
+        margin-top: 1rem;
+        font-weight: $font-weight-medium;
+
+        + .mypage__sub {
+            margin-top: 1rem;
+        }
+    }
+
+    &__cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    // ---------- 알림 설정 (켜고 끄기) ----------
+    &__toggle {
+        position: relative;
+        flex-shrink: 0;
+        width: 2.75rem;
+        height: 1.5rem;
+        border-radius: $radius-pill;
+        background-color: $neutral-color-500;
+        transition: background-color 0.2s;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0.1875rem;
+            left: 0.1875rem;
+            width: 1.125rem;
+            height: 1.125rem;
+            border-radius: 50%;
+            background-color: $neutral-color-white;
+            transition: transform 0.2s;
+        }
+
+        &.is-on {
+            background-color: $main-primary-color;
+
+            &::after {
+                background-color: $neutral-color-black;
+                transform: translateX(1.25rem);
+            }
+        }
+    }
+}
+
+// 결제 카드 (배송지·결제 관리)
+.pay-card {
+    display: flex;
+    flex-direction: column;
+    width: 18.5rem;
+    height: 11.5rem;
+    padding: 1.5rem;
+    border: 1px solid $neutral-color-300;
+    border-radius: $radius-md;
+
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    // 카드사 로고 자리 (겹친 원 두 개)
+    &__logo {
+        position: relative;
+        width: 2.25rem;
+        height: 1.375rem;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 1.375rem;
+            height: 1.375rem;
+            border-radius: 50%;
+        }
+
+        &::before {
+            left: 0;
+            background-color: #EB001B;
+        }
+
+        &::after {
+            right: 0;
+            background-color: #F79E1B;
+            opacity: 0.9;
+        }
+    }
+
+    &__brand {
+        @include heading-24-b;
+        flex: 1;
+    }
+
+    &__default {
+        @include caption-12-r;
+        color: $main-primary-color;
+    }
+
+    &__more {
+        display: inline-flex;
+        width: 1.5rem;
+        height: 1.5rem;
+        color: $neutral-color-white;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__number {
+        @include heading-20-sb;
+        margin-top: 1.75rem;
+        font-weight: $font-weight-medium;
+        letter-spacing: 0.05em;
+    }
+
+    &__foot {
+        @include caption-12-r;
+        display: flex;
+        justify-content: space-between;
+        margin-top: auto;
+        color: $neutral-color-100;
     }
 }
 

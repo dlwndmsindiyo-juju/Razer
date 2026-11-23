@@ -25,6 +25,7 @@ import {
     type OrderFilter,
 } from "../data/mypageData";
 import { ImageOrText } from "../components/common/ImageOrText";
+import { AccountSettings, accountSections, type AccountSection } from "../components/mypage/AccountSettings";
 import { BoxIcon, CartIcon, ChevronIcon, HeartIcon, TruckIcon } from "../components/mypage/MypageIcons";
 import type { Order, Product, RegisteredProduct } from "../types/product";
 
@@ -380,11 +381,13 @@ export const MyPage = () => {
     const tab: MypageTab = mypageTabs.some((t) => t.key === tabParam) ? (tabParam as MypageTab) : "home";
     const orderParam = searchParams.get("order");
     const isWishlist = tab === "home" && searchParams.get("view") === "wishlist";
+    const sectionParam = searchParams.get("section");
+    const section: AccountSection = accountSections.some((x) => x.key === sectionParam) ? (sectionParam as AccountSection) : "basic";
 
     // 탭 · 주문 상세 · 위시리스트로 바뀌면 맨 위부터
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [tab, orderParam, isWishlist]);
+    }, [tab, orderParam, isWishlist, section]);
 
     // 로그인 확인 전에는 대기, 비로그인이면 로그인 페이지로
     if (!authReady) return null;
@@ -395,13 +398,6 @@ export const MyPage = () => {
     const name = user.nickname || user.name || "Razer 회원";
     const changeTab = (key: MypageTab) => setSearchParams(key === "home" ? {} : { tab: key });
     const detailOrder = tab === "orders" && orderParam ? orders.find((o) => String(o.id) === orderParam) : undefined;
-
-    const accountRows = [
-        { label: "Razer ID", value: user.nickname || user.name },
-        { label: "이메일", value: user.email },
-        { label: "생년월일", value: user.birth },
-        { label: "위치", value: user.location },
-    ];
 
     return (
         <div className="mypage">
@@ -414,7 +410,7 @@ export const MyPage = () => {
                     <h1 className="mypage__name">{name}님</h1>
                     {/* 프로필 설정은 마이페이지 첫 화면에만 */}
                     {tab === "home" && !isWishlist && (
-                        <button type="button" className="mypage__line-btn mypage__profile-btn" onClick={() => changeTab("account")}>
+                        <button type="button" className="mypage__line-btn mypage__profile-btn" onClick={() => setSearchParams({ tab: "account", section: "profile" })}>
                             프로필 설정
                         </button>
                     )}
@@ -510,15 +506,7 @@ export const MyPage = () => {
 
                 {tab === "account" && (
                     <section className="mypage__section">
-                        <SectionHead title="계정 관리" />
-                        <dl className="mypage__account">
-                            {accountRows.map((row) => (
-                                <div key={row.label} className="mypage__account-row">
-                                    <dt>{row.label}</dt>
-                                    <dd>{row.value || "-"}</dd>
-                                </div>
-                            ))}
-                        </dl>
+                        <AccountSettings section={section} onSection={(key) => setSearchParams({ tab: "account", section: key })} />
                     </section>
                 )}
             </div>

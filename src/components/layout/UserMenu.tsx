@@ -69,9 +69,9 @@ export const UserMenu = () => {
                         {user.email && <span>{user.email}</span>}
                     </div>
                     <Link to="/mypage" className="user-menu__item" role="menuitem">나의 주문</Link>
-                    <Link to="/cart" className="user-menu__item" role="menuitem">배송지 및 결제 관리</Link>
+                    <Link to="/mypage?tab=account&section=address" className="user-menu__item" role="menuitem">배송지 및 결제 관리</Link>
                     <Link to="/mypage?view=wishlist" className="user-menu__item" role="menuitem">위시리스트</Link>
-                    <Link to="/mypage?tab=account" className="user-menu__item" role="menuitem">프로필 관리</Link>
+                    <Link to="/mypage?tab=account&section=profile" className="user-menu__item" role="menuitem">프로필 관리</Link>
                     <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={handleLogout}>
                         로그아웃
                     </button>

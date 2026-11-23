@@ -98,7 +98,7 @@ const runLogin = async (login: () => Promise<unknown>): Promise<boolean> => {
     }
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
     user: null,
     authReady: false,
 
@@ -239,5 +239,15 @@ export const useAuthStore = create<AuthState>((set) => ({
     onLogout: async () => {
         await signOut(auth);
         set({ user: null });
+    },
+
+    onUpdateProfile: async (changes) => {
+        const current = get().user;
+        const firebaseUser = auth.currentUser;
+        if (!current || !firebaseUser) return;
+        await setDoc(doc(db, "users", firebaseUser.uid), changes, { merge: true });
+        // 별명이 바뀌면 Firebase 프로필 이름도 같이
+        if (changes.nickname) await updateProfile(firebaseUser, { displayName: changes.nickname });
+        set({ user: { ...current, ...changes } });
     },
 }));
