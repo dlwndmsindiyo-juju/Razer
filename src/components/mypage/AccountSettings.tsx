@@ -1,8 +1,17 @@
 import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
-import { supportPath } from "../../data/collabData";
 import { Modal } from "../common/Modal";
+import {
+    AddressModal,
+    CardModal,
+    ConfirmModal,
+    DeviceModal,
+    ImageUploadModal,
+    TwoFactorModal,
+    ModalField,
+    authErrorText,
+} from "./MypageModals";
 import { maskPhone } from "../../data/mypageData";
 import type { Address, AppUser, PaymentCard } from "../../types/auth";
 
@@ -80,6 +89,136 @@ const currentDevice = () => {
     return `이 기기 · ${os} · ${browser}`;
 };
 
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// 이메일 변경 팝업
+// Firebase 는 새 이메일로 "인증 링크"를 보내고, 링크를 누르면 이메일이 바뀜
+const EmailModal = ({ current, onClose, onSent }: { current: string; onClose: () => void; onSent: (email: string) => void }) => {
+    const { onChangeEmail } = useAuthStore();
+    const [email, setEmail] = useState("");
+    const [code, setCode] = useState("");
+    const [error, setError] = useState("");
+    const [saving, setSaving] = useState(false);
+
+    const submit = async () => {
+        const next = email.trim();
+        if (!emailPattern.test(next)) return setError("이메일 형식이 올바르지 않아요.");
+        if (next.toLowerCase() === current.toLowerCase()) return setError("지금 쓰는 이메일과 같아요.");
+        setSaving(true);
+        try {
+            await onChangeEmail(next);
+            onSent(next);
+        } catch (e) {
+            setError(authErrorText(e));
+            setSaving(false);
+        }
+    };
+
+    return (
+        <Modal
+            title="이메일 변경"
+            onClose={onClose}
+            actions={
+                <>
+                    <button type="button" className="modal__btn" onClick={onClose}>
+                        취소
+                    </button>
+                    <button type="button" className="modal__btn modal__btn--primary" onClick={submit} disabled={saving}>
+                        인증하고 변경
+                    </button>
+                </>
+            }
+        >
+            <ModalField
+                label="새 이메일"
+                type="email"
+                placeholder="example@email.com"
+                value={email}
+                autoFocus
+                onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                }}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+            />
+            <ModalField
+                label="인증번호"
+                inputMode="numeric"
+                maxLength={6}
+                placeholder="6자리 인증번호"
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+            />
+            {error && <p className="modal__error">{error}</p>}
+        </Modal>
+    );
+};
+
+// 비밀번호 변경 팝업 (현재 비밀번호 확인 → 새 비밀번호 · 문자+숫자 6자 이상)
+const PasswordModal = ({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) => {
+    const { onChangePassword } = useAuthStore();
+    const [form, setForm] = useState({ current: "", next: "", confirm: "" });
+    const [error, setError] = useState("");
+    const [saving, setSaving] = useState(false);
+
+    const set = (key: keyof typeof form) => (e: ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [key]: e.target.value });
+        setError("");
+    };
+
+    const submit = async () => {
+        if (!form.current) return setError("현재 비밀번호를 입력해 주세요.");
+        if (form.next.length < 6 || !/[A-Za-z]/.test(form.next) || !/\d/.test(form.next) || /[ㄱ-ㅎ가-힣]/.test(form.next))
+            return setError("새 비밀번호는 문자·숫자를 조합해 6자 이상 입력해 주세요.");
+        if (form.next === form.current) return setError("현재 비밀번호와 다른 비밀번호를 입력해 주세요.");
+        if (form.next !== form.confirm) return setError("새 비밀번호가 서로 맞지 않아요.");
+        setSaving(true);
+        try {
+            await onChangePassword(form.current, form.next);
+            onSaved();
+        } catch (e) {
+            setError(authErrorText(e));
+            setSaving(false);
+        }
+    };
+
+    return (
+        <Modal
+            title="비밀번호 변경"
+            onClose={onClose}
+            actions={
+                <>
+                    <button type="button" className="modal__btn" onClick={onClose}>
+                        취소
+                    </button>
+                    <button type="button" className="modal__btn modal__btn--primary" onClick={submit} disabled={saving}>
+                        저장
+                    </button>
+                </>
+            }
+        >
+            <ModalField label="현재 비밀번호" type="password" autoComplete="current-password" autoFocus value={form.current} onChange={set("current")} />
+            <ModalField
+                label="새 비밀번호"
+                type="password"
+                autoComplete="new-password"
+                hint="문자·숫자를 조합해 입력"
+                value={form.next}
+                onChange={set("next")}
+            />
+            <ModalField
+                label="새 비밀번호 확인"
+                type="password"
+                autoComplete="new-password"
+                value={form.confirm}
+                onChange={set("confirm")}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+            />
+            {error && <p className="modal__error">{error}</p>}
+        </Modal>
+    );
+};
+
 // ---------- 기본 정보 설정 ----------
 // 닉네임 변경 팝업
 const NicknameModal = ({ current, onClose, onSaved }: { current: string; onClose: () => void; onSaved: () => void }) => {
@@ -117,27 +256,28 @@ const NicknameModal = ({ current, onClose, onSaved }: { current: string; onClose
                 </>
             }
         >
-            <label className="modal__field">
-                <span className="modal__label">닉네임</span>
-                <input
-                    className="modal__input"
-                    value={nickname}
-                    maxLength={20}
-                    autoFocus
-                    onChange={(e) => {
-                        setNickname(e.target.value);
-                        setError("");
-                    }}
-                    onKeyDown={(e) => e.key === "Enter" && save()}
-                />
-            </label>
+            <ModalField
+                label="닉네임"
+                value={nickname}
+                maxLength={20}
+                autoFocus
+                onChange={(e) => {
+                    setNickname(e.target.value);
+                    setError("");
+                }}
+                onKeyDown={(e) => e.key === "Enter" && save()}
+            />
             {error && <p className="modal__error">{error}</p>}
         </Modal>
     );
 };
 
 const BasicInfo = ({ user }: { user: AppUser }) => {
+    const { onDeleteAccount } = useAuthStore();
+    const navigate = useNavigate();
     const [editing, setEditing] = useState(false);
+    const [editingEmail, setEditingEmail] = useState(false);
+    const [leaving, setLeaving] = useState(false);
     const [message, setMessage] = useState("");
 
     return (
@@ -158,18 +298,42 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
                     title="이메일"
                     value={user.email || "-"}
                     action={
-                        <Link to={supportPath} className="account__btn">
+                        <button type="button" className="account__btn" onClick={() => setEditingEmail(true)}>
                             변경
-                        </Link>
+                        </button>
                     }
                 />
                 <SettingRow icon={<HelpIcon />} title="Razer ID" value={user.nickname || user.name || "-"} />
             </div>
             {message && <p className="account__message">{message}</p>}
-            <Link to={supportPath} className="mypage__line-btn account__leave">
+            <button type="button" className="mypage__line-btn account__leave" onClick={() => setLeaving(true)}>
                 회원 탈퇴 안내
-            </Link>
+            </button>
 
+            {leaving && (
+                <ConfirmModal
+                    title="회원 탈퇴"
+                    text="주문·지원 내역을 확인한 뒤 진행하세요."
+                    confirmLabel="탈퇴"
+                    danger
+                    onClose={() => setLeaving(false)}
+                    onConfirm={async () => {
+                        await onDeleteAccount();
+                        navigate("/");
+                    }}
+                />
+            )}
+
+            {editingEmail && (
+                <EmailModal
+                    current={user.email}
+                    onClose={() => setEditingEmail(false)}
+                    onSent={(email) => {
+                        setEditingEmail(false);
+                        setMessage(`${email} 로 인증 메일을 보냈어요. 메일의 링크를 누르면 이메일이 바뀌어요.`);
+                    }}
+                />
+            )}
             {editing && (
                 <NicknameModal
                     current={user.nickname}
@@ -189,7 +353,7 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
     const { onUpdateProfile } = useAuthStore();
     const [selected, setSelected] = useState(user.profile);
     const [message, setMessage] = useState("");
-    const uploadRef = useRef<HTMLInputElement>(null);
+    const [uploading, setUploading] = useState(false);
     const cameraRef = useRef<HTMLInputElement>(null);
 
     const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -222,7 +386,7 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
                 </span>
                 <ul className="account__avatars">
                     <li>
-                        <button type="button" className="account__avatar" onClick={() => uploadRef.current?.click()} aria-label="사진 올리기">
+                        <button type="button" className="account__avatar" onClick={() => setUploading(true)} aria-label="사진 올리기">
                             <img src="/images/profile/upload.webp" alt="" />
                         </button>
                     </li>
@@ -245,10 +409,19 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
                         </li>
                     ))}
                 </ul>
-                <input ref={uploadRef} type="file" accept="image/*" hidden onChange={handleFile} />
                 <input ref={cameraRef} type="file" accept="image/*" capture="user" hidden onChange={handleFile} />
             </div>
             {message && <p className="account__message">{message}</p>}
+            {uploading && (
+                <ImageUploadModal
+                    onClose={() => setUploading(false)}
+                    onApply={(dataUrl) => {
+                        setSelected(dataUrl);
+                        setUploading(false);
+                        setMessage("");
+                    }}
+                />
+            )}
             <div className="mypage__actions account__actions">
                 <button type="button" className="mypage__line-btn" onClick={() => setSelected(user.profile)} disabled={selected === user.profile}>
                     변경 취소
@@ -263,17 +436,16 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
 
 // ---------- 계정 및 보안 ----------
 const Security = ({ user }: { user: AppUser }) => {
-    const { onResetPassword } = useAuthStore();
+    const { hasPassword, onUpdateProfile } = useAuthStore();
+    const [editing, setEditing] = useState(false);
+    const [devices, setDevices] = useState(false);
+    const [twoFactor, setTwoFactor] = useState(false);
     const [message, setMessage] = useState("");
 
-    const resetPassword = async () => {
-        if (!user.email) return setMessage("이메일이 없는 계정은 비밀번호를 바꿀 수 없어요.");
-        try {
-            await onResetPassword(user.email);
-            setMessage(`${user.email} 로 비밀번호 재설정 메일을 보냈어요.`);
-        } catch {
-            setMessage("메일을 보내지 못했어요. 잠시 후 다시 시도해 주세요.");
-        }
+    const openPassword = () => {
+        if (!hasPassword()) return setMessage("간편 로그인으로 가입한 계정은 비밀번호가 없어요. 가입한 서비스에서 관리해 주세요.");
+        setMessage("");
+        setEditing(true);
     };
 
     return (
@@ -284,7 +456,7 @@ const Security = ({ user }: { user: AppUser }) => {
                     title="비밀번호"
                     value={user.passwordChangedAt ? `최근 변경 ${user.passwordChangedAt}` : "최근 변경 내역 없음"}
                     action={
-                        <button type="button" className="account__btn" onClick={resetPassword}>
+                        <button type="button" className="account__btn" onClick={openPassword}>
                             변경
                         </button>
                     }
@@ -294,9 +466,9 @@ const Security = ({ user }: { user: AppUser }) => {
                     title="2단계 인증"
                     value={user.twoFactor ? "설정됨" : "설정 안 됨"}
                     action={
-                        <Link to={supportPath} className="account__btn">
-                            설정하기
-                        </Link>
+                        <button type="button" className="account__btn" onClick={() => setTwoFactor(true)}>
+                            {user.twoFactor ? "해제하기" : "설정하기"}
+                        </button>
                     }
                 />
                 <SettingRow
@@ -304,46 +476,145 @@ const Security = ({ user }: { user: AppUser }) => {
                     title="로그인 기기"
                     value={currentDevice()}
                     action={
-                        <Link to={supportPath} className="account__btn">
+                        <button type="button" className="account__btn" onClick={() => setDevices(true)}>
                             기기 관리
-                        </Link>
+                        </button>
                     }
                 />
             </div>
             {message && <p className="account__message">{message}</p>}
+            {devices && <DeviceModal device={currentDevice()} onClose={() => setDevices(false)} />}
+            {twoFactor &&
+                (user.twoFactor ? (
+                    <ConfirmModal
+                        title="2단계 인증을 해제할까요?"
+                        confirmLabel="해제"
+                        danger
+                        onClose={() => setTwoFactor(false)}
+                        onConfirm={async () => {
+                            await onUpdateProfile({ twoFactor: false });
+                            setTwoFactor(false);
+                            setMessage("2단계 인증을 해제했어요.");
+                        }}
+                    />
+                ) : (
+                    <TwoFactorModal
+                        email={user.email}
+                        onClose={() => setTwoFactor(false)}
+                        onSave={async () => {
+                            await onUpdateProfile({ twoFactor: true });
+                            setTwoFactor(false);
+                            setMessage("2단계 인증을 설정했어요.");
+                        }}
+                    />
+                ))}
+            {editing && (
+                <PasswordModal
+                    onClose={() => setEditing(false)}
+                    onSaved={() => {
+                        setEditing(false);
+                        setMessage("비밀번호를 변경했어요.");
+                    }}
+                />
+            )}
         </>
     );
 };
 
 // ---------- 배송지·결제 관리 ----------
-const PaymentCardItem = ({ card }: { card: PaymentCard }) => (
-    <li className="pay-card">
-        <div className="pay-card__head">
-            <span className="pay-card__logo" aria-hidden="true" />
-            <strong className="pay-card__brand">{card.brand}</strong>
-            {card.isDefault && <span className="pay-card__default">기본</span>}
-            <button type="button" className="pay-card__more" aria-label={`${card.brand} 카드 메뉴`}>
-                <MoreIcon />
-            </button>
-        </div>
-        <p className="pay-card__number">•••• •••• •••• {card.last4}</p>
-        <div className="pay-card__foot">
-            <span>{card.issuer ?? ""}</span>
-            <span>{card.expiry ?? ""}</span>
-        </div>
-    </li>
-);
+// 카드 오른쪽 위 … 메뉴 (기본 결제수단으로 설정 · 삭제)
+const PaymentCardItem = ({ card, onDefault, onDelete }: { card: PaymentCard; onDefault: () => void; onDelete: () => void }) => {
+    const [menu, setMenu] = useState(false);
+    return (
+        <li className="pay-card">
+            <div className="pay-card__head">
+                <span className="pay-card__logo" aria-hidden="true" />
+                <strong className="pay-card__brand">{card.brand}</strong>
+                {card.isDefault && <span className="pay-card__default">기본</span>}
+                <div className="pay-card__menu-wrap">
+                    <button
+                        type="button"
+                        className="pay-card__more"
+                        aria-label={`${card.brand} 카드 메뉴`}
+                        aria-expanded={menu}
+                        onClick={() => setMenu(!menu)}
+                    >
+                        <MoreIcon />
+                    </button>
+                    {menu && (
+                        <div className="pay-card__menu" role="menu" onMouseLeave={() => setMenu(false)}>
+                            {!card.isDefault && (
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    onClick={() => {
+                                        setMenu(false);
+                                        onDefault();
+                                    }}
+                                >
+                                    기본 결제수단으로 설정
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                role="menuitem"
+                                onClick={() => {
+                                    setMenu(false);
+                                    onDelete();
+                                }}
+                            >
+                                삭제
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+            <p className="pay-card__number">•••• •••• •••• {card.last4}</p>
+            <div className="pay-card__foot">
+                <span>{card.issuer ?? ""}</span>
+                <span>{card.expiry ?? ""}</span>
+            </div>
+        </li>
+    );
+};
+
+// 기본 하나만 남기기 (새로 기본으로 고른 것 우선 · 하나도 없으면 첫 번째)
+const keepOneDefault = <T extends { id: string; isDefault?: boolean }>(list: T[], preferId?: string): T[] => {
+    const defaultId = preferId ?? list.find((x) => x.isDefault)?.id ?? list[0]?.id;
+    return list.map((x) => ({ ...x, isDefault: x.id === defaultId }));
+};
+
+// "(06234) 서울특별시 강남구 테헤란로 123, 101동" → "서울특별시 강남구 테헤란로 123" (상세 주소는 숨김)
+const publicAddress = (address: string) => address.split(", ")[0].replace(/^\(\d+\)\s*/, "");
+
+type AddressModalState = { type: "address"; target?: Address } | { type: "card" } | { type: "deleteAddress" } | { type: "deleteCard"; target: PaymentCard } | null;
 
 const AddressPayment = ({ user }: { user: AppUser }) => {
     const { onUpdateProfile } = useAuthStore();
+    const [modal, setModal] = useState<AddressModalState>(null);
     const addresses = user.addresses ?? [];
     const address: Address | undefined = addresses.find((a) => a.isDefault) ?? addresses[0];
-    const cards = [...(user.cards ?? [])].sort((a, b) => Number(!!b.isDefault) - Number(!!a.isDefault));
+    // 등록한 순서 그대로 (처음 등록한 카드가 맨 앞 · 새 카드는 뒤에 붙음)
+    const cards = user.cards ?? [];
+    const close = () => setModal(null);
 
-    const removeAddress = async () => {
-        if (!address) return;
-        await onUpdateProfile({ addresses: addresses.filter((a) => a.id !== address.id) });
+    const saveAddress = async (next: Address) => {
+        const exists = addresses.some((a) => a.id === next.id);
+        const list = exists ? addresses.map((a) => (a.id === next.id ? next : a)) : [...addresses, next];
+        await onUpdateProfile({ addresses: keepOneDefault(list, next.isDefault ? next.id : undefined) });
+        close();
     };
+
+    const saveCards = async (list: PaymentCard[], preferId?: string) => {
+        await onUpdateProfile({ cards: keepOneDefault(list, preferId) });
+        close();
+    };
+
+    const addCardButton = (primary?: boolean) => (
+        <button type="button" className={primary ? "mypage__primary-btn" : "mypage__line-btn"} onClick={() => setModal({ type: "card" })}>
+            카드 추가
+        </button>
+    );
 
     return (
         <div className="mypage__panels account__panels">
@@ -360,22 +631,30 @@ const AddressPayment = ({ user }: { user: AppUser }) => {
                         <p className="account__address-name">
                             {address.name} · {maskPhone(address.phone)}
                         </p>
-                        <p className="mypage__sub">{address.address}</p>
+                        <p className="mypage__sub">
+                            {publicAddress(address.address)}
+                            <br />
+                            상세 주소는 주문 시 다시 확인할 수 있습니다.
+                        </p>
                     </>
                 ) : (
                     <p className="mypage__sub mypage__sub--lg">등록된 배송지가 없습니다.</p>
                 )}
                 <div className="mypage__actions">
                     {address && (
-                        <button type="button" className="mypage__line-btn">
+                        <button type="button" className="mypage__line-btn" onClick={() => setModal({ type: "address", target: address })}>
                             배송지 수정
                         </button>
                     )}
-                    <button type="button" className="mypage__line-btn">
+                    <button
+                        type="button"
+                        className={address ? "mypage__line-btn" : "mypage__primary-btn"}
+                        onClick={() => setModal({ type: "address" })}
+                    >
                         배송지 추가
                     </button>
                     {address && (
-                        <button type="button" className="mypage__line-btn" onClick={removeAddress}>
+                        <button type="button" className="mypage__line-btn" onClick={() => setModal({ type: "deleteAddress" })}>
                             삭제
                         </button>
                     )}
@@ -390,20 +669,58 @@ const AddressPayment = ({ user }: { user: AppUser }) => {
                         </span>
                         나의 결제 수단
                     </h3>
-                    <button type="button" className="mypage__line-btn">
-                        카드 추가
-                    </button>
+                    {cards.length > 0 && addCardButton()}
                 </div>
                 {cards.length > 0 ? (
                     <ul className="account__cards">
                         {cards.map((card) => (
-                            <PaymentCardItem key={card.id} card={card} />
+                            <PaymentCardItem
+                                key={card.id}
+                                card={card}
+                                onDefault={() => saveCards(cards, card.id)}
+                                onDelete={() => setModal({ type: "deleteCard", target: card })}
+                            />
                         ))}
                     </ul>
                 ) : (
-                    <p className="mypage__sub mypage__sub--lg">등록된 결제 수단이 없습니다.</p>
+                    <>
+                        <p className="mypage__sub mypage__sub--lg">등록된 결제수단이 없습니다.</p>
+                        <div className="mypage__actions">{addCardButton(true)}</div>
+                    </>
                 )}
             </section>
+
+            {modal?.type === "address" && <AddressModal initial={modal.target} onClose={close} onSave={saveAddress} />}
+            {modal?.type === "card" && (
+                <CardModal
+                    cards={cards}
+                    onClose={close}
+                    // 등록 · 기본 변경 후에도 팝업은 열어 둠 (슬라이드에서 바로 확인)
+                    onSave={(card) => onUpdateProfile({ cards: keepOneDefault([...cards, card], card.isDefault ? card.id : undefined) })}
+                    onDefault={(card) => onUpdateProfile({ cards: keepOneDefault(cards, card.id) })}
+                />
+            )}
+            {modal?.type === "deleteAddress" && address && (
+                <ConfirmModal
+                    title="배송지를 삭제할까요?"
+                    confirmLabel="삭제"
+                    danger
+                    onClose={close}
+                    onConfirm={async () => {
+                        await onUpdateProfile({ addresses: keepOneDefault(addresses.filter((a) => a.id !== address.id)) });
+                        close();
+                    }}
+                />
+            )}
+            {modal?.type === "deleteCard" && (
+                <ConfirmModal
+                    title="결제수단을 삭제할까요?"
+                    confirmLabel="삭제"
+                    danger
+                    onClose={close}
+                    onConfirm={() => saveCards(cards.filter((c) => c.id !== modal.target.id))}
+                />
+            )}
         </div>
     );
 };
@@ -453,6 +770,7 @@ const Notify = ({ user }: { user: AppUser }) => {
 export const AccountSettings = ({ section, onSection }: { section: AccountSection; onSection: (key: AccountSection) => void }) => {
     const { user, onLogout } = useAuthStore();
     const navigate = useNavigate();
+    const [loggingOut, setLoggingOut] = useState(false);
     if (!user) return null;
     const current = accountSections.find((s) => s.key === section) ?? accountSections[0];
 
@@ -481,7 +799,7 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
                         </li>
                     ))}
                 </ul>
-                <button type="button" className="mypage__line-btn account__logout" onClick={logout}>
+                <button type="button" className="mypage__line-btn account__logout" onClick={() => setLoggingOut(true)}>
                     로그아웃
                 </button>
             </nav>
@@ -495,6 +813,8 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
                 {current.key === "address" && <AddressPayment user={user} />}
                 {current.key === "notify" && <Notify user={user} />}
             </section>
+
+            {loggingOut && <ConfirmModal title="로그아웃할까요?" confirmLabel="로그아웃" onClose={() => setLoggingOut(false)} onConfirm={logout} />}
         </div>
     );
 };

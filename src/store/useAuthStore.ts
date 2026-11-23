@@ -10,9 +10,14 @@ import {
     getAdditionalUserInfo,
     signOut,
     updateProfile,
+    EmailAuthProvider,
+    reauthenticateWithCredential,
+    updatePassword,
+    verifyBeforeUpdateEmail,
+    deleteUser,
 } from "firebase/auth";
 import { auth, db, googleProvider, twitchProvider } from "../firebase/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 // 로그인하면 계정의 찜·주문 조회, 로그아웃하면 목록 초기화
 import { useProductStore } from "./useProductStore";
 
@@ -239,6 +244,40 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     onLogout: async () => {
         await signOut(auth);
         set({ user: null });
+    },
+
+    // 이메일·비밀번호로 가입한 계정인지 (간편 로그인만 한 계정은 비밀번호가 없음)
+    hasPassword: () => !!auth.currentUser?.providerData.some((p) => p.providerId === "password"),
+
+    // 회원 탈퇴: 계정 문서 · 가입 이메일 기록을 지우고 Firebase 계정 삭제
+    // (오래전에 로그인했으면 auth/requires-recent-login → 다시 로그인 후 진행)
+    onDeleteAccount: async () => {
+        const firebaseUser = auth.currentUser;
+        if (!firebaseUser) throw { code: "auth/no-user" };
+        // Firebase 는 최근(약 5분 안)에 로그인한 계정만 삭제할 수 있어서, 문서를 지우기 전에 먼저 확인
+        const signedInAt = new Date(firebaseUser.metadata.lastSignInTime ?? 0).getTime();
+        if (Date.now() - signedInAt > 5 * 60 * 1000) throw { code: "auth/requires-recent-login" };
+        const { uid, email } = firebaseUser;
+        await Promise.allSettled([deleteDoc(doc(db, "users", uid)), email ? deleteDoc(emailRef(email)) : Promise.resolve()]);
+        await deleteUser(firebaseUser);
+        set({ user: null });
+    },
+
+    // 비밀번호 변경: 현재 비밀번호로 다시 확인한 뒤 바꿈
+    onChangePassword: async (current, next) => {
+        const firebaseUser = auth.currentUser;
+        if (!firebaseUser?.email) throw { code: "auth/no-user" };
+        await reauthenticateWithCredential(firebaseUser, EmailAuthProvider.credential(firebaseUser.email, current));
+        await updatePassword(firebaseUser, next);
+        const changedAt = new Date().toISOString().slice(0, 10).replace(/-/g, ".");
+        await get().onUpdateProfile({ passwordChangedAt: changedAt });
+    },
+
+    // 이메일 변경: 새 이메일로 인증 메일을 보내고, 메일의 링크를 누르면 바뀜
+    onChangeEmail: async (newEmail) => {
+        const firebaseUser = auth.currentUser;
+        if (!firebaseUser) throw { code: "auth/no-user" };
+        await verifyBeforeUpdateEmail(firebaseUser, newEmail.trim());
     },
 
     onUpdateProfile: async (changes) => {

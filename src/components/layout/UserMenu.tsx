@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import { ConfirmModal } from "../mypage/MypageModals";
 
 // 헤더 유저 아이콘
 // - 로그아웃 상태: 누르면 로그인 페이지
@@ -10,6 +11,7 @@ export const UserMenu = () => {
     const navigate = useNavigate();
     const { user, onLogout } = useAuthStore();
     const [isOpen, setIsOpen] = useState(false);
+    const [confirmLogout, setConfirmLogout] = useState(false); // 로그아웃할까요? 팝업
     const ref = useRef<HTMLDivElement>(null);
 
     // 페이지 이동하면 닫기
@@ -44,8 +46,8 @@ export const UserMenu = () => {
     }
 
     const handleLogout = async () => {
-        setIsOpen(false);
         await onLogout();
+        setConfirmLogout(false);
         navigate("/");
     };
 
@@ -68,14 +70,21 @@ export const UserMenu = () => {
                         <strong>{user.nickname || user.name || "Razer 회원"}</strong>
                         {user.email && <span>{user.email}</span>}
                     </div>
-                    <Link to="/mypage" className="user-menu__item" role="menuitem">나의 주문</Link>
+                    <Link to="/mypage?tab=orders" className="user-menu__item" role="menuitem">나의 주문</Link>
                     <Link to="/mypage?tab=account&section=address" className="user-menu__item" role="menuitem">배송지 및 결제 관리</Link>
                     <Link to="/mypage?view=wishlist" className="user-menu__item" role="menuitem">위시리스트</Link>
                     <Link to="/mypage?tab=account&section=profile" className="user-menu__item" role="menuitem">프로필 관리</Link>
-                    <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={handleLogout}>
+                    <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={() => {
+                            setIsOpen(false);
+                            setConfirmLogout(true);
+                        }}>
                         로그아웃
                     </button>
                 </div>
+            )}
+
+            {confirmLogout && (
+                <ConfirmModal title="로그아웃할까요?" confirmLabel="로그아웃" onClose={() => setConfirmLogout(false)} onConfirm={handleLogout} />
             )}
         </div>
     );

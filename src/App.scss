@@ -4825,8 +4825,10 @@ $top-green: $main-primary-color;
     }
 }
 // =========================================================
-// 공통 팝업 (Modal.tsx · 어두운 배경 55% + 가운데 상자)
+// 공통 팝업 (Modal.tsx · MypageModals.tsx · 어두운 배경 55% + 가운데 상자)
 // =========================================================
+$modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
+
 .modal {
     position: fixed;
     inset: 0;
@@ -4837,27 +4839,45 @@ $top-green: $main-primary-color;
     background-color: rgba(0, 0, 0, 0.55);
     animation: auth-modal-fade 0.2s ease-out;
 
+    // 입력 팝업 (520)
     &__panel {
         width: 32.5rem;
         max-width: calc(100% - 2rem);
+        max-height: calc(100vh - 2rem);
         padding: 2rem;
         border: 1px solid $neutral-color-500;
         border-radius: $radius-md;
         background-color: $neutral-color-panel;
+        overflow-y: auto;
         animation: auth-modal-in 0.25s ease-out;
+
+        // 확인 팝업 (440 · 제목 + 버튼)
+        &--sm {
+            width: 27.5rem;
+
+            .modal__actions {
+                margin-top: 2.5rem;
+            }
+
+            .modal__body + .modal__actions {
+                margin-top: 1.5rem;
+            }
+        }
     }
 
     &__head {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 1rem;
     }
 
     &__title {
-        @include heading-20-sb;
+        @include heading-24-sb;
     }
 
     &__close {
+        flex-shrink: 0;
         width: 1.5rem;
         height: 1.5rem;
         opacity: 0.8;
@@ -4873,14 +4893,18 @@ $top-green: $main-primary-color;
         }
     }
 
+    // 내용 (칸 사이 1.5rem)
     &__body {
-        margin-top: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 2rem;
     }
 
     &__field {
         display: flex;
         flex-direction: column;
-        gap: 0.625rem;
+        gap: 0.75rem;
     }
 
     &__label {
@@ -4891,27 +4915,194 @@ $top-green: $main-primary-color;
     &__input {
         @include body-16-r;
         width: 100%;
-        height: 3.125rem;
+        height: 3.25rem;
         padding: 0 1rem;
         border: 1px solid transparent;
         border-radius: $radius-sm;
         background-color: $neutral-color-700;
         color: $neutral-color-white;
+        text-align: left;
         transition: border-color 0.2s;
+
+        &::placeholder {
+            color: $neutral-color-100;
+        }
 
         &:focus {
             border-color: $neutral-color-300;
             outline: none;
         }
+
+        &[readonly]:not(.modal__input--button) {
+            color: $neutral-color-100;
+        }
+
+        // 누르면 주소 검색이 열리는 칸
+        &--button {
+            cursor: pointer;
+        }
+    }
+
+    // 파일 선택 칸 (이미지 업로드)
+    &__file {
+        cursor: pointer;
+
+        &.is-empty {
+            color: $neutral-color-100;
+        }
+    }
+
+    &__hint {
+        @include caption-12-r;
+        color: $neutral-color-100;
+    }
+
+    // 안내 문장 (회원 탈퇴 등)
+    &__text {
+        @include body-14-r;
+        color: $neutral-color-100;
+        word-break: keep-all;
+    }
+
+    // 정보 팝업 (로그인 기기 · 배송 조회)
+    &__strong {
+        @include body-16-m;
+        font-size: 1.125rem;
+        color: $neutral-color-white;
+    }
+
+    &__status {
+        @include caption-12-r;
+        color: $main-primary-color;
+
+        &--lg {
+            @include body-16-m;
+        }
+    }
+
+    &__line {
+        @include body-14-r;
+        color: $neutral-color-white;
+    }
+
+    &__link {
+        @include body-14-r;
+        color: $main-primary-color;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    // 체크박스 (기본 배송지 · 기본 결제수단)
+    &__check {
+        @include body-14-r;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: fit-content;
+        cursor: pointer;
+
+        input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        input:focus-visible + .modal__check-box {
+            outline: 2px solid $main-primary-color;
+            outline-offset: 2px;
+        }
+
+        input:checked + .modal__check-box {
+            border-color: $main-primary-color;
+            background-color: $main-primary-color;
+
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__check-box {
+        position: relative;
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 1px solid $neutral-color-300;
+        border-radius: $radius-sm;
+        transition: background-color 0.2s, border-color 0.2s;
+
+        // 체크 표시
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0.25rem;
+            left: 0.5rem;
+            width: 0.375rem;
+            height: 0.75rem;
+            border: solid $neutral-color-black;
+            border-width: 0 2px 2px 0;
+            opacity: 0;
+            transform: rotate(45deg);
+        }
+    }
+
+    // 구매 증빙 첨부 (가로 꽉 찬 테두리 버튼)
+    &__attach {
+        @include label-14-sb;
+        width: 100%;
+        height: 2.75rem;
+        border: 1px solid $neutral-color-300;
+        border-radius: $radius-sm;
+        color: $neutral-color-white;
+        transition: border-color 0.2s;
+
+        &:hover {
+            border-color: $neutral-color-100;
+        }
+    }
+
+    // 이미지 표시 영역 조정 (동그라미 미리보기 + 확대)
+    &__crop {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    &__crop-preview {
+        flex-shrink: 0;
+        width: 7.5rem;
+        height: 7.5rem;
+        border-radius: 50%;
+        background-color: $neutral-color-700;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__crop-zoom {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        input {
+            width: 100%;
+            accent-color: $main-primary-color;
+        }
     }
 
     &__error {
         @include caption-12-r;
-        margin-top: 0.5rem;
         color: $auth-error-color;
     }
 
-    // 버튼 (오른쪽 정렬 · 취소: 테두리 / 저장: 초록)
+    // 버튼 (오른쪽 정렬 · 취소: 테두리 / 확인: 초록 · 삭제: 빨강)
     &__actions {
         display: flex;
         justify-content: flex-end;
@@ -4932,6 +5123,13 @@ $top-green: $main-primary-color;
             border-color: $neutral-color-100;
         }
 
+        &--primary,
+        &--danger {
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+
         &--primary {
             border-color: $main-primary-color;
             background-color: $main-primary-color;
@@ -4939,13 +5137,474 @@ $top-green: $main-primary-color;
 
             &:hover {
                 border-color: $main-primary-color;
-                opacity: 0.9;
+            }
+        }
+
+        &--danger {
+            border-color: $modal-danger;
+            background-color: $modal-danger;
+            color: $neutral-color-white;
+
+            &:hover {
+                border-color: $modal-danger;
             }
         }
 
         &:disabled {
             opacity: 0.5;
             cursor: default;
+        }
+    }
+}
+
+// ---------- 결제 수단 등록 (size="card") ----------
+.modal__panel--card {
+    position: relative;
+    width: 43.125rem;
+    padding: 3.5rem 1.875rem 1.875rem;
+    border-color: transparent;
+    background-color: $neutral-color-700;
+
+    .modal__head {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .modal__title {
+        @include display-32-b;
+    }
+
+    .modal__close {
+        position: absolute;
+        top: 3.5rem;
+        right: 2.5rem;
+    }
+
+    .modal__body {
+        gap: 0;
+        margin-top: 0;
+    }
+
+    .modal__actions {
+        margin-top: 4.75rem;
+    }
+}
+
+.modal__subtitle {
+    @include body-14-r;
+    margin-top: 1.5rem;
+    color: $neutral-color-100;
+}
+
+// 가로 꽉 찬 큰 버튼 (등록)
+.modal__btn--block {
+    @include heading-20-sb;
+    width: 100%;
+    height: 4.5rem;
+}
+
+// 카드 슬라이드 (← 카드 →)
+.card-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.9375rem;
+    margin-top: 3.5rem;
+
+    &__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.875rem;
+        height: 1.875rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-panel;
+        transition: opacity 0.2s;
+
+        img {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        &.is-prev img {
+            transform: rotate(180deg);
+        }
+
+        &:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+    }
+
+    // 카드 한 장만 보이는 창 + 옆으로 미는 줄
+    &__viewport {
+        width: 15.8125rem;
+        height: 7.875rem;
+        overflow: hidden;
+    }
+
+    &__track {
+        display: flex;
+        gap: 1rem;
+        height: 100%;
+        transition: transform 0.35s ease;
+    }
+
+    &__slide {
+        flex-shrink: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    // + 다른 카드 등록하기 (밝은 회색 빈 카드)
+    &__add {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        border-radius: $radius-sm;
+        background-color: #E5E5E5; // 시안 값
+    }
+
+    &__add-btn {
+        @include caption-12-r;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        height: 2rem;
+        padding: 0 1rem;
+        border-radius: $radius-pill;
+        background-color: $neutral-color-white;
+        color: $neutral-color-black;
+        font-weight: $font-weight-medium;
+        transition: box-shadow 0.2s;
+
+        &:hover {
+            box-shadow: 0 0 0 2px $main-primary-color;
+        }
+    }
+
+    // 위치 점
+    &__dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.375rem;
+        margin-top: 1rem;
+
+        span {
+            width: 0.375rem;
+            height: 0.375rem;
+            border-radius: 50%;
+            background-color: $neutral-color-300;
+            transition: background-color 0.2s, width 0.2s;
+
+            &.is-active {
+                width: 1rem;
+                border-radius: $radius-pill;
+                background-color: $main-primary-color;
+            }
+        }
+    }
+}
+
+// 카드 모양 (등록된 카드 · 입력 미리보기)
+.card-face {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: $radius-sm;
+    background: linear-gradient(135deg, #3A3A3A 0%, $neutral-color-panel 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    animation: auth-modal-fade 0.25s ease-out;
+
+    &__top,
+    &__bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__issuer {
+        @include body-14-m;
+    }
+
+    &__default {
+        @include caption-12-r;
+        color: $main-primary-color;
+    }
+
+    &__number {
+        @include body-16-m;
+        margin-top: auto;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+    }
+
+    &__bottom {
+        @include caption-12-r;
+        margin-top: 0.5rem;
+        color: $neutral-color-100;
+
+        strong {
+            @include label-14-sb;
+            color: $neutral-color-white;
+        }
+    }
+}
+
+// 입력 (안에 라벨이 있는 회색 칸)
+.card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 28.75rem;
+    max-width: 100%;
+    margin: 3rem auto 0;
+
+    &__row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.3125rem;
+    }
+
+    &__field {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 5.8125rem;
+        padding: 0 1.0625rem;
+        border: 1px solid transparent;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-500;
+        transition: border-color 0.2s;
+
+        &:focus-within {
+            border-color: $neutral-color-100;
+        }
+
+        input {
+            @include body-16-r;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: $neutral-color-white;
+            outline: none;
+
+            &::placeholder {
+                color: $neutral-color-white;
+            }
+
+            &:disabled {
+                color: $neutral-color-100;
+                cursor: default;
+            }
+        }
+    }
+
+    &__label {
+        @include caption-12-r;
+        color: $neutral-color-white;
+    }
+
+    .modal__error,
+    &__notice {
+        margin-top: -0.75rem;
+    }
+
+    &__notice {
+        @include caption-12-r;
+        color: $main-primary-color;
+    }
+}
+
+// 스크롤바 (드롭다운 목록 · 팝업) · 얇고 둥근 회색 막대
+@mixin thin-scrollbar($thumb: $neutral-color-300) {
+    // Firefox 전용 (크롬은 이 값이 있으면 아래 둥근 모양을 무시해서 Firefox 에만)
+    @supports (-moz-appearance: none) {
+        scrollbar-width: thin;
+        scrollbar-color: $thumb transparent;
+    }
+
+    &::-webkit-scrollbar {
+        width: 0.375rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        margin: 0.375rem 0;
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: $radius-pill;
+        background-color: $thumb;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: $neutral-color-100;
+    }
+}
+
+.modal__panel {
+    @include thin-scrollbar;
+}
+
+// 드롭다운 (MypageModals Dropdown · 브라우저 기본 select 대신)
+.dropdown {
+    position: relative;
+
+    &__button {
+        @include body-16-r;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        width: 100%;
+        height: 3.25rem;
+        padding: 0 1rem;
+        border: 1px solid transparent;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+        color: $neutral-color-white;
+        text-align: left;
+        transition: border-color 0.2s;
+
+        &:hover:not(:disabled),
+        &.is-open {
+            border-color: $neutral-color-300;
+        }
+
+        &:disabled {
+            color: $neutral-color-100;
+            cursor: default;
+        }
+    }
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-width: 0;
+    }
+
+    &__value {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &.is-empty {
+            color: $neutral-color-100;
+        }
+    }
+
+    &__arrow {
+        flex-shrink: 0;
+        width: 1.25rem;
+        height: 1.25rem;
+        transition: transform 0.2s;
+    }
+
+    &__button.is-open &__arrow {
+        transform: rotate(180deg);
+    }
+
+    &.is-disabled &__arrow {
+        opacity: 0.4;
+    }
+
+    // 목록 (정렬 드롭다운과 같은 모양)
+    &__list {
+        position: absolute;
+        top: calc(100% + 0.25rem);
+        left: 0;
+        z-index: 10;
+        width: 100%;
+        max-height: 15rem;
+        padding: 0.375rem 0;
+        border: 1px solid $neutral-color-500;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+        overflow-y: auto;
+        @include thin-scrollbar;
+
+        button {
+            @include body-14-r;
+            width: 100%;
+            padding: 0.625rem 1rem;
+            color: $neutral-color-100;
+            text-align: left;
+
+            &:hover {
+                background-color: $neutral-color-canvas;
+                color: $neutral-color-white;
+            }
+
+            &.is-selected {
+                color: $main-primary-color;
+            }
+        }
+    }
+
+    // 결제 수단 등록: 라벨 들어간 회색 칸 (카드번호 칸과 같은 모양)
+    &--card &__button {
+        min-height: 5.8125rem;
+        height: auto;
+        padding: 0 1.0625rem;
+        background-color: $neutral-color-500;
+
+        &.is-open,
+        &:hover:not(:disabled) {
+            border-color: $neutral-color-100;
+        }
+    }
+
+    // 라벨 없는 칸 (할부)은 얇게
+    &--compact &__button {
+        min-height: 3.125rem;
+    }
+
+    &--card &__list {
+        background-color: $neutral-color-500;
+        border-color: $neutral-color-300;
+        @include thin-scrollbar($neutral-color-200);
+
+        button:hover {
+            background-color: $neutral-color-300;
+        }
+    }
+}
+
+// 결제 카드 … 메뉴
+.pay-card__menu-wrap {
+    position: relative;
+}
+
+.pay-card__menu {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    right: 0;
+    z-index: 10;
+    min-width: 11rem;
+    padding: 0.375rem 0;
+    border: 1px solid $neutral-color-500;
+    border-radius: $radius-sm;
+    background-color: $neutral-color-700;
+
+    button {
+        @include body-14-r;
+        display: block;
+        width: 100%;
+        padding: 0.625rem 1rem;
+        color: $neutral-color-100;
+        text-align: left;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: $neutral-color-canvas;
+            color: $neutral-color-white;
         }
     }
 }

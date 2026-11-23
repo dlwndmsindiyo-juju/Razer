@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useProductStore } from "../store/useProductStore";
@@ -28,6 +28,19 @@ import { ImageOrText } from "../components/common/ImageOrText";
 import { AccountSettings, accountSections, type AccountSection } from "../components/mypage/AccountSettings";
 import { BoxIcon, CartIcon, ChevronIcon, HeartIcon, TruckIcon } from "../components/mypage/MypageIcons";
 import type { Order, Product, RegisteredProduct } from "../types/product";
+import type { SupportRequest } from "../types/auth";
+import { ConfirmModal, RegisterModal, ReturnModal, SupportModal, TrackingModal, today } from "../components/mypage/MypageModals";
+import { productData } from "../data/productData";
+
+// 마이페이지 팝업 (어디서 눌러도 MyPage 가 띄움)
+type MypageModal =
+    | { type: "tracking"; order: Order }
+    | { type: "return"; order: Order }
+    | { type: "register"; item?: RegisteredProduct }
+    | { type: "support"; item: RegisteredProduct }
+    | { type: "done"; title: string; text: string }
+    | null;
+const ModalContext = createContext<(modal: MypageModal) => void>(() => {});
 
 // 섹션 제목 + 오른쪽 "전체 … 보기 >" 링크
 const SectionHead = ({ title, more }: { title: string; more?: { to: string; label: string } }) => (
@@ -71,24 +84,21 @@ const StatsBoard = ({ orders, likes }: { orders: Order[]; likes: number }) => {
 // 주문 상세 주소
 const orderDetailPath = (id: number) => `/mypage?tab=orders&order=${id}`;
 
-// 상태별 버튼: 배송 조회 (송장 주소가 있으면 새 창) · 반품 문의 (지원 페이지)
+// 상태별 버튼: 배송 중 → 배송 조회 팝업 · 배송 완료 → 반품 신청 팝업 · 취소/반품 → 주문 상세
 const OrderAction = ({ order }: { order: Order }) => {
+    const open = useContext(ModalContext);
     const label = orderActionLabel(order.status);
-    if (order.status === "배송 완료" || isCancelStatus(order.status)) {
+    if (isCancelStatus(order.status)) {
         return (
-            <Link to={order.status === "배송 완료" ? supportPath : orderDetailPath(order.id)} className="mypage__line-btn">
+            <Link to={orderDetailPath(order.id)} className="mypage__line-btn">
                 {label}
             </Link>
         );
     }
-    return order.trackingUrl ? (
-        <a href={order.trackingUrl} target="_blank" rel="noreferrer" className="mypage__line-btn">
+    return (
+        <button type="button" className="mypage__line-btn" onClick={() => open({ type: order.status === "배송 완료" ? "return" : "tracking", order })}>
             {label}
-        </a>
-    ) : (
-        <Link to={orderDetailPath(order.id)} className="mypage__line-btn">
-            {label}
-        </Link>
+        </button>
     );
 };
 
@@ -225,6 +235,7 @@ const Panel = ({ title, icon, children }: { title: ReactNode; icon?: ReactNode; 
 
 // 주문 상세 (/mypage?tab=orders&order=주문번호)
 const OrderDetail = ({ order }: { order: Order }) => {
+    const open = useContext(ModalContext);
     const done = order.status === "배송 완료";
     const shipping = order.status === "배송 중";
     const statusLine = done
@@ -276,16 +287,11 @@ const OrderDetail = ({ order }: { order: Order }) => {
                             </>
                         )}
                     </p>
-                    {!isCancelStatus(order.status) &&
-                        (order.trackingUrl ? (
-                            <a href={order.trackingUrl} target="_blank" rel="noreferrer" className="mypage__line-btn mypage__panel-btn">
-                                배송 조회
-                            </a>
-                        ) : (
-                            <button type="button" className="mypage__line-btn mypage__panel-btn" disabled>
-                                배송 조회
-                            </button>
-                        ))}
+                    {!isCancelStatus(order.status) && (
+                        <button type="button" className="mypage__line-btn mypage__panel-btn" onClick={() => open({ type: "tracking", order })}>
+                            배송 조회
+                        </button>
+                    )}
                 </Panel>
 
                 <Panel title="결제·수령 정보">
@@ -313,9 +319,9 @@ const OrderDetail = ({ order }: { order: Order }) => {
                     </Link>
                 )}
                 {done && (
-                    <Link to={supportPath} className="mypage__line-btn">
+                    <button type="button" className="mypage__line-btn" onClick={() => open({ type: "return", order })}>
                         반품 신청
-                    </Link>
+                    </button>
                 )}
                 <Link to="/mypage?tab=orders" className="mypage__line-btn">
                     목록으로
@@ -327,6 +333,7 @@ const OrderDetail = ({ order }: { order: Order }) => {
 
 // 등록 제품 한 개
 const RegisteredItem = ({ item }: { item: RegisteredProduct }) => {
+    const open = useContext(ModalContext);
     const product = getProductById(item.id);
     const to = product ? `/products/${product.category}/${product.id}` : undefined;
     const thumb = <ImageOrText src={item.image ?? product?.image} alt="" label="Image" />;
@@ -352,29 +359,30 @@ const RegisteredItem = ({ item }: { item: RegisteredProduct }) => {
             <p className="mypage__sub">{warrantyText(item.warranty, item.purchasedAt, item.warrantyUntil)}</p>
             <div className="mypage__actions mypage__actions--panel">
                 {item.warranty === "pending" && (
-                    <Link to={supportPath} className="mypage__line-btn">
+                    <button type="button" className="mypage__line-btn" onClick={() => open({ type: "register", item })}>
                         구매 증빙 등록
-                    </Link>
+                    </button>
                 )}
-                <Link to={supportPath} className="mypage__line-btn">
+                <button type="button" className="mypage__line-btn" onClick={() => open({ type: "support", item })}>
                     지원 요청
-                </Link>
-                <Link to={registrationPath} className="mypage__line-btn">
+                </button>
+                <button type="button" className="mypage__line-btn" onClick={() => open({ type: "register", item })}>
                     등록 정보 수정
-                </Link>
+                </button>
             </div>
         </li>
     );
 };
 
-// 제품 등록 · 보증 안내 페이지
-const registrationPath = "/info/service/registration-warranty";
+// 제품 등록 모델명 자동완성 (상품 이름 앞부분 · 중복 제거)
+const productNames = [...new Set(productData.map((p) => p.title.split(" - ")[0]))];
 
 // 마이페이지 (/mypage?tab=home|orders|warranty|account)
 // - 주문 상세: /mypage?tab=orders&order=주문번호
 // - 위시리스트: /mypage?view=wishlist (탭은 마이페이지)
 export const MyPage = () => {
-    const { user, authReady } = useAuthStore();
+    const { user, authReady, onUpdateProfile } = useAuthStore();
+    const [modal, setModal] = useState<MypageModal>(null);
     const { hearts, orderList, registeredList } = useProductStore();
     const [searchParams, setSearchParams] = useSearchParams();
     const tabParam = searchParams.get("tab");
@@ -398,8 +406,39 @@ export const MyPage = () => {
     const name = user.nickname || user.name || "Razer 회원";
     const changeTab = (key: MypageTab) => setSearchParams(key === "home" ? {} : { tab: key });
     const detailOrder = tab === "orders" && orderParam ? orders.find((o) => String(o.id) === orderParam) : undefined;
+    const closeModal = () => setModal(null);
+
+    // 반품 신청 · 지원 요청 접수 → 계정 문서의 requests 에 쌓음
+    const addRequest = async (request: Omit<SupportRequest, "id" | "createdAt">, done: { title: string; text: string }) => {
+        const next: SupportRequest = { ...request, id: `${Date.now()}`, createdAt: today() };
+        await onUpdateProfile({ requests: [...(user.requests ?? []), next] });
+        setModal({ type: "done", ...done });
+    };
+
+    // 제품 등록 · 수정 → 계정 문서의 registeredProducts (화면 목록도 바로 갱신)
+    const saveRegistered = async (prev: RegisteredProduct | undefined, values: { title: string; serial: string; purchasedAt: string; proof?: string }) => {
+        const product = productData.find((p) => p.title.startsWith(values.title));
+        const item: RegisteredProduct = {
+            ...prev,
+            id: product?.id ?? prev?.id ?? 0,
+            title: values.title,
+            image: product?.image ?? prev?.image,
+            serial: values.serial,
+            purchasedAt: values.purchasedAt.replace(/\./g, "-"),
+            warranty: prev?.warranty ?? "pending", // 구매 증빙 확인 후 보증 적용
+        };
+        const list = prev ? registeredList.map((r) => (r === prev ? item : r)) : [...registeredList, item];
+        await onUpdateProfile({ registeredProducts: list });
+        useProductStore.setState({ registeredList: list });
+        setModal(
+            values.proof
+                ? { type: "done", title: "구매 증빙을 첨부했어요", text: "확인 후 보증 적용 여부를 이메일로 안내해 드려요." }
+                : null,
+        );
+    };
 
     return (
+        <ModalContext.Provider value={setModal}>
         <div className="mypage">
             {/* 프로필 */}
             <section className="mypage__profile">
@@ -485,9 +524,9 @@ export const MyPage = () => {
                 {tab === "warranty" && (
                     <section className="mypage__section">
                         <SectionHead title="등록 제품·보증" />
-                        <Link to={registrationPath} className="mypage__primary-btn mypage__register-btn">
+                        <button type="button" className="mypage__primary-btn mypage__register-btn" onClick={() => setModal({ type: "register" })}>
                             제품 등록
-                        </Link>
+                        </button>
                         <div className="mypage__panels">
                             <Panel title={`등록 제품 ${registeredList.length}`}>
                                 {registeredList.length > 0 ? (
@@ -511,5 +550,40 @@ export const MyPage = () => {
                 )}
             </div>
         </div>
+
+        {/* 팝업 */}
+        {modal?.type === "tracking" && <TrackingModal order={modal.order} onClose={closeModal} />}
+        {modal?.type === "return" && (
+            <ReturnModal
+                order={modal.order}
+                addresses={user.addresses ?? []}
+                onClose={closeModal}
+                onSubmit={(reason, address) =>
+                    addRequest(
+                        { type: "return", orderId: modal.order.id, product: modal.order.items[0]?.title.split(" - ")[0] ?? "", reason, address },
+                        { title: "반품 신청을 접수했어요", text: "회수 일정은 확인 후 이메일로 안내해 드려요." },
+                    )
+                }
+            />
+        )}
+        {modal?.type === "register" && (
+            <RegisterModal initial={modal.item} productNames={productNames} onClose={closeModal} onSave={(values) => saveRegistered(modal.item, values)} />
+        )}
+        {modal?.type === "support" && (
+            <SupportModal
+                product={modal.item.title.split(" - ")[0]}
+                onClose={closeModal}
+                onSubmit={(type, content) =>
+                    addRequest(
+                        { type: "support", product: modal.item.title.split(" - ")[0], reason: type, content },
+                        { title: "지원 요청을 접수했어요", text: "답변은 가입한 이메일로 보내드려요." },
+                    )
+                }
+            />
+        )}
+        {modal?.type === "done" && (
+            <ConfirmModal title={modal.title} text={modal.text} confirmLabel="확인" single onClose={closeModal} onConfirm={closeModal} />
+        )}
+        </ModalContext.Provider>
     );
 };
