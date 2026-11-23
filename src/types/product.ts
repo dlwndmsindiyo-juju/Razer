@@ -92,7 +92,27 @@ export interface Order {
     date: string;
     items: CartItem[];
     price: number;
-    status: string;
+    status: string; // "배송 중" · "배송 완료" · "취소" · "반품"
+    // ↓ 주문 상세에 보이는 값 (없으면 "확인 중" 으로 표시)
+    deliveredAt?: string; // 배송 완료일
+    expectedAt?: string; // 배송 예정일
+    carrier?: string; // 택배사
+    trackingNumber?: string; // 송장번호
+    trackingUrl?: string; // 배송 조회 주소
+    payment?: { method: string; last4?: string }; // 결제 수단 (예: Visa · 4242)
+    receiver?: { name: string; phone: string; address: string }; // 받는 사람
+}
+
+// Firestore users/{uid} 문서의 등록 제품 (등록 제품·보증)
+export interface RegisteredProduct {
+    id: number; // 상품 id (productData)
+    title: string;
+    image?: string;
+    option?: string; // 블랙 · 미국 배열
+    serial: string; // 시리얼 번호 (화면에는 끝 4자리만)
+    purchasedAt?: string; // 구매일
+    warranty: "pending" | "active" | "expired"; // 구매 증빙 확인 필요 · 보증 적용 중 · 보증 만료
+    warrantyUntil?: string; // 보증 만료일
 }
 
 // 상품 스토어에서 관리하는 상태와 메서드
@@ -100,6 +120,7 @@ export interface ProductState {
     items: Product[];
     hearts: Product[];
     orderList: Order[];
+    registeredList: RegisteredProduct[];
 
     // 로그인한 계정의 찜과 주문 불러오기
     loadUserData: (uid: string) => Promise<void>;
