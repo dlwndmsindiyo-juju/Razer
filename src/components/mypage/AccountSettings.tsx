@@ -2,6 +2,7 @@ import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { supportPath } from "../../data/collabData";
+import { Modal } from "../common/Modal";
 import { maskPhone } from "../../data/mypageData";
 import type { Address, AppUser, PaymentCard } from "../../types/auth";
 
@@ -80,23 +81,64 @@ const currentDevice = () => {
 };
 
 // ---------- 기본 정보 설정 ----------
-const BasicInfo = ({ user }: { user: AppUser }) => {
+// 닉네임 변경 팝업
+const NicknameModal = ({ current, onClose, onSaved }: { current: string; onClose: () => void; onSaved: () => void }) => {
     const { onUpdateProfile } = useAuthStore();
-    const [editing, setEditing] = useState(false);
-    const [nickname, setNickname] = useState(user.nickname);
-    const [message, setMessage] = useState("");
+    const [nickname, setNickname] = useState(current);
+    const [error, setError] = useState("");
+    const [saving, setSaving] = useState(false);
 
     const save = async () => {
         const next = nickname.trim();
-        if (next.length < 2) return setMessage("닉네임은 2자 이상 입력해 주세요.");
+        if (next.length < 2) return setError("닉네임은 2자 이상 입력해 주세요.");
+        if (next === current) return onClose();
+        setSaving(true);
         try {
             await onUpdateProfile({ nickname: next, name: next });
-            setEditing(false);
-            setMessage("닉네임을 변경했어요.");
+            onSaved();
         } catch {
-            setMessage("저장하지 못했어요. 잠시 후 다시 시도해 주세요.");
+            setError("저장하지 못했어요. 잠시 후 다시 시도해 주세요.");
+            setSaving(false);
         }
     };
+
+    return (
+        <Modal
+            title="닉네임 변경"
+            onClose={onClose}
+            actions={
+                <>
+                    <button type="button" className="modal__btn" onClick={onClose}>
+                        취소
+                    </button>
+                    <button type="button" className="modal__btn modal__btn--primary" onClick={save} disabled={saving}>
+                        저장
+                    </button>
+                </>
+            }
+        >
+            <label className="modal__field">
+                <span className="modal__label">닉네임</span>
+                <input
+                    className="modal__input"
+                    value={nickname}
+                    maxLength={20}
+                    autoFocus
+                    onChange={(e) => {
+                        setNickname(e.target.value);
+                        setError("");
+                    }}
+                    onKeyDown={(e) => e.key === "Enter" && save()}
+                />
+            </label>
+            {error && <p className="modal__error">{error}</p>}
+        </Modal>
+    );
+};
+
+const BasicInfo = ({ user }: { user: AppUser }) => {
+    const [editing, setEditing] = useState(false);
+    const [message, setMessage] = useState("");
 
     return (
         <>
@@ -104,24 +146,10 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
                 <SettingRow
                     icon={<Icon name="user" />}
                     title="닉네임"
-                    value={
-                        editing ? (
-                            <input
-                                className="account__input"
-                                value={nickname}
-                                maxLength={20}
-                                autoFocus
-                                onChange={(e) => setNickname(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && save()}
-                                aria-label="새 닉네임"
-                            />
-                        ) : (
-                            user.nickname || "-"
-                        )
-                    }
+                    value={user.nickname || "-"}
                     action={
-                        <button type="button" className="account__btn" onClick={editing ? save : () => setEditing(true)}>
-                            {editing ? "저장" : "변경"}
+                        <button type="button" className="account__btn" onClick={() => setEditing(true)}>
+                            변경
                         </button>
                     }
                 />
@@ -141,6 +169,17 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
             <Link to={supportPath} className="mypage__line-btn account__leave">
                 회원 탈퇴 안내
             </Link>
+
+            {editing && (
+                <NicknameModal
+                    current={user.nickname}
+                    onClose={() => setEditing(false)}
+                    onSaved={() => {
+                        setEditing(false);
+                        setMessage("닉네임을 변경했어요.");
+                    }}
+                />
+            )}
         </>
     );
 };

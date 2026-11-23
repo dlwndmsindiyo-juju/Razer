@@ -7,8 +7,11 @@ export function mountKeyboardScene(
     options: {
         signal: AbortSignal;
         getFeel: () => SwitchFeel | undefined;
+        lightingFallback?: "rainbow" | "lavender";
+        edgeLighting?: boolean;
         onReady: (scene: {
             canType: boolean;
+            canLight: boolean;
             setView: (view: ViewAngle) => void;
             setCapture: (enabled: boolean) => void;
             setLighting: (enabled: boolean) => void;

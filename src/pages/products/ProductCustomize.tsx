@@ -67,6 +67,9 @@ function KeyboardCustomizer({ product }: { product: Product }) {
     const modelUrl = preview?.src;
     const specs = getSpecs(product);
     const feel = specs.feel;
+    const supportsLighting = product.specs?.chroma ?? specs.values.rgb.some(value => /chroma/i.test(value));
+    const lightingFallback = product.id === 1091 ? "lavender" : supportsLighting || product.id === 1090 ? "rainbow" : undefined;
+    const edgeLighting = product.series === "blackwidow-v4-pro";
     const visibleOptions = compatibleOptionLabels.flatMap(label => {
         const option = product.selectedOptions?.find(item => item.label === label);
         return option ? [option] : [];
@@ -89,6 +92,7 @@ function KeyboardCustomizer({ product }: { product: Product }) {
     const [panelOpen, setPanelOpen] = useState(false);
     const [ready, setReady] = useState(false);
     const [canType, setCanType] = useState(false);
+    const [canLight, setCanLight] = useState(false);
     const [capture, setCapture] = useState(false);
     const [lighting, setLighting] = useState(true);
     const [lastKey, setLastKey] = useState("");
@@ -102,15 +106,19 @@ function KeyboardCustomizer({ product }: { product: Product }) {
             scene.current = null;
             setReady(false);
             setCanType(false);
+            setCanLight(false);
             setCapture(false);
             setError(message);
         };
         void import("./keyboardScene").then(({ mountKeyboardScene }) => mountKeyboardScene(container, modelUrl, {
             signal: controller.signal,
             getFeel: () => feel,
+            lightingFallback,
+            edgeLighting,
             onReady: controls => {
                 scene.current = controls;
                 setCanType(controls.canType);
+                setCanLight(controls.canLight);
                 setReady(true);
             },
             onCapture: enabled => {
@@ -126,7 +134,7 @@ function KeyboardCustomizer({ product }: { product: Product }) {
             controller.abort();
             scene.current = null;
         };
-    }, [modelUrl, feel]);
+    }, [modelUrl, feel, lightingFallback, edgeLighting]);
 
     function changeView(next: ViewAngle) {
         scene.current?.setView(next);
@@ -149,7 +157,7 @@ function KeyboardCustomizer({ product }: { product: Product }) {
         setLastKey("");
     }
     const status = error || (!preview ? "이 상품의 3D 모델을 준비 중이에요." : !ready ? "3D 모델을 불러오는 중이에요." : "");
-    const canChangeLighting = ready && (product.specs?.chroma ?? specs.values.rgb.some(value => /chroma/i.test(value)));
+    const canChangeLighting = ready && canLight;
 
     return (
         <section className="keyboard-customize">
