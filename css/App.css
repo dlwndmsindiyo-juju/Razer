@@ -141,18 +141,6 @@ main {
   width: 100%;
   height: 100%;
 }
-.header__lang {
-  font-family: "Pretendard", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  line-height: 1.25rem;
-  letter-spacing: 0;
-  width: 4.75rem;
-  height: 2.25rem;
-  border: 1px solid #AEFF00;
-  border-radius: 62.438rem;
-  color: #AEFF00;
-}
 
 .user-menu {
   position: relative;
@@ -1368,17 +1356,17 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 13.6875rem;
-  padding-top: 2.0625rem;
-  border-radius: 0.25rem;
+  height: 13rem;
+  padding-top: 2rem;
+  border-radius: 0.5rem;
   background-color: #222222;
 }
 .home-features__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 6.25rem;
-  height: 6.25rem;
+  width: 4.5rem;
+  height: 4.5rem;
 }
 .home-features__icon img {
   width: 100%;
@@ -2285,14 +2273,42 @@ main {
   }
 }
 .mypage {
-  width: 60rem;
-  margin: 0 auto;
-  padding: 6rem 0 12.5rem;
+  padding-bottom: 10rem;
 }
-.mypage__head {
+.mypage__container {
+  width: 90rem;
+  max-width: calc(100% - 2rem);
+  margin: 0 auto;
+}
+.mypage__profile {
+  background-color: #171717;
+}
+.mypage__profile-inner {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2.75rem;
+  padding: 3.25rem 0;
+}
+.mypage__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #222222;
+}
+.mypage__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mypage__avatar .mypage__avatar-default {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
 }
 .mypage__name {
   font-family: "Pretendard", sans-serif;
@@ -2301,29 +2317,67 @@ main {
   line-height: 2.5rem;
   letter-spacing: 0;
 }
-.mypage__email {
+.mypage__line-btn {
   font-family: "Pretendard", sans-serif;
   font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.375rem;
+  font-weight: 700;
+  line-height: 1.25rem;
   letter-spacing: 0;
-  margin-top: 0.25rem;
-  color: #888888;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 10rem;
+  height: 2.75rem;
+  border: 1px solid #444444;
+  border-radius: 0.25rem;
+  color: #ffffff;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.mypage__line-btn:hover:not(:disabled) {
+  border-color: #ffffff;
+}
+.mypage__line-btn:disabled {
+  color: #666666;
+  cursor: default;
+}
+.mypage__primary-btn {
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10rem;
+  height: 2.75rem;
+  border-radius: 0.25rem;
+  background-color: #AEFF00;
+  color: #000000;
+  transition: opacity 0.2s;
+}
+.mypage__primary-btn:hover {
+  opacity: 0.85;
+}
+.mypage__profile-btn {
+  margin-left: auto;
 }
 .mypage__tabs {
+  border-bottom: 1px solid #222222;
+  background-color: #111111;
+}
+.mypage__tabs-inner {
   display: flex;
-  gap: 2rem;
-  margin-top: 3rem;
-  border-bottom: 1px solid #444444;
+  gap: 2.75rem;
 }
 .mypage__tab {
   font-family: "Pretendard", sans-serif;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5rem;
   letter-spacing: 0;
-  margin-bottom: -1px;
-  padding-bottom: 0.875rem;
+  padding: 1.375rem 0 1.25rem;
   border-bottom: 2px solid transparent;
   color: #A5A5A5;
 }
@@ -2332,10 +2386,43 @@ main {
 }
 .mypage__tab.is-active {
   border-bottom-color: #AEFF00;
+  color: #AEFF00;
+}
+.mypage__section {
+  margin-top: 5rem;
+}
+.mypage__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mypage__section-title {
+  font-family: "Pretendard", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.5rem;
+  letter-spacing: 0;
+}
+.mypage__more,
+.mypage .order-card__detail {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   color: #ffffff;
 }
-.mypage__panel {
-  padding-top: 2.5rem;
+.mypage__chevron {
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.mypage__chevron img {
+  width: 100%;
+  height: 100%;
 }
 .mypage__empty {
   font-family: "Pretendard", sans-serif;
@@ -2347,119 +2434,439 @@ main {
   color: #888888;
   text-align: center;
 }
-.mypage__list {
-  border-top: 1px solid #444444;
+.mypage__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 1.75rem;
+  padding: 1rem 0 1.5rem;
+  border-top: 1px solid #222222;
+  border-bottom: 1px solid #222222;
 }
-.mypage__row {
+.mypage__stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.mypage__stat + .mypage__stat {
+  border-left: 1px solid #222222;
+}
+.mypage__stat-link {
+  position: absolute;
+  inset: 0;
+}
+.mypage__stat-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.mypage__stat-icon img {
+  width: 100%;
+  height: 100%;
+}
+.mypage__stat-label {
   font-family: "Pretendard", sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.375rem;
   letter-spacing: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #444444;
+  color: #A5A5A5;
 }
-.mypage__row a:hover {
+.mypage__stat-value {
+  font-family: "Pretendard", sans-serif;
+  font-size: 2.75rem;
+  font-weight: bold;
+  line-height: 3.25rem;
+  letter-spacing: 0;
+}
+.mypage__stat-value.is-highlight {
   color: #AEFF00;
 }
-.mypage__profile {
+.mypage__filters {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.mypage__filter {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid transparent;
+  color: #A5A5A5;
+}
+.mypage__filter:hover {
+  color: #ffffff;
+}
+.mypage__filter.is-active {
+  border-bottom-color: #AEFF00;
+  color: #AEFF00;
+}
+.mypage__orders {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1rem;
+  margin-top: 1.75rem;
 }
-.mypage__avatar-edit {
-  display: flex;
-  align-items: center;
+.mypage__best {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
+  margin-top: 3.75rem;
 }
-.mypage__avatar-btns {
+.mypage__best-item {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
 }
-.mypage__btn {
+.mypage__best-thumb {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background-color: #222222;
+}
+.mypage__best-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s;
+}
+.mypage__best-thumb:hover img {
+  transform: scale(1.04);
+}
+.mypage__best-name {
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.375rem;
+  letter-spacing: 0;
+  margin-top: 1rem;
+  color: #ffffff;
+}
+.mypage__best-price {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  margin-top: 0.75rem;
+}
+.mypage__cart-btn {
   font-family: "Pretendard", sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
   line-height: 1.25rem;
   letter-spacing: 0;
   height: 2.75rem;
-  padding: 0 1.25rem;
+  margin-top: 1rem;
   border-radius: 0.25rem;
   background-color: #ffffff;
   color: #000000;
+  transition: background-color 0.2s;
 }
-.mypage__btn--ghost {
-  border: 1px solid #444444;
-  background-color: transparent;
-  color: #ffffff;
+.mypage__cart-btn:hover:not(:disabled) {
+  background-color: #AEFF00;
 }
-.mypage__btn:disabled {
-  opacity: 0.4;
+.mypage__cart-btn:disabled {
+  background-color: #444444;
+  color: #888888;
   cursor: default;
 }
-.mypage__field {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.mypage__field label {
+.mypage__meta {
   font-family: "Pretendard", sans-serif;
   font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
+  font-weight: 500;
+  line-height: 1.375rem;
   letter-spacing: 0;
-  width: 8rem;
+  margin-top: 1.75rem;
   color: #A5A5A5;
 }
-.mypage__field input {
+.mypage__panels {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+}
+.mypage__panel {
+  padding: 1.5rem 1.5rem 1.75rem;
+  border-radius: 0.5rem;
+  background-color: #171717;
+}
+.mypage__panel .mypage__best {
+  margin-top: 1.75rem;
+}
+.mypage__panel-title {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2rem;
+  letter-spacing: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.mypage__panel-icon {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.mypage__panel-icon img {
+  width: 100%;
+  height: 100%;
+}
+.mypage__panel-btn {
+  margin-top: 1.5rem;
+}
+.mypage__order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.mypage__order-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.mypage__item-thumb {
+  flex-shrink: 0;
+  width: 5.5rem;
+  height: 5.5rem;
+}
+.mypage__item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mypage__item-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.mypage__item-name {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+  color: #ffffff;
+}
+.mypage__item-option, .mypage__serial {
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.375rem;
+  letter-spacing: 0;
+  margin-top: 0.5rem;
+  color: #A5A5A5;
+}
+.mypage__serial {
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0;
+}
+.mypage__item-price {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+  margin-top: 0.75rem;
+  font-weight: 400;
+}
+.mypage__status-line {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+  margin-top: 1.5rem;
+  font-weight: 400;
+  color: #AEFF00;
+}
+.mypage__status-line.is-cancel {
+  color: #888888;
+}
+.mypage__sub {
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.375rem;
+  letter-spacing: 0;
+  margin-top: 1.5rem;
+  color: #A5A5A5;
+}
+.mypage__sub--lg {
   font-family: "Pretendard", sans-serif;
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5rem;
   letter-spacing: 0;
-  width: 20rem;
-  height: 2.75rem;
-  padding: 0 1rem;
-  border: 1px solid #444444;
-  border-radius: 0.25rem;
+}
+.mypage__pay {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  margin-top: 1.5rem;
+  font-weight: 400;
+}
+.mypage__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.mypage__actions--panel {
+  margin-top: 1.5rem;
+}
+.mypage__primary-btn + .mypage__sub, .mypage__sub + .mypage__primary-btn {
+  margin-top: 1.25rem;
+}
+.mypage__register-btn {
+  margin-top: 1.75rem;
+}
+.mypage__register-btn + .mypage__panels {
+  margin-top: 1.5rem;
+}
+.mypage__registered-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+}
+.mypage__account {
+  margin-top: 1.75rem;
+  border-top: 1px solid #222222;
+}
+.mypage__account-row {
+  display: flex;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #222222;
+}
+.mypage__account-row dt {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  width: 10rem;
+  color: #888888;
+}
+.mypage__account-row dd {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+}
+
+.order-card {
+  overflow: hidden;
+  border: 1px solid #222222;
+  border-radius: 0.5rem;
+  background-color: #171717;
+}
+.order-card__head {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 2rem;
   background-color: #222222;
+}
+.order-card__date {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+}
+.order-card__number {
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0;
+  color: #888888;
+}
+.order-card__detail {
+  margin-left: auto;
+}
+.order-card__body {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+.order-card__thumb {
+  flex-shrink: 0;
+  width: 8.5rem;
+  height: 8.5rem;
+  overflow: hidden;
+  background-color: #222222;
+}
+.order-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.order-card__info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.order-card__name {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2rem;
+  letter-spacing: 0;
   color: #ffffff;
 }
-.mypage__field input:focus {
-  border-color: #888888;
-}
-.mypage__info > div {
-  display: flex;
-  padding: 1rem 0;
-  border-top: 1px solid #444444;
-}
-.mypage__info > div dt {
+.order-card__option {
   font-family: "Pretendard", sans-serif;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  margin-top: 0.5rem;
+  color: #888888;
+}
+.order-card__price {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+  margin-top: 0.75rem;
+}
+.order-card__status {
+  font-family: "Pretendard", sans-serif;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.25rem;
+  line-height: 1.5rem;
   letter-spacing: 0;
-  width: 9rem;
-  color: #A5A5A5;
-}
-.mypage__info > div dd {
-  font-family: "Pretendard", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.375rem;
-  letter-spacing: 0;
-}
-.mypage__message {
-  font-family: "Pretendard", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.375rem;
-  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 16rem;
   color: #AEFF00;
+}
+.order-card__status.is-cancel {
+  color: #888888;
+}
+.order-card__status-icon {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.order-card__status-icon img {
+  width: 100%;
+  height: 100%;
 }
 
 .product-detail {
@@ -3398,7 +3805,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3.5rem;
+  height: 4.5rem;
   background-color: #000000;
 }
 .collab-strip img {
@@ -3486,7 +3893,7 @@ main {
   padding-bottom: 20rem;
 }
 .promotion__hero {
-  height: calc(min(100rem, 100vw - 2rem) * 850 / 1920);
+  height: calc(min(90rem, 100vw - 2rem) * 700 / 1920 + 3rem);
 }
 .promotion__featured {
   padding-top: 6.125rem;
@@ -3721,9 +4128,8 @@ main {
   padding-bottom: 17rem;
 }
 .collab-page__hero {
-  height: 50vh;
+  height: auto;
   margin-top: 2.5rem;
-  background-color: #111111;
 }
 .collab-page__hero video,
 .collab-page__hero img {
