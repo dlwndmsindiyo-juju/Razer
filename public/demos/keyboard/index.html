@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>키보드 3D 체험</title>
+</head>
+<body>
+    <a id="continue" href="../../products/keyboards/1071/customize">키보드 3D 체험 열기</a>
+    <script>
+        const productId = new URLSearchParams(location.search).get("productId");
+        const target = document.getElementById("continue");
+        if (/^\d+$/.test(productId ?? "")) {
+            target.href = "../../products/keyboards/" + productId + "/customize";
+        }
+        location.replace(target.href);
+    </script>
+</body>
+</html>

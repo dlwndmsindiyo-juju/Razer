@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
@@ -20,6 +20,8 @@ import { CollabPage } from "./pages/CollabPage";
 import { PromotionPage } from "./pages/PromotionPage";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 
+const ProductCustomize = lazy(() => import("./pages/products/ProductCustomize")
+  .then(({ ProductCustomize }) => ({ default: ProductCustomize })));
 
 function App() {
   const initAuth = useAuthStore((state) => state.initAuth);
@@ -52,6 +54,10 @@ function App() {
           <Route
             path="/products/:category/:productId"
             element={<ProductsDetail />}
+          />
+          <Route
+            path="/products/keyboards/:productId/customize"
+            element={<Suspense fallback={<p role="status">커스텀 페이지를 불러오는 중이에요.</p>}><ProductCustomize /></Suspense>}
           />
           {/* 푸터 내부 링크 페이지 */}
           {/* 그룹 메뉴 페이지 (헤더 메뉴 → 왼쪽 메뉴만) */}

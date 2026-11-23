@@ -30,6 +30,7 @@ export interface Collab {
     collection?: string; // 컬렉션 소개 · 대표 상품 블록 이미지 (전체 구성 컷)
     thumb?: string; // 대표 상품 블록의 작은 정사각 이미지 (500 x 500)
     sections?: CollabSection[]; // 상품 소개 블록 (있으면 이 순서대로 · 3장 이상이면 마지막 장은 "플레이 뒤에도 남는" 이미지)
+    stay?: CollabSection; // "플레이 뒤에도 남는 …" 큰 이미지 · 소개 상품 (없으면 배너 3장 이상일 때 마지막 배너)
     stayAfter?: number; // "플레이 뒤에도 남는 …" 블록을 몇 번째 상품 블록 뒤에 둘지 (기본 4)
     ended?: boolean; // 종료된 이벤트 → 카드는 흐리게 · 상세 페이지는 들어갈 수 없음
     headline: string; // 컬렉션 소개 큰 문구 (\n 줄바꿈)
@@ -87,15 +88,17 @@ export const collabs: Collab[] = [
     make({
         slug: "evangelion",
         video: "/videos/collab/evangelion.mp4",
-        collection: "/images/promotion/evangelion-hero.webp",
+        // 시안 순서: 대표 배너(풀폭) → 키보드 → (컬렉션 소개) → 마우스 → 사운드바(풀폭) → (마우스 + 스탠드) → 마우스 매트
+        collection: "/images/promotion/evangelion/hero.webp",
         thumb: "/images/promotion/evangelion/mouse-stand.webp",
         sections: [
-            { image: "/images/promotion/evangelion/deathadder-v4-pro.webp", model: "Razer DeathAdder V4 Pro", productId: 2004 },
+            { image: "/images/promotion/evangelion/hero.webp", model: "Razer Iskur V2 X", layout: "center" },
             { image: "/images/promotion/evangelion/blackwidow-v4-tkl-hyperspeed.webp", model: "Razer BlackWidow V4 Tenkeyless HyperSpeed", productId: 1002 },
-            { image: "/images/promotion/evangelion/gigantus-v2-xxl.webp", model: "Razer DeathAdder V4 Pro + Gigantus V2 XXL", productId: 2005 },
+            { image: "/images/promotion/evangelion/deathadder-v4-pro.webp", model: "Razer DeathAdder V4 Pro", productId: 2004 },
             { image: "/images/promotion/evangelion/leviathan-v2-x.webp", model: "Razer Leviathan V2 X", productId: 4044 },
-            { image: "/images/promotion/evangelion/iskur-v2-x.webp", model: "Razer Iskur V2 X" },
+            { image: "/images/promotion/evangelion/gigantus-v2-xxl.webp", model: "Razer DeathAdder V4 Pro + Gigantus V2 XXL", productId: 2005 },
         ],
+        stay: { image: "/images/promotion/evangelion/deathadder-v4-pro.webp", model: "Razer DeathAdder V4 Pro", productId: 2004 },
         name: "EVANGELION (EVA-01)",
         ko: "에반게리온 (EVA-01)",
         match: /Evangelion/i,
@@ -349,6 +352,7 @@ export const getCollabCollection = (collab: Collab) =>
 // "플레이 뒤에도 남는 …" 블록 큰 이미지 (컬렉션 소개와 겹치지 않게)
 // 배너가 3장 이상이면 마지막 배너 (블록에서는 빠짐)
 export const getStayImage = (collab: Collab, product?: Product) => {
+    if (collab.stay) return collab.stay.image;
     const sections = collab.sections ?? [];
     if (sections.length >= 3) return sections[sections.length - 1].image;
     return product?.gallery?.[3] ?? product?.image;

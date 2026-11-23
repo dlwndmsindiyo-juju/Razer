@@ -107,7 +107,9 @@ export const CollabPage = () => {
     // 배너가 3장 이상이면 마지막 배너는 "플레이 뒤에도 남는 …" 큰 이미지로 씀 (블록에서는 빠짐)
     const sections = collab.sections ?? [];
     const stayImage = getStayImage(collab, getCollabProducts(collab)[0]);
-    const blockSections = sections.length >= 3 ? sections.slice(0, -1) : sections;
+    // stay 가 따로 있으면 배너는 모두 블록 · 없으면 3장 이상일 때 마지막 배너가 stay
+    const lastIsStay = !collab.stay && sections.length >= 3;
+    const blockSections = lastIsStay ? sections.slice(0, -1) : sections;
     const sectionBlock = (section: CollabSection, i: number): Block => {
         const product = section.productId ? getProductById(section.productId) : undefined;
         const block: Block = product
@@ -131,7 +133,11 @@ export const CollabPage = () => {
     ).slice(0, 5);
     // "플레이 뒤에도 남는 …" 블록에 소개할 상품: 그 큰 이미지의 상품 (마지막 배너) → 없으면 첫 상품
     const main =
-        sections.length >= 3 ? sectionBlock(sections[sections.length - 1], sections.length - 1) : blocks.find((b) => b.product) ?? blocks[0];
+        collab.stay
+            ? sectionBlock(collab.stay, sections.length)
+            : lastIsStay
+              ? sectionBlock(sections[sections.length - 1], sections.length - 1)
+              : blocks.find((b) => b.product) ?? blocks[0];
     // 시안 순서: 히어로 아래 글 → 이미지 왼쪽 · 글 오른쪽 → (컬렉션 소개) → 같은 배치 → 풀폭 이미지 + 아래 글 → (대표 상품) → 글 왼쪽 · 이미지 오른쪽
     const layouts: Layout[] = ["caption", "right", "right", "center", "left"];
     // 컬렉션 소개는 2번째 블록 뒤, 대표 상품 블록은 4번째 블록 뒤 (상품이 적으면 끝에)
@@ -196,7 +202,7 @@ export const CollabPage = () => {
             {main ? (
                 blocks.map((block, i) => (
                     <Fragment key={block.key}>
-                        <ProductBlock block={block} layout={i === 0 ? "caption" : block.layout ?? layouts[i]} />
+                        <ProductBlock block={block} layout={block.layout ?? layouts[i]} />
                         {i + 1 === introAfter && intro}
                         {i + 1 === stayAfter && stay}
                     </Fragment>

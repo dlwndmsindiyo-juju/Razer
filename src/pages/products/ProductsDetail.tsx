@@ -50,6 +50,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     }, [product]);
     const recommended = useMemo(() => getRecommended(product), [product]);
     const isKeyboard = product.category === "keyboards";
+    const customizeTo = isKeyboard ? keyboardActions.customizeTo(product.id) : undefined;
 
     const soldOut = isSoldOut(product);
     const unverified = product.stockStatus === "unverified";
@@ -101,9 +102,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
                                     <ImageOrText src={keyboardActions.soundIcon} alt="" label="" />
                                     {keyboardActions.soundLabel}
                                 </button>
-                                <Link to={keyboardActions.customizeTo} className="pd-gallery__customize">
-                                    {keyboardActions.customizeLabel}
-                                </Link>
+                                {customizeTo && (
+                                    <Link to={customizeTo} className="pd-gallery__customize">
+                                        {keyboardActions.customizeLabel}
+                                    </Link>
+                                )}
                             </div>
                         )}
                     </ProductGallery>
