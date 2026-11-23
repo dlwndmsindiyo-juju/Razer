@@ -35,7 +35,7 @@ export const keyboardActions = {
     soundIcon: "/icons/headset.svg", // 헤드셋 아이콘 (파일이 없으면 글자만 표시)
     soundSrc: (series?: string) => `/sounds/keyboards/${series ?? "default"}.mp3`, // 타건음 파일 위치
     customizeLabel: "커스터마이징 시작",
-    customizeTo: "/", // 커스터마이징 페이지가 생기면 주소 변경
+    customizeTo: (productId: number) => `/products/keyboards/${productId}/customize`,
 };
 
 // 상품 상세(아래 긴 소개) 공통 문구
