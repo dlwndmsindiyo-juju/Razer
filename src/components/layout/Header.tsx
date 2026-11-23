@@ -97,7 +97,6 @@ export const Header = () => {
                             <img src="/icons/cart.svg" alt="" />
                         </Link>
                         <UserMenu />
-                        <button type="button" className="header__lang">KR</button>
                     </div>
                 </div>
             </div>

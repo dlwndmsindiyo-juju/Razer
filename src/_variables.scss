@@ -1,5 +1,5 @@
 // 공통으로 적용되는 값
-@use "../public/font/font.scss";
+@use "./assets/font/font.scss";
 
 // 컬러
 $body-bg: #111111;
@@ -165,8 +165,8 @@ $inner-offset: 8.875rem; // 상품 섹션은 컨테이너 안쪽 142px에서 시
 $section-gap: 10rem; // 섹션 사이 간격
 
 // 레이아웃 높이
-$promo-bar-height: 3.875rem; // 헤더 아래 프로모션 바 (62px)
-$header-height: 4.3125rem; // GNB (69px)
+$promo-bar-height: 2.5rem; // 헤더 아래 프로모션 바 (62px)
+$header-height: 4rem; // GNB (69px)
 
 @mixin container {
     width: 100%;
