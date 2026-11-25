@@ -489,7 +489,7 @@ a.design-support:hover {
 
 .design-search {
     display: block;
-    width: min(100% - 3rem, 1112px);
+    width: min(100% - 3rem, 928px);
     margin: 0 auto 3rem;
     border: 1px solid transparent;
     border-radius: v.$radius-pill;
@@ -516,13 +516,14 @@ a.design-support:hover {
     }
 
     .design-tabs {
-        gap: 0;
+        gap: 3.25rem;
     }
 
     .design-tabs button {
-        border-radius: v.$radius-sm;
-        min-height: 68px;
-        padding-inline: clamp(14px, 2vw, 40px);
+        @include v.label-16-sb;
+        border-radius: v.$radius-pill;
+        min-height: 3rem;
+        padding: 0.75rem 1.75rem;
     }
 
     .design-questions {

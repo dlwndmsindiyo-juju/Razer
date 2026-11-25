@@ -11,19 +11,19 @@ import { PageHeading, PageHero } from "./PageLayout";
 import { Collapse } from "../../components/common/Collapse";
 
 const servicePath = "/info/service/";
+// FAQ 탭 (시안 순서) · 배송 · 복원 안내는 "자주 묻는 질문"에 함께
 const tabs = [
-    ["questions", "자주 묻는 질문"], ["shipping", "배송 정보"], ["privacy", "개인정보 보안"],
-    ["restorify", "복원 (Restorify)"], ["returns", "교환 및 환불"], ["terms", "이용약관"], ["contact", "1 : 1 문의"],
+    ["questions", "자주 묻는 질문 FAQ"], ["terms", "이용약관"], ["contact", "1 : 1 문의"],
+    ["privacy", "개인 정보 처리 방침"], ["returns", "교환 및 환불"],
 ] as const;
 const faqTopics = {
-    questions: [...orderHelp, ...warrantyHelp],
-    shipping: shippingHelp,
-    privacy: [...privacyHelp, ...accountHelp],
-    restorify: restorifyHelp,
-    returns: returnsHelp,
+    questions: [...orderHelp, ...shippingHelp, ...warrantyHelp, ...restorifyHelp],
     terms: warrantyHelp.filter(({ id }) => id === "warranty-7"),
     contact: [],
+    privacy: [...privacyHelp, ...accountHelp],
+    returns: returnsHelp,
 };
+const FAQ_PAGE_SIZE = 10;
 const faqEntries = [...new Map(Object.values(faqTopics).flat().map((entry) => [entry.id, entry])).values()];
 
 export function FaqPage() {
@@ -36,29 +36,41 @@ export function FaqPage() {
     const results = entries.filter(({ question, answer }) =>
         (question + " " + answer).toLowerCase().includes(normalizedQuery),
     );
+    // 10개씩 페이지 (탭 · 검색어가 바뀌면 1페이지로)
+    const [page, setPage] = useState(1);
+    const pageCount = Math.max(1, Math.ceil(results.length / FAQ_PAGE_SIZE));
+    const currentPage = Math.min(page, pageCount);
+    const pageResults = results.slice((currentPage - 1) * FAQ_PAGE_SIZE, currentPage * FAQ_PAGE_SIZE);
+    const goPage = (next: number) => { setPage(next); setActive(undefined); };
 
     return <div className="design-page design-faq-page">
         <PageHeading title="FAQ" description="고객 가이드" />
         <input className="design-search" type="search" aria-label="도움말 검색"
-            placeholder="검색 또는 도움말 카테고리를 선택하세요."
-            value={query} onChange={(event) => { setQuery(event.target.value); setActive(undefined); }} />
+            placeholder="궁금하신 점이 있다면 검색 또는 도움말 카테고리를 선택하세요."
+            value={query} onChange={(event) => { setQuery(event.target.value); setActive(undefined); setPage(1); }} />
         <section className="design-panel design-faq">
             <nav className="design-tabs" aria-label="고객 가이드">
                 {tabs.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key}
-                    onClick={() => { setParams({ topic: key }); setQuery(""); setActive(undefined); }}>{label}</button>)}
+                    onClick={() => { setParams({ topic: key }); setQuery(""); setActive(undefined); setPage(1); }}>{label}</button>)}
             </nav>
             {results.length ? <ol className="design-questions">
-                {results.map(({ id, question, answer }, index) => <li key={id}>
+                {pageResults.map(({ id, question, answer }, index) => <li key={id} className={active === id ? "is-open" : ""}>
                     <button type="button" aria-expanded={active === id} aria-controls={"faq-answer-" + id}
                         onClick={() => setActive(active === id ? undefined : id)}>
-                        <span>{String(index + 1).padStart(2, "0")}</span><strong>{question}</strong>
-                        <span className="design-toggle-icon" aria-hidden="true">{active === id ? "−" : <img src={faqImages.plus} alt="" />}</span>
+                        <span>{String((currentPage - 1) * FAQ_PAGE_SIZE + index + 1).padStart(2, "0")}</span><strong>{question}</strong>
+                        <span className="design-toggle-icon" aria-hidden="true"><img src={faqImages.plus} alt="" /></span>
                     </button>
                     <Collapse open={active === id} id={"faq-answer-" + id}>
                         <div className="design-faq__answer"><p>{answer}</p></div>
                     </Collapse>
                 </li>)}
-            </ol> : <p className="design-policy" role="status">
+            </ol> : null}
+            {results.length > 0 && pageCount > 1 && <nav className="design-faq__pages" aria-label="FAQ 페이지">
+                {Array.from({ length: pageCount }, (_, i) => i + 1).map((number) =>
+                    <button type="button" key={number} aria-label={number + "페이지"}
+                        aria-current={number === currentPage ? "page" : undefined} onClick={() => goPage(number)}>{number}</button>)}
+            </nav>}
+            {!results.length && <p className="design-policy" role="status">
                 {normalizedQuery ? "검색 결과가 없습니다." : "등록된 안내가 없습니다."}
             </p>}
         </section>
