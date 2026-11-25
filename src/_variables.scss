@@ -43,7 +43,7 @@ $font-family-display: "Stalinist One", $font-family-base; // 영문 디스플레
 @mixin display-44-b {
     font-family: $font-family-base;
     font-size: 2.75rem;
-    font-weight: bold;
+    font-weight: $font-weight-bold;
     line-height: 3.25rem;
     letter-spacing: 0;
 }
@@ -51,7 +51,7 @@ $font-family-display: "Stalinist One", $font-family-base; // 영문 디스플레
 @mixin display-32-b {
     font-family: $font-family-base;
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: $font-weight-bold;
     line-height: 2.5rem;
     letter-spacing: 0;
 }
@@ -67,7 +67,7 @@ $font-family-display: "Stalinist One", $font-family-base; // 영문 디스플레
 @mixin heading-24-b {
     font-family: $font-family-base;
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: $font-weight-bold;
     line-height: 2rem;
     letter-spacing: 0;
 }
@@ -184,11 +184,11 @@ $radius-pill: 62.438rem; // 버튼, 뱃지
 // ---------- 그리드 (12 Columns · 24 Gutter · 80 Margin) ----------
 
 $page-margin: 7.5rem; // 좌우 여백 (1920 기준)
-$container-width: 1680px; // 헤더 · 배너 · 푸터 폭 (1920 - 120*2)
+$container-width: 105rem; // 헤더 · 배너 · 푸터 폭 (1920 - 120*2)
 $grid-gutter: 1.5rem;
 
 // 이너 (히어로 제외 공통 콘텐츠 폭)
-$inner-width: 1680px;
+$inner-width: 105rem;
 $inner-offset: 8.875rem; // 상품 섹션은 컨테이너 안쪽 142px에서 시작 (x=262)
 $section-gap: 10rem; // 섹션 사이 간격
 

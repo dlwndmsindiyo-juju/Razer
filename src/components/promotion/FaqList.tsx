@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import type { CollabFaq } from "../../data/collabData";
 import { Collapse } from "../common/Collapse";
+import { faqImages } from "../../data/pageImages";
 
 interface FaqListProps {
     items: CollabFaq[];
@@ -29,7 +30,7 @@ export const FaqList = ({ items, numbered = false, defaultOpen = null }: FaqList
                         >
                             {numbered && <span className="faq__num">{String(i + 1).padStart(2, "0")}</span>}
                             <span className="faq__text">{item.q}</span>
-                            <span className="faq__icon" aria-hidden="true" />
+                            <img className="faq__icon plus-toggle" src={faqImages.plus} alt="" />
                         </button>
                         <Collapse open={isOpen} id={panelId}>
                             <p className="faq__answer">{item.a}</p>
