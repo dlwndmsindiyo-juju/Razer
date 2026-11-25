@@ -19,6 +19,41 @@ body {
     min-width: 120rem; // 현재 1920 시안 기준 (반응형은 추후)
 }
 
+// ---------- 스크롤바 (페이지 배경에 묻어나는 얇은 다크 톤) ----------
+// 크롬 · 사파리 · 엣지
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 0.125rem solid transparent; // 트랙 안에서 살짝 떠 보이게
+    border-radius: $radius-pill;
+    background-color: $neutral-color-500;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: $neutral-color-300;
+}
+
+::-webkit-scrollbar-button {
+    display: none; // 양 끝 화살표 숨김
+}
+
+// Firefox (크롬은 이 값이 있으면 위 모양을 무시해서 Firefox 에만)
+@supports (-moz-appearance: none) {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: $neutral-color-500 transparent;
+    }
+}
+
 a {
     color: inherit;
     text-decoration: none;

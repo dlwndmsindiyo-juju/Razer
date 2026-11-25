@@ -24,7 +24,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     );
 
     return (
-        <article className="product-card">
+        <div className="product-card">
             <div className="product-card__thumb">
                 {/* 이미지 영역 전체를 상세 링크로 (상품명 링크와 같은 주소 · 키보드 이동은 상품명 링크 하나로) */}
                 {product.to ? (
@@ -34,6 +34,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 ) : (
                     thumbContent
                 )}
+
+                {/* 뱃지 (이미지 왼쪽 위) · NEW = 커스터마이징 버튼 색 · 품절 = 회색 · 나머지(독점 등) = 메인 컬러 */}
+                {product.badge && (() => {
+                    const isNew = product.badge === "신규" || product.badge === "NEW";
+                    const tone = isNew ? " is-new" : product.badge === "품절" ? " is-soldout" : "";
+                    return <span className={"product-card__badge" + tone}>{isNew ? "NEW" : product.badge}</span>;
+                })()}
 
                 {/* 위시리스트 (public/icons/wishlist-normal · wishlist-active .svg) */}
                 <button
@@ -56,14 +63,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 )}
             </div>
 
-            {product.badge && <span className="product-card__badge">{product.badge}</span>}
             {product.to ? (
                 <Link to={product.to} className="product-card__name">{product.name}</Link>
             ) : (
                 <strong className="product-card__name">{product.name}</strong>
             )}
             <p className="product-card__price">{product.originalPrice && <del>{product.originalPrice}원</del>}{product.price}</p>
-        </article>
+        </div>
     );
 };
 

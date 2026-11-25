@@ -12,7 +12,7 @@ import {
     ModalField,
     authErrorText,
 } from "./MypageModals";
-import { maskPhone } from "../../data/mypageData";
+import { maskPhone } from "../../types/mypageData";
 import type { Address, AppUser, PaymentCard } from "../../types/auth";
 
 // 계정 관리 메뉴 (/mypage?tab=account&section=…)
@@ -326,7 +326,7 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
 
             {editingEmail && (
                 <EmailModal
-                    current={user.email}
+                    current={user.email ?? ""}
                     onClose={() => setEditingEmail(false)}
                     onSent={(email) => {
                         setEditingEmail(false);
@@ -499,7 +499,7 @@ const Security = ({ user }: { user: AppUser }) => {
                     />
                 ) : (
                     <TwoFactorModal
-                        email={user.email}
+                        email={user.email ?? ""}
                         onClose={() => setTwoFactor(false)}
                         onSave={async () => {
                             await onUpdateProfile({ twoFactor: true });

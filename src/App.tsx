@@ -19,6 +19,14 @@ import { InfoPage } from "./pages/InfoPage";
 import { CollabPage } from "./pages/CollabPage";
 import { PromotionPage } from "./pages/PromotionPage";
 import { ScrollToTop } from "./components/common/ScrollToTop";
+import { PasswordReset } from "./pages/PasswordReset";
+import { OrderComplete } from "./pages/OrderComplete";
+import { AboutPage, EsportsPage } from "./pages/info/BrandPages";
+import { NikoPage } from "./pages/info/NikoPage";
+import { EsportsGreenPage } from "./pages/info/EsportsGreenPage";
+import { FaqPage, SupportPage, WarrantyPage } from "./pages/info/ServicePages";
+import { BuyingGuidePage, ExclusivesPage, MembershipPage } from "./pages/info/StorePages";
+import { TechnologyPage } from "./pages/info/TechnologyPage";
 
 const ProductCustomize = lazy(() => import("./pages/products/ProductCustomize")
   .then(({ ProductCustomize }) => ({ default: ProductCustomize })));
@@ -44,6 +52,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
           {/* 디스코드 로그인 서버에서 돌아오는 주소 */}
           <Route path="/login/discord" element={<DiscordCallback />} />
           <Route path="/mypage" element={<MyPage />} />
@@ -51,6 +60,7 @@ function App() {
           <Route path="/products/:catalogSlug" element={<CatalogPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Payment />} />
+          <Route path="/checkout/complete" element={<OrderComplete />} />
           <Route
             path="/products/:category/:productId"
             element={<ProductsDetail />}
@@ -64,6 +74,17 @@ function App() {
           <Route path="/info/:group" element={<InfoPage />} />
           {/* 프로모션 알아보기 (PDF 화면) · 콜라보 상세 (콜라보 카드에서 이동) */}
           <Route path="/info/promotion/promotions" element={<PromotionPage />} />
+          <Route path="/info/product/how-to-buy" element={<BuyingGuidePage />} />
+          <Route path="/info/product/razer-exclusives" element={<ExclusivesPage />} />
+          <Route path="/info/product/membership" element={<MembershipPage />} />
+          <Route path="/info/promotion/technology/:technology?" element={<TechnologyPage />} />
+          <Route path="/info/promotion/esports" element={<EsportsPage />} />
+          <Route path="/info/promotion/esports/niko" element={<NikoPage />} />
+          <Route path="/info/promotion/esports/green" element={<EsportsGreenPage />} />
+          <Route path="/info/service/faq" element={<FaqPage />} />
+          <Route path="/info/service/registration-warranty" element={<WarrantyPage />} />
+          <Route path="/info/service/support" element={<SupportPage />} />
+          <Route path="/info/company/about" element={<AboutPage />} />
           <Route path="/promotion/collab/:collabSlug" element={<CollabPage />} />
           <Route path="/info/:group/:page" element={<InfoPage />} />
         </Routes>

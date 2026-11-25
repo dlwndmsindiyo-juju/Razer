@@ -44,4 +44,4 @@ export const useProductStore = create<ProductState>((set) => ({
         // 로그아웃 시 화면의 목록 초기화
         set({ hearts: [], orderList: [], registeredList: [] });
     },
-}));
+}));

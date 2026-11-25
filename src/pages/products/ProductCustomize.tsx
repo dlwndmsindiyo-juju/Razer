@@ -5,7 +5,7 @@ import { getKeyboardPreview } from "../../data/keyboardPreview";
 import { keyboardActions } from "../../data/detailData";
 import type { Product } from "../../types/product";
 import type { mountKeyboardScene, SwitchFeel, ViewAngle } from "./keyboardScene";
-import "./ProductCustomize.scss";
+import "../../style/ProductCustomize.scss";
 
 const tabs = [
     { id: "size", label: "사이즈", icon: "keyboard" },
@@ -241,11 +241,14 @@ function KeyboardCustomizer({ product }: { product: Product }) {
                                 </button>
                             )}
                             {visibleOptions.length > 0 && (
-                                <dl className="keyboard-customize__selected">
+                                <ul className="keyboard-customize__selected">
                                     {visibleOptions.map(option => (
-                                        <div key={option.label}><dt>{option.label}</dt><dd>{option.value}</dd></div>
+                                        <li key={option.label}>
+                                            <span className="keyboard-customize__selected-label">{option.label}</span>
+                                            <span className="keyboard-customize__selected-value">{option.value}</span>
+                                        </li>
                                     ))}
-                                </dl>
+                                </ul>
                             )}
                         </aside>
                     </div>

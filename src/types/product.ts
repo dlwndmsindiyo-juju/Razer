@@ -28,12 +28,11 @@ export interface ProductOption {
     options: { label: string; value: string }[];
     price?: number;
     stockStatus?: string;
-    url?: string;
 }
 
 export interface CatalogListing {
     category: ProductCategory;
-    url: string;
+    id: string;
     code?: string;
     officialCount?: number;
     apiUniqueCount: number;
@@ -49,9 +48,7 @@ export interface CatalogListing {
 
 export interface Product {
     categories?: ProductCategory[];
-    officialImage?: string;
-    productUrl?: string;
-    listingUrls?: string[];
+    listingIds?: string[];
     badge?: string;
     summary?: string;
     stockStatus?: string;
@@ -98,7 +95,6 @@ export interface Order {
     expectedAt?: string; // 배송 예정일
     carrier?: string; // 택배사
     trackingNumber?: string; // 송장번호
-    trackingUrl?: string; // 배송 조회 주소
     payment?: { method: string; last4?: string }; // 결제 수단 (예: Visa · 4242)
     receiver?: { name: string; phone: string; address: string }; // 받는 사람
 }

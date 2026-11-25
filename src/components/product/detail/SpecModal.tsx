@@ -26,17 +26,17 @@ export const SpecModal = ({ product, onClose }: { product: Product; onClose: () 
                     </button>
                 </div>
                 {features.length > 0 ? (
-                    <dl className="pd-spec__list">
+                    <ul className="pd-spec__list">
                         {features.map((feature) => (
-                            <div key={feature.code}>
-                                <dt>{feature.label}</dt>
-                                <dd>
+                            <li key={feature.code}>
+                                <span className="pd-spec__label">{feature.label}</span>
+                                <span className="pd-spec__value">
                                     {feature.values.join(" · ")}
                                     {feature.unit ? ` ${feature.unit}` : ""}
-                                </dd>
-                            </div>
+                                </span>
+                            </li>
                         ))}
-                    </dl>
+                    </ul>
                 ) : (
                     <p className="pd-spec__empty">등록된 사양 정보가 없어요.</p>
                 )}

@@ -91,7 +91,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const closeSpec = useCallback(() => setIsSpecOpen(false), []);
 
     return (
-        <article className="product-detail">
+        <div className="product-detail">
             <div className="product-detail__top">
                 {/* 왼쪽 위: 이미지 */}
                 <div className="product-detail__gallery">
@@ -130,7 +130,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </div>
 
                     <ProductOptions product={product} />
-                    {unverified && product.productUrl && <a href={product.productUrl}>Razer 공식 소개 보기</a>}
 
                     <div className="product-detail__bottom">
                         <div className="product-detail__extras">
@@ -178,7 +177,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     {toast.cart && <Link to="/cart">장바구니 보기</Link>}
                 </div>
             )}
-        </article>
+        </div>
     );
 };
 
