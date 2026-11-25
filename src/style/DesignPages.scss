@@ -1,4 +1,4 @@
-@use "../../variables" as v;
+@use "../variables" as v;
 
 body:has(main > :is(.design-page, .auth)) {
     min-width: 0;
@@ -669,37 +669,78 @@ a.design-support:hover {
     }
 }
 
-.design-warranty .design-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+// ---------- 등록 및 보증 ----------
+.design-warranty__section {
+    padding-top: 3rem;
 
-.design-warranty .design-support {
-    min-height: 10rem;
-}
-
-.design-accordion {
-    padding: 0;
-    background: transparent;
-
-    &__item {
-        margin-bottom: 1rem;
-        padding: 1.5rem;
-        background: v.$neutral-color-panel;
+    >h2 {
+        @include v.heading-24-b;
+        margin-bottom: 2rem;
     }
+}
+
+// 왜 제품을 등록해야할까요? (아이콘 왼쪽 · 2열)
+.design-warranty__benefits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3.5rem 1.5rem;
+    padding-bottom: 2rem;
+
+    article {
+        display: flex;
+        align-items: flex-start;
+        gap: 3.75rem;
+    }
+
+    img {
+        flex: none;
+        width: 5rem;
+        height: 5rem;
+        object-fit: contain;
+    }
+
+    h3 {
+        @include v.body-16-sb;
+        margin: .25rem 0 .75rem;
+    }
+
+    p {
+        @include v.body-14-r;
+        color: v.$neutral-color-100;
+    }
+}
+
+// Razer 품질 보증 정책 (질문 박스 + 아래로 펼쳐지는 답변 박스)
+.design-accordion {
+    display: grid;
+    gap: 1.875rem;
+    padding-bottom: 6rem;
 
     &__summary {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
+        gap: 1.5rem;
         width: 100%;
-        color: inherit;
+        min-height: 7.5rem;
+        padding: 1.5rem 5.625rem 1.5rem 7.5rem;
+        border-radius: v.$radius-sm;
+        background: v.$neutral-color-panel;
+        color: v.$neutral-color-white;
         text-align: left;
         cursor: pointer;
-        @include v.heading-20-sb;
+        @include v.heading-24-sb;
+        word-break: keep-all;
+        transition: background-color .2s;
+
+        &:hover {
+            background: v.$neutral-color-700;
+        }
 
         img {
             flex: none;
+            width: 1.5rem;
+            height: 1.5rem;
             transition: transform .3s ease;
         }
     }
@@ -708,16 +749,86 @@ a.design-support:hover {
     &__item.is-open &__summary img {
         transform: rotate(45deg);
     }
+}
 
-    &__answer {
-        padding-top: 1rem;
-        color: v.$neutral-color-100;
+.warranty-answer {
+    margin-top: 1.875rem;
+    padding: 2rem 4.5rem;
+    border-radius: 1rem;
+    background: v.$neutral-color-700;
+    @include v.body-14-r;
+    line-height: 1.5rem;
+    color: v.$neutral-color-white;
+    word-break: keep-all;
+
+    ul {
+        padding-left: 1.5rem;
+        list-style: disc;
+    }
+
+    li::marker {
+        font-size: .75em;
     }
 
     a {
-        display: inline-block;
-        margin-top: 1rem;
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+
+        &:hover {
+            color: v.$main-primary-color;
+        }
+    }
+
+    strong {
+        font-weight: v.$font-weight-bold;
+    }
+
+    &__mark {
+        font-style: normal;
         color: v.$main-primary-color;
+    }
+
+    &__gap {
+        margin-top: 1.5rem;
+    }
+
+    &__indent {
+        padding-left: 2.5rem !important;
+    }
+
+    &__notes {
+        margin-top: 2.5rem;
+        display: grid;
+        gap: 1.5rem;
+    }
+}
+
+// 보증 기간 표
+.warranty-table {
+    width: 100%;
+    margin-top: 3.5rem;
+    border-collapse: collapse;
+    table-layout: fixed;
+    text-align: center;
+
+    th,
+    td {
+        height: 2.25rem;
+        padding: .375rem 1rem;
+        border: 1px solid v.$neutral-color-300;
+        font-weight: v.$font-weight-regular;
+    }
+
+    th:last-child,
+    td:last-child {
+        width: 33.3%;
+    }
+
+    &__mark {
+        margin-left: .25rem;
+        font-size: .75rem;
+        color: v.$neutral-color-100;
     }
 }
 
@@ -2341,12 +2452,39 @@ a.design-support:hover {
             margin-inline: auto;
         }
 
-        .design-grid {
+        .design-warranty__benefits {
             grid-template-columns: 1fr;
+            gap: 1.5rem;
         }
 
-        .design-support {
+        .design-warranty__benefits article {
+            gap: 1rem;
+        }
+
+        .design-warranty__benefits img {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .design-accordion__summary {
             min-height: 0;
+            padding: 1rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+
+        .warranty-answer {
+            padding: 1rem;
+            font-size: .75rem;
+            line-height: 1.25rem;
+        }
+
+        .warranty-table {
+            font-size: .6875rem;
+        }
+
+        .warranty-table :is(th, td) {
+            padding: .25rem;
         }
 
         .design-heading h2 {
@@ -2881,14 +3019,7 @@ a.design-support:hover {
     }
 
     .design-warranty .design-accordion {
-        background: v.$neutral-color-700;
-        padding: 8px 14px;
-    }
-
-    .design-warranty .design-accordion__item {
-        margin: 0;
-        padding: 12px 4px;
-        background: transparent;
+        gap: 8px;
     }
 
     .design-warranty .design-accordion__summary {

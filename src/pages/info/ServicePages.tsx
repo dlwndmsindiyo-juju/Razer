@@ -1,8 +1,12 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
+import { ConfirmModal, RegisterModal, serialOnlyText, toSerial } from "../../components/mypage/MypageModals";
+import { registerProductNames, useRegisterProduct, type RegisterValues } from "../../types/useRegisterProduct";
 import { promotionFaq } from "../../data/collabData";
-import { supportCards, warrantyQuestions } from "../../data/editorialData";
-import { figmaImage } from "../../data/figmaPageAssets";
+import { supportCards } from "../../data/editorialData";
+import { warrantyBenefits, warrantyFaq } from "../../data/warrantyData";
+import { faqImages, supportImages, warrantyImages } from "../../data/pageImages";
 import { PageHeading, PageHero } from "./PageLayout";
 import { Collapse } from "../../components/common/Collapse";
 
@@ -45,7 +49,7 @@ export function FaqPage() {
                     <button type="button" aria-expanded={active === index} aria-controls={"faq-answer-" + index}
                         onClick={() => setActive(active === index ? undefined : index)}>
                         <span>{entry === initialQuestion ? "01" : String(index + 1).padStart(2, "0")}</span><strong>{entry.question}</strong>
-                        <span className="design-toggle-icon" aria-hidden="true">{active === index ? "−" : <img src="/images/faq/plus.svg" alt="" />}</span>
+                        <span className="design-toggle-icon" aria-hidden="true">{active === index ? "−" : <img src={faqImages.plus} alt="" />}</span>
                     </button>
                     <Collapse open={active === index} id={"faq-answer-" + index}>
                         <div className="design-faq__answer"><p>{entry.answer}</p></div>
@@ -73,7 +77,7 @@ export function SupportPage() {
             {supportCards.map(([title, description], index) => {
                 const path = supportPaths[index];
                 const content = <><h2>{title}</h2><p>{description}</p>{path && <span className="design-support__arrow">
-                    <img src={index === 0 ? "/images/support/arrow-primary.svg" : "/images/support/arrow.svg"} alt="" />
+                    <img src={index === 0 ? supportImages.arrowPrimary : supportImages.arrow} alt="" />
                 </span>}</>;
                 return path ?
                     <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
@@ -83,48 +87,85 @@ export function SupportPage() {
     </div>;
 }
 
-const warrantyBenefits = [
-    ["제품 지원 자료에 쉽게 접근", "지원 문서에서 필요한 정보를 쉽고 간편하게 찾아보세요."],
-    ["더 빠른 지원 및 해결", "제품을 등록하시면 제품 정보에 빠르게 접근할 수 있습니다."],
-    ["최신 정보 업데이트", "최신 프로모션 및 소프트웨어 업데이트 소식을 받아보세요."],
-    ["피드백 제공 및 보상", "등록된 제품에 대한 의견을 공유해 주세요."],
-];
+// 히어로 오른쪽: 제품 PIN 입력 → 이 페이지에서 바로 제품 등록 팝업 (PIN이 시리얼 칸에 채워짐)
+type PinModal = "register" | "login" | "done" | "proof" | null;
 
-// 히어로 오른쪽: 제품 PIN 입력 → 마이페이지 제품 등록 팝업 (PIN이 시리얼 칸에 채워짐)
 function PinRegister() {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const user = useAuthStore((state) => state.user);
+    const registerProduct = useRegisterProduct();
     const [pin, setPin] = useState("");
     const [error, setError] = useState("");
+    const [modal, setModal] = useState<PinModal>(null);
+
+    // 영문 · 숫자만 (한글 · 특수문자는 입력 즉시 빼고 안내)
+    const changePin = (value: string) => {
+        const next = toSerial(value);
+        setPin(next);
+        // 한글 · 특수문자 안내는 다시 등록을 누를 때까지 보여 줌
+        if (next !== value.toUpperCase()) setError(serialOnlyText);
+        else if (error !== serialOnlyText) setError("");
+    };
+
     const submit = (event: FormEvent) => {
         event.preventDefault();
-        const value = pin.trim();
-        if (value.length < 4) return setError("제품의 PIN 번호를 정확히 입력해 주세요.");
-        navigate("/mypage?" + new URLSearchParams({ tab: "warranty", pin: value }).toString());
+        if (pin.length < 4) return setError("제품의 PIN 번호를 정확히 입력해 주세요.");
+        setModal(user ? "register" : "login");
     };
-    return <form className="design-warranty__register" onSubmit={submit} noValidate>
-        <h1>등록 및 보증</h1>
-        <div className="design-warranty__field">
-            <input type="text" value={pin} aria-label="제품 PIN 번호" placeholder="제품의 PIN 번호를 입력하세요"
-                aria-invalid={!!error} aria-describedby={error ? "warranty-pin-error" : undefined}
-                onChange={(event) => { setPin(event.target.value); setError(""); }} />
-            <button type="submit" className="btn btn--primary">등록</button>
-        </div>
-        {error && <p id="warranty-pin-error" className="design-warranty__error" role="alert">{error}</p>}
-    </form>;
+
+    const save = async (values: RegisterValues) => {
+        await registerProduct(undefined, values);
+        setPin("");
+        setModal(values.proof ? "proof" : "done");
+    };
+
+    return <>
+        <form className="design-warranty__register" onSubmit={submit} noValidate>
+            <h1>등록 및 보증</h1>
+            <div className="design-warranty__field">
+                <input type="text" value={pin} aria-label="제품 PIN 번호" placeholder="제품의 PIN 번호를 입력하세요"
+                    autoComplete="off" autoCapitalize="characters" spellCheck={false}
+                    aria-invalid={!!error} aria-describedby={error ? "warranty-pin-error" : undefined}
+                    onChange={(event) => changePin(event.target.value)}
+                    onCompositionEnd={(event) => changePin(event.currentTarget.value)} />
+                <button type="submit" className="btn btn--primary">등록</button>
+            </div>
+            {error && <p id="warranty-pin-error" className="design-warranty__error" role="alert">{error}</p>}
+        </form>
+
+        {/* 팝업은 모두 이 페이지 위에서 열림 */}
+        {modal === "register" && (
+            <RegisterModal serial={pin} productNames={registerProductNames} onClose={() => setModal(null)} onSave={save} />
+        )}
+        {modal === "login" && (
+            <ConfirmModal title="로그인이 필요해요" text="제품 등록은 로그인 후 이용할 수 있어요." confirmLabel="로그인"
+                onClose={() => setModal(null)} onConfirm={() => navigate("/login", { state: { from: pathname } })} />
+        )}
+        {modal === "done" && (
+            <ConfirmModal single title="제품을 등록했어요" text="등록한 제품은 마이페이지 > 등록 및 보증에서 확인할 수 있어요."
+                confirmLabel="확인" onClose={() => setModal(null)} onConfirm={() => setModal(null)} />
+        )}
+        {modal === "proof" && (
+            <ConfirmModal single title="구매 증빙을 첨부했어요" text="확인 후 보증 적용 여부를 이메일로 안내해 드려요."
+                confirmLabel="확인" onClose={() => setModal(null)} onConfirm={() => setModal(null)} />
+        )}
+    </>;
 }
 
+// Razer 품질 보증 정책: 질문을 누르면 아래 답변 박스가 스르륵 (한 번에 하나)
 function WarrantyAccordion() {
     const [open, setOpen] = useState<number>();
-    return <div className="design-panel design-accordion">
-        {warrantyQuestions.map((question, index) => {
+    return <div className="design-accordion">
+        {warrantyFaq.map(({ q, a }, index) => {
             const isOpen = open === index;
-            return <div className={"design-accordion__item" + (isOpen ? " is-open" : "")} key={question}>
+            return <div className={"design-accordion__item" + (isOpen ? " is-open" : "")} key={q}>
                 <button type="button" className="design-accordion__summary" aria-expanded={isOpen}
                     aria-controls={"warranty-answer-" + index} onClick={() => setOpen(isOpen ? undefined : index)}>
-                    {question}<img src="/images/warranty/plus.svg" alt="" />
+                    {q}<img src={warrantyImages.plus} alt="" />
                 </button>
                 <Collapse open={isOpen} id={"warranty-answer-" + index}>
-                    <p className="design-accordion__answer">등록된 보증 안내가 없습니다.</p>
+                    <div className="warranty-answer">{a}</div>
                 </Collapse>
             </div>;
         })}
@@ -133,20 +174,26 @@ function WarrantyAccordion() {
 
 export function WarrantyPage() {
     return <div className="design-page design-warranty">
-        <PageHero src={figmaImage("1404:27724", "Rectangle182")}>
+        <PageHero src={warrantyImages.hero}>
             <PinRegister />
         </PageHero>
         <div className="design-container">
-            <PageHeading title="왜 제품을 등록해야할까요?" as="h2" />
-            <div className="design-grid design-grid--four">
-                {warrantyBenefits.map(([title, description], index) => <article className="design-support" key={title}>
-                    <img src={figmaImage("1404:27724", ["Frame", "Frame1", "Frame2", "Frame3"][index])} alt="" />
-                    <h3>{title}</h3>
-                    <p>{description}</p>
-                </article>)}
-            </div>
-            <PageHeading title="Razer 품질 보증 정책" description="도움이 필요하신가요? 걱정하지 마세요! 저희가 도와드리겠습니다." as="h2" />
-            <WarrantyAccordion />
+            <section className="design-warranty__section">
+                <h2>왜 제품을 등록해야할까요?</h2>
+                <div className="design-warranty__benefits">
+                    {warrantyBenefits.map(([title, lines], index) => <article key={title}>
+                        <img src={warrantyImages.benefits[index]} alt="" />
+                        <div>
+                            <h3>{title}</h3>
+                            {lines.map((line) => <p key={line}>{line}</p>)}
+                        </div>
+                    </article>)}
+                </div>
+            </section>
+            <section className="design-warranty__section">
+                <h2>Razer 품질 보증 정책</h2>
+                <WarrantyAccordion />
+            </section>
         </div>
     </div>;
 }

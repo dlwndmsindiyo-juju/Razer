@@ -12,7 +12,7 @@ import {
     ModalField,
     authErrorText,
 } from "./MypageModals";
-import { maskPhone } from "../../data/mypageData";
+import { maskPhone } from "../../types/mypageData";
 import type { Address, AppUser, PaymentCard } from "../../types/auth";
 
 // 계정 관리 메뉴 (/mypage?tab=account&section=…)

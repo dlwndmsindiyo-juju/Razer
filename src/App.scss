@@ -5594,6 +5594,12 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
         }
     }
 
+    // 키보드로 고른 항목
+    &__list button.is-active {
+        background-color: $neutral-color-canvas;
+        color: $neutral-color-white;
+    }
+
     // 결제 수단 등록: 라벨 들어간 회색 칸 (카드번호 칸과 같은 모양)
     &--card &__button {
         min-height: 5.8125rem;
@@ -5724,5 +5730,56 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
     .reveal,
     .reveal__inner {
         transition: none;
+    }
+}
+
+// 제품 등록 팝업 · 모델명 (입력 + 목록 · 드롭다운과 같은 모양)
+.model-select {
+    &__input {
+        @include body-16-r;
+        width: 100%;
+        height: 3.25rem;
+        padding: 0 3rem 0 1rem;
+        border: 1px solid transparent;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-700;
+        color: $neutral-color-white;
+        transition: border-color 0.2s;
+
+        &::placeholder {
+            color: $neutral-color-100;
+        }
+
+        &:hover,
+        &:focus {
+            border-color: $neutral-color-300;
+        }
+    }
+
+    // 오른쪽 아래 화살표 (chevron-down.svg · 열리면 위로)
+    &__toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: grid;
+        place-items: center;
+        width: 3rem;
+        height: 3.25rem;
+
+        img {
+            width: 0.75rem;
+            height: 0.75rem;
+            transition: transform 0.2s;
+        }
+    }
+
+    &.is-open &__toggle img {
+        transform: rotate(180deg);
+    }
+
+    &__empty {
+        @include body-14-r;
+        padding: 0.625rem 1rem;
+        color: $neutral-color-100;
     }
 }

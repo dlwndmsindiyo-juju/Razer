@@ -5,7 +5,7 @@ import { getKeyboardPreview } from "../../data/keyboardPreview";
 import { keyboardActions } from "../../data/detailData";
 import type { Product } from "../../types/product";
 import type { mountKeyboardScene, SwitchFeel, ViewAngle } from "./keyboardScene";
-import "./ProductCustomize.scss";
+import "../../style/ProductCustomize.scss";
 
 const tabs = [
     { id: "size", label: "사이즈", icon: "keyboard" },

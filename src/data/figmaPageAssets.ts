@@ -34,7 +34,7 @@ const assets: Record<string, Record<string, string>> = {
         "Frame3": "warranty/benefit-feedback.svg"
     },
     "1404:27645": {
-        "MaskGroup": "checkout/order-complete-bag.svg"
+        "MaskGroup": "order-complete/bag.svg"
     },
     "1401:24703": {
         "Rectangle172": "about/awards-service-background.webp",
@@ -84,7 +84,6 @@ const assets: Record<string, Record<string, string>> = {
         "Frame721": "technology/hyperpolling-wireless.webp",
         "Frame722": "technology/snap-tap.webp",
         "Frame723": "technology/sensa-hd-haptics.webp",
-        "Frame706": "technology/icon-all.svg",
         "IconDevicesMouse": "technology/icon-mouse.svg",
         "IconDevicesKeyboard": "technology/icon-keyboard.svg",
         "IconDevicesHeadset": "technology/icon-headset.svg",

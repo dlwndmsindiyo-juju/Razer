@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { figmaImage } from "../data/figmaPageAssets";
+import { orderCompleteImages } from "../data/pageImages";
 import { getProductsByCollection } from "../data/productData";
 import { PageHeading, ProductRail } from "./info/PageLayout";
 
@@ -10,7 +10,7 @@ export function OrderComplete() {
     const orderNumber = typeof state?.previewNumber === "string" ? state.previewNumber : undefined;
     return <div className="design-page design-container">
         <section className="design-order-complete">
-            <img src={figmaImage("1404:27645", "MaskGroup")} alt="" />
+            <img src={orderCompleteImages.bag} alt="" />
             <PageHeading title={orderNumber ? "테스트 주문이 완료되었습니다" : "주문 완료"} />
             {orderNumber ? <p>테스트 주문 번호는 <strong>{orderNumber}</strong>입니다.</p> :
                 <p>확인할 수 있는 주문 정보가 없습니다. <Link to="/mypage?tab=orders">주문 내역 보기</Link></p>}

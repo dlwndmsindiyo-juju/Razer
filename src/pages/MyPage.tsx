@@ -23,20 +23,20 @@ import {
     orderFilters,
     type MypageTab,
     type OrderFilter,
-} from "../data/mypageData";
+} from "../types/mypageData";
 import { ImageOrText } from "../components/common/ImageOrText";
 import { AccountSettings, accountSections, type AccountSection } from "../components/mypage/AccountSettings";
 import { BoxIcon, CartIcon, ChevronIcon, HeartIcon, TruckIcon } from "../components/mypage/MypageIcons";
 import type { Order, Product, RegisteredProduct } from "../types/product";
 import type { SupportRequest } from "../types/auth";
 import { ConfirmModal, RegisterModal, ReturnModal, SupportModal, TrackingModal, today } from "../components/mypage/MypageModals";
-import { productData } from "../data/productData";
+import { registerProductNames, useRegisterProduct, type RegisterValues } from "../types/useRegisterProduct";
 
 // 마이페이지 팝업 (어디서 눌러도 MyPage 가 띄움)
 type MypageModal =
     | { type: "tracking"; order: Order }
     | { type: "return"; order: Order }
-    | { type: "register"; item?: RegisteredProduct; serial?: string }
+    | { type: "register"; item?: RegisteredProduct }
     | { type: "support"; item: RegisteredProduct }
     | { type: "done"; title: string; text: string }
     | null;
@@ -375,7 +375,6 @@ const RegisteredItem = ({ item }: { item: RegisteredProduct }) => {
 };
 
 // 제품 등록 모델명 자동완성 (상품 이름 앞부분 · 중복 제거)
-const productNames = [...new Set(productData.map((p) => p.title.split(" - ")[0]))];
 
 // 마이페이지 (/mypage?tab=home|orders|warranty|account)
 // - 주문 상세: /mypage?tab=orders&order=주문번호
@@ -384,15 +383,8 @@ export const MyPage = () => {
     const { user, authReady, onUpdateProfile } = useAuthStore();
     const { hearts, orderList, registeredList } = useProductStore();
     const [searchParams, setSearchParams] = useSearchParams();
-    // 등록 및 보증 페이지에서 PIN 입력 후 넘어오면 (?tab=warranty&pin=…) 제품 등록 팝업을 바로 열기
-    const pinParam = searchParams.get("pin");
-    const [modal, setModal] = useState<MypageModal>(() => (pinParam ? { type: "register", serial: pinParam } : null));
-    useEffect(() => {
-        if (!pinParam) return;
-        const next = new URLSearchParams(searchParams);
-        next.delete("pin");
-        setSearchParams(next, { replace: true });
-    }, [pinParam, searchParams, setSearchParams]);
+    const [modal, setModal] = useState<MypageModal>(null);
+    const registerProduct = useRegisterProduct();
     const tabParam = searchParams.get("tab");
     const tab: MypageTab = mypageTabs.some((t) => t.key === tabParam) ? (tabParam as MypageTab) : "home";
     const orderParam = searchParams.get("order");
@@ -424,20 +416,8 @@ export const MyPage = () => {
     };
 
     // 제품 등록 · 수정 → 계정 문서의 registeredProducts (화면 목록도 바로 갱신)
-    const saveRegistered = async (prev: RegisteredProduct | undefined, values: { title: string; serial: string; purchasedAt: string; proof?: string }) => {
-        const product = productData.find((p) => p.title.startsWith(values.title));
-        const item: RegisteredProduct = {
-            ...prev,
-            id: product?.id ?? prev?.id ?? 0,
-            title: values.title,
-            image: product?.image ?? prev?.image,
-            serial: values.serial,
-            purchasedAt: values.purchasedAt.replace(/\./g, "-"),
-            warranty: prev?.warranty ?? "pending", // 구매 증빙 확인 후 보증 적용
-        };
-        const list = prev ? registeredList.map((r) => (r === prev ? item : r)) : [...registeredList, item];
-        await onUpdateProfile({ registeredProducts: list });
-        useProductStore.setState({ registeredList: list });
+    const saveRegistered = async (prev: RegisteredProduct | undefined, values: RegisterValues) => {
+        await registerProduct(prev, values);
         setModal(
             values.proof
                 ? { type: "done", title: "구매 증빙을 첨부했어요", text: "확인 후 보증 적용 여부를 이메일로 안내해 드려요." }
@@ -575,7 +555,7 @@ export const MyPage = () => {
             />
         )}
         {modal?.type === "register" && (
-            <RegisterModal initial={modal.item} serial={modal.serial} productNames={productNames} onClose={closeModal} onSave={(values) => saveRegistered(modal.item, values)} />
+            <RegisterModal initial={modal.item} productNames={registerProductNames} onClose={closeModal} onSave={(values) => saveRegistered(modal.item, values)} />
         )}
         {modal?.type === "support" && (
             <SupportModal

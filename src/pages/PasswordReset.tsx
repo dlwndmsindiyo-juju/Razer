@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { passwordResetImages } from "../data/pageImages";
 import { Link, useLocation } from "react-router-dom";
 import { AuthField } from "../components/auth/AuthField";
 import { validateEmail } from "../data/authData";
@@ -34,8 +35,8 @@ export function PasswordReset() {
                 <Link to="/" className="auth__logo"><img src="/icons/logo.svg" alt="Razer 홈" /></Link>
                 <h1 className="auth__title">비밀번호 찾기</h1>
                 <ul className="design-reset__help">
-                    <li><img src="/images/password-reset/check.svg" alt="" />비밀번호는 암호화로 저장되어 분실 시 찾아드릴 수 없는 정보입니다.</li>
-                    <li><img src="/images/password-reset/check.svg" alt="" />본인 확인을 통해 비밀번호를 재설정하실 수 있습니다.</li>
+                    <li><img src={passwordResetImages.check} alt="" />비밀번호는 암호화로 저장되어 분실 시 찾아드릴 수 없는 정보입니다.</li>
+                    <li><img src={passwordResetImages.check} alt="" />본인 확인을 통해 비밀번호를 재설정하실 수 있습니다.</li>
                 </ul>
             </div>
             <form className="auth__form" onSubmit={submit} noValidate>
@@ -45,7 +46,7 @@ export function PasswordReset() {
                     onChange={(value) => { setEmail(value); setError(""); setSent(false); }} error={error} />
                 {sent && <p role="status">재설정 메일을 보냈습니다. 메일함을 확인해주세요.</p>}
                 <fieldset className="design-reset__methods">
-                    <legend><img src="/images/password-reset/info.svg" alt="" />비밀번호 찾기 방법을 선택해주세요.</legend>
+                    <legend><img src={passwordResetImages.info} alt="" />비밀번호 찾기 방법을 선택해주세요.</legend>
                     <label><input type="radio" name="reset-method" defaultChecked /> 이메일로 받기</label>
                     <label><input type="radio" name="reset-method" disabled /> 휴대폰으로 받기</label>
                 </fieldset>

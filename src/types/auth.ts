@@ -90,4 +90,4 @@ export interface AuthState {
 
     // 프로필 · 계정 설정 저장 (Firestore users/{uid} 에 합쳐서 저장)
     onUpdateProfile: (changes: Partial<AppUser>) => Promise<void>;
-}
+}

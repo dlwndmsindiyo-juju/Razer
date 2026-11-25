@@ -2,7 +2,8 @@ import { useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { categoryLabels } from "../../data/productData";
 import type { Product } from "../../types/product";
-import "./DesignPages.scss";
+import "../../style/DesignPages.scss";
+import { commonImages } from "../../data/pageImages";
 
 export function PageHeading({ title, description, as: Heading = "h1" }: {
     title: string;
@@ -33,7 +34,7 @@ export function CatalogCard({ product, featured = false, badge }: { product: Pro
             <h3>{product.title}</h3>
             <p>{categoryLabels[product.category]}</p>
             <Link className="design-explore" to={to} aria-label={product.title + " 자세히 보기"}>
-                EXPLORE <img src="/images/common/explore.svg" alt="" />
+                EXPLORE <img src={commonImages.explore} alt="" />
             </Link>
         </div>
     </article>;
@@ -47,10 +48,10 @@ export function ProductRail({ products, title }: { products: Product[]; title: s
     };
 
     return <div className="design-rail">
-        <button aria-label={title + " 이전"} type="button" disabled={products.length < 2} onClick={() => scroll(-1)}><img src="/images/common/rail-left.svg" alt="" /></button>
+        <button aria-label={title + " 이전"} type="button" disabled={products.length < 2} onClick={() => scroll(-1)}><img src={commonImages.railLeft} alt="" /></button>
         <div className="design-rail__track" ref={list} tabIndex={0} aria-label={title}>
             {products.map((product) => <CatalogCard key={product.id} product={product} />)}
         </div>
-        <button aria-label={title + " 다음"} type="button" disabled={products.length < 2} onClick={() => scroll(1)}><img src="/images/common/rail-right.svg" alt="" /></button>
+        <button aria-label={title + " 다음"} type="button" disabled={products.length < 2} onClick={() => scroll(1)}><img src={commonImages.railRight} alt="" /></button>
     </div>;
 }
