@@ -37,6 +37,10 @@ export const ProductDetailContent = ({ product, title, images }: { product: Prod
     const blockImages = rest.slice(0, blocks.length);
     const cardImages = rest.slice(blocks.length, blocks.length + cards.length);
     const extraImages = rest.slice(blocks.length + cards.length);
+    // 3칸 카드는 내용과 이미지가 모두 있는 것만 (나머지는 빼고 가운데 정렬)
+    const cardItems = cards
+        .map((f, i) => ({ ...f, image: cardImages[i] }))
+        .filter((card): card is Feature & { image: string } => !!card.value.trim() && !!card.image);
     const brand = title.replace(/^Razer\s+/, "");
 
     return (
@@ -83,21 +87,19 @@ export const ProductDetailContent = ({ product, title, images }: { product: Prod
                 </section>
             ))}
 
-            {/* 3칸 카드 */}
-            {cards.length > 0 && (
-                <section className="pd-content__cards">
-                    {cards.map((f, i) => (
-                        <div key={f.code} className="pd-content__card">
-                            {cardImages[i] && (
-                                <span className="pd-content__card-img">
-                                    <img src={cardImages[i]} alt="" loading="lazy" />
-                                </span>
-                            )}
-                            <span className="pd-content__feature-label">{f.label}</span>
-                            <p>{f.value}</p>
-                        </div>
+            {/* 3칸 카드 (있는 것만 · 가운데 정렬) */}
+            {cardItems.length > 0 && (
+                <ul className="pd-content__cards">
+                    {cardItems.map((card) => (
+                        <li key={card.code} className="pd-content__card">
+                            <span className="pd-content__card-img">
+                                <img src={card.image} alt="" loading="lazy" />
+                            </span>
+                            <span className="pd-content__feature-label">{card.label}</span>
+                            <p>{card.value}</p>
+                        </li>
                     ))}
-                </section>
+                </ul>
             )}
 
             {/* 보증 */}

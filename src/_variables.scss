@@ -18,7 +18,7 @@ $neutral-color-black: #000000;
 $grey-2: #4F4F4F;
 $grey-3: #828282;
 $grey-4: #BDBDBD;
-$gradient-primary: linear-gradient(90deg, #44D62C 0%, #00FFDD 100%); // 커스터마이징 버튼
+$gradient-primary: linear-gradient(90deg, $main-primary-color 0%, #00FFDD 100%); // 커스터마이징 버튼
 
 
 // ---------- Font weight ----------

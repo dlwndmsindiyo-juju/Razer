@@ -54,6 +54,13 @@ main {
 // 커스터마이징 시작 버튼 공용 (메인 히어로 · 상품 상세 이미지 위)
 // 그라데이션이 흐르고 은은하게 빛남 (keyframes: hero-btn-flow · hero-btn-glow)
 // =========================================================
+// 커스터마이징 버튼 배경: $gradient-primary 색(초록 → 민트)을 왕복으로 이어 붙여 옆으로 흘러가게
+@mixin customize-fill {
+    background: linear-gradient(90deg, $main-primary-color 0%, #00FFDD 50%, $main-primary-color 100%);
+    background-size: 200% 100%;
+    color: $neutral-color-black;
+}
+
 @mixin customize-btn {
     @include label-14-sb;
     display: inline-flex;
@@ -62,10 +69,7 @@ main {
     width: 14.75rem;
     height: 2.75rem;
     border-radius: $radius-sm;
-    // $gradient-primary 색(초록 → 민트)을 왕복으로 이어 붙여 옆으로 흘러가게
-    background: linear-gradient(90deg, #44D62C 0%, #00FFDD 50%, #44D62C 100%);
-    background-size: 200% 100%;
-    color: $neutral-color-black;
+    @include customize-fill;
     // 그라데이션 흐름 + 은은하게 빛나는 효과
     animation:
         hero-btn-flow 4s linear infinite,
@@ -908,7 +912,7 @@ main {
 // 커스터마이징 버튼 주변이 초록 ↔ 민트로 은은하게 빛남
 @keyframes hero-btn-glow {
     from {
-        box-shadow: 0 0 0.5rem rgba(68, 214, 44, 0.25);
+        box-shadow: 0 0 0.5rem rgba($main-primary-color, 0.25);
     }
 
     to {
@@ -1212,7 +1216,7 @@ main {
         justify-content: center;
         width: 2.75rem;
         height: 2.75rem;
-        border: 1px solid #44D62C; // 시안 값
+        border: 1px solid $main-primary-color;
         border-radius: 50%;
         background-color: rgba(0, 0, 0, 0.7);
         font-size: 1.25rem;
@@ -1817,9 +1821,41 @@ main {
     margin: 0.5rem auto 1rem;
 }
 
+// 상품 카드 뱃지 (이미지 왼쪽 위) · 기본(독점 등) = 메인 컬러
 .product-card__badge {
-    color: $main-primary-color;
-    font-size: 0.875rem;
+    position: absolute;
+    top: 0.625rem;
+    left: 0.625rem;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    height: 1.25rem;
+    padding: 0 0.5rem;
+    border-radius: $radius-sm;
+    background-color: $main-primary-color;
+    color: $neutral-color-black;
+    font-size: 0.75rem;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+
+    // NEW = 커스터마이징 버튼과 같은 흐르는 그라데이션
+    &.is-new {
+        @include customize-fill;
+        animation: hero-btn-flow 4s linear infinite;
+    }
+
+    // 품절은 회색
+    &.is-soldout {
+        background: $neutral-color-500;
+        color: $neutral-color-white;
+        animation: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .product-card__badge {
+        animation: none;
+    }
 }
 
 .product-card__name[href]:hover,
@@ -3314,7 +3350,7 @@ $auth-error-color: #FF4646; // 입력 에러 문구
 // =========================================================
 // 상품 상세 (/products/:category/:productId)
 // =========================================================
-$pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
+$pd-green: $main-primary-color; // 구매하기 · 선택 테두리
 
 .product-detail {
     padding-top: 4.25rem;
@@ -3975,15 +4011,17 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
     }
 
     // 3칸 카드
+    // 1 ~ 3칸: 한 칸 크기는 그대로 두고 가운데 정렬
     &__cards {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        justify-content: center;
         gap: 1.5rem;
         padding: 5rem 3rem;
     }
 
     &__card {
         display: flex;
+        flex: 0 0 calc((100% - 3rem) / 3);
         flex-direction: column;
         align-items: center;
         gap: 0.75rem;

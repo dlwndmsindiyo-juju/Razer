@@ -6,8 +6,8 @@ export const swatchColors: Record<string, string> = {
     화이트: "#F2F2F2",
     Quartz: "#F6C6D8",
     Mercury: "#D9DADB",
-    녹색: "#44D62C",
-    "Esports Green Edition": "#44D62C",
+    녹색: "#AEFF00", // $main-primary-color
+    "Esports Green Edition": "#AEFF00", // $main-primary-color
     "Phantom Green Edition": "#7CFF5B",
     "Phantom White Edition": "#E6E6E6",
     "Carbon Fiber Edition": "#3A3A3A",
