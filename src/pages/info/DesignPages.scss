@@ -336,7 +336,28 @@ a.design-support:hover { outline: 1px solid v.$main-primary-color; }
 }
 .design-leader { display: flex; align-items: center; gap: 1rem; img { width: 4rem; aspect-ratio: 1; object-fit: cover; border-radius: 50%; } }
 .design-esports__player { display: block; margin: 0 auto 2rem; width: min(100%, 500px); }
-.design-team-logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 1rem; align-items: center; img { margin: auto; max-height: 65px; } }
+.design-team-logos {
+    --logo-gap: clamp(18px, 3vw, 42px);
+    --logo-size: clamp(52px, 7vw, 100px);
+
+    &__viewport { overflow: hidden; }
+    &__track { display: flex; width: max-content; animation: esports-logos-scroll 42s linear infinite; }
+    &__row { display: flex; flex: none; align-items: center; gap: var(--logo-gap); padding-inline-end: var(--logo-gap); }
+    &__row li { width: var(--logo-size); aspect-ratio: 1; display: grid; place-items: center; }
+    &__row img { width: 100%; height: auto; }
+    &__viewport:is(:hover, :focus-within, [data-paused="true"]) &__track { animation-play-state: paused; }
+    &__control { display: block; margin: 12px 0 0 auto; padding: 6px 8px; @include v.caption-12-r; color: v.$neutral-color-100; }
+}
+
+@keyframes esports-logos-scroll {
+    to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .design-team-logos__viewport { overflow-x: auto; }
+    .design-team-logos__track { animation: none; }
+    .design-team-logos__row[aria-hidden="true"], .design-team-logos__control { display: none; }
+}
 .design-album {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-top: 1rem;
     button { display: block; padding: 0; border: 0; background: v.$body-bg; cursor: zoom-in; }

@@ -647,11 +647,6 @@ export const TrackingModal = ({ order, onClose }: { order: Order; onClose: () =>
             </p>
             {!done && <p className="modal__line">배송 예정일 · {order.expectedAt ? formatOrderDate(order.expectedAt) : "배송사 확인 중"}</p>}
             <p className="modal__line">택배사·송장번호 · {carrier || "업데이트 대기"}</p>
-            {order.trackingUrl && (
-                <a href={order.trackingUrl} target="_blank" rel="noreferrer" className="modal__link">
-                    택배사에서 자세히 보기
-                </a>
-            )}
         </Modal>
     );
 };

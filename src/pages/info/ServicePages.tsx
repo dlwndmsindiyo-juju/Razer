@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { promotionFaq } from "../../data/collabData";
 import { supportCards, warrantyQuestions } from "../../data/editorialData";
@@ -10,12 +10,6 @@ const tabs = [
     ["notices", "공지사항"], ["questions", "자주 묻는 질문 FAQ"], ["terms", "이용약관"],
     ["contact", "1 : 1 문의"], ["privacy", "개인 정보 처리 방침"], ["returns", "교환 및 환불"],
 ] as const;
-const policyLinks: Record<string, string> = {
-    terms: "https://www.razer.com/legal/terms-conditions",
-    contact: "https://support.razer.com/contact-support",
-    privacy: "https://www.razer.com/legal/customer-privacy-policy",
-    returns: "https://www.razer.com/legal/returns-and-refunds",
-};
 const initialQuestion = {
     question: "에반게리온 컬렉션은 일상에서도 사용할 수 있나요?",
     answer: "제품별 기능과 호환성은 콜라보 상세 화면에서 확인할 수 있습니다.",
@@ -44,9 +38,8 @@ export function FaqPage() {
                 {tabs.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key}
                     onClick={() => { setParams({ topic: key }); setActive(undefined); setPage(1); }}>{label}</button>)}
             </nav>
-            {policyLinks[tab] ? <p className="design-policy">
-                <a className="btn btn--primary" href={policyLinks[tab]}>{tabs.find(([key]) => key === tab)?.[1]} 확인하기</a>
-            </p> : results.length ? <ol className="design-questions">
+            {tab !== "notices" && tab !== "questions" ? <p className="design-policy">등록된 안내가 없습니다.</p> :
+                results.length ? <ol className="design-questions">
                 {results.map((entry, index) => <li key={index}>
                     <button type="button" aria-expanded={active === index} aria-controls={"faq-answer-" + index}
                         onClick={() => setActive(active === index ? undefined : index)}>
@@ -65,8 +58,8 @@ export function FaqPage() {
 }
 
 const supportPaths = [
-    "/mypage", servicePath + "faq?topic=returns", policyLinks.contact, "/info/product/how-to-buy",
-    "https://www.razer.com/kr-kr/shipping-guide", "/mypage?tab=orders",
+    "/mypage", servicePath + "faq?topic=returns", undefined, "/info/product/how-to-buy",
+    undefined, "/mypage?tab=orders",
     servicePath + "faq?topic=terms", servicePath + "faq?topic=questions",
 ];
 
@@ -76,12 +69,12 @@ export function SupportPage() {
         <div className="design-grid design-grid--two">
             {supportCards.map(([title, description], index) => {
                 const path = supportPaths[index];
-                const content = <><h2>{title}</h2><p>{description}</p><span className="design-support__arrow">
+                const content = <><h2>{title}</h2><p>{description}</p>{path && <span className="design-support__arrow">
                     <img src={index === 0 ? "/images/figma-pages/support-arrow-primary.svg" : "/images/figma-pages/support-arrow.svg"} alt="" />
-                </span></>;
-                return path.startsWith("/") ?
+                </span>}</>;
+                return path ?
                     <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
-                    <a className="design-panel design-support" href={path} key={title}>{content}</a>;
+                    <article className="design-panel design-support" key={title}>{content}</article>;
             })}
         </div>
     </div>;
@@ -95,18 +88,12 @@ const warrantyBenefits = [
 ];
 
 export function WarrantyPage() {
-    const register = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        window.location.assign("https://mysupport.razer.com/app/answers/detail/a_id/548");
-    };
-
     return <div className="design-page design-warranty">
         <PageHero src={figmaImage("1404:27724", "Rectangle182")}>
-            <form className="design-warranty__register" onSubmit={register}>
+            <div className="design-warranty__register">
                 <h1>등록 및 보증</h1>
-                <input required aria-label="제품 PIN 번호" placeholder="제품의 PIN 번호를 입력하세요" />
-                <button className="btn btn--primary">등록</button>
-            </form>
+                <Link className="btn btn--primary" to="/mypage?tab=warranty">제품 등록</Link>
+            </div>
         </PageHero>
         <div className="design-container">
             <PageHeading title="왜 제품을 등록해야할까요?" as="h2" />
@@ -121,7 +108,7 @@ export function WarrantyPage() {
             <div className="design-panel design-accordion">
                 {warrantyQuestions.map((question) => <details key={question}>
                     <summary>{question}<img src="/images/figma-pages/warranty-plus.svg" alt="" /></summary>
-                    <a href="https://www.razer.com/warranty">Razer 제한 보증 정책에서 확인하기</a>
+                    <p>등록된 보증 안내가 없습니다.</p>
                 </details>)}
             </div>
         </div>

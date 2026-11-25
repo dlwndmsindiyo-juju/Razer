@@ -9,20 +9,20 @@ import { CatalogCard, PageHeading, PageHero, ProductRail } from "./PageLayout";
 
 const programFrame = "1404:28006";
 const programs = [
-    ["파트너 및 제휴사", "Razer 제휴 프로그램은 내 웹사이트에 배너 또는 링크를 배치하여 팔로워에게 Razer.com에서의 쇼핑을 추천하고 커미션을 받을 수 있는 기회입니다.\n방문자가 구매를 완료하면 Razer 제품 판매 금액의 최대 10%를 커미션으로 획득할 수 있습니다.", "https://www.razer.com/affiliate", "Rectangle208"],
-    ["교육 프로그램", "Razer 교육 프로그램은 학생들에게 고성능 게이밍 주변기기 및 Razer Blade 게이밍 노트북에 대한 독점 혜택을 제공합니다.\n작업할 때도 게임 플레이를 즐길 때도 최대 15% 할인된 Razer 장비로 최대의 잠재력을 발휘하세요.", "https://www.razer.com/education", "Rectangle209"],
-    ["협력사 지원 프로그램", "당사는 비전을 공유하고 당사가 하는 일을 믿어주시는, 같은 마음을 가진 파트너 분들을 소중하게 생각하기에 파트너 분들을 지원하는 데 주력하고 있습니다.\nRazer 협력사 스토어만을 위한 전용 혜택으로 가입하여 더 많은 것을 누려보세요.", "https://www.razer.com/business", "Rectangle210"],
+    ["파트너 및 제휴사", "Razer 제휴 프로그램은 내 웹사이트에 배너 또는 링크를 배치하여 팔로워에게 Razer.com에서의 쇼핑을 추천하고 커미션을 받을 수 있는 기회입니다.\n방문자가 구매를 완료하면 Razer 제품 판매 금액의 최대 10%를 커미션으로 획득할 수 있습니다.", "Rectangle208"],
+    ["교육 프로그램", "Razer 교육 프로그램은 학생들에게 고성능 게이밍 주변기기 및 Razer Blade 게이밍 노트북에 대한 독점 혜택을 제공합니다.\n작업할 때도 게임 플레이를 즐길 때도 최대 15% 할인된 Razer 장비로 최대의 잠재력을 발휘하세요.", "Rectangle209"],
+    ["협력사 지원 프로그램", "당사는 비전을 공유하고 당사가 하는 일을 믿어주시는, 같은 마음을 가진 파트너 분들을 소중하게 생각하기에 파트너 분들을 지원하는 데 주력하고 있습니다.\nRazer 협력사 스토어만을 위한 전용 혜택으로 가입하여 더 많은 것을 누려보세요.", "Rectangle210"],
 ];
 
 export function BuyingGuidePage() {
     return <div className="design-page design-buying">
         <PageHeading title="RAZER 프로그램 및 혜택" description="Razer.com에서 현재 진행 중인 프로그램으로 어떤 혜택을 받을 수 있는지 확인하세요." />
         <div className="design-container design-container--narrow design-stack">
-            {programs.map(([title, text, href, image], index) => <article key={title}>
+            {programs.map(([title, text, image], index) => <article key={title}>
                 <div className="design-buying__number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
                 <div className="design-panel design-buying__program">
                     <img src={figmaImage(programFrame, image)} alt="" loading="lazy" />
-                    <div><h2>{title}</h2><p>{text}</p><a href={href}>자세한 정보</a></div>
+                    <div><h2>{title}</h2><p>{text}</p></div>
                 </div>
             </article>)}
         </div>
@@ -87,9 +87,9 @@ export function ExclusivesPage() {
 const membershipFrame = "1404:27912";
 const benefits = [[10, 11, "Group"], [12, 13, "Frame"], [21, 22, "Group2"]] as const;
 const earning = [
-    [copy.slice(33, 35).join(" "), copy.slice(39, 41).join(" "), "Rectangle211", "https://www.razer.com/cortex"],
-    [copy.slice(35, 37).join(" "), copy.slice(41, 43).join(" "), "Rectangle214", "https://insider.razer.com/"],
-    [copy.slice(37, 39).join(" "), copy.slice(43, 45).join(" "), "Rectangle216", "https://gold.razer.com/silver"],
+    [copy.slice(33, 35).join(" "), copy.slice(39, 41).join(" "), "Rectangle211"],
+    [copy.slice(35, 37).join(" "), copy.slice(41, 43).join(" "), "Rectangle214"],
+    [copy.slice(37, 39).join(" "), copy.slice(43, 45).join(" "), "Rectangle216"],
 ];
 
 export function MembershipPage() {
@@ -125,7 +125,7 @@ export function MembershipPage() {
                     <img src={figmaImage(membershipFrame, "Rectangle204")} alt="" loading="lazy" />
                     <h2>{copy[3]}</h2><p>{copy.slice(6, 8).join(" ")}</p>
                     <small>{copy.slice(8, 10).join(" ")}</small>
-                    <div><Link className="btn btn--primary" to="/search">Razer.com</Link><a className="btn" href="https://gold.razer.com/">RAZER GOLD</a></div>
+                    <div><Link className="btn btn--primary" to="/search">Razer.com</Link></div>
                 </article>
                 <article className="design-panel design-membership__reward">
                     <img src={figmaImage(membershipFrame, "Rectangle206")} alt="" loading="lazy" />
@@ -135,15 +135,14 @@ export function MembershipPage() {
                         {[0, 1].map((index) => <button type="button" key={index} aria-label={copy[31 + index]}
                             aria-pressed={reward === index} onClick={() => setReward(index)} />)}
                     </div>
-                    <div><a className="btn btn--primary" href={reward === 0 ? "https://gold.razer.com/silver" : "https://gold.razer.com/"}>{copy[31 + reward]}</a></div>
                 </article>
             </div>
             <PageHeading title={copy[1]} as="h2" />
             <div className="design-grid design-grid--three design-membership__earning">
-                {earning.map(([title, description, layer, href]) => <a href={href} key={layer}>
+                {earning.map(([title, description, layer]) => <article key={layer}>
                     <img src={figmaImage(membershipFrame, layer)} alt="" loading="lazy" />
                     <h3>{title}</h3><p>{description}</p>
-                </a>)}
+                </article>)}
             </div>
         </div>
     </div>;

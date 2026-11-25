@@ -15,9 +15,9 @@ const leaders = [
     ["LI MENG LEE", "CSO", 189],
 ] as const;
 const brandSections = [
-    ["sustainability", "지속가능성", 180, aboutCopy[7], "https://www.razer.com/go-green"],
-    ["careers", "채용", 183, aboutCopy.slice(11, 13).join(" "), "https://www.razer.com/careers"],
-    ["ventures", "zVENTURES", 167, "Razer의 벤처 투자 프로그램", "https://www.razer.com/zventures"],
+    ["sustainability", "지속가능성", 180, aboutCopy[7]],
+    ["careers", "채용", 183, aboutCopy.slice(11, 13).join(" ")],
+    ["ventures", "zVENTURES", 167, "Razer의 벤처 투자 프로그램"],
 ] as const;
 
 export function AboutPage() {
@@ -77,17 +77,19 @@ export function AboutPage() {
     </div>;
 }
 
-function BrandSection({ section: [id, title, layer, description, href] }: { section: typeof brandSections[number] }) {
+function BrandSection({ section: [id, title, layer, description] }: { section: typeof brandSections[number] }) {
     return <section className="design-brand-section" id={id}>
         <PageHero src={aboutImage(layer)} />
         <div className="design-container design-brand-section__copy">
-            <h2>{title}</h2><p>{description}</p><a className="btn" href={href}>자세히 보기 ↗</a>
+            <h2>{title}</h2><p>{description}</p>
         </div>
     </section>;
 }
 
 const esportImage = (layer: string) => figmaImage("1403:26959", layer);
-const teamLogos = Array.from({ length: 22 }, (_, index) => 220 + index);
+const teamLogos = Array.from({ length: 22 }, (_, index) =>
+    "/images/figma-pages/esports-team-logo-" + String(index + 1).padStart(2, "0") + ".svg",
+);
 const albums = [
     { title: "RED BULL LOIO", photos: [242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261] },
     { title: "ALGS SAPPORO 2026", photos: [244, 248, 252, 256, 260] },
@@ -104,6 +106,7 @@ const proModels = [
 export function EsportsPage() {
     const [event, setEvent] = useState(0);
     const [photo, setPhoto] = useState<number>();
+    const [logosPaused, setLogosPaused] = useState(false);
     const album = albums[event];
     const adjacentPhoto = (direction: -1 | 1) => ((photo ?? 0) + direction + album.photos.length) % album.photos.length;
     return <div className="design-page design-esports">
@@ -112,11 +115,11 @@ export function EsportsPage() {
             <PageHeading title={esportsCopy[0]} description={esportsCopy.slice(11, 13).join(" ")} />
             <PageHeading title={esportsCopy[3]} description={esportsCopy.slice(7, 9).join(" ")} as="h2" />
             <div className="design-grid design-grid--two">
-                {[[5, 15, "Layer2", "https://www.youtube.com/razer"], [6, 17, "Layer3", "https://www.razer.com/esports"]].map(([title, body, icon, href]) =>
-                    <a className="design-panel design-support" href={String(href)} key={icon}>
+                {[[5, 15, "Layer2"], [6, 17, "Layer3"]].map(([title, body, icon]) =>
+                    <article className="design-panel design-support" key={icon}>
                         <img src={esportImage(String(icon))} alt="" /><h3>{esportsCopy[Number(title)]}</h3>
                         <p>{esportsCopy.slice(Number(body), Number(body) + 2).join(" ")}</p>
-                    </a>)}
+                    </article>)}
             </div>
             <PageHeading title={esportsCopy[4]} description={esportsCopy.slice(9, 11).join(" ")} as="h2" />
             <div className="design-grid design-grid--four design-esports__equipment">
@@ -130,9 +133,22 @@ export function EsportsPage() {
             </div>
             <PageHeading title={esportsCopy[1]} description={esportsCopy[13]} as="h2" />
             <img className="design-esports__player" src={esportImage("Property1Default")} alt="Team Razer 프로 선수" loading="lazy" />
-            <div className="design-team-logos">
-                {teamLogos.map((number, index) => <img src={esportImage("Rectangle" + number)} alt={"Team Razer 파트너 " + (index + 1)} key={number} loading="lazy" />)}
-            </div>
+            <section className="design-team-logos" aria-label="Team Razer 선수와 팀">
+                <div className="design-team-logos__viewport" data-paused={logosPaused} tabIndex={0} aria-label="팀 아이콘 목록">
+                    <div className="design-team-logos__track">
+                        {[false, true].map((duplicate) => (
+                            <ul className="design-team-logos__row" key={String(duplicate)} aria-hidden={duplicate || undefined}>
+                                {teamLogos.map((src, index) => <li key={src}>
+                                    <img src={src} alt={duplicate ? "" : "Team Razer 선수 및 팀 " + (index + 1)} />
+                                </li>)}
+                            </ul>
+                        ))}
+                    </div>
+                </div>
+                <button className="design-team-logos__control" type="button" onClick={() => setLogosPaused(!logosPaused)}>
+                    {logosPaused ? "아이콘 흐름 재생" : "아이콘 흐름 일시정지"}
+                </button>
+            </section>
             <PageHeading title={esportsCopy[2]} description={esportsCopy[14]} as="h2" />
             <div className="design-tabs" aria-label="e스포츠 행사">
                 {albums.map(({ title }, index) => <button type="button" key={title} aria-pressed={event === index} onClick={() => setEvent(index)}>{title}</button>)}

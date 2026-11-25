@@ -130,7 +130,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </div>
 
                     <ProductOptions product={product} />
-                    {unverified && product.productUrl && <a href={product.productUrl}>Razer 공식 소개 보기</a>}
 
                     <div className="product-detail__bottom">
                         <div className="product-detail__extras">
