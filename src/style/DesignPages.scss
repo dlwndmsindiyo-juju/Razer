@@ -3368,6 +3368,23 @@ a.design-support:hover {
     img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
 }
 
+.design-esports__gear-link {
+    @include v.body-16-m;
+    display: table;
+    margin: 0 auto 28px;
+    color: v.$main-primary-color;
+    &:hover { text-decoration: underline; }
+}
+
+.esports-green {
+    &__back { display: inline-block; color: v.$main-primary-color; margin-block: 24px; }
+    &__intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 24px; margin-bottom: 48px; }
+    &__intro .design-heading { text-align: left; }
+    &__intro img { width: 100%; border-radius: v.$radius-sm; }
+    h2 { @include v.display-32-b; margin-bottom: 20px; text-align: center; }
+    .design-tabs button[aria-pressed="true"] { background: v.$main-primary-color; color: v.$neutral-color-black; }
+}
+
 .niko-profile {
     &__back { display: inline-block; color: v.$main-primary-color; margin-block: 28px; }
     &__intro {
@@ -3378,11 +3395,13 @@ a.design-support:hover {
         border-bottom: 1px solid v.$neutral-color-500;
         padding-bottom: clamp(24px, 4vw, 60px);
     }
-    &__intro h1 { font-size: clamp(44px, 7vw, 104px); line-height: 1; color: v.$main-primary-color; margin-block: 8px; }
+    &__intro h1 { @include v.display-44-b; color: v.$main-primary-color; margin-block: 8px; }
+    &__bio h2 { @include v.display-32-b; }
     &__eyebrow { @include v.label-14-sb; color: v.$main-primary-color; }
     &__name { @include v.heading-20-sb; }
-    &__bio p, &__collection header p:last-child { color: v.$neutral-color-100; margin-top: 10px; max-width: 60ch; }
+    &__bio p, &__collection header p:last-child { @include v.body-16-r; color: v.$neutral-color-100; margin-top: 10px; max-width: 60ch; }
     &__record, &__collection { margin-top: clamp(44px, 7vw, 110px); }
+    &__record h2 { @include v.display-32-b; }
     &__record dl {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3396,7 +3415,34 @@ a.design-support:hover {
     &__record dt { color: v.$neutral-color-100; }
     &__collection header { margin-bottom: 24px; }
     &__collection h2 { @include v.display-32-b; margin-top: 8px; }
-    &__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: v.$neutral-color-black; margin-bottom: 24px; }
+    &__media, &__gear { position: relative; }
+    &__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: v.$neutral-color-black; }
+    &__playback {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 50%;
+        background: v.$main-primary-color;
+        color: v.$neutral-color-black;
+        cursor: pointer;
+    }
+    &__playback:focus-visible { outline: 2px solid v.$neutral-color-white; outline-offset: 3px; }
+    &__error { @include v.body-16-r; position: absolute; bottom: 14px; left: 12px; right: 68px; padding: 8px; background: v.$neutral-color-black; }
+    &__lineup { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &__gear { overflow: clip; padding-bottom: 66px; }
+    &__gear-track {
+        display: flex;
+        width: max-content;
+        animation: niko-gear-scroll 30s linear infinite paused;
+    }
+    &__gear-track[data-playing="true"]:not(:focus-within) { animation-play-state: running; }
+    &__gear-track > div { display: flex; gap: 16px; padding-right: 16px; }
+    &__gear-track article { width: min(295px, 70vw); }
     &__tribute {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
@@ -3410,9 +3456,12 @@ a.design-support:hover {
     &__tribute h2 { @include v.display-32-b; margin-block: 10px; }
     &__tribute p:last-child { color: v.$neutral-color-100; }
     &__related { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 44px; }
-    &__related a { display: flex; justify-content: space-between; gap: 12px; padding: 16px; border: 1px solid v.$neutral-color-500; border-radius: v.$radius-sm; color: v.$main-primary-color; }
+    &__related a { display: grid; grid-template-columns: minmax(0, 132px) 1fr; align-items: center; gap: 16px; padding: 16px; border: 1px solid v.$neutral-color-500; border-radius: v.$radius-sm; color: v.$main-primary-color; }
+    &__related img { width: 100%; aspect-ratio: 1; object-fit: cover; }
 }
+@keyframes niko-gear-scroll { to { transform: translateX(-50%); } }
 @media (max-width: 720px) {
+    .esports-green__intro { grid-template-columns: minmax(0, 1fr); }
     .design-esports__athlete { gap: 10px; }
     .design-esports__athlete h3 { @include v.display-32-b; }
     .design-esports__athlete p { @include v.heading-20-sb; }
@@ -3421,6 +3470,7 @@ a.design-support:hover {
     .design-esports__photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .modal:has(.design-esports-gallery-modal) .modal__panel { max-height: 100dvh; }
     .niko-profile__intro { grid-template-columns: minmax(0, 1fr); }
+    .niko-profile__lineup { grid-template-columns: minmax(0, 1fr); }
     .niko-profile__record dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .niko-profile__tribute, .niko-profile__related { grid-template-columns: minmax(0, 1fr); }
 }

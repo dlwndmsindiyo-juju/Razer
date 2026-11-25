@@ -23,6 +23,7 @@ import { PasswordReset } from "./pages/PasswordReset";
 import { OrderComplete } from "./pages/OrderComplete";
 import { AboutPage, EsportsPage } from "./pages/info/BrandPages";
 import { NikoPage } from "./pages/info/NikoPage";
+import { EsportsGreenPage } from "./pages/info/EsportsGreenPage";
 import { FaqPage, SupportPage, WarrantyPage } from "./pages/info/ServicePages";
 import { BuyingGuidePage, ExclusivesPage, MembershipPage } from "./pages/info/StorePages";
 import { TechnologyPage } from "./pages/info/TechnologyPage";
@@ -79,6 +80,7 @@ function App() {
           <Route path="/info/promotion/technology/:technology?" element={<TechnologyPage />} />
           <Route path="/info/promotion/esports" element={<EsportsPage />} />
           <Route path="/info/promotion/esports/niko" element={<NikoPage />} />
+          <Route path="/info/promotion/esports/green" element={<EsportsGreenPage />} />
           <Route path="/info/service/faq" element={<FaqPage />} />
           <Route path="/info/service/registration-warranty" element={<WarrantyPage />} />
           <Route path="/info/service/support" element={<SupportPage />} />

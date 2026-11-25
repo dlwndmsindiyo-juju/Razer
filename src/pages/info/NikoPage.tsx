@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { esportsImages } from "../../data/pageImages";
 import { getProductById } from "../../data/productData";
@@ -24,7 +25,51 @@ const matchGear = [
     [4021, "마이크, 게임 오디오, 장시간 착용감을 고려한 헤드셋."],
 ] as const;
 
+function PlaybackIcon({ playing }: { playing: boolean }) {
+    return <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        {playing ? <path d="M3 3h3v10H3zm7 0h3v10h-3z" /> : <path d="M4 2v12l10-6z" />}
+    </svg>;
+}
+
+function NikoVideo() {
+    const video = useRef<HTMLVideoElement>(null);
+    const [playing, setPlaying] = useState(false);
+    const [failed, setFailed] = useState(false);
+
+    async function togglePlayback() {
+        const player = video.current;
+        if (!player) return;
+        if (!player.paused) {
+            player.pause();
+            return;
+        }
+        setFailed(false);
+        try {
+            await player.play();
+        } catch {
+            setFailed(true);
+        }
+    }
+
+    return <div className="niko-profile__media">
+        <video ref={video} className="niko-profile__video" playsInline preload="none"
+            src="/videos/esports/niko-intro.mp4" poster="/images/esports/niko/intro-poster.jpg"
+            aria-label="Razer NiKo 컬렉션 소개 영상"
+            onPlaying={() => setPlaying(true)} onPause={() => setPlaying(false)}
+            onEnded={() => setPlaying(false)} onError={() => setFailed(true)} />
+        <button className="niko-profile__playback" type="button"
+            aria-label={playing ? "영상 일시정지" : "영상 재생"} onClick={() => void togglePlayback()}>
+            <PlaybackIcon playing={playing} />
+        </button>
+        {failed && <p className="niko-profile__error" role="status">영상을 재생하지 못했습니다. 다시 시도해 주세요.</p>}
+    </div>;
+}
+
 export function NikoPage() {
+    const [gearMotion, setGearMotion] = useState(
+        () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
+
     return <div className="design-page niko-profile">
         <PageHero src={esportsImages.nikoHero} mobileSrc={esportsImages.nikoHeroMobile} />
         <div className="design-container">
@@ -36,7 +81,7 @@ export function NikoPage() {
                     <p className="niko-profile__name">Nikola Kovač</p>
                 </div>
                 <div className="niko-profile__bio">
-                    <h2>Counter-Strike의 라이플러</h2>
+                    <h2>우리는 승리하기 위해 플레이합니다</h2>
                     <p>정교한 라이플 조준과 데저트 이글 플레이로 알려진 NiKo의 커리어와 그가 선택한 장비를 살펴보세요.</p>
                 </div>
             </section>
@@ -48,20 +93,17 @@ export function NikoPage() {
             </section>
             <section className="niko-profile__collection" aria-labelledby="niko-collection-title">
                 <header>
-                    <h2 id="niko-collection-title">NiKo 컬렉션에 담긴 이야기</h2>
+                    <h2 id="niko-collection-title">불꽃을 느껴보세요</h2>
                     <p>NiKo의 데저트 이글 플레이에서 영감을 얻은 불꽃 그래픽을 마우스, 키보드, 헤드셋과 마우스 패드에 담았습니다.</p>
                 </header>
-                <video className="niko-profile__video" controls playsInline preload="none"
-                    aria-label="Razer NiKo 컬렉션 소개 영상" poster="/images/esports/niko/intro-poster.jpg">
-                    <source src="/videos/esports/niko-intro.mp4" type="video/mp4" />
-                </video>
+                <NikoVideo />
             </section>
             <section className="niko-profile__collection" aria-labelledby="niko-lineup-title">
                 <header>
                     <p className="niko-profile__eyebrow">DEAGLE GOD</p>
-                    <h2 id="niko-lineup-title">NiKo Edition 라인업</h2>
+                    <h2 id="niko-lineup-title">DEAGLE GOD처럼 플레이하세요</h2>
                 </header>
-                <div className="design-grid design-grid--four">
+                <div className="design-grid design-grid--two niko-profile__lineup">
                     {collection.map(([id, description]) => {
                         const product = getProductById(id);
                         return product && <CatalogCard product={product} key={id} description={description} featured />;
@@ -72,7 +114,7 @@ export function NikoPage() {
                 <img src={esportsImages.player} alt="Team Razer의 NiKo" loading="lazy" />
                 <div>
                     <p className="niko-profile__eyebrow">TEAM RAZER</p>
-                    <h2 id="niko-tribute-title">NiKo에게 보내는 찬사</h2>
+                    <h2 id="niko-tribute-title">고마워요, NiKo.</h2>
                     <p>오랜 시간 큰 무대에서 보여준 집중력과 투지를 기립니다.</p>
                 </div>
             </section>
@@ -82,16 +124,31 @@ export function NikoPage() {
                     <h2 id="niko-gear-title">NiKo의 실전 장비</h2>
                     <p>래피드 트리거 키보드, 무선 마우스, 팀 음성 전달과 착용감을 고려한 헤드셋을 살펴보세요.</p>
                 </header>
-                <div className="design-grid design-grid--three">
-                    {matchGear.map(([id, description]) => {
-                        const product = getProductById(id);
-                        return product && <CatalogCard product={product} key={id} description={description} featured />;
-                    })}
+                <div className="niko-profile__gear">
+                    <div className="niko-profile__gear-track" data-playing={gearMotion}>
+                        {[false, true].map((duplicate) => <div key={String(duplicate)} inert={duplicate}>
+                            {matchGear.map(([id, description]) => {
+                                const product = getProductById(id);
+                                return product && <CatalogCard product={product} key={id} description={description} featured />;
+                            })}
+                        </div>)}
+                    </div>
+                    <button className="niko-profile__playback" type="button"
+                        aria-label={gearMotion ? "장비 애니메이션 일시정지" : "장비 애니메이션 재생"}
+                        onClick={() => setGearMotion(!gearMotion)}>
+                        <PlaybackIcon playing={gearMotion} />
+                    </button>
                 </div>
             </section>
             <nav className="niko-profile__related" aria-label="관련 e스포츠 페이지">
-                <Link to="/info/promotion/esports">Team Razer 선수 더 보기 <span aria-hidden="true">›</span></Link>
-                <Link to="/info/promotion/technology">Razer 제품 기술 보기 <span aria-hidden="true">›</span></Link>
+                <Link to="/info/promotion/esports">
+                    <img src="/images/esports/niko/team-razer.webp" alt="" loading="lazy" />
+                    <span>Team Razer 선수 더 보기 <span aria-hidden="true">›</span></span>
+                </Link>
+                <Link to="/info/promotion/technology">
+                    <img src="/images/esports/niko/trusted-technology.webp" alt="" loading="lazy" />
+                    <span>Razer 제품 기술 보기 <span aria-hidden="true">›</span></span>
+                </Link>
             </nav>
         </div>
     </div>;

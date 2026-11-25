@@ -141,7 +141,7 @@ const albums = [
 ];
 const proModels = [
     "Razer Viper V4 Pro - Esports Green Edition",
-    "Razer DeathAdder V4 Pro - NiKo Edition",
+    "Razer DeathAdder V4 Pro - Esports Green Edition",
     "Razer Huntsman V3 Pro - KR - 黑色",
     "Razer BlackShark V3 Pro - NiKo Edition",
 ];
@@ -163,6 +163,9 @@ export function EsportsPage() {
                     </article>)}
             </div>
             <PageHeading title={esportsCopy[4]} description={esportsCopy.slice(9, 11).join(" ")} as="h2" />
+            <Link className="design-esports__gear-link" to="/info/promotion/esports/green">
+                모든 e스포츠 기어 보기 <span aria-hidden="true">›</span>
+            </Link>
             <div className="design-grid design-grid--four design-esports__equipment">
                 {proModels.map((model, index) => {
                     const product = productData.find((item) => item.title === model);
