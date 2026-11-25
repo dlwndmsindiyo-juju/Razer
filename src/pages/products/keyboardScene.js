@@ -287,14 +287,19 @@ export async function mountKeyboardScene(stage, modelUrl, options) {
             edgeSources.push(source);
             return [];
         });
-        if (!sources.length && options.lightingFallback) {
+        if (!litCaps.size && options.lightingFallback) {
+            const modelLights = [...sources];
             capBounds.forEach(cap => {
                 const { center, size: dimensions, bottom } = cap;
                 const position = center.clone();
                 position.y = bottom + .001;
                 const hue = MathUtils.clamp((position.x - bounds.min.x) / size.x, 0, 1) * .82;
-                const color = options.lightingFallback === "lavender"
+                const nearestLight = modelLights.reduce((nearest, source) =>
+                    !nearest || Math.abs(source.center.x - center.x) < Math.abs(nearest.center.x - center.x)
+                        ? source : nearest, null);
+                const fallbackColor = options.lightingFallback === "lavender"
                     ? new Color("#dd96f3") : new Color().setHSL(hue, 1, .53);
+                const color = nearestLight?.color ?? fallbackColor;
                 litCaps.set(cap, color);
                 sources.push({
                     center: position, width: dimensions.x + pitch * 1.1, depth: dimensions.z + pitch * 1.1,

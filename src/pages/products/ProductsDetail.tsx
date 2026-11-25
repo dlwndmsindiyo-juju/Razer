@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { withoutPersonImages } from "../../data/personImages";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getBadgeLabel, getProductById, getSeriesTitle, productData } from "../../data/productData";
 import { detailGifts, keyboardActions } from "../../data/detailData";
@@ -45,7 +46,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const title = getSeriesTitle(product);
     const badges = getBadges(product);
     const images = useMemo(() => {
-        const gallery = [...new Set(product.gallery ?? [])];
+        // 사람이 크게 나온 연출 사진은 빼고 제품 사진만
+        const gallery = withoutPersonImages([...new Set(product.gallery ?? [])]);
         return gallery.length > 0 ? gallery : [product.image];
     }, [product]);
     const recommended = useMemo(() => getRecommended(product), [product]);
@@ -91,7 +93,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const closeSpec = useCallback(() => setIsSpecOpen(false), []);
 
     return (
-        <article className="product-detail">
+        <div className="product-detail">
             <div className="product-detail__top">
                 {/* 왼쪽 위: 이미지 */}
                 <div className="product-detail__gallery">
@@ -130,7 +132,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </div>
 
                     <ProductOptions product={product} />
-                    {unverified && product.productUrl && <a href={product.productUrl}>Razer 공식 소개 보기</a>}
 
                     <div className="product-detail__bottom">
                         <div className="product-detail__extras">
@@ -178,7 +179,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     {toast.cart && <Link to="/cart">장바구니 보기</Link>}
                 </div>
             )}
-        </article>
+        </div>
     );
 };
 

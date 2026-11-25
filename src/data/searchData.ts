@@ -69,11 +69,11 @@ const readFacet = (product: Product, code: string, label: string): string[] => {
 const stockAliases: Record<string, string> = { "재고 있음": "inStock", "품절": "outOfStock", "재고 부족": "lowStock" };
 
 export const getFilterGroups = (products: Product[]): FilterGroup[] => {
-    const activeListings = new Set(products.flatMap((product) => product.listingUrls ?? []));
+    const activeListings = new Set(products.flatMap((product) => product.listingIds ?? []));
     const facets = new Map<string, { label: string; options: Map<string, FilterOption> }>();
 
     for (const listing of catalogListings) {
-        if (!activeListings.has(listing.url)) continue;
+        if (!activeListings.has(listing.id)) continue;
         for (const facet of listing.filters) {
             if (facet.code === "category") continue;
             const id = facet.code === "stockAvailability" ? facet.code : normalize(facet.label);
@@ -93,7 +93,7 @@ export const getFilterGroups = (products: Product[]): FilterGroup[] => {
                     label: value.label,
                     match: (product) => {
                         if (previous?.match(product)) return true;
-                        if (!product.listingUrls?.includes(listing.url)) return false;
+                        if (!product.listingIds?.includes(listing.id)) return false;
                         if (facet.code === "stockAvailability") {
                             return product.stockStatus === (stockAliases[value.label] ?? decoded);
                         }

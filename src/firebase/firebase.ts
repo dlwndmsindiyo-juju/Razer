@@ -31,4 +31,4 @@ twitchProvider.setCustomParameters({
     force_verify: "true",
 });
 // 쇼핑 리스트, 찜 리스트 정보 저장(파이어스토어 사용 필요)
-export const db = getFirestore(app);
+export const db = getFirestore(app);

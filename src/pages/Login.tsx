@@ -4,14 +4,14 @@ import { getAuthErrorMessage, isNoAccountError, useAuthStore } from "../store/us
 import { AuthField } from "../components/auth/AuthField";
 import { AuthDivider, SocialLogin } from "../components/auth/SocialLogin";
 import { validateEmail, validatePassword } from "../data/authData";
-import { useErrorDisplay } from "../components/auth/useErrorDisplay";
+import { useErrorDisplay } from "../types/useErrorDisplay";
 import { AuthModal } from "../components/auth/AuthModal";
 
 // 로그인 (/login)
 export const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, onLogin, onResetPassword } = useAuthStore();
+    const { user, onLogin } = useAuthStore();
 
     // 로그인 후 돌아갈 곳 (이전 페이지가 넘겨준 경로, 없으면 홈)
     const redirectTo = (location.state as { from?: string } | null)?.from ?? "/";
@@ -19,7 +19,6 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [formError, setFormError] = useState("");
-    const [notice, setNotice] = useState("");
     const [loading, setLoading] = useState(false);
     const [noAccountEmail, setNoAccountEmail] = useState(""); // 회원 정보 없음 팝업 (입력했던 이메일)
 
@@ -41,7 +40,6 @@ export const Login = () => {
         setEmail("");
         setPassword("");
         setFormError("");
-        setNotice("");
         resetDisplay();
     };
 
@@ -51,7 +49,6 @@ export const Login = () => {
         e.preventDefault();
         markSubmitted();
         setFormError("");
-        setNotice("");
         if (errors.email || errors.password) return;
 
         setLoading(true);
@@ -64,23 +61,6 @@ export const Login = () => {
             else setFormError(getAuthErrorMessage(error));
         } finally {
             setLoading(false);
-        }
-    };
-
-    // 비밀번호 찾기: 입력한 이메일로 재설정 메일 발송
-    const handleReset = async () => {
-        setFormError("");
-        setNotice("");
-        if (errors.email) {
-            markSubmitted();
-            return;
-        }
-        try {
-            await onResetPassword(email.trim());
-            setNotice("암호 재설정 메일을 보냈습니다. 메일함을 확인해주세요.");
-        } catch (error) {
-            if (isNoAccountError(error)) openNoAccount();
-            else setFormError(getAuthErrorMessage(error));
         }
     };
 
@@ -123,10 +103,9 @@ export const Login = () => {
                     <div className="auth__links">
                         <Link to="/signup" state={location.state}>Razer ID 만들기</Link>
                         <span aria-hidden="true">|</span>
-                        <button type="button" onClick={handleReset}>비밀번호 찾기</button>
+                        <Link to="/password-reset" state={{ email }}>비밀번호 찾기</Link>
                     </div>
 
-                    {notice && <p className="auth__notice" role="status">{notice}</p>}
 
                     <button type="submit" className="auth__submit" disabled={loading}>
                         {loading ? "로그인 중..." : "로그인"}

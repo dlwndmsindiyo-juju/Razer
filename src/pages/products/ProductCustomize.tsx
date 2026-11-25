@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getProductById, getSeriesProducts } from "../../data/productData";
-import { getKeyboardPreview } from "../../data/keyboardPreview";
+import { getProductPreview } from "../../data/keyboardPreview";
 import { keyboardActions } from "../../data/detailData";
 import type { Product } from "../../types/product";
 import type { mountKeyboardScene, SwitchFeel, ViewAngle } from "./keyboardScene";
-import "./ProductCustomize.scss";
+import "../../style/ProductCustomize.scss";
 
 const tabs = [
     { id: "size", label: "사이즈", icon: "keyboard" },
@@ -60,23 +60,24 @@ function getSpecs(product: Product) {
 
 type SceneControls = Parameters<Parameters<typeof mountKeyboardScene>[2]["onReady"]>[0];
 
-function KeyboardCustomizer({ product }: { product: Product }) {
+function ProductViewer({ product }: { product: Product }) {
     const navigate = useNavigate();
     const { state } = useLocation();
-    const preview = getKeyboardPreview(product);
+    const isKeyboard = product.category === "keyboards";
+    const preview = getProductPreview(product);
     const modelUrl = preview?.src;
     const specs = getSpecs(product);
     const feel = specs.feel;
     const supportsLighting = product.specs?.chroma ?? specs.values.rgb.some(value => /chroma/i.test(value));
-    const lightingFallback = product.id === 1091 ? "lavender" : supportsLighting || product.id === 1090 ? "rainbow" : undefined;
+    const lightingFallback = product.id === 1091 ? "lavender" : (isKeyboard && supportsLighting) || product.id === 1090 ? "rainbow" : undefined;
     const edgeLighting = product.series === "blackwidow-v4-pro";
     const visibleOptions = compatibleOptionLabels.flatMap(label => {
         const option = product.selectedOptions?.find(item => item.label === label);
         return option ? [option] : [];
     });
     const originalId = typeof state?.originalId === "number" ? state.originalId : product.id;
-    const choices = getSeriesProducts(product).flatMap(variant => {
-        const model = getKeyboardPreview(variant);
+    const choices = (isKeyboard ? getSeriesProducts(product) : []).flatMap(variant => {
+        const model = getProductPreview(variant);
         if (variant.id !== product.id && (!model || model.sample || !compatibleOptionLabels.every(label => {
             const selected = product.selectedOptions?.find(option => option.label === label)?.value;
             return selected && variant.selectedOptions?.some(option => option.label === label && option.value === selected);
@@ -163,7 +164,7 @@ function KeyboardCustomizer({ product }: { product: Product }) {
         <section className="keyboard-customize">
             <div className="keyboard-customize__heading">
                 <div>
-                    <Link to={`/products/keyboards/${product.id}`}>← 상품 상세</Link>
+                    <Link to={`/products/${product.category}/${product.id}`}>← 상품 상세</Link>
                     <h2>{product.title}</h2>
                 </div>
             </div>
@@ -173,7 +174,7 @@ function KeyboardCustomizer({ product }: { product: Product }) {
                         className="keyboard-customize__stage"
                         ref={stage}
                         tabIndex={-1}
-                        aria-label="3D 키보드 체험 화면"
+                        aria-label={isKeyboard ? "3D 키보드 체험 화면" : "3D 상품 보기"}
                         onKeyDown={event => {
                             if (event.key === "Escape" && capture) captureButton.current?.focus();
                         }}
@@ -186,7 +187,7 @@ function KeyboardCustomizer({ product }: { product: Product }) {
                         )}
                         {preview?.sample && <p className="keyboard-customize__sample">BlackWidow V4 Pro 샘플 모델</p>}
                     </div>
-                    <div className="keyboard-customize__aside">
+                    {isKeyboard && <div className="keyboard-customize__aside">
                         <button
                             type="button"
                             className="keyboard-customize__toggle"
@@ -241,14 +242,17 @@ function KeyboardCustomizer({ product }: { product: Product }) {
                                 </button>
                             )}
                             {visibleOptions.length > 0 && (
-                                <dl className="keyboard-customize__selected">
+                                <ul className="keyboard-customize__selected">
                                     {visibleOptions.map(option => (
-                                        <div key={option.label}><dt>{option.label}</dt><dd>{option.value}</dd></div>
+                                        <li key={option.label}>
+                                            <span className="keyboard-customize__selected-label">{option.label}</span>
+                                            <span className="keyboard-customize__selected-value">{option.value}</span>
+                                        </li>
                                     ))}
-                                </dl>
+                                </ul>
                             )}
                         </aside>
-                    </div>
+                    </div>}
                 </div>
                 <div className="keyboard-customize__toolbar">
                     <div className="keyboard-customize__views" aria-label="보기 각도">
@@ -263,9 +267,9 @@ function KeyboardCustomizer({ product }: { product: Product }) {
                     </span>
                     <div className="keyboard-customize__actions">
                         <button type="button" onClick={reset}>초기화</button>
-                        <button type="button" ref={captureButton} disabled={!canType} aria-pressed={capture} onClick={() => scene.current?.setCapture(!capture)}>
+                        {isKeyboard && <button type="button" ref={captureButton} disabled={!canType} aria-pressed={capture} onClick={() => scene.current?.setCapture(!capture)}>
                             {capture ? "입력 체험 종료" : "키 입력 체험"}
-                        </button>
+                        </button>}
                     </div>
                 </div>
             </div>
@@ -274,10 +278,10 @@ function KeyboardCustomizer({ product }: { product: Product }) {
 }
 
 export function ProductCustomize() {
-    const { productId } = useParams();
+    const { category, productId } = useParams();
     const product = /^\d+$/.test(productId ?? "") ? getProductById(Number(productId)) : undefined;
-    if (product?.category !== "keyboards") {
-        return <section className="keyboard-customize"><h1>키보드 상품을 찾을 수 없어요.</h1><Link to="/search">전체 상품 보기</Link></section>;
+    if (!product || product.category !== category || (category !== "keyboards" && !getProductPreview(product))) {
+        return <section className="keyboard-customize"><h1>3D로 볼 수 있는 상품을 찾을 수 없어요.</h1><Link to="/search">전체 상품 보기</Link></section>;
     }
-    return <KeyboardCustomizer key={product.id} product={product} />;
+    return <ProductViewer key={product.id} product={product} />;
 }

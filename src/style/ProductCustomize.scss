@@ -1,0 +1,314 @@
+@use "../variables" as *;
+
+.keyboard-customize {
+    width: min($container-width, calc(100% - 2 * clamp(1rem, 6.25vw, $page-margin)));
+    margin: 0 auto;
+    padding: clamp(2rem, 4vw, 4.5rem) 0;
+    color: $neutral-color-white;
+
+    button {
+        border: 0.0625rem solid transparent;
+        border-radius: $radius-sm;
+        background: $neutral-color-500;
+        color: inherit;
+        padding: 0.5rem 0.75rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include caption-12-r;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background: $neutral-color-300;
+        }
+
+        &[aria-pressed="true"] {
+            border-color: $main-primary-color;
+            @include caption-12-r;
+        }
+
+        &:disabled {
+            opacity: .45;
+            cursor: default;
+        }
+    }
+
+    &__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: clamp(1.5rem, 4vw, 3.75rem);
+
+        a {
+            @include body-14-r;
+            color: $neutral-color-100;
+        }
+
+        h2 {
+            @include heading-24-b;
+            font-size: clamp(1rem, 3vw, 2rem);
+            line-height: 1;
+            margin: 0.625rem 0 0;
+        }
+
+    }
+
+    &__viewer {
+        overflow: hidden;
+        border: 0.0625rem solid $neutral-color-500;
+    }
+
+    &__workspace {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-height: clamp(28.75rem, 53vw, 54.375rem);
+        background: radial-gradient(ellipse at 50% 48%, $neutral-color-canvas, $body-bg 82%);
+    }
+
+    &__stage {
+        position: relative;
+        align-self: stretch;
+        min-height: 23.75rem;
+        outline-offset: -0.25rem;
+
+        &:focus-visible {
+            outline: 0.125rem solid $main-primary-color;
+        }
+
+        canvas {
+            position: absolute;
+            inset: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    }
+
+    &__poster {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        padding: 1.25rem;
+        text-align: center;
+
+        img {
+            width: min(33.125rem, 100%);
+            max-height: min(34vw, 23.125rem);
+            object-fit: contain;
+        }
+
+        p {
+            margin: 0.75rem 0 0;
+        }
+    }
+
+    &__sample {
+        position: absolute;
+        z-index: 2;
+        top: 1rem;
+        left: 1rem;
+        margin: 0;
+        border-radius: $radius-sm;
+        background: $neutral-color-panel;
+        padding: 0.375rem 0.625rem;
+        @include caption-12-r;
+        pointer-events: none;
+    }
+
+    &__aside {
+        position: absolute;
+        z-index: 3;
+        inset: clamp(0.75rem, 2vw, 1.75rem);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 1.125rem;
+        pointer-events: none;
+
+        >* {
+            pointer-events: auto;
+        }
+    }
+
+    button#{&}__toggle {
+        flex-shrink: 0;
+        border-radius: $radius-pill;
+        background: $main-primary-color;
+        color: $neutral-color-black;
+        @include label-14-sb;
+
+        &:hover:not(:disabled) {
+            background: $main-primary-color;
+            filter: brightness(.9);
+        }
+    }
+
+    &__panel {
+        width: min(100%, 24.5rem);
+        min-height: 0;
+        overflow: auto;
+        padding: clamp(1.625rem, 1.55vw, 1.625rem);
+        border-radius: $radius-md;
+        background: $neutral-color-black;
+
+        button[aria-pressed="true"] {
+            border-color: transparent;
+            color: $main-primary-color;
+        }
+
+        h2 {
+            @include label-16-sb;
+            margin: 0 0 1rem;
+        }
+    }
+
+    &__tabs {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.125rem;
+
+        button {
+            display: grid;
+            justify-items: center;
+            align-content: center;
+            gap: 0.313rem;
+            padding: 0.313rem 0.0625rem;
+            background: transparent;
+            @include label-12-m;
+            color: $neutral-color-white;
+            font-size: clamp(.5625rem, .75vw, .75rem);
+
+        }
+    }
+
+    &__values {
+        display: grid;
+        gap: 0.5rem;
+        padding: 0;
+        margin: 1rem 0;
+        list-style: none;
+
+        li {
+            // border: 1px solid $main-primary-color;
+            background: $neutral-color-200;
+            color: $neutral-color-black;
+            padding: 0.5rem;
+            border-radius: $radius-sm;
+            overflow-wrap: anywhere;
+            @include body-14-r;
+        }
+    }
+
+    &__switches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+    }
+
+    button#{&}__feel {
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+        padding: 0.5rem;
+        align-items: center;
+        background: $neutral-color-panel;
+        @include caption-12-r;
+
+        span {
+            display: grid;
+            place-items: center;
+            width: 2rem;
+            height: 2rem;
+            border: 0.0625rem solid $neutral-color-200;
+            border-radius: $radius-sm;
+
+            &::before {
+                content: "";
+                width: 1.5rem;
+                height: 1.5rem;
+                background: currentColor;
+                mask: url("/icons/plus.svg") center / contain no-repeat;
+            }
+        }
+    }
+
+    &__sound-note {
+        @include caption-12-r;
+        color: $neutral-color-100;
+        margin: 0.5rem 0 0;
+    }
+
+    &__selected {
+        display: grid;
+        gap: 0.625rem;
+        border-top: 0.0625rem solid $neutral-color-500;
+        margin: 1rem 0 0;
+        padding-top: 0.75rem;
+        @include body-14-r;
+
+        &-label {
+            display: block;
+            color: $neutral-color-100;
+        }
+
+        &-value {
+            display: block;
+            margin: 0.125rem 0 0;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    &__toolbar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        background: $neutral-color-700;
+        padding: 0.875rem;
+        @include body-14-r;
+
+    }
+
+    &__views,
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+    }
+
+    &__actions {
+        margin-inline-start: auto;
+    }
+
+    &__key-status {
+        position: absolute;
+        width: 0.0625rem;
+        height: 0.0625rem;
+        overflow: hidden;
+        clip-path: inset(50%);
+    }
+
+    @media (max-width: 820px) {
+        &__workspace {
+            min-height: 0;
+        }
+
+        &__stage {
+            height: clamp(17.813rem, 65vw, 27.5rem);
+            min-height: 0;
+        }
+
+        &__poster img {
+            max-height: 11.875rem;
+        }
+
+    }
+}

@@ -4,7 +4,7 @@ import { getAuthErrorMessage, useAuthStore } from "../store/useAuthStore";
 import { AuthField } from "../components/auth/AuthField";
 import { AuthDivider, SocialLogin } from "../components/auth/SocialLogin";
 import { AuthSelect } from "../components/auth/AuthSelect";
-import { useErrorDisplay } from "../components/auth/useErrorDisplay";
+import { useErrorDisplay } from "../types/useErrorDisplay";
 import {
     formatBirth,
     signupLocations,

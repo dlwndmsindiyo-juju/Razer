@@ -289,4 +289,4 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (changes.nickname) await updateProfile(firebaseUser, { displayName: changes.nickname });
         set({ user: { ...current, ...changes } });
     },
-}));
+}));

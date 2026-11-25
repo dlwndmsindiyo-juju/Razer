@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type InputHTMLAttributes, type KeyboardEve
 import { Modal } from "../common/Modal";
 import type { Address, PaymentCard } from "../../types/auth";
 import type { Order, RegisteredProduct } from "../../types/product";
-import { formatOrderDate } from "../../data/mypageData";
+import { formatOrderDate } from "../../types/mypageData";
 
 // =========================================================
 // 팝업 공통 부품
@@ -110,6 +110,102 @@ export const Dropdown = ({
                     ))}
                 </ul>
             )}
+        </div>
+    );
+};
+
+// 모델명: 입력하면 목록이 걸러지는 선택칸 (드롭다운과 같은 모양 · 브라우저 기본 목록 대신)
+const ModelSelect = ({ value, options, onChange }: { value: string; options: string[]; onChange: (value: string) => void }) => {
+    const [open, setOpen] = useState(false);
+    const [active, setActive] = useState(-1);
+    const ref = useRef<HTMLDivElement>(null);
+    const listRef = useRef<HTMLUListElement>(null);
+    const query = value.trim().toLowerCase();
+    // 정확히 고른 값이면 전체 목록, 입력 중이면 포함된 것만
+    const matches = !query || options.some((name) => name.toLowerCase() === query)
+        ? options
+        : options.filter((name) => name.toLowerCase().includes(query));
+
+    // 바깥을 누르면 닫기
+    useEffect(() => {
+        if (!open) return;
+        const onDown = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+        document.addEventListener("mousedown", onDown);
+        return () => document.removeEventListener("mousedown", onDown);
+    }, [open]);
+
+    // 키보드로 고른 항목이 보이게
+    useEffect(() => {
+        listRef.current?.children[active]?.scrollIntoView({ block: "nearest" });
+    }, [active]);
+
+    const pick = (name: string) => {
+        onChange(name);
+        setOpen(false);
+        setActive(-1);
+    };
+
+    const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+            e.preventDefault();
+            setOpen(true);
+            const last = matches.length - 1;
+            setActive((i) => (e.key === "ArrowDown" ? Math.min(last, i + 1) : Math.max(0, i - 1)));
+        } else if (e.key === "Enter" && open && matches[active]) {
+            e.preventDefault();
+            pick(matches[active]);
+        } else if (e.key === "Escape" && open) {
+            // 목록만 닫기 (팝업은 그대로)
+            e.stopPropagation();
+            e.nativeEvent.stopImmediatePropagation();
+            setOpen(false);
+        }
+    };
+
+    return (
+        <div className="modal__field">
+            <label className="modal__label" htmlFor="register-model">모델명</label>
+            <div className={"dropdown model-select" + (open ? " is-open" : "")} ref={ref}>
+                <input
+                    id="register-model"
+                    className="model-select__input"
+                    role="combobox"
+                    aria-expanded={open}
+                    aria-controls="register-model-list"
+                    aria-autocomplete="list"
+                    autoComplete="off"
+                    autoFocus
+                    placeholder="Razer BlackWidow V4 75%"
+                    value={value}
+                    onFocus={() => setOpen(true)}
+                    onClick={() => setOpen(true)}
+                    onChange={(e) => { onChange(e.target.value); setOpen(true); setActive(-1); }}
+                    onKeyDown={onKeyDown}
+                />
+                <button type="button" className="model-select__toggle" aria-label={open ? "모델 목록 닫기" : "모델 목록 열기"} tabIndex={-1}
+                    onClick={() => setOpen(!open)}>
+                    <img src="/icons/chevron-down.svg" alt="" />
+                </button>
+                {open && (
+                    <ul id="register-model-list" className="dropdown__list" role="listbox" aria-label="모델명" ref={listRef}>
+                        {matches.length ? matches.map((name, index) => (
+                            <li key={name}>
+                                <button
+                                    type="button"
+                                    role="option"
+                                    tabIndex={-1}
+                                    aria-selected={name === value}
+                                    className={(name === value ? "is-selected" : "") + (index === active ? " is-active" : "")}
+                                    onMouseDown={(e) => e.preventDefault()} // 입력칸 포커스 유지
+                                    onClick={() => pick(name)}
+                                >
+                                    {name}
+                                </button>
+                            </li>
+                        )) : <li className="model-select__empty">일치하는 모델이 없어요. 입력한 이름으로 등록할 수 있어요.</li>}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 };
@@ -647,11 +743,6 @@ export const TrackingModal = ({ order, onClose }: { order: Order; onClose: () =>
             </p>
             {!done && <p className="modal__line">배송 예정일 · {order.expectedAt ? formatOrderDate(order.expectedAt) : "배송사 확인 중"}</p>}
             <p className="modal__line">택배사·송장번호 · {carrier || "업데이트 대기"}</p>
-            {order.trackingUrl && (
-                <a href={order.trackingUrl} target="_blank" rel="noreferrer" className="modal__link">
-                    택배사에서 자세히 보기
-                </a>
-            )}
         </Modal>
     );
 };
@@ -736,7 +827,9 @@ export const ImageUploadModal = ({ onClose, onApply }: { onClose: () => void; on
     const { busy, error, setError, run } = useSubmit();
 
     // 미리보기 주소 정리
-    useEffect(() => () => file && URL.revokeObjectURL(file.url), [file]);
+    useEffect(() => () => {
+        if (file) URL.revokeObjectURL(file.url);
+    }, [file]);
 
     const pick = (picked?: File) => {
         if (!picked) return;
@@ -788,23 +881,36 @@ const formatDateInput = (value: string) => {
     return [d.slice(0, 4), d.slice(4, 6), d.slice(6)].filter(Boolean).join(".");
 };
 
+// 시리얼 · PIN 번호: 영문과 숫자만 (한글 · 특수문자 · 공백 제거, 대문자로)
+export const toSerial = (value: string) => value.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+export const serialOnlyText = "영문과 숫자만 입력할 수 있어요.";
+
 export const RegisterModal = ({
     initial,
+    serial: initialSerial,
     productNames,
     onClose,
     onSave,
 }: {
     initial?: RegisteredProduct;
+    serial?: string; // 등록 및 보증 페이지에서 입력한 PIN (시리얼 번호 칸에 미리 채움)
     productNames: string[]; // 모델명 자동완성
     onClose: () => void;
     onSave: (values: { title: string; serial: string; purchasedAt: string; proof?: string }) => Promise<void>;
 }) => {
     const proofRef = useRef<HTMLInputElement>(null);
     const [title, setTitle] = useState(initial?.title.split(" - ")[0] ?? "");
-    const [serial, setSerial] = useState(initial?.serial ?? "");
+    const [serial, setSerial] = useState(toSerial(initial?.serial ?? initialSerial ?? ""));
     const [purchasedAt, setPurchasedAt] = useState(initial?.purchasedAt ? formatOrderDate(initial.purchasedAt) : "");
     const [proof, setProof] = useState("");
     const { busy, error, setError, run } = useSubmit();
+    // 한글 · 특수문자는 입력 즉시 빼고 안내
+    const changeSerial = (value: string) => {
+        const next = toSerial(value);
+        setSerial(next);
+        if (next !== value.toUpperCase()) setError(serialOnlyText);
+        else if (error !== serialOnlyText) setError("");
+    };
 
     const submit = () => {
         if (!title.trim()) return setError("모델명을 입력해 주세요.");
@@ -819,20 +925,17 @@ export const RegisterModal = ({
             onClose={onClose}
             actions={<Actions onClose={onClose} label={initial ? "저장" : "등록"} busy={busy} onConfirm={submit} />}
         >
+            <ModelSelect value={title} options={productNames} onChange={setTitle} />
             <ModalField
-                label="모델명"
-                placeholder="Razer BlackWidow V4 75%"
-                list="register-models"
-                autoFocus
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                label="시리얼 번호"
+                placeholder="영문 · 숫자만 입력해 주세요"
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellCheck={false}
+                value={serial}
+                onChange={(e) => changeSerial(e.target.value)}
+                onCompositionEnd={(e) => changeSerial(e.currentTarget.value)}
             />
-            <datalist id="register-models">
-                {productNames.map((name) => (
-                    <option key={name} value={name} />
-                ))}
-            </datalist>
-            <ModalField label="시리얼 번호" placeholder="입력해 주세요" value={serial} onChange={(e) => setSerial(e.target.value.toUpperCase())} />
             <ModalField
                 label="구매일"
                 inputMode="numeric"
