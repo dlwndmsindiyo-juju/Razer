@@ -51,7 +51,7 @@ export function FaqPage() {
                     <button type="button" aria-expanded={active === index} aria-controls={"faq-answer-" + index}
                         onClick={() => setActive(active === index ? undefined : index)}>
                         <span>{entry === initialQuestion ? "01" : String(index + 1).padStart(2, "0")}</span><strong>{entry.question}</strong>
-                        <span aria-hidden="true">{active === index ? "−" : "+"}</span>
+                        <span className="design-toggle-icon" aria-hidden="true">{active === index ? "−" : <img src="/images/figma-pages/faq-plus.svg" alt="" />}</span>
                     </button>
                     <div className="design-faq__answer" id={"faq-answer-" + index} hidden={active !== index}><p>{entry.answer}</p></div>
                 </li>)}
@@ -76,7 +76,9 @@ export function SupportPage() {
         <div className="design-grid design-grid--two">
             {supportCards.map(([title, description], index) => {
                 const path = supportPaths[index];
-                const content = <><h2>{title}</h2><p>{description}</p><span className="design-support__arrow" aria-hidden="true">→</span></>;
+                const content = <><h2>{title}</h2><p>{description}</p><span className="design-support__arrow">
+                    <img src={index === 0 ? "/images/figma-pages/support-arrow-primary.svg" : "/images/figma-pages/support-arrow.svg"} alt="" />
+                </span></>;
                 return path.startsWith("/") ?
                     <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
                     <a className="design-panel design-support" href={path} key={title}>{content}</a>;
@@ -118,7 +120,7 @@ export function WarrantyPage() {
             <PageHeading title="Razer 품질 보증 정책" description="도움이 필요하신가요? 걱정하지 마세요! 저희가 도와드리겠습니다." as="h2" />
             <div className="design-panel design-accordion">
                 {warrantyQuestions.map((question) => <details key={question}>
-                    <summary>{question}</summary>
+                    <summary>{question}<img src="/images/figma-pages/warranty-plus.svg" alt="" /></summary>
                     <a href="https://www.razer.com/warranty">Razer 제한 보증 정책에서 확인하기</a>
                 </details>)}
             </div>

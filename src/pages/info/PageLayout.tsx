@@ -30,7 +30,9 @@ export function CatalogCard({ product, title, featured = false }: { product: Pro
         <div className="design-recommendation__copy">
             <h3>{title ?? product.title}</h3>
             <p>Section Title</p>
-            <Link to={to} aria-label={product.title + " 자세히 보기"}>EXPLORE ↗</Link>
+            <Link className="design-explore" to={to} aria-label={product.title + " 자세히 보기"}>
+                EXPLORE <img src="/images/figma-pages/explore.svg" alt="" />
+            </Link>
         </div>
     </article>;
 }
@@ -43,10 +45,10 @@ export function ProductRail({ products, title }: { products: Product[]; title: s
     };
 
     return <div className="design-rail">
-        <button aria-label={title + " 이전"} type="button" onClick={() => scroll(-1)}>‹</button>
+        <button aria-label={title + " 이전"} type="button" onClick={() => scroll(-1)}><img src="/images/figma-pages/rail-left.svg" alt="" /></button>
         <div className="design-rail__track" ref={list} tabIndex={0} aria-label={title}>
             {products.map((product) => <CatalogCard key={product.id} product={product} title="Category Title (카테고리 제목)" />)}
         </div>
-        <button aria-label={title + " 다음"} type="button" onClick={() => scroll(1)}>›</button>
+        <button aria-label={title + " 다음"} type="button" onClick={() => scroll(1)}><img src="/images/figma-pages/rail-right.svg" alt="" /></button>
     </div>;
 }

@@ -6,7 +6,7 @@ $body-bg: #111111;
 // $main-primary-color: #44D62C;
 $main-primary-color: #AEFF00;
 $neutral-color-white: #ffffff;
-$neutral-color-100: #E4E4E4;
+$neutral-color-50: #E4E4E4;
 $neutral-color-100: #A5A5A5;
 $neutral-color-200: #888888;
 $neutral-color-300: #666666;
@@ -15,6 +15,9 @@ $neutral-color-700: #222222;
 $neutral-color-panel: #171717;
 $neutral-color-canvas: #282828;
 $neutral-color-black: #000000;
+$grey-2: #4F4F4F;
+$grey-3: #828282;
+$grey-4: #BDBDBD;
 $promo-text-color: #9AFE7B; // 프로모션 바 텍스트
 $gradient-primary: linear-gradient(90deg, #44D62C 0%, #00FFDD 100%); // 커스터마이징 버튼
 
@@ -22,7 +25,8 @@ $gradient-primary: linear-gradient(90deg, #44D62C 0%, #00FFDD 100%); // 커스�
 // ---------- Font weight ----------
 $font-weight-regular: 400; // Regular · 기본 정보와 편안하게 읽는 표현
 $font-weight-bold: 700; // Bold · 제목이나 강조가 필요한 핵심 표현
-$font-weight-medium: 500; // Medium · body-small-m 용 (SF Pro Medium)
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
 
 $font-family-base: "Pretendard", sans-serif;
 
@@ -46,7 +50,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin heading-32-sb {
     font-family: $font-family-base;
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: $font-weight-semibold;
     line-height: 2.5rem;
     letter-spacing: 0;
 }
@@ -62,7 +66,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin heading-24-sb {
     font-family: $font-family-base;
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: $font-weight-semibold;
     line-height: 2rem;
     letter-spacing: 0;
 }
@@ -70,7 +74,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin heading-20-sb {
     font-family: $font-family-base;
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: $font-weight-semibold;
     line-height: 1.75rem;
     letter-spacing: 0;
 }
@@ -78,7 +82,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin body-16-r {
     font-family: $font-family-base;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: $font-weight-regular;
     line-height: 1.5rem;
     letter-spacing: 0;
 }
@@ -86,7 +90,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin body-16-m {
     font-family: $font-family-base;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: $font-weight-medium;
     line-height: 1.5rem;
     letter-spacing: 0;
 }
@@ -94,7 +98,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin body-16-sb {
     font-family: $font-family-base;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: $font-weight-semibold;
     line-height: 1.5rem;
     letter-spacing: 0;
 }
@@ -102,7 +106,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin body-14-m {
     font-family: $font-family-base;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: $font-weight-medium;
     line-height: 1.25rem;
     letter-spacing: 0;
 }
@@ -110,7 +114,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin body-14-r {
     font-family: $font-family-base;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: $font-weight-regular;
     line-height: 1.375rem;
     letter-spacing: 0;
 }
@@ -118,7 +122,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin label-16-sb {
     font-family: $font-family-base;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: $font-weight-semibold;
     line-height: 1.5rem;
     letter-spacing: 0;
 }
@@ -126,7 +130,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin label-14-sb {
     font-family: $font-family-base;
     font-size: 0.875rem;
-    font-weight: 700;
+    font-weight: $font-weight-semibold;
     line-height: 1.25rem;
     letter-spacing: 0;
 }
@@ -134,7 +138,7 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin label-12-m {
     font-family: $font-family-base;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: $font-weight-medium;
     line-height: 1rem;
     letter-spacing: 0;
 }
@@ -142,9 +146,24 @@ $font-family-base: "Pretendard", sans-serif;
 @mixin caption-12-r {
     font-family: $font-family-base;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: $font-weight-regular;
     line-height: 1rem;
     letter-spacing: 0;
+}
+
+// Figma의 입력 및 버튼 스타일 (Inter)
+@mixin text-normal {
+    font-family: "Inter", $font-family-base;
+    font-size: 1rem;
+    font-weight: $font-weight-regular;
+    line-height: 1.4;
+}
+
+@mixin text-small-bold {
+    font-family: "Inter", $font-family-base;
+    font-size: .875rem;
+    font-weight: $font-weight-bold;
+    line-height: 1.4;
 }
 
 // ---------- 둥글기 (용도로 선택) ----------

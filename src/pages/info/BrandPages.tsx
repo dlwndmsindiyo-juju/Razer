@@ -144,8 +144,8 @@ export function EsportsPage() {
                     <img className="design-lightbox__neighbor" src={esportImage("Rectangle" + album.photos[adjacentPhoto(-1)])} alt="" />
                     <img className="design-lightbox__active" src={esportImage("Rectangle" + album.photos[photo])} alt={album.title + " 사진 " + (photo + 1)} />
                     <img className="design-lightbox__neighbor" src={esportImage("Rectangle" + album.photos[adjacentPhoto(1)])} alt="" />
-                    <button type="button" onClick={() => setPhoto(adjacentPhoto(-1))} aria-label="이전">‹</button>
-                    <button type="button" onClick={() => setPhoto(adjacentPhoto(1))} aria-label="다음">›</button>
+                    <button type="button" onClick={() => setPhoto(adjacentPhoto(-1))} aria-label="이전"><img src="/images/figma-pages/gallery-left.svg" alt="" /></button>
+                    <button type="button" onClick={() => setPhoto(adjacentPhoto(1))} aria-label="다음"><img src="/images/figma-pages/gallery-right.svg" alt="" /></button>
                 </div>
                 <div className="design-lightbox__thumbs" aria-label="갤러리 사진">
                     {Array.from({ length: Math.min(5, album.photos.length) }, (_, offset) => {
