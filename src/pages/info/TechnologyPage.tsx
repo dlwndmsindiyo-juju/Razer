@@ -17,8 +17,8 @@ export function TechnologyPage() {
             <nav className="design-tech__nav" aria-label="제품 기술 카테고리">
                 {technologyCategories.map(({ slug, label }, index) => (
                     <NavLink key={label} to={slug ? basePath + "/" + slug : basePath} end>
-                        <span><img src={figmaImage(technologyCategories[0].id, icons[index])} alt="" /></span>
-                        {label}
+                        <span className="design-tech__icon"><img src={figmaImage(technologyCategories[0].id, icons[index])} alt="" /></span>
+                        <span className="design-tech__label">{label}</span>
                     </NavLink>
                 ))}
             </nav>

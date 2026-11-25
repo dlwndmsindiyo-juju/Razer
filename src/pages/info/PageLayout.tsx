@@ -1,5 +1,6 @@
 import { useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { categoryLabels } from "../../data/productData";
 import type { Product } from "../../types/product";
 import "./DesignPages.scss";
 
@@ -21,15 +22,15 @@ export function PageHero({ src, mobileSrc, children }: { src: string; mobileSrc?
     </div>;
 }
 
-export function CatalogCard({ product, title, featured = false }: { product: Product; title?: string; featured?: boolean }) {
+export function CatalogCard({ product, featured = false }: { product: Product; featured?: boolean }) {
     const to = "/products/" + product.category + "/" + product.id;
     return <article className={"design-recommendation" + (featured ? " design-recommendation--featured" : "")}>
         <div className="design-recommendation__art">
-            <img src="/images/figma-pages/recommendation-mouse.png" alt="" loading="lazy" />
+            <img src={product.image} alt="" loading="lazy" />
         </div>
         <div className="design-recommendation__copy">
-            <h3>{title ?? product.title}</h3>
-            <p>Section Title</p>
+            <h3>{product.title}</h3>
+            <p>{categoryLabels[product.category]}</p>
             <Link className="design-explore" to={to} aria-label={product.title + " 자세히 보기"}>
                 EXPLORE <img src="/images/figma-pages/explore.svg" alt="" />
             </Link>
@@ -45,10 +46,10 @@ export function ProductRail({ products, title }: { products: Product[]; title: s
     };
 
     return <div className="design-rail">
-        <button aria-label={title + " 이전"} type="button" onClick={() => scroll(-1)}><img src="/images/figma-pages/rail-left.svg" alt="" /></button>
+        <button aria-label={title + " 이전"} type="button" disabled={products.length < 2} onClick={() => scroll(-1)}><img src="/images/figma-pages/rail-left.svg" alt="" /></button>
         <div className="design-rail__track" ref={list} tabIndex={0} aria-label={title}>
-            {products.map((product) => <CatalogCard key={product.id} product={product} title="Category Title (카테고리 제목)" />)}
+            {products.map((product) => <CatalogCard key={product.id} product={product} />)}
         </div>
-        <button aria-label={title + " 다음"} type="button" onClick={() => scroll(1)}><img src="/images/figma-pages/rail-right.svg" alt="" /></button>
+        <button aria-label={title + " 다음"} type="button" disabled={products.length < 2} onClick={() => scroll(1)}><img src="/images/figma-pages/rail-right.svg" alt="" /></button>
     </div>;
 }

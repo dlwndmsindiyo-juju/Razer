@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { collabs, getCollabPath } from "../../data/collabData";
 import { membershipCopy as copy } from "../../data/editorialData";
 import { figmaImage } from "../../data/figmaPageAssets";
-import { getProductsByCategory, getProductsByCollection, productData } from "../../data/productData";
+import { getProductsByCollection } from "../../data/productData";
 import type { ProductCategory } from "../../types/product";
 import { CatalogCard, PageHeading, PageHero, ProductRail } from "./PageLayout";
 
@@ -32,11 +32,12 @@ export function BuyingGuidePage() {
 const exclusiveFrame = "1404:27870";
 const hardware: [ProductCategory, string][] = [["mice", "마우스"], ["mousepads", "마우스 패드"], ["keyboards", "키보드"], ["controllers", "컨트롤러"]];
 const exclusiveProducts = getProductsByCollection("exclusive");
-const carbonProducts = ["Viper V4 Pro", "DeathAdder V4 Pro"].flatMap((model) => {
-    const product = productData.find(({ title }) => title.includes(model) && /carbon/i.test(title))
-        ?? productData.find(({ title }) => title.includes(model));
-    return product ? [product] : [];
-});
+const carbonProducts = exclusiveProducts.filter(({ title }) => /^Razer (Viper V4 Pro|DeathAdder V4 Pro) - Carbon Fiber Edition$/i.test(title));
+const otherExclusiveProducts = exclusiveProducts.filter(({ title }) => /^Razer (Viper V4 Pro - Esports Green Edition|Raiju V3 Pro Signature Edition)$/i.test(title));
+const featuredGroups = [
+    { badge: "ONLY AT RAZER", title: "RAZER 카본 파이버 컬렉션", products: carbonProducts },
+    { badge: "RAZER 독점", title: "Razer 독점 템", products: otherExclusiveProducts },
+];
 const featuredCollabCards = [
     ["honkai", "Rectangle198", "RAZER | HONKAI : STAR RAIL | CTRL + ALT + WIN", "모든 전투가 하나의 게임에 불과한 은하계에서, 무적 모드로 플레이하는 게이머는 오직 단 한 명뿐입니다."],
     ["evangelion", "Rectangle201", "RAZER | EVANGELION (EVA-01) | EVA-01의 힘을 깨우다", "새로운 Razer | EVANGELION(EVA-01) 컬렉션으로 EVA-01을 손에 넣으세요."],
@@ -47,25 +48,24 @@ const featuredCollabCards = [
 
 export function ExclusivesPage() {
     const [category, setCategory] = useState<ProductCategory>("mice");
-    const hardwareProducts = exclusiveProducts.filter((item) => item.category === category);
+    const hardwareProducts = exclusiveProducts.filter((item) => item.category === category || item.categories?.includes(category));
     return <div className="design-page design-exclusive">
         <PageHero src={figmaImage(exclusiveFrame, "Rectangle197")} mobileSrc="/images/figma-pages/exclusive-hero-mobile.png" />
         <div className="design-container">
             <PageHeading title="Razer 독점" description="공식 온라인 스토어에서만 구매할 수 있는 고유한 제품을 알아보세요" />
             <div className="design-grid design-grid--two design-exclusive__featured">
-                {[["ONLY AT RAZER", "RAZER 카본 파이버 컬렉션", carbonProducts],
-                    ["RAZER 독점", "Razer 독점 템", exclusiveProducts.filter((item) => !carbonProducts.includes(item)).slice(0, 2)]].map(([badge, title, products]) =>
-                    <section key={String(title)} className="design-stack">
-                        <div className="design-exclusive__label"><span className="design-pill">{String(badge)}</span><p>프로를 위한</p><h2>{String(title)}</h2></div>
-                        <div className="design-grid design-grid--two design-product-pair">{typeof products !== "string" && products.map((product, index) =>
-                            <CatalogCard key={product.id} product={product} featured title={products === carbonProducts ? ["Viper V4 Pro", "DeathAdder V4 Pro"][index] : "Category Title (카테고리 제목)"} />)}</div>
+                {featuredGroups.map(({ badge, title, products }) =>
+                    <section key={title} className="design-stack">
+                        <div className="design-exclusive__label"><span className="design-pill">{badge}</span><p>프로를 위한</p><h2>{title}</h2></div>
+                        <div className="design-grid design-grid--two design-product-pair">{products.map((product) =>
+                            <CatalogCard key={product.id} product={product} featured />)}</div>
                     </section>)}
             </div>
             <PageHeading title="PC 관련 기기" description="공식 온라인 스토어에서만 구매할 수 있는 PC 관련 기기들을 알아보세요" as="h2" />
             <div className="design-tabs" aria-label="PC 관련 기기">
                 {hardware.map(([key, label]) => <button type="button" key={key} onClick={() => setCategory(key)} aria-pressed={category === key}>{label}</button>)}
             </div>
-            <ProductRail key={category} title="PC 관련 기기" products={(hardwareProducts.length ? hardwareProducts : getProductsByCategory(category)).slice(0, 8)} />
+            <ProductRail key={category} title="PC 관련 기기" products={hardwareProducts.slice(0, 8)} />
             <PageHeading title="Razer 콜라보 제품" description="Razer와 콜라보한 제품들을 만나보세요" as="h2" />
             <div className="design-grid design-grid--two">
                 {featuredCollabCards.map(([slug, layer, title, description]) => {

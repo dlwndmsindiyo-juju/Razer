@@ -94,7 +94,12 @@ const albums = [
     { title: "VCT EMEA 2026", photos: [245, 249, 253, 257, 261] },
     { title: "EVO JAPAN 2026", photos: [246, 250, 254, 258] },
 ];
-const proModels = ["Viper V4 Pro", "DeathAdder V4 Pro", "Huntsman V3 Pro", "BlackShark V3 Pro"];
+const proModels = [
+    "Razer Viper V4 Pro - Esports Green Edition",
+    "Razer DeathAdder V4 Pro - NiKo Edition",
+    "Razer Huntsman V3 Pro - KR - 黑色",
+    "Razer BlackShark V3 Pro - NiKo Edition",
+];
 
 export function EsportsPage() {
     const [event, setEvent] = useState(0);
@@ -116,10 +121,10 @@ export function EsportsPage() {
             <PageHeading title={esportsCopy[4]} description={esportsCopy.slice(9, 11).join(" ")} as="h2" />
             <div className="design-grid design-grid--four design-esports__equipment">
                 {proModels.map((model, index) => {
-                    const product = productData.find((item) => item.title.includes(model));
+                    const product = productData.find((item) => item.title === model);
                     return product && <div key={model}>
                         <span className="design-pill">{esportsCopy[19 + index * 4]}</span>
-                        <CatalogCard product={product} title={esportsCopy[20 + index * 4]} featured />
+                        <CatalogCard product={product} featured />
                     </div>;
                 })}
             </div>

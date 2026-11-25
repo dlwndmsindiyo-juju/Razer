@@ -1,34 +1,30 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { footerGroups, getGroupPath } from "../../data/footerData";
+import { footerGroups, getFooterPath } from "../../data/footerData";
 import { getCategoryPath, productMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
 import { UserMenu } from "./UserMenu";
 import { promoBarText } from "../../data/navData";
 
 export const Header = () => {
-    const { pathname } = useLocation();
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // 제품 서브 메뉴
-    const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색창
+    const { pathname, key } = useLocation();
+    const [overlay, setOverlay] = useState<{ location: string; id: string }>();
+    const openId = overlay?.location === key ? overlay.id : undefined;
+    const openGroup = footerGroups.find(({ slug }) => slug === openId);
+    const isSearchOpen = openId === "search";
+    const closeOverlay = () => setOverlay(undefined);
+    const toggleOverlay = (id: string) => {
+        setOverlay(openId === id ? undefined : { location: key, id });
+    };
 
-    // 페이지 이동하면 닫기
     useEffect(() => {
-        setIsMenuOpen(false);
-        setIsSearchOpen(false);
-    }, [pathname]);
-
-    // ESC 로 닫기
-    useEffect(() => {
-        if (!isMenuOpen && !isSearchOpen) return;
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") {
-                setIsMenuOpen(false);
-                setIsSearchOpen(false);
-            }
+        if (!openId) return;
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setOverlay(undefined);
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isMenuOpen, isSearchOpen]);
+    }, [openId]);
 
     return (
         <header className="header">
@@ -45,34 +41,18 @@ export const Header = () => {
                         {/* GNB 메뉴 = 푸터 그룹 타이틀 (footerData 공용) */}
                         <ul className="header__menu">
                             {footerGroups.map((group) => {
-                                const isCurrent =
-                                    pathname === `/info/${group.slug}` || pathname.startsWith(`/info/${group.slug}/`);
-
-                                // 제품: 서브 메뉴 열기
-                                if (group.slug === "product") {
-                                    return (
-                                        <li key={group.slug}>
-                                            <button
-                                                type="button"
-                                                className={isCurrent || isMenuOpen ? "is-active" : undefined}
-                                                aria-expanded={isMenuOpen}
-                                                aria-controls="product-menu"
-                                                onClick={() => {
-                                                    setIsSearchOpen(false);
-                                                    setIsMenuOpen((prev) => !prev);
-                                                }}
-                                            >
-                                                {group.title}
-                                            </button>
-                                        </li>
-                                    );
-                                }
+                                const expanded = openGroup === group;
+                                const isCurrent = pathname === `/info/${group.slug}`
+                                    || pathname.startsWith(`/info/${group.slug}/`)
+                                    || (group.slug === "product" && pathname.startsWith("/products/"));
 
                                 return (
                                     <li key={group.slug}>
-                                        <Link to={getGroupPath(group)} className={isCurrent ? "is-active" : undefined}>
+                                        <button type="button" className={isCurrent || expanded ? "is-active" : undefined}
+                                            aria-expanded={expanded} aria-controls={expanded ? "gnb-submenu" : undefined}
+                                            onClick={() => toggleOverlay(group.slug)}>
                                             {group.title}
-                                        </Link>
+                                        </button>
                                     </li>
                                 );
                             })}
@@ -86,10 +66,7 @@ export const Header = () => {
                             aria-label="검색"
                             aria-expanded={isSearchOpen}
                             aria-controls="search-overlay"
-                            onClick={() => {
-                                setIsMenuOpen(false);
-                                setIsSearchOpen((prev) => !prev);
-                            }}
+                            onClick={() => toggleOverlay("search")}
                         >
                             <img src="/icons/search.svg" alt="" />
                         </button>
@@ -106,17 +83,17 @@ export const Header = () => {
                 <p className="header__promo-text">{promoBarText}</p>
             </div>
 
-            {/* 제품 서브 메뉴 (메가 메뉴) */}
-            {isMenuOpen && (
+            {/* GNB 서브 메뉴 */}
+            {openGroup && (
                 <>
-                    <div id="product-menu" className="mega-menu">
-                        <div className="mega-menu__inner">
-                            <div className="mega-menu__main">
+                    <div id="gnb-submenu" className="mega-menu">
+                        <div className={openGroup.slug === "product" ? "mega-menu__inner" : "mega-menu__inner mega-menu__inner--links"}>
+                            {openGroup.slug === "product" && <div className="mega-menu__main">
                                 <strong className="mega-menu__title">{productMenu.title}</strong>
                                 <ul className="mega-menu__grid">
                                     {productMenu.categories.map((category) => (
                                         <li key={category.slug}>
-                                            <Link to={getCategoryPath(category.slug)} className="mega-menu__tile">
+                                            <Link to={getCategoryPath(category.slug)} className="mega-menu__tile" onClick={closeOverlay}>
                                                 <span className="mega-menu__thumb">
                                                     {category.image ? (
                                                         <img src={category.image} alt="" />
@@ -129,13 +106,17 @@ export const Header = () => {
                                         </li>
                                     ))}
                                 </ul>
-                            </div>
+                            </div>}
 
-                            {/* 카드에 없는 판매 제품 */}
-                            <ul className="mega-menu__links">
-                                {productMenu.links.map((link) => (
+                            <ul className="mega-menu__links" aria-label={openGroup.title + " 서브메뉴"}>
+                                {openGroup.pages.map((page) => (
+                                    <li key={page.slug}>
+                                        <Link to={getFooterPath(openGroup.slug, page.slug)} onClick={closeOverlay}>{page.label}</Link>
+                                    </li>
+                                ))}
+                                {openGroup.slug === "product" && productMenu.links.map((link) => (
                                     <li key={link.slug}>
-                                        <Link to={getCategoryPath(link.slug)}>{link.label}</Link>
+                                        <Link to={getCategoryPath(link.slug)} onClick={closeOverlay}>{link.label}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -144,7 +125,7 @@ export const Header = () => {
                                 type="button"
                                 className="mega-menu__close"
                                 aria-label="메뉴 닫기"
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={closeOverlay}
                             >
                                 <img src="/icons/close.svg" alt="" />
                             </button>
@@ -152,12 +133,12 @@ export const Header = () => {
                     </div>
 
                     {/* 뒤 배경 (누르면 닫기) */}
-                    <div className="mega-menu__dim" onClick={() => setIsMenuOpen(false)} />
+                    <div className="mega-menu__dim" onClick={closeOverlay} />
                 </>
             )}
 
             {/* 검색창 */}
-            {isSearchOpen && <SearchOverlay onClose={() => setIsSearchOpen(false)} />}
+            {isSearchOpen && <SearchOverlay onClose={closeOverlay} />}
         </header>
     );
 };
