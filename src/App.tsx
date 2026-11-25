@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { TopButton } from "./components/common/TopButton";
+import { useDragScroll } from "./types/useDragScroll";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
@@ -32,6 +33,7 @@ const ProductCustomize = lazy(() => import("./pages/products/ProductCustomize")
   .then(({ ProductCustomize }) => ({ default: ProductCustomize })));
 
 function App() {
+  useDragScroll(); // 가로 목록 마우스 드래그
   const initAuth = useAuthStore((state) => state.initAuth);
 
   useEffect(() => {

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { footerGroups, getFooterPath, type FooterGroup } from "../../data/footerData";
 import { getCategoryPath, productMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
 import { UserMenu } from "./UserMenu";
+import { MobileMenu } from "./MobileMenu";
 import { promoBarText } from "../../data/navData";
 
 export const Header = () => {
@@ -15,6 +16,8 @@ export const Header = () => {
     // 닫히는 동안에도 내용이 보이도록 마지막으로 연 메뉴를 기억
     const [menuGroup, setMenuGroup] = useState<FooterGroup>();
     const closeOverlay = () => setOverlay(undefined);
+    const [mobileOpen, setMobileOpen] = useState(false); // 태블릿 · 모바일 햄버거 메뉴
+    const closeMobile = useCallback(() => setMobileOpen(false), []);
     const toggleOverlay = (id: string) => {
         const group = footerGroups.find(({ slug }) => slug === id);
         if (group) setMenuGroup(group);
@@ -35,6 +38,11 @@ export const Header = () => {
             {/* GNB */}
             <div className="header__gnb">
                 <div className="header__inner">
+                    {/* 태블릿 · 모바일: 햄버거 (왼쪽) */}
+                    <button type="button" className="header__burger" aria-label="전체 메뉴 열기"
+                        aria-expanded={mobileOpen} onClick={() => setMobileOpen(true)}>
+                        <span /><span /><span />
+                    </button>
                     <h1 className="header__logo">
                         <Link to="/">
                             <img src="/icons/logo.svg" alt="Razer" />
@@ -82,10 +90,14 @@ export const Header = () => {
                 </div>
             </div>
 
-            {/* 프로모션 바 (GNB 아래) */}
+            {/* 프로모션 바 (GNB 아래) · 좁은 화면에서는 글자가 옆으로 흘러감 */}
             <div className="header__promo">
-                <p className="header__promo-text">{promoBarText}</p>
+                <div className="header__promo-track">
+                    <p className="header__promo-text">{promoBarText}</p>
+                    <p className="header__promo-text header__promo-copy" aria-hidden="true">{promoBarText}</p>
+                </div>
             </div>
+            <MobileMenu open={mobileOpen} onClose={closeMobile} />
 
             {/* GNB 서브 메뉴 (열고 닫을 때 아래로 스르륵) */}
             {menuGroup && (

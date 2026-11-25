@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { useShake } from "./useShake";
+import { useShake } from "../../types/useShake";
 
 interface AuthSelectProps {
     label: string; // 선택 전 표시 문구

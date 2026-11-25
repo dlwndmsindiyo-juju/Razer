@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { hasKorean } from "../../data/authData";
+import { hasKorean } from "../data/authData";
 
 // 에러 문구를 언제 보여줄지 관리
 // - 제출 버튼을 누른 뒤: 모든 칸
