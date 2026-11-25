@@ -537,7 +537,7 @@ a.design-support:hover {
   border-radius: 62.438rem;
   padding: 1rem 1.5rem 1rem 3rem;
   color: #ffffff;
-  background: #444444 url("/images/figma-pages/faq-search.svg") 1rem center no-repeat;
+  background: #444444 url("/images/faq/search.svg") 1rem center no-repeat;
 }
 
 .design-faq {

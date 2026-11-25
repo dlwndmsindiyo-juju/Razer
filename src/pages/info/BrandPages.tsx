@@ -7,68 +7,70 @@ import { CatalogCard, PageHeading, PageHero } from "./PageLayout";
 
 const aboutImage = (number: number) => figmaImage("1401:24703", "Rectangle" + number);
 const years = Array.from({ length: 19 }, (_, index) => 2023 - index);
+// [이름, 직책, 사진 레이어, 소개] · 첫 번째는 넓은 카드
 const leaders = [
-    ["MIN-LIANG TAN", "공동 설립자 겸 CEO", 185],
+    ["MIN-LIANG TAN", "공동 설립자 겸 CEO", 185, aboutCopy[57]],
     ["CHONG NENG TAN", "CFO", 186],
-    ["CHOO WEI-PIN", "CCO", 187],
     ["KHENG JOO KHAW", "COO", 188],
+    ["CHOO WEI-PIN", "CCO", 187],
     ["LI MENG LEE", "CSO", 189],
 ] as const;
+const pcAward = "Razer는 Blade 게이밍 노트북을 비롯해 키보드, 마우스, 헤드셋 등 고성능 PC 게이밍 기기를 제공합니다. Huntsman V2 Analog, DeathAdder V2, BlackShark V2 Pro 등 다양한 수상 제품을 통해 뛰어난 성능과 정밀한 제어, 몰입감 있는 게이밍 경험을 제공합니다.";
+const awards = [
+    ["PC", [172], pcAward],
+    ["콘솔", [173], aboutCopy[47]],
+    ["모바일", [174], aboutCopy[49]],
+    ["라이프스타일", [175], aboutCopy[52]],
+    ["서비스", [172, 176], aboutCopy[54]],
+] as const;
+// [id, 제목, 배너 레이어, 본문, 버튼, 링크, 제목을 디스플레이 서체로]
 const brandSections = [
-    ["sustainability", "지속가능성", 180, aboutCopy[7]],
-    ["careers", "채용", 183, aboutCopy.slice(11, 13).join(" ")],
-    ["ventures", "zVENTURES", 167, "Razer의 벤처 투자 프로그램"],
+    ["sustainability", "지속가능성", 180, aboutCopy[7], "자세히 보기", "https://www.razer.com/go-green", false],
+    ["careers", "채용", 183, aboutCopy.slice(11, 13).join(" "), "지원하기", "https://careers.razer.com/", false],
+    ["ventures", "zVENTURES", 167, "zVentures는 Razer의 기업 벤처 투자 조직으로, Razer 생태계와 함께 성장할 스타트업과 새로운 기술에 투자합니다.", "자세히 보기", "https://www.zvntrs.com/", true],
 ] as const;
 
+// #GoGreenWithRazer 를 초록 밑줄 링크로
+const withGreenTag = (text: string) => text.split(/(#GoGreenWithRazer)/).map((part, index) =>
+    part === "#GoGreenWithRazer"
+        ? <a key={index} className="design-about__tag" href="#sustainability">{part}</a>
+        : part);
+
 export function AboutPage() {
-    const [year, setYear] = useState(2023);
     return <div className="design-page design-about">
         <header className="design-about__hero"><h1>About Me</h1></header>
-        <nav className="design-tabs design-about__nav" aria-label="Razer 소개">
-            {[["overview", "RAZER 소개"], ["sustainability", "지속가능성"], ["awards", "수상"], ["leadership", "LEADERSHIP"],
-                ["careers", "채용"], ["ventures", "zVENTURES"]].map(([id, label]) => <a key={id} href={"#" + id}>{label}</a>)}
-        </nav>
-        <section className="design-container design-about__intro" id="overview">
+        <section className="design-about__intro" id="overview">
             <img src={aboutImage(167)} alt="" loading="lazy" />
-            <PageHeading title="RAZER 소개" description={aboutCopy[4]} as="h2" />
-            <p>{aboutCopy[5]}</p>
-        </section>
-        <PageHero src={aboutImage(168)} />
-        <section className="design-container design-about__intro">
+            <h2 className="design-about__title"><span className="design-display">RAZER</span> 소개</h2>
+            <p className="design-about__lead">{aboutCopy[4]}</p>
             <p>{aboutCopy[13]}</p>
-            <p>{aboutCopy[14]}</p>
         </section>
-        <section className="design-container design-stack">
-            <div className="design-tabs design-years" aria-label="Razer 주요 성과 연도">
-                {years.map((value) => <button key={value} type="button" aria-pressed={year === value} onClick={() => setYear(value)}>{value}</button>)}
-            </div>
-            <div className="design-timeline" aria-live="polite">
-                <h2>{year}년</h2>
-                {year === 2023 && <div className="design-program">
-                    <div><h3>Razer 주요 성과</h3><p>{aboutCopy[6]}</p><p>{aboutCopy[15]}</p></div>
-                    <img src={aboutImage(170)} alt="" loading="lazy" />
-                </div>}
-            </div>
+        <img className="design-about__banner" src={aboutImage(168)} alt="" loading="lazy" />
+        <section className="design-about__intro design-about__intro--after">
+            <p className="design-about__lead">{aboutCopy[5]}</p>
+            <p>{withGreenTag(aboutCopy[14])}</p>
         </section>
-        <BrandSection section={brandSections[0]} />
-        <section className="design-container" id="awards">
-            <PageHeading title="수상" as="h2" />
-            <div className="design-grid design-grid--three">
-                {[["콘솔", 173, aboutCopy[47]], ["모바일", 174, aboutCopy[49]], ["라이프스타일", 175, aboutCopy[52]], ["서비스", 176, aboutCopy[54]]].map(([title, number, body]) =>
-                    <article className="design-media-card" key={title}>
-                        <div className="design-award-image">
-                            {number === 176 && <img src={aboutImage(172)} alt="" loading="lazy" />}
-                            <img src={aboutImage(Number(number))} alt="" loading="lazy" />
-                        </div>
-                        <h3>{title}</h3><p>{body}</p>
-                    </article>)}
+        <YearTimeline />
+        <BrandSection section={brandSections[0]} overlay={aboutCopy[26]} />
+        <section className="design-about__block" id="awards">
+            <h2 className="design-about__heading">수상</h2>
+            <div className="design-about__awards" tabIndex={0} aria-label="수상 분야">
+                {awards.map(([title, layers, body]) => <article className="design-about__award" key={title}>
+                    <div className="design-award-image">
+                        {layers.map((layer) => <img key={layer} src={aboutImage(layer)} alt="" loading="lazy" />)}
+                    </div>
+                    <h3 className="design-display">{title}</h3>
+                    <p className="design-display-text">{body}</p>
+                </article>)}
             </div>
         </section>
-        <section className="design-container" id="leadership">
-            <PageHeading title="LEADERSHIP" as="h2" />
-            <div className="design-grid design-grid--two">
-                {leaders.map(([name, role, layer]) => <article className="design-panel design-leader" key={name}>
-                    <img src={aboutImage(layer)} alt="" loading="lazy" /><div><h3>{name}</h3><p>{role}</p></div>
+        <section className="design-about__block" id="leadership">
+            <h2 className="design-about__heading design-display">LEADERSHIP</h2>
+            <div className="design-about__leaders">
+                {leaders.map(([name, role, layer, description]) => <article className={"design-leader" + (description ? " design-leader--wide" : "")} key={name}>
+                    <img src={aboutImage(layer)} alt="" loading="lazy" />
+                    <div><h3>{name}</h3><p>{role}</p></div>
+                    {description && <p className="design-leader__desc">{description}</p>}
                 </article>)}
             </div>
         </section>
@@ -77,18 +79,62 @@ export function AboutPage() {
     </div>;
 }
 
-function BrandSection({ section: [id, title, layer, description] }: { section: typeof brandSections[number] }) {
+// 연도 탭: 선택한 연도가 가운데로 오고, 좌우로 스크롤
+function YearTimeline() {
+    const [year, setYear] = useState(years[0]);
+    const track = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const list = track.current;
+        const active = list?.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
+        if (!list || !active) return;
+        list.scrollTo({
+            left: active.offsetLeft - (list.clientWidth - active.offsetWidth) / 2,
+            behavior: year === years[0] ? "auto" : "smooth",
+        });
+    }, [year]);
+
+    return <section className="design-about__timeline" aria-label="Razer 주요 성과">
+        <div className="design-about__years" ref={track} aria-label="연도 선택">
+            {years.map((value) => <button key={value} type="button" aria-pressed={year === value} onClick={() => setYear(value)}>{value}</button>)}
+        </div>
+        <div className="design-about__block design-about__milestone" aria-live="polite">
+            <div>
+                <h2 className="design-about__heading design-about__heading--light">
+                    <span className="design-display">{year}</span>년
+                    {year === 2023 && <><br /><span className="design-display">Razer</span> 주요 성과</>}
+                </h2>
+                {year === 2023
+                    ? <div className="design-display-text"><p>{aboutCopy[6]}</p><p>{aboutCopy[15]}</p></div>
+                    : <p className="design-about__empty">등록된 주요 성과가 없습니다.</p>}
+            </div>
+            {year === 2023 && <img src={aboutImage(170)} alt="" loading="lazy" />}
+        </div>
+    </section>;
+}
+
+function BrandSection({ section: [id, title, layer, description, action, href, display], overlay }: {
+    section: typeof brandSections[number];
+    overlay?: string;
+}) {
     return <section className="design-brand-section" id={id}>
-        <PageHero src={aboutImage(layer)} />
-        <div className="design-container design-brand-section__copy">
-            <h2>{title}</h2><p>{description}</p>
+        <div className="design-brand-section__banner">
+            <img src={aboutImage(layer)} alt="" loading="lazy" />
+            {overlay && <strong className="design-brand-section__overlay">{overlay}</strong>}
+        </div>
+        <div className="design-about__block design-brand-section__copy">
+            <div>
+                <h2 className={"design-about__heading" + (display ? " design-display" : "")}>{title}</h2>
+                <p className="design-display-text">{description}</p>
+            </div>
+            <a className="design-about__button" href={href} target="_blank" rel="noreferrer">{action}</a>
         </div>
     </section>;
 }
 
 const esportImage = (layer: string) => figmaImage("1403:26959", layer);
 const teamLogos = Array.from({ length: 22 }, (_, index) =>
-    "/images/figma-pages/esports-team-logo-" + String(index + 1).padStart(2, "0") + ".svg",
+    "/images/esports/team-logo-" + String(index + 1).padStart(2, "0") + ".webp",
 );
 const albums = [
     { title: "RED BULL LOIO", photos: [242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261] },
@@ -106,7 +152,6 @@ const proModels = [
 export function EsportsPage() {
     const [event, setEvent] = useState(0);
     const [mobilePhoto, setMobilePhoto] = useState<number>();
-    const [logosPaused, setLogosPaused] = useState(false);
     const album = albums[event];
     return <div className="design-page design-esports">
         <PageHero src={esportImage("Rectangle199")} />
@@ -124,31 +169,26 @@ export function EsportsPage() {
             <div className="design-grid design-grid--four design-esports__equipment">
                 {proModels.map((model, index) => {
                     const product = productData.find((item) => item.title === model);
-                    return product && <div key={model}>
-                        <span className="design-pill">{esportsCopy[19 + index * 4]}</span>
-                        <CatalogCard product={product} featured />
-                    </div>;
+                    return product && <CatalogCard key={model} product={product} featured badge={esportsCopy[19 + index * 4]} />;
                 })}
             </div>
             <PageHeading title={esportsCopy[1]} description={esportsCopy[13]} as="h2" />
             <img className="design-esports__player" src={esportImage("Property1Default")} alt="Team Razer 프로 선수" loading="lazy" />
-            <section className="design-team-logos" aria-label="Team Razer 선수와 팀">
-                <div className="design-team-logos__viewport" data-paused={logosPaused} tabIndex={0} aria-label="팀 아이콘 목록">
-                    <div className="design-team-logos__track">
-                        {[false, true].map((duplicate) => (
-                            <ul className="design-team-logos__row" key={String(duplicate)} aria-hidden={duplicate || undefined}>
-                                {teamLogos.map((src, index) => <li key={src}>
-                                    <img src={src} alt={duplicate ? "" : "Team Razer 선수 및 팀 " + (index + 1)} />
-                                </li>)}
-                            </ul>
-                        ))}
-                    </div>
-                </div>
-                <button className="design-team-logos__control" type="button" onClick={() => setLogosPaused(!logosPaused)}>
-                    {logosPaused ? "아이콘 흐름 재생" : "아이콘 흐름 일시정지"}
-                </button>
-            </section>
         </div>
+        {/* 팀 아이콘: 화면 끝까지 풀로 흘러감 · 마우스를 올리면 멈춤 */}
+        <section className="design-team-logos" aria-label="Team Razer 선수와 팀">
+            <div className="design-team-logos__viewport" tabIndex={0} aria-label="팀 아이콘 목록 (마우스를 올리면 멈춤)">
+                <div className="design-team-logos__track">
+                    {[false, true].map((duplicate) => (
+                        <ul className="design-team-logos__row" key={String(duplicate)} aria-hidden={duplicate || undefined}>
+                            {teamLogos.map((src, index) => <li key={src}>
+                                <img src={src} alt={duplicate ? "" : "Team Razer 선수 및 팀 " + (index + 1)} />
+                            </li>)}
+                        </ul>
+                    ))}
+                </div>
+            </div>
+        </section>
         <section className="design-esports__year" aria-labelledby="esports-year-heading">
             <div className="design-container design-heading">
                 <h2 id="esports-year-heading">
@@ -212,10 +252,10 @@ function EsportsGallery({ album, initialIndex = 0 }: { album: typeof albums[numb
             <div className="design-esports-gallery__focus">
                 <img src={imageAt(index)} alt={album.title + " 사진 " + (index + 1)} loading="lazy" />
                 <button type="button" className="design-esports-gallery__arrow" onClick={() => changePhoto(-1)} aria-label="이전 사진">
-                    <img src="/images/figma-pages/gallery-left.svg" alt="" />
+                    <img src="/images/esports/gallery-left.svg" alt="" />
                 </button>
                 <button type="button" className="design-esports-gallery__arrow design-esports-gallery__arrow--next" onClick={() => changePhoto(1)} aria-label="다음 사진">
-                    <img src="/images/figma-pages/gallery-right.svg" alt="" />
+                    <img src="/images/esports/gallery-right.svg" alt="" />
                 </button>
             </div>
             <img className="design-esports-gallery__neighbor" src={imageAt(wrapIndex(index + 1))} alt="" loading="lazy" />

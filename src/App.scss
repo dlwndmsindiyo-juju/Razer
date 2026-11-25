@@ -1,5 +1,9 @@
 @use "./variables" as *;
 
+// 펼침 (메뉴 · FAQ · 아코디언) 공통 속도
+$reveal-duration: 0.4s;
+$reveal-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
 main {
     background-color: $body-bg;
 }
@@ -296,6 +300,22 @@ main {
     width: 100%;
     background-color: $neutral-color-panel;
     border-top: 1px solid $neutral-color-500;
+    // 열고 닫을 때 높이가 스르륵 (0fr ↔ 1fr)
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows $reveal-duration $reveal-ease, visibility 0s $reveal-duration;
+
+    &.is-open {
+        grid-template-rows: 1fr;
+        visibility: visible;
+        transition: grid-template-rows $reveal-duration $reveal-ease, visibility 0s;
+    }
+
+    &__clip {
+        min-height: 0;
+        overflow: hidden;
+    }
 
     &__inner {
         @include container;
@@ -303,6 +323,24 @@ main {
         display: flex;
         gap: 6.75rem;
         padding: 3.5rem 0 4rem;
+        opacity: 0;
+        transform: translateY(-0.75rem);
+        transition: opacity $reveal-duration ease, transform $reveal-duration $reveal-ease;
+    }
+
+    &.is-open &__inner {
+        opacity: 1;
+        transform: none;
+    }
+
+    // 프로모션 · 서비스: 타이틀 아래 링크
+    &__inner--links {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    &__inner--links &__links {
+        padding-top: 1.75rem;
     }
 
     &__title {
@@ -410,6 +448,14 @@ main {
         inset: 0;
         z-index: -1;
         background-color: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity $reveal-duration ease;
+
+        &.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
     }
 }
 
@@ -5613,5 +5659,70 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
     .modal,
     .modal__panel {
         animation: none;
+    }
+}
+
+// =========================================================
+// 펼침 영역 공용 (Collapse 컴포넌트 · FAQ · 아코디언)
+// 높이를 0fr ↔ 1fr 로 바꿔 아래로 스르륵 펼쳐짐
+// =========================================================
+.reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows $reveal-duration $reveal-ease, visibility 0s $reveal-duration;
+
+    &.is-open {
+        grid-template-rows: 1fr;
+        visibility: visible;
+        transition: grid-template-rows $reveal-duration $reveal-ease, visibility 0s;
+    }
+
+    &__inner {
+        min-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-0.5rem);
+        transition: opacity $reveal-duration ease, transform $reveal-duration $reveal-ease;
+    }
+
+    &.is-open &__inner {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+// 드롭다운 · 팝업 메뉴: 열릴 때 위에서 살짝 내려오며 나타남
+@keyframes reveal-drop {
+    from {
+        opacity: 0;
+        transform: translateY(-0.5rem);
+    }
+}
+
+.search-overlay,
+.sort-dropdown__list,
+.auth-select__list,
+.dropdown__list,
+.pay-card__menu {
+    animation: reveal-drop 0.3s $reveal-ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .search-overlay,
+    .sort-dropdown__list,
+    .auth-select__list,
+    .dropdown__list,
+    .pay-card__menu {
+        animation: none;
+    }
+
+    .mega-menu,
+    .mega-menu__inner,
+    .mega-menu__dim,
+    .reveal,
+    .reveal__inner {
+        transition: none;
     }
 }

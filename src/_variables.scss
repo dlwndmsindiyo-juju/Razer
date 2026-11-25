@@ -18,7 +18,6 @@ $neutral-color-black: #000000;
 $grey-2: #4F4F4F;
 $grey-3: #828282;
 $grey-4: #BDBDBD;
-$promo-text-color: #9AFE7B; // 프로모션 바 텍스트
 $gradient-primary: linear-gradient(90deg, #44D62C 0%, #00FFDD 100%); // 커스터마이징 버튼
 
 
@@ -29,8 +28,18 @@ $font-weight-medium: 500;
 $font-weight-semibold: 600;
 
 $font-family-base: "Pretendard", sans-serif;
+$font-family-display: "Stalinist One", $font-family-base; // 영문 디스플레이 (한글은 Pretendard로 표시)
 
 // 텍스트
+// Stalinist One Regular 60 / 61 (소개 페이지 대표 타이틀)
+@mixin display-60-r {
+    font-family: $font-family-display;
+    font-size: 3.75rem;
+    font-weight: $font-weight-regular;
+    line-height: 3.8125rem;
+    letter-spacing: 0;
+}
+
 @mixin display-44-b {
     font-family: $font-family-base;
     font-size: 2.75rem;

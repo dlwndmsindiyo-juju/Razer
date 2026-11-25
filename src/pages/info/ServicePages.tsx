@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { promotionFaq } from "../../data/collabData";
 import { supportCards, warrantyQuestions } from "../../data/editorialData";
 import { figmaImage } from "../../data/figmaPageAssets";
 import { PageHeading, PageHero } from "./PageLayout";
+import { Collapse } from "../../components/common/Collapse";
 
 const servicePath = "/info/service/";
 const tabs = [
@@ -44,9 +45,11 @@ export function FaqPage() {
                     <button type="button" aria-expanded={active === index} aria-controls={"faq-answer-" + index}
                         onClick={() => setActive(active === index ? undefined : index)}>
                         <span>{entry === initialQuestion ? "01" : String(index + 1).padStart(2, "0")}</span><strong>{entry.question}</strong>
-                        <span className="design-toggle-icon" aria-hidden="true">{active === index ? "−" : <img src="/images/figma-pages/faq-plus.svg" alt="" />}</span>
+                        <span className="design-toggle-icon" aria-hidden="true">{active === index ? "−" : <img src="/images/faq/plus.svg" alt="" />}</span>
                     </button>
-                    <div className="design-faq__answer" id={"faq-answer-" + index} hidden={active !== index}><p>{entry.answer}</p></div>
+                    <Collapse open={active === index} id={"faq-answer-" + index}>
+                        <div className="design-faq__answer"><p>{entry.answer}</p></div>
+                    </Collapse>
                 </li>)}
             </ol> : <p className="design-policy" role="status">검색 결과가 없습니다.</p>}
             {tab === "notices" && !query && <nav className="design-faq__pages" aria-label="공지사항 페이지">
@@ -70,7 +73,7 @@ export function SupportPage() {
             {supportCards.map(([title, description], index) => {
                 const path = supportPaths[index];
                 const content = <><h2>{title}</h2><p>{description}</p>{path && <span className="design-support__arrow">
-                    <img src={index === 0 ? "/images/figma-pages/support-arrow-primary.svg" : "/images/figma-pages/support-arrow.svg"} alt="" />
+                    <img src={index === 0 ? "/images/support/arrow-primary.svg" : "/images/support/arrow.svg"} alt="" />
                 </span>}</>;
                 return path ?
                     <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
@@ -87,13 +90,51 @@ const warrantyBenefits = [
     ["피드백 제공 및 보상", "등록된 제품에 대한 의견을 공유해 주세요."],
 ];
 
+// 히어로 오른쪽: 제품 PIN 입력 → 마이페이지 제품 등록 팝업 (PIN이 시리얼 칸에 채워짐)
+function PinRegister() {
+    const navigate = useNavigate();
+    const [pin, setPin] = useState("");
+    const [error, setError] = useState("");
+    const submit = (event: FormEvent) => {
+        event.preventDefault();
+        const value = pin.trim();
+        if (value.length < 4) return setError("제품의 PIN 번호를 정확히 입력해 주세요.");
+        navigate("/mypage?" + new URLSearchParams({ tab: "warranty", pin: value }).toString());
+    };
+    return <form className="design-warranty__register" onSubmit={submit} noValidate>
+        <h1>등록 및 보증</h1>
+        <div className="design-warranty__field">
+            <input type="text" value={pin} aria-label="제품 PIN 번호" placeholder="제품의 PIN 번호를 입력하세요"
+                aria-invalid={!!error} aria-describedby={error ? "warranty-pin-error" : undefined}
+                onChange={(event) => { setPin(event.target.value); setError(""); }} />
+            <button type="submit" className="btn btn--primary">등록</button>
+        </div>
+        {error && <p id="warranty-pin-error" className="design-warranty__error" role="alert">{error}</p>}
+    </form>;
+}
+
+function WarrantyAccordion() {
+    const [open, setOpen] = useState<number>();
+    return <div className="design-panel design-accordion">
+        {warrantyQuestions.map((question, index) => {
+            const isOpen = open === index;
+            return <div className={"design-accordion__item" + (isOpen ? " is-open" : "")} key={question}>
+                <button type="button" className="design-accordion__summary" aria-expanded={isOpen}
+                    aria-controls={"warranty-answer-" + index} onClick={() => setOpen(isOpen ? undefined : index)}>
+                    {question}<img src="/images/warranty/plus.svg" alt="" />
+                </button>
+                <Collapse open={isOpen} id={"warranty-answer-" + index}>
+                    <p className="design-accordion__answer">등록된 보증 안내가 없습니다.</p>
+                </Collapse>
+            </div>;
+        })}
+    </div>;
+}
+
 export function WarrantyPage() {
     return <div className="design-page design-warranty">
         <PageHero src={figmaImage("1404:27724", "Rectangle182")}>
-            <div className="design-warranty__register">
-                <h1>등록 및 보증</h1>
-                <Link className="btn btn--primary" to="/mypage?tab=warranty">제품 등록</Link>
-            </div>
+            <PinRegister />
         </PageHero>
         <div className="design-container">
             <PageHeading title="왜 제품을 등록해야할까요?" as="h2" />
@@ -105,12 +146,7 @@ export function WarrantyPage() {
                 </article>)}
             </div>
             <PageHeading title="Razer 품질 보증 정책" description="도움이 필요하신가요? 걱정하지 마세요! 저희가 도와드리겠습니다." as="h2" />
-            <div className="design-panel design-accordion">
-                {warrantyQuestions.map((question) => <details key={question}>
-                    <summary>{question}<img src="/images/figma-pages/warranty-plus.svg" alt="" /></summary>
-                    <p>등록된 보증 안내가 없습니다.</p>
-                </details>)}
-            </div>
+            <WarrantyAccordion />
         </div>
     </div>;
 }

@@ -1,4 +1,6 @@
+import { useId, useState } from "react";
 import { Link } from "react-router-dom";
+import { Collapse } from "../components/common/Collapse";
 import type { CartItem } from "../types/product";
 import { formatPrice } from "../data/searchData";
 import { money } from "../data/checkoutData";
@@ -8,8 +10,20 @@ export function CheckoutItem({ item }: { item: CartItem }) {
         <img src={item.image} alt="" />
         <div><Link to={"/products/" + item.category + "/" + item.id}>{item.title}</Link>
             <p>{formatPrice(item)}</p>
-            {item.size && <details><summary>상세 정보 표시</summary><p>{item.size}</p></details>}
+            {item.size && <ItemDetail text={item.size} />}
         </div>
+    </div>;
+}
+
+// 상세 정보 표시 (누르면 아래로 스르륵)
+function ItemDetail({ text }: { text: string }) {
+    const [open, setOpen] = useState(false);
+    const id = useId();
+    return <div className={"design-checkout__detail" + (open ? " is-open" : "")}>
+        <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+            {open ? "상세 정보 숨기기" : "상세 정보 표시"}
+        </button>
+        <Collapse open={open} id={id}><p>{text}</p></Collapse>
     </div>;
 }
 

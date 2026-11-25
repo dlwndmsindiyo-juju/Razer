@@ -36,7 +36,7 @@ import { productData } from "../data/productData";
 type MypageModal =
     | { type: "tracking"; order: Order }
     | { type: "return"; order: Order }
-    | { type: "register"; item?: RegisteredProduct }
+    | { type: "register"; item?: RegisteredProduct; serial?: string }
     | { type: "support"; item: RegisteredProduct }
     | { type: "done"; title: string; text: string }
     | null;
@@ -382,9 +382,17 @@ const productNames = [...new Set(productData.map((p) => p.title.split(" - ")[0])
 // - 위시리스트: /mypage?view=wishlist (탭은 마이페이지)
 export const MyPage = () => {
     const { user, authReady, onUpdateProfile } = useAuthStore();
-    const [modal, setModal] = useState<MypageModal>(null);
     const { hearts, orderList, registeredList } = useProductStore();
     const [searchParams, setSearchParams] = useSearchParams();
+    // 등록 및 보증 페이지에서 PIN 입력 후 넘어오면 (?tab=warranty&pin=…) 제품 등록 팝업을 바로 열기
+    const pinParam = searchParams.get("pin");
+    const [modal, setModal] = useState<MypageModal>(() => (pinParam ? { type: "register", serial: pinParam } : null));
+    useEffect(() => {
+        if (!pinParam) return;
+        const next = new URLSearchParams(searchParams);
+        next.delete("pin");
+        setSearchParams(next, { replace: true });
+    }, [pinParam, searchParams, setSearchParams]);
     const tabParam = searchParams.get("tab");
     const tab: MypageTab = mypageTabs.some((t) => t.key === tabParam) ? (tabParam as MypageTab) : "home";
     const orderParam = searchParams.get("order");
@@ -567,7 +575,7 @@ export const MyPage = () => {
             />
         )}
         {modal?.type === "register" && (
-            <RegisterModal initial={modal.item} productNames={productNames} onClose={closeModal} onSave={(values) => saveRegistered(modal.item, values)} />
+            <RegisterModal initial={modal.item} serial={modal.serial} productNames={productNames} onClose={closeModal} onSave={(values) => saveRegistered(modal.item, values)} />
         )}
         {modal?.type === "support" && (
             <SupportModal

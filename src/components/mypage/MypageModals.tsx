@@ -787,18 +787,20 @@ const formatDateInput = (value: string) => {
 
 export const RegisterModal = ({
     initial,
+    serial: initialSerial,
     productNames,
     onClose,
     onSave,
 }: {
     initial?: RegisteredProduct;
+    serial?: string; // 등록 및 보증 페이지에서 입력한 PIN (시리얼 번호 칸에 미리 채움)
     productNames: string[]; // 모델명 자동완성
     onClose: () => void;
     onSave: (values: { title: string; serial: string; purchasedAt: string; proof?: string }) => Promise<void>;
 }) => {
     const proofRef = useRef<HTMLInputElement>(null);
     const [title, setTitle] = useState(initial?.title.split(" - ")[0] ?? "");
-    const [serial, setSerial] = useState(initial?.serial ?? "");
+    const [serial, setSerial] = useState(initial?.serial ?? initialSerial ?? "");
     const [purchasedAt, setPurchasedAt] = useState(initial?.purchasedAt ? formatOrderDate(initial.purchasedAt) : "");
     const [proof, setProof] = useState("");
     const { busy, error, setError, run } = useSubmit();

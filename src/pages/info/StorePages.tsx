@@ -50,7 +50,7 @@ export function ExclusivesPage() {
     const [category, setCategory] = useState<ProductCategory>("mice");
     const hardwareProducts = exclusiveProducts.filter((item) => item.category === category || item.categories?.includes(category));
     return <div className="design-page design-exclusive">
-        <PageHero src={figmaImage(exclusiveFrame, "Rectangle197")} mobileSrc="/images/figma-pages/exclusive-hero-mobile.png" />
+        <PageHero src={figmaImage(exclusiveFrame, "Rectangle197")} mobileSrc="/images/exclusive/hero-mobile.png" />
         <div className="design-container">
             <PageHeading title="Razer 독점" description="공식 온라인 스토어에서만 구매할 수 있는 고유한 제품을 알아보세요" />
             <div className="design-grid design-grid--two design-exclusive__featured">
@@ -75,7 +75,7 @@ export function ExclusivesPage() {
                         <h3>{title}</h3>
                         <p>{description}</p>
                         <Link className="design-explore" to={collab ? getCollabPath(collab.slug) : "/products/collab"}>
-                            EXPLORE <img src="/images/figma-pages/explore-primary.svg" alt="" />
+                            EXPLORE <img src="/images/common/explore-primary.svg" alt="" />
                         </Link>
                     </article>;
                 })}
@@ -109,7 +109,7 @@ export function MembershipPage() {
                     <div><p>{copy[23]}</p><h2>{copy[24]}</h2><p>{copy[25]}</p></div>
                 </div>
                 <ul>{copy.slice(14, 17).map((line, index) => <li key={line}>
-                    <img src={"/images/figma-pages/" + ["membership-promo-email.svg", "membership-cart.svg", "membership-info.svg"][index]} alt="" />
+                    <img src={"/images/membership/" + ["promo-email.svg", "cart.svg", "info.svg"][index]} alt="" />
                     {line}
                 </li>)}</ul>
                 <Link className="btn btn--primary" to="/signup">멤버십 가입하기</Link>
@@ -131,7 +131,7 @@ export function MembershipPage() {
                     <img src={figmaImage(membershipFrame, "Rectangle206")} alt="" loading="lazy" />
                     <h2>{copy[27 + reward]}</h2><p aria-live="polite">{copy[29 + reward]}</p>
                     <div className="design-membership__reward-pages" aria-label="리워드 유형">
-                        <img src={"/images/figma-pages/membership-reward-" + (reward === 0 ? "first" : "second") + ".svg"} alt="" />
+                        <img src={"/images/membership/reward-" + (reward === 0 ? "first" : "second") + ".svg"} alt="" />
                         {[0, 1].map((index) => <button type="button" key={index} aria-label={copy[31 + index]}
                             aria-pressed={reward === index} onClick={() => setReward(index)} />)}
                     </div>

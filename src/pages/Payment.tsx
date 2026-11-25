@@ -73,14 +73,14 @@ export function Payment() {
             actions={<button type="button" className="btn btn--primary" onClick={() => setCardOpen(false)}>등록</button>}>
             <div className="design-payment-preview">
                 <div className="design-payment-preview__carousel" aria-hidden="true">
-                    <span><img src="/images/figma-pages/rail-left.svg" alt="" /></span>
-                    <div><strong><img src="/images/figma-pages/payment-add-card.svg" alt="" /> 다른 카드 등록하기</strong></div>
-                    <span><img src="/images/figma-pages/rail-right.svg" alt="" /></span>
+                    <span><img src="/images/common/rail-left.svg" alt="" /></span>
+                    <div><strong><img src="/images/checkout/payment-add-card.svg" alt="" /> 다른 카드 등록하기</strong></div>
+                    <span><img src="/images/common/rail-right.svg" alt="" /></span>
                 </div>
                 <div className="design-payment-preview__fields">
                     <p><small>카드번호</small>0000 0000 0000 0000</p>
                     <div><p><small>유효기간</small>MM/YY</p><p><small>비밀번호 앞 두자리</small>●●</p></div>
-                    <p className="design-payment-preview__installment">일시불 <img src="/images/figma-pages/payment-installment-chevron.svg" alt="" /></p>
+                    <p className="design-payment-preview__installment">일시불 <img src="/images/checkout/payment-installment-chevron.svg" alt="" /></p>
                 </div>
             </div>
         </Modal>}

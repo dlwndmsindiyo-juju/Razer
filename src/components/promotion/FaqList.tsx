@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import type { CollabFaq } from "../../data/collabData";
+import { Collapse } from "../common/Collapse";
 
 interface FaqListProps {
     items: CollabFaq[];
@@ -7,7 +8,7 @@ interface FaqListProps {
     defaultOpen?: number | null;
 }
 
-// 자주 묻는 질문 (누르면 답변 열림 · 다시 누르면 닫힘)
+// 자주 묻는 질문 (누르면 답변이 아래로 스르륵 열림 · 다시 누르면 닫힘)
 export const FaqList = ({ items, numbered = false, defaultOpen = null }: FaqListProps) => {
     const [open, setOpen] = useState<number | null>(defaultOpen);
     const baseId = useId();
@@ -30,11 +31,9 @@ export const FaqList = ({ items, numbered = false, defaultOpen = null }: FaqList
                             <span className="faq__text">{item.q}</span>
                             <span className="faq__icon" aria-hidden="true" />
                         </button>
-                        {isOpen && (
-                            <p id={panelId} className="faq__answer">
-                                {item.a}
-                            </p>
-                        )}
+                        <Collapse open={isOpen} id={panelId}>
+                            <p className="faq__answer">{item.a}</p>
+                        </Collapse>
                     </li>
                 );
             })}

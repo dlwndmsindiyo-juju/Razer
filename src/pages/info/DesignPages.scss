@@ -1,22 +1,5 @@
 @use "../../variables" as v;
 
-.mega-menu {
-    animation: gnb-submenu-in .2s ease-out;
-}
-
-@keyframes gnb-submenu-in {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .mega-menu {
-        animation: none;
-    }
-}
-
 body:has(main > :is(.design-page, .auth)) {
     min-width: 0;
 
@@ -522,7 +505,7 @@ a.design-support:hover {
     border-radius: v.$radius-pill;
     padding: 1rem 1.5rem 1rem 3rem;
     color: v.$neutral-color-white;
-    background: v.$neutral-color-500 url("/images/figma-pages/faq-search.svg") 1rem center no-repeat;
+    background: v.$neutral-color-500 url("/images/faq/search.svg") 1rem center no-repeat;
 }
 
 .design-faq {
@@ -626,30 +609,56 @@ a.design-support:hover {
     text-align: center;
 }
 
+// 등록 및 보증 히어로: PIN 입력 + 등록 버튼 (한 박스 안)
 .design-warranty__register {
+    margin-left: auto;
+    width: min(100%, 34rem);
+}
+
+.design-warranty__field {
     display: flex;
     align-items: center;
     gap: .5rem;
-    margin-left: auto;
-    width: min(100%, 544px);
+    padding: .25rem;
+    border: 1px solid v.$neutral-color-500;
+    border-radius: v.$radius-sm;
+    background: rgba(0, 0, 0, .6);
+    transition: border-color .2s;
+
+    &:focus-within {
+        border-color: v.$neutral-color-100;
+    }
 
     input {
-        @include v.text-normal;
+        @include v.body-16-r;
         flex: 1;
         min-width: 0;
-        padding: .875rem;
-        border: 1px solid v.$grey-4;
+        padding: .625rem 1.25rem;
+        border: 0;
         color: v.$neutral-color-white;
-        background: v.$body-bg;
+        background: transparent;
     }
 
     input::placeholder {
-        color: v.$grey-2;
+        color: v.$neutral-color-200;
     }
 
     .btn {
-        @include v.text-small-bold;
+        @include v.label-14-sb;
+        flex: none;
+        height: 3rem;
+        padding: 0 3rem;
+        border-radius: v.$radius-sm;
     }
+}
+
+.design-warranty__error {
+    margin-top: .5rem;
+    @include v.body-14-r;
+    color: #D63F46;
+}
+
+.design-warranty__register {
 
     h1 {
         position: absolute;
@@ -672,19 +681,37 @@ a.design-support:hover {
     padding: 0;
     background: transparent;
 
-    details {
+    &__item {
         margin-bottom: 1rem;
         padding: 1.5rem;
         background: v.$neutral-color-panel;
     }
 
-    summary {
+    &__summary {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 12px;
+        width: 100%;
+        color: inherit;
+        text-align: left;
         cursor: pointer;
         @include v.heading-20-sb;
+
+        img {
+            flex: none;
+            transition: transform .3s ease;
+        }
+    }
+
+    // 열리면 + 가 45도 돌아서 x
+    &__item.is-open &__summary img {
+        transform: rotate(45deg);
+    }
+
+    &__answer {
+        padding-top: 1rem;
+        color: v.$neutral-color-100;
     }
 
     a {
@@ -711,27 +738,35 @@ a.design-support:hover {
         border-radius: v.$radius-md;
         display: grid;
         place-items: center;
-        width: clamp(48px, 8vw, 120px);
+        width: clamp(48px, 5vw, 5.5rem);
         aspect-ratio: 1;
         background: v.$neutral-color-700;
     }
 
     img {
         display: block;
-        max-height: 85%;
-        max-width: 85%;
+        max-height: 55%;
+        max-width: 55%;
+    }
+
+    // ALL 로고: 이미지 배경 없이 모양만 (기본 회색 · 선택 시 검정)
+    .design-tech__logo {
+        width: 55%;
+        aspect-ratio: 1;
+        background: v.$neutral-color-100;
+        mask: url("/icons/logo.svg") center / contain no-repeat;
     }
 
     a[aria-current="page"] .design-tech__icon {
         background: v.$main-primary-color;
     }
 
-    a[aria-current="page"]:not(:first-child) img {
+    a[aria-current="page"] img {
         filter: brightness(0);
     }
 
-    a:first-child:not([aria-current="page"]) img {
-        filter: grayscale(1) brightness(.6);
+    a[aria-current="page"] .design-tech__logo {
+        background: v.$body-bg;
     }
 }
 
@@ -798,72 +833,289 @@ a.design-support:hover {
     }
 }
 
-.design-about {
-    &__hero {
-        display: grid;
-        align-items: end;
-        text-align: center;
-        min-height: clamp(14rem, 55vw, 65rem);
-        background: v.$neutral-color-black;
-    }
+// =========================================================
+// Razer 소개 (About Me) · 영문 타이틀은 Stalinist One (v.display-60-r)
+// =========================================================
+// 영문 디스플레이 서체 (한글은 Pretendard로 자동 표시)
+.design-display {
+    font-family: v.$font-family-display;
+    font-weight: v.$font-weight-regular;
+}
 
-    &__hero h1 {
-        background: v.$neutral-color-panel;
-        padding: .625rem 1rem;
+// 본문: 영문 · 숫자만 디스플레이 서체 (시안처럼 한글은 Pretendard)
+.design-display-text {
+    font-family: v.$font-family-display;
+    font-size: 1.25rem;
+    line-height: 2rem;
+    color: v.$neutral-color-white;
+    word-break: keep-all;
+
+    p+p {
+        margin-top: 3rem;
     }
+}
+
+.design-about {
+    padding-bottom: 0;
 
     section[id] {
         scroll-margin-top: 8rem;
     }
 
-    &__nav {
-        padding: 1rem;
-        background: v.$neutral-color-panel;
+    &__hero {
+        display: grid;
+        align-items: end;
+        text-align: center;
+        min-height: clamp(14rem, 56.25vw, 67.5rem);
+        background: v.$neutral-color-black;
+    }
+
+    &__hero h1 {
+        padding: 1.25rem 1rem;
+        background: v.$neutral-color-700;
+        font-family: v.$font-family-display;
+        font-size: 1.5rem;
+        font-weight: v.$font-weight-regular;
+        line-height: 1.5rem;
+    }
+
+    // 섹션 안쪽 폭 (1920 기준 좌우 240)
+    &__block {
+        width: min(100% - 3rem, 90rem);
+        margin-inline: auto;
     }
 
     &__intro {
-        padding-block: 3rem;
+        width: min(100% - 3rem, 90rem);
+        margin-inline: auto;
+        padding-top: 5.75rem;
         text-align: center;
+
+        img {
+            display: block;
+            margin: 0 auto 2.5rem;
+            width: min(100%, 37.5rem);
+            aspect-ratio: 600 / 484;
+            object-fit: cover;
+            border-radius: v.$radius-sm;
+        }
+
+        p {
+            @include v.heading-20-sb;
+            color: v.$neutral-color-100;
+            word-break: keep-all;
+        }
     }
 
-    &__intro img {
+    &__intro--after {
+        padding-top: 3.25rem;
+    }
+
+    &__title {
+        @include v.display-60-r;
+        color: v.$main-primary-color;
+        margin-bottom: 2.5rem;
+
+        // 한글 부분도 같은 크기 (Pretendard)
+        font-family: v.$font-family-base;
+    }
+
+    p.design-about__lead {
+        @include v.heading-20-sb;
+        margin-bottom: 1.75rem;
+        color: v.$neutral-color-white;
+    }
+
+    &__tag {
+        color: v.$main-primary-color;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    &__banner {
         display: block;
-        margin-inline: auto;
-        width: min(100%, 598px);
-        aspect-ratio: 598 / 481;
+        width: 100%;
+        height: clamp(12rem, 34.375vw, 41.25rem);
+        margin-top: 4rem;
         object-fit: cover;
     }
-}
 
-.design-years {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    justify-content: start;
-}
-
-.design-timeline {
-    min-height: 14rem;
-
-    h2 {
+    // 제목 (지속가능성 · 수상 · 채용 = Pretendard 44 / LEADERSHIP · zVENTURES = Stalinist 60)
+    &__heading {
+        @include v.display-44-b;
+        font-weight: v.$font-weight-regular;
         color: v.$main-primary-color;
+        word-break: keep-all;
+
+        &.design-display {
+            @include v.display-60-r;
+        }
+    }
+
+    &__heading--light {
+        @include v.display-60-r;
+        font-family: v.$font-family-base;
+        color: v.$neutral-color-white;
+    }
+
+    // ---------- 연도 타임라인 ----------
+    &__timeline {
+        padding-top: 13.75rem;
+    }
+
+    // 선택한 연도가 가운데 · 좌우 스크롤
+    &__years {
+        display: flex;
+        gap: 2.5rem;
+        overflow-x: auto;
+        padding: 0 50vw .75rem;
+        scrollbar-gutter: stable;
+
+        button {
+            flex: none;
+            @include v.display-60-r;
+            color: v.$neutral-color-300;
+            transition: color .3s ease;
+
+            &:hover {
+                color: v.$neutral-color-100;
+            }
+
+            &[aria-pressed="true"] {
+                color: v.$main-primary-color;
+            }
+        }
+    }
+
+    &__milestone {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 37.5rem);
+        gap: 4rem;
+        align-items: start;
+        margin-top: 5rem;
+        min-height: 30rem;
+
+        .design-display-text {
+            max-width: 50rem;
+            margin-top: 5rem;
+        }
+
+        img {
+            width: 100%;
+            aspect-ratio: 600 / 480;
+            object-fit: cover;
+            border-radius: v.$radius-sm;
+        }
+    }
+
+    &__empty {
+        @include v.body-16-r;
+        margin-top: 3rem;
+        color: v.$neutral-color-100;
+    }
+
+    // ---------- 수상 (가로 스크롤) ----------
+    &__awards {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: min(38.875rem, 80vw);
+        gap: 4.625rem;
+        overflow-x: auto;
+        // 오른쪽은 화면 끝까지 이어지게 (시안처럼 다음 카드가 걸쳐 보임)
+        margin: 2.5rem calc((100% - 100vw) / 2) 0 0;
+        padding: 0 calc((100vw - 100%) / 2) 1rem 0;
+        scroll-snap-type: x mandatory;
+    }
+
+    &__award {
+        scroll-snap-align: start;
+
+        h3 {
+            margin: 2.75rem 0 1rem;
+            font-size: 1.25rem;
+            line-height: 1.5rem;
+            color: v.$main-primary-color;
+        }
+
+        .design-display-text {
+            font-size: 1rem;
+            line-height: 1.625rem;
+        }
+    }
+
+    // ---------- 리더십 ----------
+    &__leaders {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4rem 1.5rem;
+        margin-top: 5rem;
+    }
+
+    #awards,
+    #leadership {
+        margin-top: 10rem;
+    }
+
+    // 버튼 (초록 테두리)
+    &__button {
+        @include v.label-16-sb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        min-width: 12.75rem;
+        height: 4.125rem;
+        padding: 0 1.5rem;
+        border: 1px solid v.$main-primary-color;
+        border-radius: v.$radius-sm;
+        color: v.$main-primary-color;
+        transition: background-color .2s, color .2s;
+
+        &:hover {
+            background-color: v.$main-primary-color;
+            color: v.$body-bg;
+        }
     }
 }
 
+// 배너 + 제목 · 본문 · 버튼 (지속가능성 · 채용 · zVENTURES)
 .design-brand-section {
-    margin-top: clamp(3rem, 8vw, 9rem);
-}
+    margin-top: 13.5rem;
 
-.design-brand-section__copy {
-    padding-block: 3rem;
+    &__banner {
+        position: relative;
 
-    h2 {
-        color: v.$main-primary-color;
-        font-size: 2rem;
+        img {
+            display: block;
+            width: 100%;
+            height: clamp(12rem, 34.375vw, 41rem);
+            object-fit: cover;
+        }
     }
 
-    p {
-        margin-block: 1rem;
-        max-width: 68ch;
+    &__overlay {
+        position: absolute;
+        top: 50%;
+        left: 17.5%;
+        transform: translateY(-50%);
+        @include v.display-44-b;
+        color: v.$neutral-color-white;
+    }
+
+    &__copy {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 3rem;
+        padding: 5.5rem 0 8rem;
+
+        >div {
+            max-width: 51rem;
+        }
+
+        .design-display-text {
+            margin-top: 3.5rem;
+        }
     }
 }
 
@@ -879,16 +1131,46 @@ a.design-support:hover {
     }
 }
 
+// 리더 카드 (첫 번째는 넓게 + 소개)
 .design-leader {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 3.75rem;
+    padding: 3.75rem;
+    border-radius: v.$radius-sm;
+    background: v.$neutral-color-700;
 
     img {
-        width: 4rem;
+        flex: none;
+        width: 6.25rem;
         aspect-ratio: 1;
         object-fit: cover;
-        border-radius: 50%;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: v.$font-weight-medium;
+        line-height: 2rem;
+    }
+
+    p {
+        margin-top: .75rem;
+        font-size: 1.5rem;
+        font-weight: v.$font-weight-semibold;
+        line-height: 2rem;
+        color: v.$main-primary-color;
+    }
+
+    &--wide {
+        grid-column: 1 / -1;
+    }
+
+    p.design-leader__desc {
+        margin: 0 0 0 1.5rem;
+        max-width: 48rem;
+        font-weight: v.$font-weight-medium;
+        color: v.$neutral-color-200;
+        word-break: keep-all;
     }
 }
 
@@ -898,6 +1180,7 @@ a.design-support:hover {
     width: min(100%, 500px);
 }
 
+// 화면 너비 전체로 흘러감 (섹션 안쪽에 가두지 않음)
 .design-team-logos {
     --logo-gap: clamp(18px, 3vw, 42px);
     --logo-size: clamp(52px, 7vw, 100px);
@@ -932,16 +1215,9 @@ a.design-support:hover {
         height: auto;
     }
 
-    &__viewport:is(:hover, :focus-within, [data-paused="true"]) &__track {
+    // 마우스를 올리거나 키보드로 들어오면 멈춤
+    &__viewport:is(:hover, :focus-within) &__track {
         animation-play-state: paused;
-    }
-
-    &__control {
-        display: block;
-        margin: 12px 0 0 auto;
-        padding: 6px 8px;
-        @include v.caption-12-r;
-        color: v.$neutral-color-100;
     }
 }
 
@@ -960,8 +1236,7 @@ a.design-support:hover {
         animation: none;
     }
 
-    .design-team-logos__row[aria-hidden="true"],
-    .design-team-logos__control {
+    .design-team-logos__row[aria-hidden="true"] {
         display: none;
     }
 }
@@ -998,9 +1273,6 @@ a.design-support:hover {
         grid-template-columns: repeat(4, minmax(0, 301px));
     }
 
-    &__equipment .design-pill {
-        margin-bottom: 14px;
-    }
 }
 
 @media (max-width: 720px) {
@@ -1047,10 +1319,12 @@ a.design-support:hover {
             gap: 10px;
         }
 
-        &__equipment .design-pill {
-            margin-bottom: 6px;
-            padding: 5px;
+        &__equipment .design-recommendation__badge {
+            top: 6px;
+            left: 6px;
+            padding: 3px 6px;
             font-size: 9px;
+            line-height: 12px;
         }
 
         .design-tabs {
@@ -1121,8 +1395,20 @@ a.design-support:hover {
         }
 
         p,
-        details {
+        .design-checkout__detail {
             margin-top: .5rem;
+        }
+    }
+
+    &__detail button {
+        @include v.body-14-r;
+        color: v.$neutral-color-100;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        cursor: pointer;
+
+        &:hover {
+            color: v.$neutral-color-white;
         }
     }
 
@@ -1355,6 +1641,7 @@ a.design-support:hover {
 }
 
 .design-recommendation {
+    position: relative;
     min-width: 0;
     min-height: 416px;
     border-radius: v.$radius-sm;
@@ -1391,9 +1678,24 @@ a.design-support:hover {
         @include v.body-14-r;
     }
 
+    // e스포츠 프로 장비: 제목 왼쪽 정렬 · 화이트
     &--featured h3 {
-        color: v.$main-primary-color;
-        text-align: center;
+        @include v.body-16-sb;
+        color: v.$neutral-color-white;
+        text-align: left;
+    }
+
+    // 선수 뱃지 (카드 안 왼쪽 위)
+    &__badge {
+        position: absolute;
+        top: 1.25rem;
+        left: 1.25rem;
+        z-index: 1;
+        padding: .375rem .75rem;
+        border-radius: v.$radius-pill;
+        background: v.$main-primary-color;
+        color: v.$body-bg;
+        @include v.label-14-sb;
     }
 }
 
@@ -2560,17 +2862,20 @@ a.design-support:hover {
 
     .design-warranty__register {
         width: min(100%, 272px);
-        gap: 2px;
     }
 
-    .design-warranty__register input {
+    .design-warranty__field {
+        padding: 2px;
+    }
+
+    .design-warranty__field input {
         height: 28px;
         padding: 4px 8px;
         @include v.caption-12-r;
     }
 
-    .design-warranty__register .btn {
-        min-height: 28px;
+    .design-warranty__field .btn {
+        height: 28px;
         padding: 4px 12px;
         @include v.caption-12-r;
     }
@@ -2580,13 +2885,13 @@ a.design-support:hover {
         padding: 8px 14px;
     }
 
-    .design-warranty .design-accordion details {
+    .design-warranty .design-accordion__item {
         margin: 0;
         padding: 12px 4px;
         background: transparent;
     }
 
-    .design-warranty .design-accordion summary {
+    .design-warranty .design-accordion__summary {
         @include v.caption-12-r;
     }
 
@@ -2919,4 +3224,4 @@ a.design-support:hover {
     &__thumbs button {
         flex-basis: 14%;
     }
-}
+}
