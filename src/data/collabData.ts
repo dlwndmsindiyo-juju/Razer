@@ -185,7 +185,7 @@ export const collabs: Collab[] = [
         slug: "joola",
         ended: true, // 종료된 이벤트
         cover: "/images/promotion/collab/joola.webp",
-        name: "줄라",
+        name: "JOOLA",
         ko: "줄라 (JOOLA)",
         match: /JOOLA/i,
         headline: "Performance Pulse,\n당신의 셋업으로.",
