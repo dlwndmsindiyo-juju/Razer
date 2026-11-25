@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { useAuthStore } from "../../store/useAuthStore";
 import { ConfirmModal, RegisterModal, serialOnlyText, toSerial } from "../../components/mypage/MypageModals";
 import { registerProductNames, useRegisterProduct, type RegisterValues } from "../../types/useRegisterProduct";
-import { accountHelp, warrantyHelp } from "../../data/customerFaq";
+import { accountHelp, orderHelp, privacyHelp, restorifyHelp, returnsHelp, shippingHelp, warrantyHelp } from "../../data/customerFaq";
 import { supportCards } from "../../data/editorialData";
 import { warrantyBenefits, warrantyFaq } from "../../data/warrantyData";
 import { faqImages, supportImages, warrantyImages } from "../../data/pageImages";
@@ -12,11 +12,19 @@ import { Collapse } from "../../components/common/Collapse";
 
 const servicePath = "/info/service/";
 const tabs = [
-    ["notices", "공지사항"], ["questions", "자주 묻는 질문 FAQ"], ["terms", "이용약관"],
-    ["contact", "1 : 1 문의"], ["privacy", "개인 정보 처리 방침"], ["returns", "교환 및 환불"],
+    ["questions", "자주 묻는 질문"], ["shipping", "배송 정보"], ["privacy", "개인정보 보안"],
+    ["restorify", "복원 (Restorify)"], ["returns", "교환 및 환불"], ["terms", "이용약관"], ["contact", "1 : 1 문의"],
 ] as const;
-const faqEntries = [...warrantyHelp, ...accountHelp];
-const warrantyTerms = warrantyHelp.filter(({ id }) => id === "warranty-7");
+const faqTopics = {
+    questions: [...orderHelp, ...warrantyHelp],
+    shipping: shippingHelp,
+    privacy: [...privacyHelp, ...accountHelp],
+    restorify: restorifyHelp,
+    returns: returnsHelp,
+    terms: warrantyHelp.filter(({ id }) => id === "warranty-7"),
+    contact: [],
+};
+const faqEntries = [...new Map(Object.values(faqTopics).flat().map((entry) => [entry.id, entry])).values()];
 
 export function FaqPage() {
     const [params, setParams] = useSearchParams();
@@ -24,7 +32,7 @@ export function FaqPage() {
     const [active, setActive] = useState<string>();
     const tab = tabs.find(([key]) => key === params.get("topic"))?.[0] ?? "questions";
     const normalizedQuery = query.trim().toLowerCase();
-    const entries = normalizedQuery || tab === "questions" ? faqEntries : tab === "terms" ? warrantyTerms : [];
+    const entries = normalizedQuery ? faqEntries : faqTopics[tab];
     const results = entries.filter(({ question, answer }) =>
         (question + " " + answer).toLowerCase().includes(normalizedQuery),
     );

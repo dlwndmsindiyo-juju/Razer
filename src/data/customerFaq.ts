@@ -1,3 +1,35 @@
+// Razer 공식 스토어 도움말과 한국 반품 정책의 요약입니다.
+export const orderHelp = [
+    { id: "order-status", question: "주문 상태는 어디에서 확인하나요?", answer: "Razer.com에서 구매했다면 주문 내역에서 주문 처리 상태를 확인할 수 있습니다. 출고가 완료되면 발송 확인 이메일도 전송됩니다." },
+    { id: "order-change", question: "주문한 상품이나 결제 정보를 변경할 수 있나요?", answer: "접수된 주문은 곧바로 물류 처리 단계로 넘어가므로 주문 내용을 수정하기 어렵습니다. 변경이 필요하다면 주문 번호를 준비해 구매처에 문의하세요." },
+    { id: "order-payment", question: "어떤 결제 수단을 사용할 수 있나요?", answer: "결제 화면에 표시되는 수단 중에서 선택할 수 있습니다. 사용 가능한 카드와 간편 결제는 국가나 스토어에 따라 달라질 수 있습니다." },
+];
+
+export const shippingHelp = [
+    { id: "shipping-tracking", question: "배송 조회와 운송장 번호는 어디에서 확인하나요?", answer: "상품이 배송업체에 인계되면 발송 확인 이메일을 받습니다. Razer.com 주문 내역의 배송 정보에서도 배송 상태와 도착 예정일을 확인할 수 있습니다." },
+    { id: "shipping-estimate", question: "배송비와 도착 예정일은 어떻게 확인하나요?", answer: "상품과 배송지를 선택한 뒤 결제 화면에서 이용 가능한 배송 옵션과 비용을 확인하세요. 출고 뒤에는 배송업체의 조회 화면에서 도착 예정일을 확인할 수 있습니다." },
+    { id: "shipping-split", question: "한 주문의 상품이 따로 도착할 수도 있나요?", answer: "상품이 서로 다른 창고에서 출고되면 여러 건으로 나뉘어 배송될 수 있습니다. 각 배송 건의 도착 날짜와 운송장 번호를 따로 확인하세요." },
+    { id: "shipping-address", question: "주문 후 배송지나 배송 방법을 변경할 수 있나요?", answer: "주문이 접수되면 창고에서 바로 준비를 시작하므로 배송지나 배송 옵션을 변경하기 어렵습니다. 주문 전에 주소와 배송 옵션을 확인하세요." },
+    { id: "shipping-backorder", question: "재고가 없는 상품은 언제 출고되나요?", answer: "일시 품절로 출고가 보류된 상품은 발송이 가능해지면 이메일로 안내됩니다. 같은 주문의 다른 상품은 먼저 출고될 수 있습니다." },
+    { id: "shipping-customs", question: "해외 배송에는 추가 비용이 있나요?", answer: "배송지에 따라 세금, 관세, 통관 수수료가 부과될 수 있습니다. 배송업체가 통관용 서류를 추가로 요청할 수도 있습니다." },
+];
+
+export const privacyHelp = [
+    { id: "privacy-policy", question: "Razer는 개인정보를 어떻게 처리하나요?", answer: "Razer의 고객 개인정보 보호정책은 계정과 서비스 이용 중 수집하는 정보, 이용 목적, 공유 대상과 보호 방법을 설명합니다. 개인정보 열람·정정 요청과 마케팅 수신 거부에 관한 안내도 포함합니다." },
+];
+
+export const restorifyHelp = [
+    { id: "restorify-footprint", question: "제품의 탄소 발자국은 어떻게 계산하나요?", answer: "Restorify는 제품군의 생애주기 평가 자료를 사용해 배출량을 추정합니다. 개별 제품의 상세 자료가 제한될 수 있어 계산 결과는 추정치입니다." },
+    { id: "restorify-credits", question: "Restorify는 어떤 탄소 크레딧을 사용하나요?", answer: "공식 도움말에 따르면 Restorify는 공인 등록기관에서 인증받은 프로젝트의 크레딧을 사용합니다. 프로젝트를 고를 때 추가성, 추적 가능성, 공동 편익, 모니터링 여부를 고려합니다." },
+    { id: "restorify-contribution", question: "참여 금액은 어떻게 사용되나요?", answer: "참여 금액은 탄소 상쇄 프로그램에 사용됩니다. 프로그램은 확보한 크레딧을 등록기관에서 소각 처리해 같은 크레딧이 중복 사용되지 않도록 합니다." },
+];
+
+export const returnsHelp = [
+    { id: "returns-eligibility", question: "Razer.com에서 산 상품은 언제까지 반품할 수 있나요?", answer: "한국 Razer.com의 표준 반품 기간은 제품을 받은 날부터 14일입니다. 제품과 포장은 원래 상태여야 하고 번들이나 사은품도 함께 보내야 할 수 있습니다. 일부 품목과 행사에는 별도 조건이 적용됩니다. 다른 판매처에서 구입했다면 해당 판매처에 문의하세요." },
+    { id: "returns-request", question: "반품은 어떻게 접수하나요?", answer: "Razer 지원에서 Razer.com 주문의 반품 케이스를 접수하고 반품 승인(RMA)을 받은 뒤 발송하세요. 오배송이면 반품 전에 지원팀에 먼저 문의하세요. 환불이 완료될 때까지 발송 영수증을 보관하세요." },
+    { id: "returns-refund", question: "반품 후 환불은 언제 되나요?", answer: "한국 공식 정책에 따르면 반품 센터에서 제품을 받은 뒤 처리에 최대 14영업일이 걸릴 수 있습니다. 처리 후 기존 결제 수단으로 환불되는 데 보통 5~7영업일이 추가로 소요됩니다. 최초 배송비는 표준 환불 금액에서 제외됩니다." },
+];
+
 // 보증 답변은 사용자 제공 원문입니다.
 export const warrantyHelp = [
     {
