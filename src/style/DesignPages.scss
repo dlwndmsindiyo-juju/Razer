@@ -552,9 +552,10 @@ a.design-support:hover {
     .design-faq__answer {
         padding: 24px;
         margin: 10px 36px 10px;
-        min-height: min(1000px, 52vw);
         background: v.$neutral-color-500;
         border-radius: v.$radius-sm;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
     }
 
     .design-faq__pages {
@@ -2650,7 +2651,6 @@ a.design-support:hover {
         }
 
         .design-faq__answer {
-            min-height: 220px;
             padding: 14px;
             margin: 0;
             font-size: 12px;

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { useAuthStore } from "../../store/useAuthStore";
 import { ConfirmModal, RegisterModal, serialOnlyText, toSerial } from "../../components/mypage/MypageModals";
 import { registerProductNames, useRegisterProduct, type RegisterValues } from "../../types/useRegisterProduct";
-import { promotionFaq } from "../../data/collabData";
+import { accountHelp, warrantyHelp } from "../../data/customerFaq";
 import { supportCards } from "../../data/editorialData";
 import { warrantyBenefits, warrantyFaq } from "../../data/warrantyData";
 import { faqImages, supportImages, warrantyImages } from "../../data/pageImages";
@@ -15,51 +15,44 @@ const tabs = [
     ["notices", "공지사항"], ["questions", "자주 묻는 질문 FAQ"], ["terms", "이용약관"],
     ["contact", "1 : 1 문의"], ["privacy", "개인 정보 처리 방침"], ["returns", "교환 및 환불"],
 ] as const;
-const initialQuestion = {
-    question: "에반게리온 컬렉션은 일상에서도 사용할 수 있나요?",
-    answer: "제품별 기능과 호환성은 콜라보 상세 화면에서 확인할 수 있습니다.",
-};
+const faqEntries = [...warrantyHelp, ...accountHelp];
+const warrantyTerms = warrantyHelp.filter(({ id }) => id === "warranty-7");
 
 export function FaqPage() {
     const [params, setParams] = useSearchParams();
     const [query, setQuery] = useState("");
-    const [active, setActive] = useState<number>();
-    const [page, setPage] = useState(1);
-    const tab = tabs.find(([key]) => key === params.get("topic"))?.[0] ?? "notices";
-    const entries = tab === "notices" && !query.trim()
-        ? Array.from({ length: 10 }, () => initialQuestion)
-        : [initialQuestion, ...promotionFaq.map(({ q, a }) => ({ question: q, answer: a }))];
+    const [active, setActive] = useState<string>();
+    const tab = tabs.find(([key]) => key === params.get("topic"))?.[0] ?? "questions";
+    const normalizedQuery = query.trim().toLowerCase();
+    const entries = normalizedQuery || tab === "questions" ? faqEntries : tab === "terms" ? warrantyTerms : [];
     const results = entries.filter(({ question, answer }) =>
-        (question + " " + answer).toLowerCase().includes(query.trim().toLowerCase()),
+        (question + " " + answer).toLowerCase().includes(normalizedQuery),
     );
 
     return <div className="design-page design-faq-page">
         <PageHeading title="FAQ" description="고객 가이드" />
         <input className="design-search" type="search" aria-label="도움말 검색"
             placeholder="검색 또는 도움말 카테고리를 선택하세요."
-            value={query} onChange={(event) => { setQuery(event.target.value); setActive(undefined); setPage(1); }} />
+            value={query} onChange={(event) => { setQuery(event.target.value); setActive(undefined); }} />
         <section className="design-panel design-faq">
             <nav className="design-tabs" aria-label="고객 가이드">
                 {tabs.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key}
-                    onClick={() => { setParams({ topic: key }); setActive(undefined); setPage(1); }}>{label}</button>)}
+                    onClick={() => { setParams({ topic: key }); setQuery(""); setActive(undefined); }}>{label}</button>)}
             </nav>
-            {tab !== "notices" && tab !== "questions" ? <p className="design-policy">등록된 안내가 없습니다.</p> :
-                results.length ? <ol className="design-questions">
-                {results.map((entry, index) => <li key={index}>
-                    <button type="button" aria-expanded={active === index} aria-controls={"faq-answer-" + index}
-                        onClick={() => setActive(active === index ? undefined : index)}>
-                        <span>{entry === initialQuestion ? "01" : String(index + 1).padStart(2, "0")}</span><strong>{entry.question}</strong>
-                        <span className="design-toggle-icon" aria-hidden="true">{active === index ? "−" : <img src={faqImages.plus} alt="" />}</span>
+            {results.length ? <ol className="design-questions">
+                {results.map(({ id, question, answer }, index) => <li key={id}>
+                    <button type="button" aria-expanded={active === id} aria-controls={"faq-answer-" + id}
+                        onClick={() => setActive(active === id ? undefined : id)}>
+                        <span>{String(index + 1).padStart(2, "0")}</span><strong>{question}</strong>
+                        <span className="design-toggle-icon" aria-hidden="true">{active === id ? "−" : <img src={faqImages.plus} alt="" />}</span>
                     </button>
-                    <Collapse open={active === index} id={"faq-answer-" + index}>
-                        <div className="design-faq__answer"><p>{entry.answer}</p></div>
+                    <Collapse open={active === id} id={"faq-answer-" + id}>
+                        <div className="design-faq__answer"><p>{answer}</p></div>
                     </Collapse>
                 </li>)}
-            </ol> : <p className="design-policy" role="status">검색 결과가 없습니다.</p>}
-            {tab === "notices" && !query && <nav className="design-faq__pages" aria-label="공지사항 페이지">
-                {[1, 2, 3].map((number) => <button type="button" key={number} aria-current={page === number ? "page" : undefined}
-                    onClick={() => { setPage(number); setActive(undefined); }}>{number}</button>)}
-            </nav>}
+            </ol> : <p className="design-policy" role="status">
+                {normalizedQuery ? "검색 결과가 없습니다." : "등록된 안내가 없습니다."}
+            </p>}
         </section>
     </div>;
 }
