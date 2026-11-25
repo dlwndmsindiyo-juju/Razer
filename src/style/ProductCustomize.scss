@@ -7,7 +7,7 @@
     color: $neutral-color-white;
 
     button {
-        border: 1px solid transparent;
+        border: 0.0625rem solid transparent;
         border-radius: $radius-sm;
         background: $neutral-color-500;
         color: inherit;
@@ -37,8 +37,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        margin-bottom: clamp(24px, 4vw, 60px);
+        gap: 1rem;
+        margin-bottom: clamp(1.5rem, 4vw, 3.75rem);
 
         a {
             @include body-14-r;
@@ -56,7 +56,7 @@
 
     &__viewer {
         overflow: hidden;
-        border: 1px solid $neutral-color-500;
+        border: 0.0625rem solid $neutral-color-500;
     }
 
     &__workspace {
@@ -71,10 +71,10 @@
         position: relative;
         align-self: stretch;
         min-height: 23.75rem;
-        outline-offset: -4px;
+        outline-offset: -0.25rem;
 
         &:focus-visible {
-            outline: 2px solid $main-primary-color;
+            outline: 0.125rem solid $main-primary-color;
         }
 
         canvas {
@@ -171,14 +171,14 @@
     &__tabs {
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 2px;
+        gap: 0.125rem;
 
         button {
             display: grid;
             justify-items: center;
             align-content: center;
             gap: 0.313rem;
-            padding: 0.313rem 1px;
+            padding: 0.313rem 0.0625rem;
             background: transparent;
             @include label-12-m;
             color: $neutral-color-white;
@@ -225,7 +225,7 @@
             place-items: center;
             width: 2rem;
             height: 2rem;
-            border: 1px solid $neutral-color-200;
+            border: 0.0625rem solid $neutral-color-200;
             border-radius: $radius-sm;
 
             &::before {
@@ -247,7 +247,7 @@
     &__selected {
         display: grid;
         gap: 0.625rem;
-        border-top: 1px solid $neutral-color-500;
+        border-top: 0.0625rem solid $neutral-color-500;
         margin: 1rem 0 0;
         padding-top: 0.75rem;
         @include body-14-r;
@@ -259,7 +259,7 @@
 
         &-value {
             display: block;
-            margin: 2px 0 0;
+            margin: 0.125rem 0 0;
             overflow-wrap: anywhere;
         }
     }
@@ -290,8 +290,8 @@
 
     &__key-status {
         position: absolute;
-        width: 1px;
-        height: 1px;
+        width: 0.0625rem;
+        height: 0.0625rem;
         overflow: hidden;
         clip-path: inset(50%);
     }

@@ -79,7 +79,7 @@ export function EsportsGreenPage() {
                 return <div className={"collection-faq__item" + (open ? " is-open" : "")} key={q}>
                     <button type="button" aria-expanded={open} aria-controls={"green-faq-" + index}
                         onClick={() => setOpenFaq(open ? undefined : index)}>
-                        {q}<img className="collection-faq__icon" src={faqImages.plus} alt="" />
+                        {q}<img className="collection-faq__icon plus-toggle" src={faqImages.plus} alt="" />
                     </button>
                     <Collapse open={open} id={"green-faq-" + index}><p>{a}</p></Collapse>
                 </div>;

@@ -58,7 +58,7 @@ export function FaqPage() {
                     <button type="button" aria-expanded={active === id} aria-controls={"faq-answer-" + id}
                         onClick={() => setActive(active === id ? undefined : id)}>
                         <span>{String((currentPage - 1) * FAQ_PAGE_SIZE + index + 1).padStart(2, "0")}</span><strong>{question}</strong>
-                        <span className="design-toggle-icon" aria-hidden="true"><img src={faqImages.plus} alt="" /></span>
+                        <span className="design-toggle-icon" aria-hidden="true"><img className="plus-toggle" src={faqImages.plus} alt="" /></span>
                     </button>
                     <Collapse open={active === id} id={"faq-answer-" + id}>
                         <div className="design-faq__answer"><p>{answer}</p></div>
@@ -175,7 +175,7 @@ function WarrantyAccordion() {
             return <div className={"design-accordion__item" + (isOpen ? " is-open" : "")} key={q}>
                 <button type="button" className="design-accordion__summary" aria-expanded={isOpen}
                     aria-controls={"warranty-answer-" + index} onClick={() => setOpen(isOpen ? undefined : index)}>
-                    {q}<img src={warrantyImages.plus} alt="" />
+                    {q}<img className="plus-toggle" src={warrantyImages.plus} alt="" />
                 </button>
                 <Collapse open={isOpen} id={"warranty-answer-" + index}>
                     <div className="warranty-answer">{a}</div>
