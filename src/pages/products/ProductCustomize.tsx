@@ -241,11 +241,14 @@ function KeyboardCustomizer({ product }: { product: Product }) {
                                 </button>
                             )}
                             {visibleOptions.length > 0 && (
-                                <dl className="keyboard-customize__selected">
+                                <ul className="keyboard-customize__selected">
                                     {visibleOptions.map(option => (
-                                        <div key={option.label}><dt>{option.label}</dt><dd>{option.value}</dd></div>
+                                        <li key={option.label}>
+                                            <span className="keyboard-customize__selected-label">{option.label}</span>
+                                            <span className="keyboard-customize__selected-value">{option.value}</span>
+                                        </li>
                                     ))}
-                                </dl>
+                                </ul>
                             )}
                         </aside>
                     </div>

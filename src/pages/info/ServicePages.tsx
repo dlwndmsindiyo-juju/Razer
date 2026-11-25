@@ -82,7 +82,7 @@ export function SupportPage() {
                 </span>}</>;
                 return path ?
                     <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
-                    <article className="design-panel design-support" key={title}>{content}</article>;
+                    <div className="design-panel design-support" key={title}>{content}</div>;
             })}
         </div>
     </div>;
@@ -182,13 +182,13 @@ export function WarrantyPage() {
             <section className="design-warranty__section">
                 <h2>왜 제품을 등록해야할까요?</h2>
                 <div className="design-warranty__benefits">
-                    {warrantyBenefits.map(([title, lines], index) => <article key={title}>
+                    {warrantyBenefits.map(([title, lines], index) => <div key={title}>
                         <img src={warrantyImages.benefits[index]} alt="" />
                         <div>
                             <h3>{title}</h3>
                             {lines.map((line) => <p key={line}>{line}</p>)}
                         </div>
-                    </article>)}
+                    </div>)}
                 </div>
             </section>
             <section className="design-warranty__section">

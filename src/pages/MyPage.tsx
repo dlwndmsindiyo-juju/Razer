@@ -109,7 +109,7 @@ const OrderCard = ({ order }: { order: Order }) => {
     const to = item ? `/products/${item.category}/${item.id}` : "/";
     const isShipping = order.status === "배송 중";
     return (
-        <article className="order-card">
+        <div className="order-card">
             <header className="order-card__head">
                 <strong className="order-card__date">{formatOrderDate(order.date)}</strong>
                 <span className="order-card__number">주문번호 {formatOrderNumber(order.id)}</span>
@@ -143,7 +143,7 @@ const OrderCard = ({ order }: { order: Order }) => {
                     <OrderAction order={order} />
                 </div>
             )}
-        </article>
+        </div>
     );
 };
 

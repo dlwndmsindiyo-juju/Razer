@@ -23,7 +23,7 @@ export function Cart() {
             <h1 className="design-visually-hidden">장바구니</h1>
             <label><input type="checkbox" checked={available.length > 0 && selection.length === available.length}
                 disabled={!available.length} onChange={(event) => setExcluded(event.target.checked ? [] : items.map(({ id }) => id))} /> 전체선택</label>
-            {items.map((item) => <article className="design-cart__row" key={item.id}>
+            {items.map((item) => <div className="design-cart__row" key={item.id}>
                 <input type="checkbox" aria-label={item.title + " 선택"} disabled={item.price === null}
                     checked={item.price !== null && !excluded.includes(item.id)}
                     onChange={(event) => setExcluded((previous) => event.target.checked ? previous.filter((id) => id !== item.id) : [...previous, item.id])} />
@@ -36,7 +36,7 @@ export function Cart() {
                     <button type="button" aria-label={item.title + " 삭제"} onClick={() => removeItem(item.id)}>×</button>
                     <strong>{item.price === null ? "가격 미정" : money(item.price * item.count)}</strong>
                 </div>
-            </article>)}
+            </div>)}
             <p className="design-cart__total"><strong>총 결제 금액</strong><strong>{money(amount)}</strong></p>
         </section>
         <aside className="design-stack">

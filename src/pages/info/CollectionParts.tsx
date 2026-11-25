@@ -13,10 +13,10 @@ export const productPath = (id: number) => {
 
 // ProSettings.net 순위 배지 + 출처
 export function AwardSeal({ award }: { award: AwardBadge }) {
-    return <figure className="collection-award">
+    return <div className="collection-award">
         <SafeImage className="collection-award__seal" src={award.image} alt={award.label} fallback={award.label} loading="lazy" />
-        <figcaption>{award.source}</figcaption>
-    </figure>;
+        <p className="collection-award__source">{award.source}</p>
+    </div>;
 }
 
 // 구입: 장바구니에 담고 장바구니로 이동
@@ -33,7 +33,7 @@ export function CollectionProduct({ productId, name, description }: { productId:
     const product = getProductById(productId);
     if (!product) return null;
     const title = name ?? product.title.replace(/\s*-\s*$/, ""); // 끝에 남은 " -" 정리
-    return <article className="collection-product">
+    return <div className="collection-product">
         <Link to={productPath(productId)} className="collection-product__image" tabIndex={-1} aria-hidden="true">
             <SafeImage src={product.image} fallback={title} loading="lazy" />
         </Link>
@@ -43,7 +43,7 @@ export function CollectionProduct({ productId, name, description }: { productId:
             <Link to={productPath(productId)}>자세한 정보 <span aria-hidden="true">›</span></Link>
             <BuyButton productId={productId} />
         </div>
-    </article>;
+    </div>;
 }
 
 // 기능 3칸 (원형 아이콘 · 제목 · 설명)
@@ -54,7 +54,7 @@ export function FeatureList({ features, note }: { features: Feature[]; note?: st
                 {/* 아이콘 모양만 가져와 프라이머리 색으로 칠함 */}
                 <span className="collection-features__icon" aria-hidden="true"
                     style={{ maskImage: `url("${feature.icon}")`, WebkitMaskImage: `url("${feature.icon}")` }} />
-                <h4>{feature.title}</h4>
+                <h3>{feature.title}</h3>
                 <p>{feature.body}</p>
             </li>)}
         </ul>

@@ -4092,7 +4092,7 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
             }
         }
 
-        dl>div {
+        &__spec-list>li {
             display: grid;
             grid-template-columns: 9rem 1fr;
             gap: 1rem;
@@ -4104,12 +4104,12 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
             }
         }
 
-        dt {
+        &__spec-label {
             @include body-14-m;
             color: $neutral-color-100;
         }
 
-        dd {
+        &__spec-value {
             @include body-14-r;
             word-break: keep-all;
         }
@@ -4155,21 +4155,21 @@ $pd-green: #44D62C; // 구매하기 · 선택 테두리 (시안 초록)
         height: 1.5rem;
     }
 
-    &__list>div {
+    &__list>li {
         display: grid;
         grid-template-columns: 12rem 1fr;
         gap: 1rem;
         padding: 0.875rem 0;
         border-top: 1px solid $neutral-color-500;
+    }
 
-        dt {
-            @include body-14-m;
-            color: $neutral-color-100;
-        }
+    &__label {
+        @include body-14-m;
+        color: $neutral-color-100;
+    }
 
-        dd {
-            @include body-14-r;
-        }
+    &__value {
+        @include body-14-r;
     }
 
     &__empty {

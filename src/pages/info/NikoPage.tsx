@@ -54,11 +54,11 @@ function NikoCarousel() {
 
     return <section className="niko__carousel" aria-roledescription="carousel" aria-label="NiKo가 쓰는 장비">
         <div className="niko__slides" style={{ transform: `translateX(${index * -100}%)` }}>
-            {slides.map((slide, i) => <article className="niko__slide" key={slide.image}
+            {slides.map((slide, i) => <div className="niko__slide" key={slide.image}
                 aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`} aria-hidden={i !== index} inert={i !== index}>
                 <SafeImage src={slide.image} alt={slide.alt} fallback={slide.alt} loading="lazy" />
                 <Link className="niko__shop" to={productPath(slide.productId)}>지금 쇼핑하기</Link>
-            </article>)}
+            </div>)}
         </div>
         <div className="niko__carousel-controls">
             {slides.map((slide, i) => <button key={slide.image} type="button" className={i === index ? "is-active" : ""}
@@ -90,12 +90,12 @@ export function NikoPage() {
         {/* 기록 */}
         <section className="niko__records" aria-labelledby="niko-records">
             <h2 id="niko-records">{niko.recordTitle}</h2>
-            <dl>
-                {niko.records.map(([value, label]) => <div key={label}>
-                    <dd>{value}</dd>
-                    <dt>{label}</dt>
-                </div>)}
-            </dl>
+            <ul>
+                {niko.records.map(([value, label]) => <li key={label}>
+                    <span className="niko__record-value">{value}</span>
+                    <span className="niko__record-label">{label}</span>
+                </li>)}
+            </ul>
         </section>
 
         {/* 불꽃을 느껴보세요 + 영상 */}
@@ -108,9 +108,9 @@ export function NikoPage() {
         {/* DEAGLE GOD처럼 플레이하세요 */}
         <section className="collection-lineup" aria-labelledby="niko-gear">
             <h2 id="niko-gear" className="collection-lineup__title">{niko.gearTitle}</h2>
-            <div className="collection-lineup__grid">
-                {niko.gear.map(([id, description]) => <CollectionProduct key={id} productId={id} description={description} />)}
-            </div>
+            <ul className="collection-lineup__grid">
+                {niko.gear.map(([id, description]) => <li key={id}><CollectionProduct productId={id} description={description} /></li>)}
+            </ul>
         </section>
 
         <section className="niko__thanks" aria-labelledby="niko-thanks">
@@ -122,13 +122,15 @@ export function NikoPage() {
         <p className="collection-source">{niko.source}</p>
 
         {/* 다른 페이지 */}
-        <nav className="niko__related" aria-label="관련 페이지">
-            {niko.related.map((item) => <Link key={item.to} to={item.to}>
-                <SafeImage src={item.image} fallback={item.title} loading="lazy" />
-                <strong>{item.title}</strong>
-                <span>{item.body}</span>
-                <em>자세한 정보 <span aria-hidden="true">›</span></em>
-            </Link>)}
-        </nav>
+        <ul className="niko__related" aria-label="관련 페이지">
+            {niko.related.map((item) => <li key={item.to}>
+                <Link to={item.to}>
+                    <SafeImage src={item.image} fallback={item.title} loading="lazy" />
+                    <span className="niko__related-title">{item.title}</span>
+                    <span className="niko__related-body">{item.body}</span>
+                    <span className="niko__related-more">자세한 정보 <span aria-hidden="true">›</span></span>
+                </Link>
+            </li>)}
+        </ul>
     </div>;
 }

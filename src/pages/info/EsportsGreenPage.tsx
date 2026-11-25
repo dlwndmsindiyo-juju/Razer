@@ -22,9 +22,9 @@ export function EsportsGreenPage() {
             <p className="collection-intro__eyebrow">{greenHero.eyebrow}</p>
             <h1 className="collection-intro__title">{greenHero.title}</h1>
             <p className="collection-intro__body">{greenHero.body}</p>
-            <div className="collection-intro__awards">
-                {greenHero.awards.map((award) => <AwardSeal key={award.label} award={award} />)}
-            </div>
+            <ul className="collection-intro__awards">
+                {greenHero.awards.map((award) => <li key={award.label}><AwardSeal award={award} /></li>)}
+            </ul>
         </section>
 
         {/* 최고급 장비. 승리의 색상. */}
@@ -34,14 +34,14 @@ export function EsportsGreenPage() {
                 {platforms.map((option) => <button key={option} type="button" role="tab" aria-selected={option === platform}
                     onClick={() => setPlatform(option)}>{option}</button>)}
             </div>
-            <div className="collection-lineup__grid" role="tabpanel" aria-label={platform + " 제품"}>
-                {greenLineup.tabs[platform].map((id) => <CollectionProduct key={id} productId={id} name={greenLineup.names[id]} />)}
-            </div>
+            <ul className="collection-lineup__grid" role="tabpanel" aria-label={platform + " 제품"}>
+                {greenLineup.tabs[platform].map((id) => <li key={id}><CollectionProduct productId={id} name={greenLineup.names[id]} /></li>)}
+            </ul>
         </section>
 
         {/* 제품별 소개 */}
         {greenSections.map((section) => <section className="collection-section" id={section.id} key={section.id}>
-            <header className="collection-section__head">
+            <div className="collection-section__head">
                 <h2>{section.title}</h2>
                 <p>{section.body}</p>
                 <div className="collection-section__links">
@@ -50,7 +50,7 @@ export function EsportsGreenPage() {
                     </Link>)}
                 </div>
                 {section.award && <AwardSeal award={section.award} />}
-            </header>
+            </div>
             <div className={"collection-section__media" + (section.images.length > 1 ? " is-split" : "")}>
                 {section.images.map((image) => <SafeImage key={image.src} src={image.src} alt={image.alt} fallback={image.alt} loading="lazy" />)}
             </div>
@@ -134,12 +134,12 @@ function AxonWallpapers() {
     const rows = [0, 1, 2, 3].map((row) => greenAxon.wallpapers.filter((_, index) => index % 4 === row));
 
     return <section className="collection-axon" aria-labelledby="green-axon">
-        <header className="collection-axon__head">
+        <div className="collection-axon__head">
             <h2 id="green-axon">{greenAxon.title}</h2>
             <h3>{greenAxon.name}</h3>
             <p>{greenAxon.body}</p>
             <p className="collection-axon__platforms">{greenAxon.platforms}</p>
-        </header>
+        </div>
         <div className="collection-axon__wall" data-playing={playing}>
             <div className="collection-axon__tilt" aria-hidden="true">
                 {rows.map((row, index) => <div className="collection-axon__row" key={index}>

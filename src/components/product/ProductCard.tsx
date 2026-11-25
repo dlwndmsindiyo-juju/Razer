@@ -24,7 +24,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     );
 
     return (
-        <article className="product-card">
+        <div className="product-card">
             <div className="product-card__thumb">
                 {/* 이미지 영역 전체를 상세 링크로 (상품명 링크와 같은 주소 · 키보드 이동은 상품명 링크 하나로) */}
                 {product.to ? (
@@ -63,7 +63,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 <strong className="product-card__name">{product.name}</strong>
             )}
             <p className="product-card__price">{product.originalPrice && <del>{product.originalPrice}원</del>}{product.price}</p>
-        </article>
+        </div>
     );
 };
 

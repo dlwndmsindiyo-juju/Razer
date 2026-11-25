@@ -30,10 +30,10 @@ function ItemDetail({ text }: { text: string }) {
 export function CheckoutSummary({ amount, title }: { amount: number; title: string }) {
     return <section className="design-panel design-checkout__summary">
         <h2>{title}</h2>
-        <dl>
-            <div><dt>선택 상품 금액</dt><dd>{money(amount)}</dd></div>
-            <div><dt>배송비</dt><dd>{amount >= 139900 ? "무료" : "주문 시 확인"}</dd></div>
-            <div><dt>상품 합계</dt><dd>{money(amount)}</dd></div>
-        </dl>
+        <ul className="design-checkout__totals">
+            <li><span>선택 상품 금액</span><span className="design-checkout__total-value">{money(amount)}</span></li>
+            <li><span>배송비</span><span className="design-checkout__total-value">{amount >= 139900 ? "무료" : "주문 시 확인"}</span></li>
+            <li><span>상품 합계</span><span className="design-checkout__total-value">{money(amount)}</span></li>
+        </ul>
     </section>;
 }

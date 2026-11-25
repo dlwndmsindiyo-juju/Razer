@@ -17,13 +17,13 @@ export function BuyingGuidePage() {
     return <div className="design-page design-buying">
         <PageHeading title="RAZER 프로그램 및 혜택" description="Razer.com에서 현재 진행 중인 프로그램으로 어떤 혜택을 받을 수 있는지 확인하세요." />
         <div className="design-container design-container--narrow design-stack">
-            {programs.map(([title, text, image], index) => <article key={title}>
+            {programs.map(([title, text, image], index) => <div key={title}>
                 <div className="design-buying__number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
                 <div className="design-panel design-buying__program">
                     <img src={image} alt="" loading="lazy" />
                     <div><h2>{title}</h2><p>{text}</p></div>
                 </div>
-            </article>)}
+            </div>)}
         </div>
     </div>;
 }
@@ -68,14 +68,14 @@ export function ExclusivesPage() {
             <div className="design-grid design-grid--two">
                 {featuredCollabCards.map(([slug, image, title, description]) => {
                     const collab = collabs.find((item) => item.slug.includes(slug));
-                    return <article key={slug} className="design-media-card">
+                    return <div key={slug} className="design-media-card">
                         <img src={image} alt="" loading="lazy" />
                         <h3>{title}</h3>
                         <p>{description}</p>
                         <Link className="design-explore" to={collab ? getCollabPath(collab.slug) : "/products/collab"}>
                             EXPLORE <img src={exclusiveImages.explore} alt="" />
                         </Link>
-                    </article>;
+                    </div>;
                 })}
             </div>
         </div>
@@ -96,9 +96,9 @@ export function MembershipPage() {
         <div className="design-container">
             <PageHeading title={copy[0]} />
             <div className="design-grid design-grid--three design-member-benefits">
-                {benefits.map(([title, body, icon]) => <article className="design-panel design-support" key={icon}>
+                {benefits.map(([title, body, icon]) => <div className="design-panel design-support" key={icon}>
                     <img src={icon} alt="" /><h2>{copy[title]}</h2><p>{copy[body]}</p>
-                </article>)}
+                </div>)}
             </div>
             <section className="design-membership__signup">
                 <div className="design-panel design-membership__coupon">
@@ -113,18 +113,18 @@ export function MembershipPage() {
                 <p>{copy[26]}</p>
             </section>
             <div className="design-grid design-grid--three design-membership__rewards">
-                <article className="design-panel design-membership__reward">
+                <div className="design-panel design-membership__reward">
                     <img src={membershipImages.cyberWeekend} alt="" loading="lazy" />
                     <h2>{copy[2]}</h2><p>{copy.slice(4, 6).join(" ")}</p>
                     <div><Link className="btn btn--primary" to="/signup">멤버십 가입하기</Link></div>
-                </article>
-                <article className="design-panel design-membership__reward">
+                </div>
+                <div className="design-panel design-membership__reward">
                     <img src={membershipImages.rewardsEcosystem} alt="" loading="lazy" />
                     <h2>{copy[3]}</h2><p>{copy.slice(6, 8).join(" ")}</p>
                     <small>{copy.slice(8, 10).join(" ")}</small>
                     <div><Link className="btn btn--primary" to="/search">Razer.com</Link></div>
-                </article>
-                <article className="design-panel design-membership__reward">
+                </div>
+                <div className="design-panel design-membership__reward">
                     <img src={membershipImages.rewardsRedemption} alt="" loading="lazy" />
                     <h2>{copy[27 + reward]}</h2><p aria-live="polite">{copy[29 + reward]}</p>
                     <div className="design-membership__reward-pages" aria-label="리워드 유형">
@@ -132,14 +132,14 @@ export function MembershipPage() {
                         {[0, 1].map((index) => <button type="button" key={index} aria-label={copy[31 + index]}
                             aria-pressed={reward === index} onClick={() => setReward(index)} />)}
                     </div>
-                </article>
+                </div>
             </div>
             <PageHeading title={copy[1]} as="h2" />
             <div className="design-grid design-grid--three design-membership__earning">
-                {earning.map(([title, description, image]) => <article key={image}>
+                {earning.map(([title, description, image]) => <div key={image}>
                     <img src={image} alt="" loading="lazy" />
                     <h3>{title}</h3><p>{description}</p>
-                </article>)}
+                </div>)}
             </div>
         </div>
     </div>;

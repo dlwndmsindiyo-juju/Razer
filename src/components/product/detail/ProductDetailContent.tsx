@@ -130,14 +130,14 @@ export const ProductDetailContent = ({ product, title, images }: { product: Prod
                     </div>
                     <div className="pd-content__spec-row">
                         <h4>Tech Specs</h4>
-                        <dl>
+                        <ul className="pd-content__spec-list">
                             {features.map((f) => (
-                                <div key={f.code}>
-                                    <dt>{f.label}</dt>
-                                    <dd>{f.value}</dd>
-                                </div>
+                                <li key={f.code}>
+                                    <span className="pd-content__spec-label">{f.label}</span>
+                                    <span className="pd-content__spec-value">{f.value}</span>
+                                </li>
                             ))}
-                        </dl>
+                        </ul>
                     </div>
                     {product.sku && (
                         <div className="pd-content__spec-row">

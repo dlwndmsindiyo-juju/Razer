@@ -38,7 +38,7 @@ const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean 
     );
 
     return (
-        <article className={`home-pick__card ${isLarge ? "is-large" : ""}`}>
+        <div className={`home-pick__card ${isLarge ? "is-large" : ""}`}>
             {/* 선수 사진 */}
             <div className="home-pick__player">
                 <PlayerPhoto src={pick.playerImage} alt={pick.player} />
@@ -69,6 +69,6 @@ const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean 
 
             {/* 상품 이미지 (오른쪽 작은 카드) */}
             {!isLarge && productImage}
-        </article>
+        </div>
     );
 };

@@ -27,7 +27,7 @@ export function CatalogCard({ product, featured = false, badge, description }: {
     product: Product; featured?: boolean; badge?: string; description?: string;
 }) {
     const to = "/products/" + product.category + "/" + product.id;
-    return <article className={"design-recommendation" + (featured ? " design-recommendation--featured" : "")}>
+    return <div className={"design-recommendation" + (featured ? " design-recommendation--featured" : "")}>
         {badge && <span className="design-recommendation__badge">{badge}</span>}
         <div className="design-recommendation__art">
             <img src={product.image} alt="" loading="lazy" />
@@ -39,7 +39,7 @@ export function CatalogCard({ product, featured = false, badge, description }: {
                 EXPLORE <img src={commonImages.explore} alt="" />
             </Link>
         </div>
-    </article>;
+    </div>;
 }
 
 export function ProductRail({ products, title }: { products: Product[]; title: string }) {

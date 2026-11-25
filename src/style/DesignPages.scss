@@ -297,14 +297,6 @@ body:has(main > :is(.design-page, .auth)) {
     color: v.$main-primary-color;
 }
 
-.design-pill {
-    border-radius: v.$radius-pill;
-    padding: .5rem .75rem;
-    color: v.$neutral-color-white;
-    background: v.$neutral-color-500;
-    font-size: .75rem;
-}
-
 .design-tabs {
     display: flex;
     justify-content: center;
@@ -687,7 +679,7 @@ a.design-support:hover {
     gap: 3.5rem 1.5rem;
     padding-bottom: 2rem;
 
-    article {
+    >div {
         display: flex;
         align-items: flex-start;
         gap: 3.75rem;
@@ -773,8 +765,6 @@ a.design-support:hover {
 
     a {
         color: inherit;
-        text-decoration: underline;
-        text-underline-offset: 3px;
 
         &:hover {
             color: v.$main-primary-color;
@@ -1040,8 +1030,6 @@ a.design-support:hover {
 
     &__tag {
         color: v.$main-primary-color;
-        text-decoration: underline;
-        text-underline-offset: 4px;
     }
 
     &__banner {
@@ -1183,7 +1171,7 @@ a.design-support:hover {
         color: v.$main-primary-color;
         transition: background-color .2s, color .2s;
 
-        &:hover {
+        .design-page &:hover {
             background-color: v.$main-primary-color;
             color: v.$body-bg;
         }
@@ -1515,8 +1503,6 @@ a.design-support:hover {
     &__detail button {
         @include v.body-14-r;
         color: v.$neutral-color-100;
-        text-decoration: underline;
-        text-underline-offset: 3px;
         cursor: pointer;
 
         &:hover {
@@ -1529,20 +1515,20 @@ a.design-support:hover {
             margin-bottom: 1.25rem;
         }
 
-        dl>div {
+        .design-checkout__totals>li {
             display: flex;
             justify-content: space-between;
             gap: .75rem;
             margin: .75rem 0;
         }
 
-        dl>div:last-child {
+        .design-checkout__totals>li:last-child {
             border-top: 1px solid v.$neutral-color-500;
             padding-top: 1rem;
             font-weight: v.$font-weight-bold;
         }
 
-        dl>div:last-child dd {
+        .design-checkout__totals>li:last-child .design-checkout__total-value {
             color: v.$main-primary-color;
         }
     }
@@ -2458,7 +2444,7 @@ a.design-support:hover {
             gap: 1.5rem;
         }
 
-        .design-warranty__benefits article {
+        .design-warranty__benefits>div {
             gap: 1rem;
         }
 
@@ -3173,75 +3159,62 @@ a.design-support:hover {
 
 }
 
+// 2026년을 돌아보며 · 큰 사진 (가운데 + 양옆 걸침)
 .design-esports-gallery {
-    --event-image-width: min(58%, 1112px);
-    --event-stage-gap: clamp(8px, 1.56vw, 30px);
-    position: relative;
-    overflow: hidden;
-    margin-top: clamp(16px, 2.08vw, 40px);
+    --slide-width: min(59rem, 62vw);
+    --slide-gap: 1.625rem;
+    margin-top: 2.25rem;
 
     &__stage {
-        display: grid;
-        grid-template-columns: repeat(3, var(--event-image-width));
-        justify-content: center;
-        gap: var(--event-stage-gap);
         position: relative;
-        isolation: isolate;
+        height: calc(var(--slide-width) * 2 / 3);
+        overflow: hidden;
+        touch-action: pan-y;
+        user-select: none;
     }
 
-    &__stage::before,
-    &__stage::after {
-        content: "";
+    // 가운데 기준으로 --offset 칸만큼 옆에 놓임 (넘길 때 스르륵 이동)
+    &__slide {
         position: absolute;
-        inset-block: 0;
-        width: 9.75%;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    &__stage::before {
-        left: 0;
-        background: linear-gradient(90deg, v.$neutral-color-black 25%, transparent);
-    }
-
-    &__stage::after {
-        right: 0;
-        background: linear-gradient(270deg, v.$neutral-color-black 25%, transparent);
-    }
-
-    &__focus {
-        position: relative;
-        border: 1px solid v.$main-primary-color;
-    }
-
-    &__focus>img,
-    &__neighbor {
-        width: 100%;
+        top: 0;
+        left: 50%;
+        width: var(--slide-width);
         height: 100%;
-        aspect-ratio: 3 / 2;
-        object-fit: cover;
+        transform: translateX(calc(-50% + var(--offset) * (var(--slide-width) + var(--slide-gap))));
+        transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        &.is-active {
+            border: 1px solid v.$main-primary-color;
+            cursor: default;
+        }
     }
 
-    &__neighbor {
-        filter: brightness(.5);
-    }
-
+    // 화살표: 가운데 사진 안쪽 양끝
     &__arrow {
         position: absolute;
         top: 50%;
-        left: clamp(6px, 1.56vw, 30px);
-        transform: translateY(-50%);
-        width: clamp(28px, 3.1vw, 44px);
-        aspect-ratio: 1;
+        left: calc(50% - var(--slide-width) / 2 + 1.5rem);
+        z-index: 1;
         display: grid;
         place-items: center;
+        width: 2.375rem;
+        aspect-ratio: 1;
         border-radius: 50%;
         background: v.$neutral-color-700;
+        transform: translateY(-50%);
     }
 
     &__arrow--next {
         left: auto;
-        right: clamp(6px, 1.56vw, 30px);
+        right: calc(50% - var(--slide-width) / 2 + 1.5rem);
         background: v.$main-primary-color;
     }
 
@@ -3250,34 +3223,54 @@ a.design-support:hover {
         outline-offset: -3px;
     }
 
+    // 썸네일: 드래그로 옆으로 넘김
     &__thumbs {
         display: flex;
-        position: relative;
-        justify-content: safe center;
+        gap: 1rem;
+        margin-top: 1.625rem;
         overflow-x: auto;
         scrollbar-width: none;
-        gap: clamp(6px, .94vw, 18px);
-        margin-top: clamp(12px, 1.61vw, 31px);
+        cursor: grab;
+        user-select: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        &:active {
+            cursor: grabbing;
+        }
     }
 
     &__thumbs button {
-        flex: 0 0 min(28%, 208px);
-        min-width: 0;
+        flex: 0 0 11rem;
     }
 
     &__thumbs img {
+        display: block;
         width: 100%;
-        aspect-ratio: 208 / 137;
+        aspect-ratio: 177 / 117;
         object-fit: cover;
+        transition: filter .2s;
     }
 
     &__thumbs button:not([aria-pressed="true"]) img {
-        filter: brightness(.65);
+        filter: brightness(.7);
+    }
+
+    &__thumbs button:hover img {
+        filter: none;
     }
 
     &__thumbs button[aria-pressed="true"] img {
         outline: 1px solid v.$main-primary-color;
         outline-offset: -1px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .design-esports-gallery__slide {
+        transition: none;
     }
 }
 
@@ -3293,41 +3286,6 @@ a.design-support:hover {
         }
     }
 
-}
-
-.modal:has(.design-esports-gallery-modal) {
-    padding: 0;
-
-    .modal__panel {
-        width: 100%;
-        max-width: none;
-        padding: 12px 0;
-        background: transparent;
-        border: 0;
-    }
-
-    .modal__head {
-        justify-content: end;
-        padding-inline: 16px;
-    }
-
-    .modal__title {
-        position: absolute;
-        clip-path: inset(50%);
-    }
-
-    .modal__body {
-        margin-top: 8px;
-    }
-}
-
-.design-esports-gallery-modal .design-esports-gallery {
-    --event-image-width: 50%;
-    margin-top: 0;
-
-    &__thumbs button {
-        flex-basis: 14%;
-    }
 }
 
 .design-esports__athlete {
@@ -3356,57 +3314,11 @@ a.design-support:hover {
     }
 }
 
-.design-esports__year {
-    .design-tabs {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .design-tabs button {
-        border: 1px solid v.$neutral-color-white;
-        background: transparent;
-        color: v.$neutral-color-white;
-        font-weight: v.$font-weight-bold;
-    }
-
-    .design-tabs button[aria-pressed="true"] {
-        border-color: v.$main-primary-color;
-        background: transparent;
-        color: v.$main-primary-color;
-    }
-}
-
-.design-esports__photo-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-top: clamp(28px, 4.7vw, 84px);
-
-    button {
-        display: block;
-    }
-
-    button:focus-visible {
-        position: relative;
-        z-index: 1;
-        outline-offset: -3px;
-    }
-
-    img {
-        width: 100%;
-        aspect-ratio: 3 / 2;
-        object-fit: cover;
-    }
-}
-
 .design-esports__gear-link {
     @include v.body-16-m;
     display: table;
     margin: 0 auto 28px;
     color: v.$main-primary-color;
-
-    &:hover {
-        text-decoration: underline;
-    }
 }
 
 // =========================================================
@@ -3539,7 +3451,7 @@ a.design-support:hover {
         @include v.label-12-m;
     }
 
-    figcaption {
+    &__source {
         @include v.caption-12-r;
         color: v.$main-primary-color;
     }
@@ -3562,8 +3474,6 @@ a.design-support:hover {
 
         &[aria-selected="true"] {
             color: v.$main-primary-color;
-            text-decoration: underline;
-            text-underline-offset: .375rem;
         }
     }
 }
@@ -3629,9 +3539,6 @@ a.design-support:hover {
             @include v.body-14-m;
             color: v.$main-primary-color;
 
-            &:hover {
-                text-decoration: underline;
-            }
         }
     }
 }
@@ -3683,10 +3590,6 @@ a.design-support:hover {
         a {
             @include v.body-14-m;
             color: v.$main-primary-color;
-
-            &:hover {
-                text-decoration: underline;
-            }
         }
     }
 
@@ -3737,7 +3640,7 @@ a.design-support:hover {
         -webkit-mask-repeat: no-repeat;
     }
 
-    h4 {
+    h3 {
         margin-top: 1rem;
         @include v.body-16-sb;
         text-transform: uppercase;
@@ -3980,14 +3883,14 @@ a.design-support:hover {
             color: v.$main-primary-color;
         }
 
-        dl {
+        ul {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 1.25rem;
             margin-top: 2.5rem;
         }
 
-        dl>div {
+        li {
             display: grid;
             align-content: center;
             gap: .75rem;
@@ -3998,15 +3901,16 @@ a.design-support:hover {
             background: v.$neutral-color-panel;
         }
 
-        dd {
-            @include v.display-44-b;
-            color: v.$main-primary-color;
-        }
+    }
 
-        dt {
-            @include v.body-14-m;
-            color: v.$neutral-color-white;
-        }
+    &__record-value {
+        @include v.display-44-b;
+        color: v.$main-primary-color;
+    }
+
+    &__record-label {
+        @include v.body-14-m;
+        color: v.$neutral-color-white;
     }
 
     &__story {
@@ -4106,7 +4010,10 @@ a.design-support:hover {
         @include v.label-16-sb;
         transition: filter .2s;
 
-        &:hover {
+        // 페이지 공통 .design-page a:hover(초록 글자)보다 우선해 글자색 유지
+        .design-page &:hover,
+        .design-page &:focus-visible {
+            color: v.$neutral-color-black;
             filter: brightness(1.1);
         }
     }
@@ -4153,25 +4060,22 @@ a.design-support:hover {
             margin-bottom: 1rem;
         }
 
-        strong {
-            @include v.heading-20-sb;
-        }
-
-        span {
-            @include v.body-14-r;
-            color: v.$neutral-color-100;
-        }
-
-        em {
-            font-style: normal;
-            @include v.body-14-m;
-            color: v.$main-primary-color;
-        }
-
-        a:hover em {
-            text-decoration: underline;
-        }
     }
+
+    &__related-title {
+        @include v.heading-20-sb;
+    }
+
+    &__related-body {
+        @include v.body-14-r;
+        color: v.$neutral-color-100;
+    }
+
+    &__related-more {
+        @include v.body-14-m;
+        color: v.$main-primary-color;
+    }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4200,7 +4104,7 @@ a.design-support:hover {
 
     .collection-lineup__grid,
     .collection-features,
-    .niko__records dl {
+    .niko__records ul {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -4228,22 +4132,5 @@ a.design-support:hover {
 
     .design-esports__athlete p {
         @include v.heading-20-sb;
-    }
-
-    .design-esports__year .design-tabs {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .design-esports__year .design-tabs button {
-        min-height: 40px;
-        font-size: 12px;
-    }
-
-    .design-esports__photo-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .modal:has(.design-esports-gallery-modal) .modal__panel {
-        max-height: 100dvh;
     }
 }

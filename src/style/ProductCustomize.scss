@@ -252,11 +252,13 @@
         padding-top: 0.75rem;
         @include body-14-r;
 
-        dt {
+        &-label {
+            display: block;
             color: $neutral-color-100;
         }
 
-        dd {
+        &-value {
+            display: block;
             margin: 2px 0 0;
             overflow-wrap: anywhere;
         }
