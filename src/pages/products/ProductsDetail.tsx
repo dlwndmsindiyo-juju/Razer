@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { withoutPersonImages } from "../../data/personImages";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getBadgeLabel, getProductById, getSeriesTitle, productData } from "../../data/productData";
 import { detailGifts, keyboardActions } from "../../data/detailData";
-import { getProductPreview } from "../../data/keyboardPreview";
 import { useCartStore } from "../../store/useCartStore";
 import type { Product } from "../../types/product";
 import { ImageOrText } from "../../components/common/ImageOrText";
@@ -46,14 +46,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const title = getSeriesTitle(product);
     const badges = getBadges(product);
     const images = useMemo(() => {
-        const gallery = [...new Set(product.gallery ?? [])];
+        // 사람이 크게 나온 연출 사진은 빼고 제품 사진만
+        const gallery = withoutPersonImages([...new Set(product.gallery ?? [])]);
         return gallery.length > 0 ? gallery : [product.image];
     }, [product]);
     const recommended = useMemo(() => getRecommended(product), [product]);
     const isKeyboard = product.category === "keyboards";
-    const customizeTo = isKeyboard || getProductPreview(product)
-        ? `/products/${product.category}/${product.id}/customize`
-        : undefined;
+    const customizeTo = isKeyboard ? keyboardActions.customizeTo(product.id) : undefined;
 
     const soldOut = isSoldOut(product);
     const unverified = product.stockStatus === "unverified";
@@ -99,15 +98,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 {/* 왼쪽 위: 이미지 */}
                 <div className="product-detail__gallery">
                     <ProductGallery key={product.id} images={images} alt={product.title}>
-                        {(isKeyboard || customizeTo) && (
+                        {isKeyboard && (
                             <div className="pd-gallery__actions">
-                                {isKeyboard && <button type="button" className="pd-gallery__sound" onClick={playSound}>
+                                <button type="button" className="pd-gallery__sound" onClick={playSound}>
                                     <ImageOrText src={keyboardActions.soundIcon} alt="" label="" />
                                     {keyboardActions.soundLabel}
-                                </button>}
+                                </button>
                                 {customizeTo && (
                                     <Link to={customizeTo} className="pd-gallery__customize">
-                                        {isKeyboard ? keyboardActions.customizeLabel : "3D로 보기"}
+                                        {keyboardActions.customizeLabel}
                                     </Link>
                                 )}
                             </div>
