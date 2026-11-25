@@ -358,15 +358,6 @@ a.design-support:hover { outline: 1px solid v.$main-primary-color; }
     .design-team-logos__track { animation: none; }
     .design-team-logos__row[aria-hidden="true"], .design-team-logos__control { display: none; }
 }
-.design-album {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-top: 1rem;
-    button { display: block; padding: 0; border: 0; background: v.$body-bg; cursor: zoom-in; }
-    button:first-child { grid-column: 1 / -1; }
-    img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-    &--mosaic { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    &--mosaic button:first-child { aspect-ratio: 3 / 2; }
-    &--mosaic button:first-child img { height: 100%; }
-}
 .design-esports {
     .design-hero + .design-container > .design-heading:first-child { padding-top: 30px; }
     .design-heading h2 { color: v.$neutral-color-white; font-size: clamp(22px, 2vw, 32px); }
@@ -376,27 +367,6 @@ a.design-support:hover { outline: 1px solid v.$main-primary-color; }
     .design-support h3 { font-size: 24px; }
     &__equipment { grid-template-columns: repeat(4, minmax(0, 301px)); }
     &__equipment .design-pill { margin-bottom: 14px; }
-}
-.modal:has(.design-lightbox) {
-    background: rgba(v.$neutral-color-black, .88);
-    backdrop-filter: blur(12px);
-    .modal__panel { width: 100%; max-width: none; padding: 0; background: transparent; box-shadow: none; border: 0; }
-    .modal__head { justify-content: end; padding: 12px max(16px, 2vw); }
-    .modal__title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-    .modal__body { margin: 0; }
-}
-.design-lightbox {
-    width: 100%; overflow: hidden;
-    &__stage { display: grid; grid-template-columns: minmax(0, 1fr) 58% minmax(0, 1fr); align-items: stretch; gap: 1.5vw; position: relative; }
-    &__stage > img { width: 100%; height: min(69vh, 745px); object-fit: cover; }
-    &__neighbor { opacity: .45; }
-    &__active { border: 1px solid v.$main-primary-color; }
-    &__stage button { position: absolute; top: 50%; transform: translateY(-50%); border-radius: 50%; background: v.$neutral-color-700; display: grid; place-items: center; width: 44px; height: 44px; left: 23%; }
-    &__stage button:last-child { left: auto; right: 23%; color: v.$body-bg; background: v.$main-primary-color; }
-    &__thumbs { width: 58%; margin: 16px auto 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
-    &__thumbs button { opacity: .65; }
-    &__thumbs button[aria-pressed="true"] { opacity: 1; outline: 1px solid v.$main-primary-color; }
-    &__thumbs img { aspect-ratio: 3 / 2; width: 100%; object-fit: cover; }
 }
 @media (max-width: 720px) {
     .design-esports {
@@ -412,14 +382,6 @@ a.design-support:hover { outline: 1px solid v.$main-primary-color; }
         &__equipment .design-pill { margin-bottom: 6px; padding: 5px; font-size: 9px; }
         .design-tabs { gap: 4px; }
         .design-tabs button { padding: 5px; font-size: 9px; }
-    }
-    .design-lightbox {
-        &__stage { grid-template-columns: minmax(0, 1fr); }
-        &__stage > img { height: auto; aspect-ratio: 3 / 2; }
-        &__stage .design-lightbox__neighbor { display: none; }
-        &__stage button { left: 6px; width: 30px; height: 30px; }
-        &__stage button:last-child { right: 6px; }
-        &__thumbs { width: calc(100% - 24px); gap: 6px; }
     }
 }
 
@@ -838,13 +800,106 @@ a.design-support:hover { outline: 1px solid v.$main-primary-color; }
         &__fields small { @include v.caption-12-r; margin-bottom: 10px; }
         &__fields .design-payment-preview__installment { @include v.caption-12-r; align-items: center; padding-block: 16px; }
     }
-    .modal:has(.design-lightbox) .modal__panel { padding-bottom: 16px; }
-    .design-lightbox {
-        &__stage { grid-template-columns: minmax(0, 1fr) 50% minmax(0, 1fr); gap: 3vw; }
-        &__stage > img { width: 100%; height: auto; aspect-ratio: 3 / 2; }
-        &__stage > .design-lightbox__neighbor { display: block; height: 100%; aspect-ratio: auto; }
-        &__stage button { left: 10%; width: 24px; height: 24px; }
-        &__stage button:last-child { right: 16%; }
-        &__thumbs { width: 50%; gap: 4px; margin-top: 10px; }
+}
+
+.design-esports {
+    padding-bottom: clamp(80px, 16.35vw, 314px);
+
+    &__year {
+        margin-top: clamp(56px, 8vw, 154px);
+        .design-heading { padding-top: 0; padding-bottom: clamp(18px, 2vw, 40px); }
+        .design-heading h2 { @include v.display-32-b; color: v.$neutral-color-white; }
+        .design-tabs { gap: clamp(6px, 1.04vw, 20px); }
+        .design-tabs button { min-height: 48px; }
     }
+    &__year-mobile { display: none; }
+}
+
+.design-esports-gallery {
+    --event-image-width: min(58%, 1112px);
+    --event-stage-gap: clamp(8px, 1.56vw, 30px);
+    position: relative;
+    overflow: hidden;
+    margin-top: clamp(16px, 2.08vw, 40px);
+
+    &__stage {
+        display: grid;
+        grid-template-columns: repeat(3, var(--event-image-width));
+        justify-content: center;
+        gap: var(--event-stage-gap);
+        position: relative;
+        isolation: isolate;
+    }
+    &__stage::before,
+    &__stage::after {
+        content: "";
+        position: absolute;
+        inset-block: 0;
+        width: 9.75%;
+        pointer-events: none;
+        z-index: 1;
+    }
+    &__stage::before { left: 0; background: linear-gradient(90deg, v.$neutral-color-black 25%, transparent); }
+    &__stage::after { right: 0; background: linear-gradient(270deg, v.$neutral-color-black 25%, transparent); }
+    &__focus { position: relative; border: 1px solid v.$main-primary-color; }
+    &__focus > img, &__neighbor { width: 100%; height: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    &__neighbor { filter: brightness(.5); }
+    &__arrow {
+        position: absolute;
+        top: 50%;
+        left: clamp(6px, 1.56vw, 30px);
+        transform: translateY(-50%);
+        width: clamp(28px, 3.1vw, 44px);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: v.$neutral-color-700;
+    }
+    &__arrow--next { left: auto; right: clamp(6px, 1.56vw, 30px); background: v.$main-primary-color; }
+    &__arrow:focus-visible, &__thumbs button:focus-visible { outline-offset: -3px; }
+    &__thumbs {
+        display: flex;
+        position: relative;
+        justify-content: safe center;
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: clamp(6px, .94vw, 18px);
+        margin-top: clamp(12px, 1.61vw, 31px);
+    }
+    &__thumbs button { flex: 0 0 min(28%, 208px); min-width: 0; }
+    &__thumbs img { width: 100%; aspect-ratio: 208 / 137; object-fit: cover; }
+    &__thumbs button:not([aria-pressed="true"]) img { filter: brightness(.65); }
+    &__thumbs button[aria-pressed="true"] img { outline: 1px solid v.$main-primary-color; outline-offset: -1px; }
+}
+
+@media (max-width: 720px) {
+    .design-esports__year {
+        .design-heading h2 { @include v.heading-24-b; }
+        .design-tabs button { min-height: 32px; padding-inline: 5px; }
+    }
+
+    .design-esports__year-desktop { display: none; }
+    .design-esports__year-mobile { display: revert; }
+    .design-esports__photo-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2px;
+        margin-top: 10px;
+        button:first-child { grid-column: 1 / -1; }
+        img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    }
+}
+
+.modal:has(.design-esports-gallery-modal) {
+    padding: 0;
+    .modal__panel { width: 100%; max-width: none; padding: 12px 0; background: transparent; border: 0; }
+    .modal__head { justify-content: end; padding-inline: 16px; }
+    .modal__title { position: absolute; clip-path: inset(50%); }
+    .modal__body { margin-top: 8px; }
+}
+.design-esports-gallery-modal .design-esports-gallery {
+    --event-image-width: 50%;
+    margin-top: 0;
+    &__thumbs button { flex-basis: 14%; }
 }

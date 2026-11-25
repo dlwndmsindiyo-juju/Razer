@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Modal } from "../../components/common/Modal";
 import { aboutCopy, esportsCopy } from "../../data/editorialData";
 import { figmaImage } from "../../data/figmaPageAssets";
@@ -105,10 +105,9 @@ const proModels = [
 
 export function EsportsPage() {
     const [event, setEvent] = useState(0);
-    const [photo, setPhoto] = useState<number>();
+    const [mobilePhoto, setMobilePhoto] = useState<number>();
     const [logosPaused, setLogosPaused] = useState(false);
     const album = albums[event];
-    const adjacentPhoto = (direction: -1 | 1) => ((photo ?? 0) + direction + album.photos.length) % album.photos.length;
     return <div className="design-page design-esports">
         <PageHero src={esportImage("Rectangle199")} />
         <div className="design-container">
@@ -149,34 +148,86 @@ export function EsportsPage() {
                     {logosPaused ? "아이콘 흐름 재생" : "아이콘 흐름 일시정지"}
                 </button>
             </section>
-            <PageHeading title={esportsCopy[2]} description={esportsCopy[14]} as="h2" />
-            <div className="design-tabs" aria-label="e스포츠 행사">
+        </div>
+        <section className="design-esports__year" aria-labelledby="esports-year-heading">
+            <div className="design-container design-heading">
+                <h2 id="esports-year-heading">
+                    <span className="design-esports__year-desktop">{esportsCopy[2]}</span>
+                    <span className="design-esports__year-mobile">우리가 함께한 곳</span>
+                </h2>
+                <p>{esportsCopy[14]}</p>
+            </div>
+            <div className="design-tabs design-container" aria-label="e스포츠 행사">
                 {albums.map(({ title }, index) => <button type="button" key={title} aria-pressed={event === index} onClick={() => setEvent(index)}>{title}</button>)}
             </div>
-            <div className={event === 0 ? "design-album design-album--mosaic" : "design-album"}>
-                {album.photos.map((number, index) => <button type="button" key={number} onClick={() => setPhoto(index)} aria-label={album.title + " 사진 " + (index + 1)}>
-                    <img src={esportImage("Rectangle" + number)} alt="" loading="lazy" />
-                </button>)}
+            <div className="design-esports__year-desktop">
+                <EsportsGallery key={album.title} album={album} />
             </div>
-        </div>
-        {photo !== undefined && <Modal title={album.title} onClose={() => setPhoto(undefined)}>
-            <div className="design-lightbox">
-                <div className="design-lightbox__stage">
-                    <img className="design-lightbox__neighbor" src={esportImage("Rectangle" + album.photos[adjacentPhoto(-1)])} alt="" />
-                    <img className="design-lightbox__active" src={esportImage("Rectangle" + album.photos[photo])} alt={album.title + " 사진 " + (photo + 1)} />
-                    <img className="design-lightbox__neighbor" src={esportImage("Rectangle" + album.photos[adjacentPhoto(1)])} alt="" />
-                    <button type="button" onClick={() => setPhoto(adjacentPhoto(-1))} aria-label="이전"><img src="/images/figma-pages/gallery-left.svg" alt="" /></button>
-                    <button type="button" onClick={() => setPhoto(adjacentPhoto(1))} aria-label="다음"><img src="/images/figma-pages/gallery-right.svg" alt="" /></button>
+            <div className="design-container design-esports__year-mobile">
+                <div className="design-esports__photo-grid">
+                    {album.photos.map((number, index) => (
+                        <button type="button" key={number} onClick={() => setMobilePhoto(index)} aria-label={album.title + " 사진 " + (index + 1)}>
+                            <img src={esportImage("Rectangle" + number)} alt="" loading="lazy" />
+                        </button>
+                    ))}
                 </div>
-                <div className="design-lightbox__thumbs" aria-label="갤러리 사진">
-                    {Array.from({ length: Math.min(5, album.photos.length) }, (_, offset) => {
-                        const index = (photo + offset + album.photos.length - Math.min(2, album.photos.length - 1)) % album.photos.length;
-                        return <button type="button" key={index} aria-label={"사진 " + (index + 1)} aria-pressed={photo === index} onClick={() => setPhoto(index)}>
-                            <img src={esportImage("Rectangle" + album.photos[index])} alt="" />
-                        </button>;
-                    })}
-                </div>
+            </div>
+        </section>
+        {mobilePhoto !== undefined && <Modal title={album.title} onClose={() => setMobilePhoto(undefined)}>
+            <div className="design-esports-gallery-modal">
+                <EsportsGallery album={album} initialIndex={mobilePhoto} />
             </div>
         </Modal>}
+    </div>;
+}
+
+function EsportsGallery({ album, initialIndex = 0 }: { album: typeof albums[number]; initialIndex?: number }) {
+    const [index, setIndex] = useState(initialIndex);
+    const thumbnailTrack = useRef<HTMLDivElement>(null);
+    const count = album.photos.length;
+    const wrapIndex = (value: number) => (value + count) % count;
+    const changePhoto = (direction: -1 | 1) => setIndex((previous) => wrapIndex(previous + direction));
+    const imageAt = (position: number) => esportImage("Rectangle" + album.photos[position]);
+    const thumbnailCount = Math.min(9, count);
+    const thumbnails = Array.from({ length: thumbnailCount }, (_, offset) =>
+        wrapIndex(index + offset - Math.floor(thumbnailCount / 2)),
+    );
+
+    useEffect(() => {
+        const track = thumbnailTrack.current;
+        const thumbnail = track?.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
+        if (track && thumbnail) {
+            track.scrollLeft = thumbnail.offsetLeft - (track.clientWidth - thumbnail.offsetWidth) / 2;
+        }
+    }, [index]);
+
+    return <div className="design-esports-gallery" role="region" aria-label={album.title + " 행사 사진"}
+        onKeyDown={(event) => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            changePhoto(event.key === "ArrowLeft" ? -1 : 1);
+        }}>
+        <div className="design-esports-gallery__stage">
+            <img className="design-esports-gallery__neighbor" src={imageAt(wrapIndex(index - 1))} alt="" loading="lazy" />
+            <div className="design-esports-gallery__focus">
+                <img src={imageAt(index)} alt={album.title + " 사진 " + (index + 1)} loading="lazy" />
+                <button type="button" className="design-esports-gallery__arrow" onClick={() => changePhoto(-1)} aria-label="이전 사진">
+                    <img src="/images/figma-pages/gallery-left.svg" alt="" />
+                </button>
+                <button type="button" className="design-esports-gallery__arrow design-esports-gallery__arrow--next" onClick={() => changePhoto(1)} aria-label="다음 사진">
+                    <img src="/images/figma-pages/gallery-right.svg" alt="" />
+                </button>
+            </div>
+            <img className="design-esports-gallery__neighbor" src={imageAt(wrapIndex(index + 1))} alt="" loading="lazy" />
+        </div>
+        <div className="design-esports-gallery__thumbs" ref={thumbnailTrack} aria-label="행사 사진 썸네일">
+            {thumbnails.map((position) => (
+                <button type="button" key={position} aria-label={"사진 " + (position + 1) + " 보기"}
+                    aria-pressed={position === index} onClick={() => setIndex(position)}>
+                    <img src={imageAt(position)} alt="" loading="lazy" />
+                </button>
+            ))}
+        </div>
+        <span className="design-visually-hidden" aria-live="polite">{index + 1} / {count}</span>
     </div>;
 }
