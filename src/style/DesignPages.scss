@@ -3337,20 +3337,38 @@ a.design-support:hover {
     gap: 16px;
     margin-bottom: clamp(40px, 6vw, 100px);
 
-    .design-esports__player { margin-bottom: 8px; }
-    h3 { @include v.display-44-b; color: v.$main-primary-color; }
-    p { @include v.heading-24-b; }
-    a { color: v.$main-primary-color; margin-top: 12px; }
+    .design-esports__player {
+        margin-bottom: 8px;
+    }
+
+    h3 {
+        @include v.display-44-b;
+        color: v.$main-primary-color;
+    }
+
+    p {
+        @include v.heading-24-b;
+    }
+
+    a {
+        color: v.$main-primary-color;
+        margin-top: 12px;
+    }
 }
 
 .design-esports__year {
-    .design-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .design-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     .design-tabs button {
         border: 1px solid v.$neutral-color-white;
         background: transparent;
         color: v.$neutral-color-white;
         font-weight: v.$font-weight-bold;
     }
+
     .design-tabs button[aria-pressed="true"] {
         border-color: v.$main-primary-color;
         background: transparent;
@@ -3363,9 +3381,21 @@ a.design-support:hover {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: clamp(28px, 4.7vw, 84px);
 
-    button { display: block; }
-    button:focus-visible { position: relative; z-index: 1; outline-offset: -3px; }
-    img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    button {
+        display: block;
+    }
+
+    button:focus-visible {
+        position: relative;
+        z-index: 1;
+        outline-offset: -3px;
+    }
+
+    img {
+        width: 100%;
+        aspect-ratio: 3 / 2;
+        object-fit: cover;
+    }
 }
 
 .design-esports__gear-link {
@@ -3373,104 +3403,847 @@ a.design-support:hover {
     display: table;
     margin: 0 auto 28px;
     color: v.$main-primary-color;
-    &:hover { text-decoration: underline; }
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
-.esports-green {
-    &__back { display: inline-block; color: v.$main-primary-color; margin-block: 24px; }
-    &__intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 24px; margin-bottom: 48px; }
-    &__intro .design-heading { text-align: left; }
-    &__intro img { width: 100%; border-radius: v.$radius-sm; }
-    h2 { @include v.display-32-b; margin-bottom: 20px; text-align: center; }
-    .design-tabs button[aria-pressed="true"] { background: v.$main-primary-color; color: v.$neutral-color-black; }
+// =========================================================
+// e스포츠 컬렉션 페이지 (Esports Green · NiKo) · razer.com 컬렉션 페이지 구성
+// =========================================================
+.safe-image__fallback {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 12rem;
+    padding: 1.5rem;
+    background: v.$neutral-color-panel;
+    color: v.$neutral-color-100;
+    text-align: center;
+    @include v.label-16-sb;
 }
 
-.niko-profile {
-    &__back { display: inline-block; color: v.$main-primary-color; margin-block: 28px; }
-    &__intro {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-        gap: clamp(20px, 4vw, 64px);
-        align-items: end;
-        border-bottom: 1px solid v.$neutral-color-500;
-        padding-bottom: clamp(24px, 4vw, 60px);
+.collection-page {
+    padding-bottom: 6rem;
+    background: v.$neutral-color-black;
+    text-align: center;
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        word-break: keep-all;
     }
-    &__intro h1 { @include v.display-44-b; color: v.$main-primary-color; margin-block: 8px; }
-    &__bio h2 { @include v.display-32-b; }
-    &__eyebrow { @include v.label-14-sb; color: v.$main-primary-color; }
-    &__name { @include v.heading-20-sb; }
-    &__bio p, &__collection header p:last-child { @include v.body-16-r; color: v.$neutral-color-100; margin-top: 10px; max-width: 60ch; }
-    &__record, &__collection { margin-top: clamp(44px, 7vw, 110px); }
-    &__record h2 { @include v.display-32-b; }
-    &__record dl {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1px;
-        background: v.$neutral-color-500;
-        border: 1px solid v.$neutral-color-500;
-        margin-top: 20px;
+}
+
+// 히어로 (가운데 1440 폭)
+.collection-hero {
+    width: min(100%, 90rem);
+    margin: 0 auto;
+
+    img,
+    .safe-image__fallback {
+        width: 100%;
+        aspect-ratio: 1920 / 700;
+        min-height: 0;
+        object-fit: cover;
     }
-    &__record dl > div { background: v.$neutral-color-panel; padding: 18px; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; }
-    &__record dd { @include v.display-32-b; color: v.$main-primary-color; }
-    &__record dt { color: v.$neutral-color-100; }
-    &__collection header { margin-bottom: 24px; }
-    &__collection h2 { @include v.display-32-b; margin-top: 8px; }
-    &__media, &__gear { position: relative; }
-    &__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: v.$neutral-color-black; }
-    &__playback {
+
+    position: relative;
+
+    img,
+    video {
+        display: block;
+    }
+
+    video {
+        width: 100%;
+        aspect-ratio: 1920 / 700;
+        object-fit: cover;
+    }
+
+    &__toggle {
         position: absolute;
-        right: 12px;
-        bottom: 12px;
-        display: grid;
-        place-items: center;
-        width: 44px;
-        height: 44px;
-        border: 0;
-        border-radius: 50%;
+        right: 1.5rem;
+        bottom: 1.5rem;
+    }
+
+    .safe-image__fallback {
+        @include v.display-44-b;
+        color: v.$main-primary-color;
+    }
+}
+
+// 소개 (RAZER 독점 · 작은 제목 · 큰 초록 제목 · 본문 · 배지)
+.collection-intro {
+    width: min(100% - 3rem, 52rem);
+    margin: 0 auto;
+    padding-top: 3rem;
+
+    &__exclusive {
+        display: inline-block;
+        padding: .25rem .75rem;
+        border-radius: v.$radius-sm;
         background: v.$main-primary-color;
         color: v.$neutral-color-black;
-        cursor: pointer;
+        @include v.label-12-m;
     }
-    &__playback:focus-visible { outline: 2px solid v.$neutral-color-white; outline-offset: 3px; }
-    &__error { @include v.body-16-r; position: absolute; bottom: 14px; left: 12px; right: 68px; padding: 8px; background: v.$neutral-color-black; }
-    &__lineup { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    &__gear { overflow: clip; padding-bottom: 66px; }
-    &__gear-track {
+
+    &__eyebrow {
+        margin-top: 2rem;
+        @include v.heading-20-sb;
+        font-weight: v.$font-weight-regular;
+        color: v.$neutral-color-100;
+    }
+
+    &__title {
+        margin-top: .5rem;
+        @include v.display-60-r;
+        font-family: v.$font-family-base;
+        font-weight: v.$font-weight-bold;
+        color: v.$main-primary-color;
+    }
+
+    &__body {
+        margin-top: 1.5rem;
+        @include v.body-16-r;
+        color: v.$neutral-color-100;
+    }
+
+    &__awards {
         display: flex;
-        width: max-content;
-        animation: niko-gear-scroll 30s linear infinite paused;
+        justify-content: center;
+        gap: 3.5rem;
+        margin-top: 4rem;
     }
-    &__gear-track[data-playing="true"]:not(:focus-within) { animation-play-state: running; }
-    &__gear-track > div { display: flex; gap: 16px; padding-right: 16px; }
-    &__gear-track article { width: min(295px, 70vw); }
-    &__tribute {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-        align-items: center;
-        gap: clamp(16px, 5vw, 80px);
-        padding: clamp(16px, 4vw, 60px);
-        margin-top: clamp(44px, 7vw, 110px);
-        background: v.$neutral-color-panel;
-    }
-    &__tribute img { width: min(100%, 360px); aspect-ratio: 1; object-fit: cover; justify-self: center; }
-    &__tribute h2 { @include v.display-32-b; margin-block: 10px; }
-    &__tribute p:last-child { color: v.$neutral-color-100; }
-    &__related { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 44px; }
-    &__related a { display: grid; grid-template-columns: minmax(0, 132px) 1fr; align-items: center; gap: 16px; padding: 16px; border: 1px solid v.$neutral-color-500; border-radius: v.$radius-sm; color: v.$main-primary-color; }
-    &__related img { width: 100%; aspect-ratio: 1; object-fit: cover; }
 }
-@keyframes niko-gear-scroll { to { transform: translateX(-50%); } }
+
+// ProSettings 배지 이미지
+.collection-award {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    max-width: 14rem;
+    margin: 0 auto;
+
+    &__seal {
+        width: 8.75rem;
+        aspect-ratio: 1;
+        object-fit: contain;
+    }
+
+    .safe-image__fallback.collection-award__seal {
+        min-height: 0;
+        border-radius: 50%;
+        @include v.label-12-m;
+    }
+
+    figcaption {
+        @include v.caption-12-r;
+        color: v.$main-primary-color;
+    }
+}
+
+// 탭 (PC | 콘솔)
+.collection-tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+
+    button {
+        padding: 0 1rem;
+        @include v.body-16-sb;
+        color: v.$neutral-color-white;
+
+        &+button {
+            border-left: 1px solid v.$neutral-color-300;
+        }
+
+        &[aria-selected="true"] {
+            color: v.$main-primary-color;
+            text-decoration: underline;
+            text-underline-offset: .375rem;
+        }
+    }
+}
+
+// 상품 목록
+.collection-lineup {
+    width: min(100% - 3rem, 56rem);
+    margin: 0 auto;
+    padding-top: 6rem;
+
+    &__title {
+        @include v.display-44-b;
+        white-space: pre-line;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 3.5rem 1.25rem;
+        margin-top: 2.5rem;
+        text-align: center;
+    }
+}
+
+.collection-product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__image {
+        display: block;
+        width: 100%;
+
+        img,
+        .safe-image__fallback {
+            width: 100%;
+            aspect-ratio: 1;
+            min-height: 0;
+            object-fit: contain;
+        }
+    }
+
+    h3 {
+        margin-top: 1.25rem;
+        @include v.body-16-sb;
+        text-transform: uppercase;
+    }
+
+    p {
+        margin-top: .5rem;
+        @include v.body-14-r;
+        color: v.$neutral-color-100;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: auto;
+        padding-top: 1.25rem;
+
+        a {
+            @include v.body-14-m;
+            color: v.$main-primary-color;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.collection-buy {
+    padding: .25rem .75rem;
+    border-radius: v.$radius-sm;
+    background: v.$main-primary-color;
+    color: v.$neutral-color-black;
+    @include v.label-14-sb;
+    transition: filter .2s;
+
+    &:hover {
+        filter: brightness(1.1);
+    }
+}
+
+// 제품별 소개
+.collection-section {
+    padding-top: 7rem;
+
+    &__head {
+        width: min(100% - 3rem, 52rem);
+        margin: 0 auto;
+
+        h2 {
+            @include v.display-32-b;
+            text-transform: uppercase;
+            white-space: pre-line;
+        }
+
+        >p {
+            margin-top: 1rem;
+            @include v.body-14-r;
+            color: v.$neutral-color-100;
+        }
+
+        .collection-award {
+            margin-top: 1.5rem;
+        }
+    }
+
+    &__links {
+        display: flex;
+        justify-content: center;
+        gap: 1.25rem;
+        margin-top: 1.25rem;
+
+        a {
+            @include v.body-14-m;
+            color: v.$main-primary-color;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__media {
+        display: grid;
+        width: min(100%, 90rem);
+        margin: 2.5rem auto 0;
+
+        &.is-split {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        img,
+        .safe-image__fallback {
+            width: 100%;
+            aspect-ratio: 1440 / 525;
+            min-height: 0;
+            object-fit: cover;
+        }
+
+        &.is-split img,
+        &.is-split .safe-image__fallback {
+            aspect-ratio: 720 / 525;
+        }
+    }
+}
+
+// 기능 3칸
+.collection-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    width: min(100% - 3rem, 56rem);
+    margin: 2.5rem auto 0;
+
+    // 아이콘 파일 모양 그대로 · 색은 프라이머리
+    &__icon {
+        display: block;
+        width: 5.5rem;
+        aspect-ratio: 1;
+        margin: 0 auto;
+        background-color: v.$main-primary-color;
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+    }
+
+    h4 {
+        margin-top: 1rem;
+        @include v.body-16-sb;
+        text-transform: uppercase;
+    }
+
+    p {
+        margin-top: .75rem;
+        @include v.body-14-r;
+        color: v.$neutral-color-100;
+    }
+}
+
+.collection-note,
+.collection-source {
+    margin-top: 2rem;
+    @include v.caption-12-r;
+    color: v.$neutral-color-100;
+}
+
+// 자주 묻는 질문
+.collection-faq {
+    width: min(100% - 3rem, 56rem);
+    margin: 0 auto;
+    padding-top: 7rem;
+    text-align: left;
+
+    h2 {
+        @include v.display-32-b;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    &__item {
+        border-bottom: 1px solid v.$neutral-color-500;
+
+        >button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            padding: 1.25rem 0;
+            color: v.$neutral-color-white;
+            text-align: left;
+            @include v.body-16-sb;
+        }
+
+        p {
+            padding-bottom: 1.25rem;
+            @include v.body-14-r;
+            color: v.$neutral-color-100;
+        }
+    }
+
+    // + (faq/plus.svg) 가 열리면 45도 돌아 x
+    &__icon {
+        flex: none;
+        width: 1.5rem;
+        height: 1.5rem;
+        transition: transform .3s ease;
+    }
+
+    &__item.is-open &__icon {
+        transform: rotate(45deg);
+    }
+}
+
+// 스타일을 완성하세요 · RAZER AXON (기울어진 배경화면이 흐름)
+.collection-axon {
+    padding-top: 7rem;
+
+    &__head {
+        width: min(100% - 3rem, 42rem);
+        margin: 0 auto;
+
+        h2 {
+            @include v.display-44-b;
+        }
+
+        h3 {
+            margin-top: 2rem;
+            @include v.heading-24-b;
+            color: v.$main-primary-color;
+        }
+
+        p {
+            margin-top: 1rem;
+            @include v.body-14-r;
+            color: v.$neutral-color-100;
+        }
+    }
+
+    &__platforms {
+        @include v.body-14-r;
+    }
+
+    &__wall {
+        position: relative;
+        height: clamp(24rem, 67vw, 80rem);
+        margin-top: 3.5rem;
+        overflow: hidden;
+        background: v.$neutral-color-black;
+    }
+
+    // 전체를 기울이고 줄마다 반대 방향으로 흐름
+    &__tilt {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        gap: 1.25rem;
+        width: 250%;
+        gap: 2rem;
+        transform: translate(-50%, -50%) rotate(25deg);
+    }
+
+    &__row {
+        display: flex;
+        gap: 1.25rem;
+        width: max-content;
+        animation: axon-flow 120s linear infinite;
+
+        &:nth-child(even) {
+            animation-direction: reverse;
+        }
+
+        img {
+            flex: none;
+            width: clamp(14rem, 36vw, 44rem);
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+    }
+
+    &__wall[data-playing="false"] &__row {
+        animation-play-state: paused;
+    }
+
+    // 가운데 로고 (얇은 사각 테두리)
+    &__logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        place-items: center;
+        width: min(75rem, 70%);
+        aspect-ratio: 1200 / 390;
+        transform: translate(-50%, -50%);
+
+        img {
+            width: 62%;
+            filter: drop-shadow(0 0 2rem rgba(0, 0, 0, .6));
+        }
+
+        .safe-image__fallback {
+            width: auto;
+            min-height: 0;
+            background: transparent;
+            @include v.display-60-r;
+            color: v.$neutral-color-white;
+        }
+    }
+
+    &__toggle {
+        position: absolute;
+        right: 1.5rem;
+        bottom: 1.5rem;
+    }
+}
+
+@keyframes axon-flow {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+// 다른 색상 둘러보기 (버튼 없이 설명만)
+.collection-colorways {
+    width: min(100% - 3rem, 56rem);
+    margin: 0 auto;
+    padding-top: 7rem;
+
+    h2 {
+        @include v.display-32-b;
+    }
+
+    ul {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.25rem;
+        margin-top: 2.5rem;
+    }
+
+    img,
+    .safe-image__fallback {
+        width: 100%;
+        aspect-ratio: 1;
+        min-height: 0;
+        object-fit: cover;
+    }
+
+    h3 {
+        margin-top: 1rem;
+        @include v.body-14-m;
+        font-weight: v.$font-weight-bold;
+    }
+
+    p {
+        margin-top: .375rem;
+        @include v.body-14-r;
+        color: v.$neutral-color-100;
+    }
+}
+
+// 재생 / 일시정지 버튼 (초록 원)
+.collection-playback {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: v.$main-primary-color;
+    color: v.$neutral-color-black;
+}
+
+// ---------- NiKo ----------
+.niko {
+    &__title {
+        @include v.heading-20-sb;
+        color: v.$neutral-color-100;
+    }
+
+    &__records {
+        width: min(100% - 3rem, 56rem);
+        margin: 0 auto;
+        padding-top: 6rem;
+
+        h2 {
+            @include v.display-44-b;
+            color: v.$main-primary-color;
+        }
+
+        dl {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+
+        dl>div {
+            display: grid;
+            align-content: center;
+            gap: .75rem;
+            min-height: 10rem;
+            padding: 1.5rem;
+            border: 1px solid v.$neutral-color-500;
+            border-radius: v.$radius-sm;
+            background: v.$neutral-color-panel;
+        }
+
+        dd {
+            @include v.display-44-b;
+            color: v.$main-primary-color;
+        }
+
+        dt {
+            @include v.body-14-m;
+            color: v.$neutral-color-white;
+        }
+    }
+
+    &__story {
+        width: min(100% - 3rem, 90rem);
+        margin: 0 auto;
+        padding-top: 7rem;
+
+        h2 {
+            @include v.display-44-b;
+        }
+
+        >p {
+            width: min(100%, 42rem);
+            margin: 1rem auto 0;
+            @include v.body-16-r;
+            color: v.$neutral-color-100;
+        }
+    }
+
+    &__video {
+        position: relative;
+        margin-top: 2.5rem;
+
+        video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background: v.$neutral-color-panel;
+        }
+
+        .collection-playback {
+            position: absolute;
+            right: 1.5rem;
+            bottom: 1.5rem;
+        }
+
+        &.safe-image__fallback {
+            aspect-ratio: 16 / 9;
+        }
+    }
+
+    &__thanks {
+        padding-top: 7rem;
+
+        h2 {
+            @include v.display-60-r;
+            font-family: v.$font-family-base;
+            font-weight: v.$font-weight-bold;
+            color: v.$main-primary-color;
+        }
+
+        p {
+            margin-top: 1rem;
+            @include v.body-16-r;
+            color: v.$neutral-color-100;
+        }
+    }
+
+    // 자동으로 넘어가는 슬라이드
+    &__carousel {
+        position: relative;
+        width: min(100%, 90rem);
+        margin: 5rem auto 0;
+        overflow: hidden;
+    }
+
+    &__slides {
+        display: flex;
+        transition: transform .6s cubic-bezier(.22, .61, .36, 1);
+    }
+
+    // 슬라이드 이미지 (글자 포함) + 지금 쇼핑하기
+    &__slide {
+        position: relative;
+        flex: 0 0 100%;
+
+        img,
+        .safe-image__fallback {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1920 / 1080;
+            min-height: 0;
+            object-fit: cover;
+        }
+    }
+
+    &__shop {
+        position: absolute;
+        left: 50%;
+        bottom: 8%;
+        padding: .875rem 2rem;
+        border-radius: v.$radius-sm;
+        background: v.$main-primary-color;
+        color: v.$neutral-color-black;
+        transform: translateX(-50%);
+        @include v.label-16-sb;
+        transition: filter .2s;
+
+        &:hover {
+            filter: brightness(1.1);
+        }
+    }
+
+    &__carousel-controls {
+        position: absolute;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+
+        >button:not(.collection-playback) {
+            width: .625rem;
+            height: .625rem;
+            border-radius: 50%;
+            background: v.$neutral-color-300;
+
+            &.is-active {
+                background: v.$main-primary-color;
+            }
+        }
+    }
+
+    &__related {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+        width: min(100% - 3rem, 56rem);
+        margin: 5rem auto 0;
+
+        a {
+            display: grid;
+            gap: .5rem;
+            justify-items: center;
+        }
+
+        img,
+        .safe-image__fallback {
+            width: 100%;
+            aspect-ratio: 1;
+            min-height: 0;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        strong {
+            @include v.heading-20-sb;
+        }
+
+        span {
+            @include v.body-14-r;
+            color: v.$neutral-color-100;
+        }
+
+        em {
+            font-style: normal;
+            @include v.body-14-m;
+            color: v.$main-primary-color;
+        }
+
+        a:hover em {
+            text-decoration: underline;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .niko__slides {
+        transition: none;
+    }
+
+    .collection-axon__row {
+        animation: none;
+    }
+}
+
 @media (max-width: 720px) {
-    .esports-green__intro { grid-template-columns: minmax(0, 1fr); }
-    .design-esports__athlete { gap: 10px; }
-    .design-esports__athlete h3 { @include v.display-32-b; }
-    .design-esports__athlete p { @include v.heading-20-sb; }
-    .design-esports__year .design-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .design-esports__year .design-tabs button { min-height: 40px; font-size: 12px; }
-    .design-esports__photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .modal:has(.design-esports-gallery-modal) .modal__panel { max-height: 100dvh; }
-    .niko-profile__intro { grid-template-columns: minmax(0, 1fr); }
-    .niko-profile__lineup { grid-template-columns: minmax(0, 1fr); }
-    .niko-profile__record dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .niko-profile__tribute, .niko-profile__related { grid-template-columns: minmax(0, 1fr); }
+    .collection-intro__title {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+
+    .collection-intro__awards {
+        gap: 1rem;
+    }
+
+    .collection-award__seal {
+        width: 6rem;
+    }
+
+    .collection-lineup__grid,
+    .collection-features,
+    .niko__records dl {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .collection-section__media.is-split,
+    .niko__related {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .collection-colorways ul {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .niko__shop {
+        padding: .5rem 1rem;
+        font-size: .75rem;
+    }
+
+    .design-esports__athlete {
+        gap: 10px;
+    }
+
+    .design-esports__athlete h3 {
+        @include v.display-32-b;
+    }
+
+    .design-esports__athlete p {
+        @include v.heading-20-sb;
+    }
+
+    .design-esports__year .design-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .design-esports__year .design-tabs button {
+        min-height: 40px;
+        font-size: 12px;
+    }
+
+    .design-esports__photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .modal:has(.design-esports-gallery-modal) .modal__panel {
+        max-height: 100dvh;
+    }
 }
