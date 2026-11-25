@@ -326,7 +326,7 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
 
             {editingEmail && (
                 <EmailModal
-                    current={user.email}
+                    current={user.email ?? ""}
                     onClose={() => setEditingEmail(false)}
                     onSent={(email) => {
                         setEditingEmail(false);
@@ -499,7 +499,7 @@ const Security = ({ user }: { user: AppUser }) => {
                     />
                 ) : (
                     <TwoFactorModal
-                        email={user.email}
+                        email={user.email ?? ""}
                         onClose={() => setTwoFactor(false)}
                         onSave={async () => {
                             await onUpdateProfile({ twoFactor: true });

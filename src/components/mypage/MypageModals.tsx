@@ -736,7 +736,9 @@ export const ImageUploadModal = ({ onClose, onApply }: { onClose: () => void; on
     const { busy, error, setError, run } = useSubmit();
 
     // 미리보기 주소 정리
-    useEffect(() => () => file && URL.revokeObjectURL(file.url), [file]);
+    useEffect(() => () => {
+        if (file) URL.revokeObjectURL(file.url);
+    }, [file]);
 
     const pick = (picked?: File) => {
         if (!picked) return;
