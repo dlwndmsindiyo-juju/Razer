@@ -23,7 +23,9 @@ export function PageHero({ src, mobileSrc, children }: { src: string; mobileSrc?
     </div>;
 }
 
-export function CatalogCard({ product, featured = false, badge }: { product: Product; featured?: boolean; badge?: string }) {
+export function CatalogCard({ product, featured = false, badge, description }: {
+    product: Product; featured?: boolean; badge?: string; description?: string;
+}) {
     const to = "/products/" + product.category + "/" + product.id;
     return <article className={"design-recommendation" + (featured ? " design-recommendation--featured" : "")}>
         {badge && <span className="design-recommendation__badge">{badge}</span>}
@@ -32,7 +34,7 @@ export function CatalogCard({ product, featured = false, badge }: { product: Pro
         </div>
         <div className="design-recommendation__copy">
             <h3>{product.title}</h3>
-            <p>{categoryLabels[product.category]}</p>
+            <p>{description ?? categoryLabels[product.category]}</p>
             <Link className="design-explore" to={to} aria-label={product.title + " 자세히 보기"}>
                 EXPLORE <img src={commonImages.explore} alt="" />
             </Link>

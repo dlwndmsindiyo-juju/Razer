@@ -3385,7 +3385,7 @@ a.design-support:hover {
     &__record, &__collection { margin-top: clamp(44px, 7vw, 110px); }
     &__record dl {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1px;
         background: v.$neutral-color-500;
         border: 1px solid v.$neutral-color-500;
@@ -3397,6 +3397,20 @@ a.design-support:hover {
     &__collection header { margin-bottom: 24px; }
     &__collection h2 { @include v.display-32-b; margin-top: 8px; }
     &__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: v.$neutral-color-black; margin-bottom: 24px; }
+    &__tribute {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+        align-items: center;
+        gap: clamp(16px, 5vw, 80px);
+        padding: clamp(16px, 4vw, 60px);
+        margin-top: clamp(44px, 7vw, 110px);
+        background: v.$neutral-color-panel;
+    }
+    &__tribute img { width: min(100%, 360px); aspect-ratio: 1; object-fit: cover; justify-self: center; }
+    &__tribute h2 { @include v.display-32-b; margin-block: 10px; }
+    &__tribute p:last-child { color: v.$neutral-color-100; }
+    &__related { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 44px; }
+    &__related a { display: flex; justify-content: space-between; gap: 12px; padding: 16px; border: 1px solid v.$neutral-color-500; border-radius: v.$radius-sm; color: v.$main-primary-color; }
 }
 @media (max-width: 720px) {
     .design-esports__athlete { gap: 10px; }
@@ -3408,4 +3422,5 @@ a.design-support:hover {
     .modal:has(.design-esports-gallery-modal) .modal__panel { max-height: 100dvh; }
     .niko-profile__intro { grid-template-columns: minmax(0, 1fr); }
     .niko-profile__record dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .niko-profile__tribute, .niko-profile__related { grid-template-columns: minmax(0, 1fr); }
 }
