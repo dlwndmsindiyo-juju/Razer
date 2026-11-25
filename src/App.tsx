@@ -66,7 +66,7 @@ function App() {
             element={<ProductsDetail />}
           />
           <Route
-            path="/products/keyboards/:productId/customize"
+            path="/products/:category/:productId/customize"
             element={<Suspense fallback={<p role="status">커스텀 페이지를 불러오는 중이에요.</p>}><ProductCustomize /></Suspense>}
           />
           {/* 푸터 내부 링크 페이지 */}
