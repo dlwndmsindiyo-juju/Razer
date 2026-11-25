@@ -33,8 +33,8 @@ const exclusiveProducts = getProductsByCollection("exclusive");
 const carbonProducts = exclusiveProducts.filter(({ title }) => /^Razer (Viper V4 Pro|DeathAdder V4 Pro) - Carbon Fiber Edition$/i.test(title));
 const otherExclusiveProducts = exclusiveProducts.filter(({ title }) => /^Razer (Viper V4 Pro - Esports Green Edition|Raiju V3 Pro Signature Edition)$/i.test(title));
 const featuredGroups = [
-    { badge: "ONLY AT RAZER", title: "RAZER 카본 파이버 컬렉션", products: carbonProducts },
-    { badge: "RAZER 독점", title: "Razer 독점 템", products: otherExclusiveProducts },
+    { title: "RAZER 카본 파이버 컬렉션", products: carbonProducts },
+    { title: "Razer 독점 템", products: otherExclusiveProducts },
 ];
 const featuredCollabCards = [
     ["honkai", exclusiveImages.collabs.honkai, "RAZER | HONKAI : STAR RAIL | CTRL + ALT + WIN", "모든 전투가 하나의 게임에 불과한 은하계에서, 무적 모드로 플레이하는 게이머는 오직 단 한 명뿐입니다."],
@@ -52,9 +52,9 @@ export function ExclusivesPage() {
         <div className="design-container">
             <PageHeading title="Razer 독점" description="공식 온라인 스토어에서만 구매할 수 있는 고유한 제품을 알아보세요" />
             <div className="design-grid design-grid--two design-exclusive__featured">
-                {featuredGroups.map(({ badge, title, products }) =>
+                {featuredGroups.map(({ title, products }) =>
                     <section key={title} className="design-stack">
-                        <div className="design-exclusive__label"><span className="design-pill">{badge}</span><p>프로를 위한</p><h2>{title}</h2></div>
+                        <div className="design-exclusive__label"><p>프로를 위한</p><h2>{title}</h2></div>
                         <div className="design-grid design-grid--two design-product-pair">{products.map((product) =>
                             <CatalogCard key={product.id} product={product} featured />)}</div>
                     </section>)}

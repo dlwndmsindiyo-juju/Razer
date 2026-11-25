@@ -1738,10 +1738,14 @@ a.design-support:hover {
     }
 }
 
+// 카드: 같은 줄 카드는 가장 긴 카드 높이에 맞추고 EXPLORE 는 항상 맨 아래
 .design-recommendation {
     position: relative;
+    display: flex;
+    flex-direction: column;
     min-width: 0;
     min-height: 416px;
+    height: 100%;
     border-radius: v.$radius-sm;
     background: v.$neutral-color-700;
 
@@ -1758,7 +1762,16 @@ a.design-support:hover {
     }
 
     &__copy {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
         padding: 0 20px 24px;
+    }
+
+    &__copy .design-explore {
+        margin-top: auto;
+        padding-top: 12px;
     }
 
     h3 {
@@ -1817,19 +1830,16 @@ a.design-support:hover {
         column-gap: 24px;
     }
 
+    // 왼쪽 · 오른쪽 카드 묶음 높이를 맞춤 (가장 긴 카드 기준)
     &__featured .design-stack {
+        display: flex;
+        flex-direction: column;
         gap: 30px;
     }
 
     .design-product-pair {
+        flex: 1;
         grid-template-columns: repeat(2, minmax(0, 301px));
-    }
-
-    &__label .design-pill {
-        margin-bottom: 10px;
-        padding: 12px;
-        line-height: 16px;
-        background: v.$neutral-color-300;
     }
 
     &__label p {
@@ -2203,13 +2213,6 @@ a.design-support:hover {
 
         &__featured .design-stack {
             gap: 10px;
-        }
-
-        &__label .design-pill {
-            float: right;
-            font-size: 9px;
-            padding: 5px 7px;
-            line-height: 12px;
         }
 
         &__label p {
@@ -3498,8 +3501,14 @@ a.design-support:hover {
     }
 }
 
+// 같은 줄 상품은 가장 긴 칸 높이에 맞추고 버튼(자세한 정보 · 구입)은 맨 아래 한 줄로
+.collection-lineup__grid>li {
+    display: flex;
+}
+
 .collection-product {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
 
@@ -4045,10 +4054,17 @@ a.design-support:hover {
         width: min(100% - 3rem, 56rem);
         margin: 5rem auto 0;
 
+        // 카드 높이를 맞추고 "자세한 정보" 는 맨 아래
+        li {
+            display: flex;
+        }
+
         a {
-            display: grid;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
             gap: .5rem;
-            justify-items: center;
         }
 
         img,
@@ -4072,6 +4088,7 @@ a.design-support:hover {
     }
 
     &__related-more {
+        margin-top: auto;
         @include v.body-14-m;
         color: v.$main-primary-color;
     }
@@ -4133,4 +4150,4 @@ a.design-support:hover {
     .design-esports__athlete p {
         @include v.heading-20-sb;
     }
-}
+}
