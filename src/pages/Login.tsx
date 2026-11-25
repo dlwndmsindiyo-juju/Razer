@@ -4,7 +4,7 @@ import { getAuthErrorMessage, isNoAccountError, useAuthStore } from "../store/us
 import { AuthField } from "../components/auth/AuthField";
 import { AuthDivider, SocialLogin } from "../components/auth/SocialLogin";
 import { validateEmail, validatePassword } from "../data/authData";
-import { useErrorDisplay } from "../components/auth/useErrorDisplay";
+import { useErrorDisplay } from "../types/useErrorDisplay";
 import { AuthModal } from "../components/auth/AuthModal";
 
 // 로그인 (/login)

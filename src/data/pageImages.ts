@@ -78,6 +78,7 @@ export const esportsImages = {
 // ---------- 서비스 > FAQ ----------
 export const faqImages = {
     plus: img("faq/plus.svg"),
+    plusWhite: img("faq/plus-white.svg"), // 모바일 · 태블릿 푸터
     search: img("faq/search.svg"),
 };
 

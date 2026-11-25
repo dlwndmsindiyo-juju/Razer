@@ -137,6 +137,7 @@ const ProductSlider = ({ children }: { children: ReactNode }) => {
         <div className="home-slider">
             <ul
                 className="home-slider__track"
+                data-no-drag
                 ref={trackRef}
                 onScroll={update}
                 onPointerDown={onPointerDown}

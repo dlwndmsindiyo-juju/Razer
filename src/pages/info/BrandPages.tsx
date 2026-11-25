@@ -277,7 +277,7 @@ function EsportsGallery({ album }: { album: typeof albums[number] }) {
                 <img src={esportsImages.galleryRight} alt="" />
             </button>
         </div>
-        <div className="design-esports-gallery__thumbs" ref={thumbs} aria-label="행사 사진 목록 (드래그해서 넘기기)"
+        <div className="design-esports-gallery__thumbs" data-no-drag ref={thumbs} aria-label="행사 사진 목록 (드래그해서 넘기기)"
             onPointerDown={onThumbDown} onPointerMove={onThumbMove} onPointerUp={onThumbUp} onPointerCancel={onThumbUp}
             onClickCapture={(e) => {
                 // 드래그한 뒤 손을 뗄 때는 사진 선택으로 치지 않음

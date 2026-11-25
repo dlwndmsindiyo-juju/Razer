@@ -1,5 +1,5 @@
 import { useId, useState, type InputHTMLAttributes } from "react";
-import { useShake } from "./useShake";
+import { useShake } from "../../types/useShake";
 
 interface AuthFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
     label: string; // 플레이스홀더 겸 접근성 이름
