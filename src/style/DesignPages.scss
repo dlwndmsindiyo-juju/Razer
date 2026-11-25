@@ -1362,7 +1362,7 @@ a.design-support:hover {
         font-size: clamp(22px, 2vw, 32px);
     }
 
-    .design-heading:has(+ .design-esports__player) h2 {
+    .design-heading:has(+ .design-esports__athlete) h2 {
         color: v.$main-primary-color;
         font-size: clamp(24px, 3vw, 44px);
     }
@@ -3171,9 +3171,6 @@ a.design-support:hover {
         }
     }
 
-    &__year-mobile {
-        display: none;
-    }
 }
 
 .design-esports-gallery {
@@ -3296,30 +3293,6 @@ a.design-support:hover {
         }
     }
 
-    .design-esports__year-desktop {
-        display: none;
-    }
-
-    .design-esports__year-mobile {
-        display: revert;
-    }
-
-    .design-esports__photo-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 2px;
-        margin-top: 10px;
-
-        button:first-child {
-            grid-column: 1 / -1;
-        }
-
-        img {
-            width: 100%;
-            aspect-ratio: 3 / 2;
-            object-fit: cover;
-        }
-    }
 }
 
 .modal:has(.design-esports-gallery-modal) {
@@ -3355,4 +3328,84 @@ a.design-support:hover {
     &__thumbs button {
         flex-basis: 14%;
     }
-}
+}
+
+.design-esports__athlete {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 16px;
+    margin-bottom: clamp(40px, 6vw, 100px);
+
+    .design-esports__player { margin-bottom: 8px; }
+    h3 { @include v.display-44-b; color: v.$main-primary-color; }
+    p { @include v.heading-24-b; }
+    a { color: v.$main-primary-color; margin-top: 12px; }
+}
+
+.design-esports__year {
+    .design-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .design-tabs button {
+        border: 1px solid v.$neutral-color-white;
+        background: transparent;
+        color: v.$neutral-color-white;
+        font-weight: v.$font-weight-bold;
+    }
+    .design-tabs button[aria-pressed="true"] {
+        border-color: v.$main-primary-color;
+        background: transparent;
+        color: v.$main-primary-color;
+    }
+}
+
+.design-esports__photo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(28px, 4.7vw, 84px);
+
+    button { display: block; }
+    button:focus-visible { position: relative; z-index: 1; outline-offset: -3px; }
+    img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+}
+
+.niko-profile {
+    &__back { display: inline-block; color: v.$main-primary-color; margin-block: 28px; }
+    &__intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+        gap: clamp(20px, 4vw, 64px);
+        align-items: end;
+        border-bottom: 1px solid v.$neutral-color-500;
+        padding-bottom: clamp(24px, 4vw, 60px);
+    }
+    &__intro h1 { font-size: clamp(44px, 7vw, 104px); line-height: 1; color: v.$main-primary-color; margin-block: 8px; }
+    &__eyebrow { @include v.label-14-sb; color: v.$main-primary-color; }
+    &__name { @include v.heading-20-sb; }
+    &__bio p, &__collection header p:last-child { color: v.$neutral-color-100; margin-top: 10px; max-width: 60ch; }
+    &__record, &__collection { margin-top: clamp(44px, 7vw, 110px); }
+    &__record dl {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 1px;
+        background: v.$neutral-color-500;
+        border: 1px solid v.$neutral-color-500;
+        margin-top: 20px;
+    }
+    &__record dl > div { background: v.$neutral-color-panel; padding: 18px; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; }
+    &__record dd { @include v.display-32-b; color: v.$main-primary-color; }
+    &__record dt { color: v.$neutral-color-100; }
+    &__collection header { margin-bottom: 24px; }
+    &__collection h2 { @include v.display-32-b; margin-top: 8px; }
+    &__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: v.$neutral-color-black; margin-bottom: 24px; }
+}
+@media (max-width: 720px) {
+    .design-esports__athlete { gap: 10px; }
+    .design-esports__athlete h3 { @include v.display-32-b; }
+    .design-esports__athlete p { @include v.heading-20-sb; }
+    .design-esports__year .design-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .design-esports__year .design-tabs button { min-height: 40px; font-size: 12px; }
+    .design-esports__photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .modal:has(.design-esports-gallery-modal) .modal__panel { max-height: 100dvh; }
+    .niko-profile__intro { grid-template-columns: minmax(0, 1fr); }
+    .niko-profile__record dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

@@ -69,7 +69,9 @@ export const esportsImages = {
     iconAim: img("esports/icon-aim.svg"),
     galleryLeft: img("esports/gallery-left.svg"),
     galleryRight: img("esports/gallery-right.svg"),
-    eventPhoto: (number: number) => img("esports/event-photo-" + pad(number) + ".webp"), // 1 ~ 20
+    eventPhoto: (event: string, number: number) => img("esports/events/" + event + "/" + pad(number) + ".webp"),
+    nikoHero: img("esports/niko/hero.webp"),
+    nikoHeroMobile: img("esports/niko/hero-mobile.webp"),
     teamLogo: (number: number) => img("esports/team-logo-" + pad(number) + ".webp"), // 1 ~ 22
 };
 

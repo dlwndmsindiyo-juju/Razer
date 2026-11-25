@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Modal } from "../../components/common/Modal";
 import { aboutCopy, esportsCopy } from "../../data/editorialData";
 import { aboutImages, esportsImages } from "../../data/pageImages";
@@ -133,10 +134,10 @@ function BrandSection({ section: [id, title, banner, description, action, href, 
 
 const teamLogos = Array.from({ length: 22 }, (_, index) => esportsImages.teamLogo(index + 1));
 const albums = [
-    { title: "RED BULL LOIO", photos: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
-    { title: "ALGS SAPPORO 2026", photos: [3, 7, 11, 15, 19] },
-    { title: "VCT EMEA 2026", photos: [4, 8, 12, 16, 20] },
-    { title: "EVO JAPAN 2026", photos: [5, 9, 13, 17] },
+    { title: "RED BULL LOIO", slug: "red-bull-loio", photoCount: 20 },
+    { title: "ALGS SAPPORO 2026", slug: "algs-sapporo-2026", photoCount: 36 },
+    { title: "VCT EMEA 2026", slug: "vct-emea-2026", photoCount: 12 },
+    { title: "EVO JAPAN 2026", slug: "evo-japan-2026", photoCount: 38 },
 ];
 const proModels = [
     "Razer Viper V4 Pro - Esports Green Edition",
@@ -147,7 +148,7 @@ const proModels = [
 
 export function EsportsPage() {
     const [event, setEvent] = useState(0);
-    const [mobilePhoto, setMobilePhoto] = useState<number>();
+    const [openPhoto, setOpenPhoto] = useState<number>();
     const album = albums[event];
     return <div className="design-page design-esports">
         <PageHero src={esportsImages.hero} />
@@ -169,7 +170,12 @@ export function EsportsPage() {
                 })}
             </div>
             <PageHeading title={esportsCopy[1]} description={esportsCopy[13]} as="h2" />
-            <img className="design-esports__player" src={esportsImages.player} alt="Team Razer 프로 선수" loading="lazy" />
+            <article className="design-esports__athlete">
+                <img className="design-esports__player" src={esportsImages.player} alt="Team Razer의 NiKo 선수" loading="lazy" />
+                <h3>NIKO</h3>
+                <p>IEM COLOGNE 2026 메이저 챔피언</p>
+                <Link to="/info/promotion/esports/niko">프로필 보기 <span aria-hidden="true">›</span></Link>
+            </article>
         </div>
         {/* 팀 아이콘: 화면 끝까지 풀로 흘러감 · 마우스를 올리면 멈춤 */}
         <section className="design-team-logos" aria-label="Team Razer 선수와 팀">
@@ -187,31 +193,23 @@ export function EsportsPage() {
         </section>
         <section className="design-esports__year" aria-labelledby="esports-year-heading">
             <div className="design-container design-heading">
-                <h2 id="esports-year-heading">
-                    <span className="design-esports__year-desktop">{esportsCopy[2]}</span>
-                    <span className="design-esports__year-mobile">우리가 함께한 곳</span>
-                </h2>
+                <h2 id="esports-year-heading">우리가 함께한 곳</h2>
                 <p>{esportsCopy[14]}</p>
             </div>
             <div className="design-tabs design-container" aria-label="e스포츠 행사">
                 {albums.map(({ title }, index) => <button type="button" key={title} aria-pressed={event === index} onClick={() => setEvent(index)}>{title}</button>)}
             </div>
-            <div className="design-esports__year-desktop">
-                <EsportsGallery key={album.title} album={album} />
-            </div>
-            <div className="design-container design-esports__year-mobile">
-                <div className="design-esports__photo-grid">
-                    {album.photos.map((number, index) => (
-                        <button type="button" key={number} onClick={() => setMobilePhoto(index)} aria-label={album.title + " 사진 " + (index + 1)}>
-                            <img src={esportsImages.eventPhoto(number)} alt="" loading="lazy" />
-                        </button>
-                    ))}
-                </div>
+            <div className="design-esports__photo-grid" key={album.slug} role="group" aria-label={album.title + " 사진 목록"}>
+                {Array.from({ length: album.photoCount }, (_, index) => (
+                    <button type="button" key={index} onClick={() => setOpenPhoto(index)} aria-label={album.title + " 사진 " + (index + 1)}>
+                        <img src={esportsImages.eventPhoto(album.slug, index + 1)} alt="" loading="lazy" />
+                    </button>
+                ))}
             </div>
         </section>
-        {mobilePhoto !== undefined && <Modal title={album.title} onClose={() => setMobilePhoto(undefined)}>
+        {openPhoto !== undefined && <Modal title={album.title} onClose={() => setOpenPhoto(undefined)}>
             <div className="design-esports-gallery-modal">
-                <EsportsGallery album={album} initialIndex={mobilePhoto} />
+                <EsportsGallery album={album} initialIndex={openPhoto} />
             </div>
         </Modal>}
     </div>;
@@ -220,10 +218,10 @@ export function EsportsPage() {
 function EsportsGallery({ album, initialIndex = 0 }: { album: typeof albums[number]; initialIndex?: number }) {
     const [index, setIndex] = useState(initialIndex);
     const thumbnailTrack = useRef<HTMLDivElement>(null);
-    const count = album.photos.length;
+    const count = album.photoCount;
     const wrapIndex = (value: number) => (value + count) % count;
     const changePhoto = (direction: -1 | 1) => setIndex((previous) => wrapIndex(previous + direction));
-    const imageAt = (position: number) => esportsImages.eventPhoto(album.photos[position]);
+    const imageAt = (position: number) => esportsImages.eventPhoto(album.slug, position + 1);
     const thumbnailCount = Math.min(9, count);
     const thumbnails = Array.from({ length: thumbnailCount }, (_, offset) =>
         wrapIndex(index + offset - Math.floor(thumbnailCount / 2)),
