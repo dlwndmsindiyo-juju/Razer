@@ -684,6 +684,97 @@ export const AddressModal = ({
 };
 
 // =========================================================
+// 결제하기: 주문자 정보 입력 (주문자 + 배송지 · 저장하면 결제 페이지에 바로 적용)
+// =========================================================
+export type OrderBuyer = { name: string; phone: string }; // 실명 · 연락처만
+
+export const OrderInfoModal = ({
+    initial,
+    needAddress,
+    canSaveAddress,
+    onClose,
+    onSave,
+}: {
+    initial: OrderBuyer;
+    needAddress: boolean; // 등록된 배송지가 없으면 주소까지 필수
+    canSaveAddress: boolean; // 로그인 상태면 내 배송지로 저장 선택 가능
+    onClose: () => void;
+    onSave: (buyer: OrderBuyer, address?: Address) => Promise<void>;
+}) => {
+    const [name, setName] = useState(initial.name);
+    const [phone, setPhone] = useState(formatPhone(initial.phone));
+    const [same, setSame] = useState(true); // 받는 사람 = 주문자
+    const [receiver, setReceiver] = useState("");
+    const [receiverPhone, setReceiverPhone] = useState("");
+    const [base, setBase] = useState("");
+    const [detail, setDetail] = useState("");
+    const [saveAddress, setSaveAddress] = useState(canSaveAddress);
+    const [manual, setManual] = useState(false);
+    const { busy, error, setError, run } = useSubmit();
+
+    const search = async () => {
+        try {
+            await loadPostcode();
+            new window.daum!.Postcode({
+                oncomplete: (data) => setBase(`(${data.zonecode}) ${data.roadAddress || data.jibunAddress}`),
+            }).open();
+        } catch {
+            setManual(true);
+            setError("주소 검색을 불러오지 못했어요. 주소를 직접 입력해 주세요.");
+        }
+    };
+
+    const submit = () => {
+        if (!name.trim()) return setError("주문자 실명을 입력해 주세요.");
+        if (phone.replace(/\D/g, "").length < 10) return setError("주문자 연락처를 정확히 입력해 주세요.");
+        const wantsAddress = needAddress || !!base.trim();
+        if (needAddress && !base.trim()) return setError("배송지 주소를 검색해 주세요.");
+        if (wantsAddress && !same) {
+            if (!receiver.trim()) return setError("받는 사람을 입력해 주세요.");
+            if (receiverPhone.replace(/\D/g, "").length < 10) return setError("받는 사람 연락처를 정확히 입력해 주세요.");
+        }
+        const buyer = { name: name.trim(), phone: phone.replace(/\D/g, "") };
+        const address: Address | undefined = wantsAddress
+            ? {
+                id: newId(),
+                name: same ? buyer.name : receiver.trim(),
+                phone: same ? phone : receiverPhone,
+                address: [base.trim(), detail.trim()].filter(Boolean).join(", "),
+                isDefault: saveAddress,
+            }
+            : undefined;
+        run(() => onSave(buyer, address && { ...address, isDefault: canSaveAddress && saveAddress }));
+    };
+
+    return (
+        <Modal title="주문자 정보 입력" onClose={onClose} actions={<Actions onClose={onClose} label="적용" busy={busy} onConfirm={submit} />}>
+            <ModalField label="이름 (실명)" placeholder="홍길동" hint="닉네임이 아닌 실명을 입력해 주세요." autoFocus value={name} onChange={(e) => setName(e.target.value)} />
+            <ModalField label="연락처" inputMode="tel" placeholder="010-0000-0000" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} />
+
+            <p className="modal__section">{needAddress ? "배송지" : "새 배송지 (선택)"}</p>
+            <ModalCheck label="주문자와 받는 사람이 같아요" checked={same} onChange={setSame} />
+            {!same && <>
+                <ModalField label="받는 사람" placeholder="홍길동" value={receiver} onChange={(e) => setReceiver(e.target.value)} />
+                <ModalField label="받는 사람 연락처" inputMode="tel" placeholder="010-0000-0000" value={receiverPhone} onChange={(e) => setReceiverPhone(formatPhone(e.target.value))} />
+            </>}
+            <ModalField
+                label="주소"
+                placeholder="우편번호 · 주소 검색"
+                value={base}
+                readOnly={!manual}
+                className={`modal__input ${manual ? "" : "modal__input--button"}`}
+                onClick={manual ? undefined : search}
+                onKeyDown={(e) => !manual && e.key === "Enter" && search()}
+                onChange={(e) => setBase(e.target.value)}
+            />
+            <ModalField label="상세 주소" placeholder="입력해 주세요" value={detail} onChange={(e) => setDetail(e.target.value)} />
+            {canSaveAddress && <ModalCheck label="기본 배송지로 설정" checked={saveAddress} onChange={setSaveAddress} />}
+            <ErrorText text={error} />
+        </Modal>
+    );
+};
+
+// =========================================================
 // 2단계 인증 설정 (인증 이메일 · 6자리 인증번호)
 // =========================================================
 export const TwoFactorModal = ({ email, onClose, onSave }: { email: string; onClose: () => void; onSave: () => Promise<void> }) => {

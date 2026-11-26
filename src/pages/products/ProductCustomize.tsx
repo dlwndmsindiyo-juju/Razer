@@ -23,7 +23,7 @@ const views: { id: ViewAngle; label: string }[] = [
 const feelLabels = { clicky: "클릭키", tactile: "택타일", linear: "리니어" };
 const compatibleOptionLabels = ["색상 / 디자인", "키보드 레이아웃"];
 const iconPaths = {
-    keyboard: "M3 6h18v12H3zM6 10h2m2 0h2m2 0h2m2 0h1M6 14h2m2 0h8",
+    keyboard: "M10 8H10.01M12 12H12.01M14 8H14.01M16 12H16.01M18 8H18.01M6 8H6.01M7 16H17M8 12H8.01M4 4H20C20.5304 4 21.0391 4.21071 21.4142 4.58579C21.7893 4.96086 22 5.46957 22 6V18C22 18.5304 21.7893 19.0391 21.4142 19.4142C21.0391 19.7893 20.5304 20 20 20H4C3.46957 20 2.96086 19.7893 2.58579 19.4142C2.21071 19.0391 2 18.5304 2 18V6C2 5.46957 2.21071 4.96086 2.58579 4.58579C2.96086 4.21071 3.46957 4 4 4Z", // public/icons/ui/keyboard.svg
     switch: "M4 4h16v16H4zM10 7h4v3h3v4h-3v3h-4v-3H7v-4h3z",
     plug: "M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-6 6v4m0-4a6 6 0 0 1-6-6z",
     spark: "m12 2 2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8z",

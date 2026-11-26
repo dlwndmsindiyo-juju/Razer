@@ -1,4 +1,7 @@
 @use "../variables" as *;
+@use "./mobile";
+
+@include mobile.product-customize;
 
 .keyboard-customize {
     width: min($container-width, calc(100% - 2 * clamp(1rem, 6.25vw, $page-margin)));

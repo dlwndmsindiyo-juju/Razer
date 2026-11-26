@@ -1,11 +1,13 @@
 // 페이지별 이미지 경로 (파일은 public/images/<페이지 폴더>/ 에 있음)
 const img = (path: string) => "/images/" + path;
 const pad = (number: number) => String(number).padStart(2, "0");
+// 공용 아이콘 (public/icons/ui · 24 x 24 · 흰색 선 1.75) · 검정이 필요한 곳은 CSS filter: brightness(0)
+const ui = (name: string) => "/icons/ui/" + name + ".svg";
 
 // ---------- 공용 (여러 페이지에서 같이 씀) ----------
 export const commonImages = {
-    railLeft: img("common/rail-left.svg"), // 상품 목록 좌우 화살표 (구매 방법 · 결제 · 주문 완료)
-    railRight: img("common/rail-right.svg"),
+    railLeft: ui("chevron-left"), // 상품 목록 좌우 화살표 (구매 방법 · 결제 · 주문 완료)
+    railRight: ui("chevron-right"),
     explore: img("common/explore.svg"), // 카드 EXPLORE 화살표
 };
 
@@ -38,8 +40,8 @@ export const membershipImages = {
     benefitEvents: img("membership/benefit-events.svg"),
     promoCoupon: img("membership/promo-coupon.svg"),
     promoEmail: img("membership/promo-email.svg"),
-    cart: img("membership/cart.svg"),
-    info: img("membership/info.svg"),
+    cart: ui("cart"),
+    info: ui("info"),
     cyberWeekend: img("membership/cyber-weekend.webp"),
     rewardsEcosystem: img("membership/rewards-ecosystem.webp"),
     rewardsRedemption: img("membership/rewards-redemption.webp"),
@@ -53,9 +55,9 @@ export const membershipImages = {
 // ---------- 프로모션 > 제품 기술 (패널 이미지는 technologyData 에) ----------
 export const technologyImages = {
     icons: {
-        mouse: img("technology/icon-mouse.svg"),
-        keyboard: img("technology/icon-keyboard.svg"),
-        headset: img("technology/icon-headset.svg"),
+        mouse: ui("mouse"),
+        keyboard: ui("keyboard"),
+        headset: ui("headset"),
         speaker: img("technology/icon-speaker.svg"),
     },
 };
@@ -67,8 +69,8 @@ export const esportsImages = {
     player: img("esports/team-player.webp"),
     iconTrophy: img("esports/icon-trophy.svg"),
     iconAim: img("esports/icon-aim.svg"),
-    galleryLeft: img("esports/gallery-left.svg"),
-    galleryRight: img("esports/gallery-right.svg"),
+    galleryLeft: ui("chevron-left"),
+    galleryRight: ui("chevron-right"),
     eventPhoto: (event: string, number: number) => img("esports/events/" + event + "/" + pad(number) + ".webp"),
     nikoHero: img("esports/niko/hero.webp"),
     nikoHeroMobile: img("esports/niko/hero-mobile.webp"),
@@ -79,7 +81,7 @@ export const esportsImages = {
 export const faqImages = {
     plus: img("faq/plus.svg"),
     plusWhite: img("faq/plus-white.svg"), // 모바일 · 태블릿 푸터
-    search: img("faq/search.svg"),
+    search: ui("search"),
 };
 
 // ---------- 서비스 > 등록 및 보증 ----------
@@ -96,12 +98,13 @@ export const warrantyImages = {
 
 // ---------- 서비스 > 지원 ----------
 export const supportImages = {
-    arrow: img("support/arrow.svg"),
-    arrowPrimary: img("support/arrow-primary.svg"),
+    arrow: ui("arrow-right"),
 };
 
 // ---------- 회사 > Razer 소개 ----------
 export const aboutImages = {
+    heroVideo: "/videos/about/razer-hero.mp4", // 히어로 영상 (소리 없음 · 10초 반복)
+    heroPoster: img("about/hero-poster.webp"), // 영상 2초 장면 (불러오기 전 · 동작 줄이기 설정)
     city: img("about/razer-city.webp"),
     chromaBanner: img("about/chroma-banner.webp"),
     milestones2023: img("about/milestones-2023.webp"),
@@ -126,7 +129,7 @@ export const aboutImages = {
 // ---------- 결제 ----------
 export const paymentImages = {
     addCard: img("payment/add-card.svg"),
-    installmentChevron: img("payment/installment-chevron.svg"),
+    installmentChevron: ui("chevron-down"),
 };
 
 // ---------- 주문 완료 ----------
@@ -136,6 +139,6 @@ export const orderCompleteImages = {
 
 // ---------- 비밀번호 찾기 ----------
 export const passwordResetImages = {
-    check: img("password-reset/check.svg"),
-    info: img("password-reset/info.svg"),
+    check: ui("check"),
+    info: ui("info"),
 };

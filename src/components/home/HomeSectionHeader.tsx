@@ -16,7 +16,8 @@ export const HomeSectionHeader = ({ title, to, moreLabel = "전체 보기", chil
                 <h2 className="home-section__title">{title}</h2>
                 {to && (
                     <Link to={to} className="home-section__more">
-                        {moreLabel} →
+                        {moreLabel}
+                        <span className="home-section__more-icon" aria-hidden="true" />
                     </Link>
                 )}
             </div>

@@ -14,8 +14,8 @@ export const HomeCategory = () => {
                                 <ImageOrText src={category.image} alt="" label="Image" />
                             </span>
                             <strong className="home-category__name">{category.name}</strong>
-                            {/* 화살표 (아이콘 파일 없음 → 텍스트) */}
-                            <span className="home-category__arrow">→</span>
+                            {/* 화살표 (public/icons/arrow-right.svg) */}
+                            <span className="home-category__arrow"><img src="/icons/arrow-right.svg" alt="" /></span>
                         </Link>
                     </li>
                 ))}

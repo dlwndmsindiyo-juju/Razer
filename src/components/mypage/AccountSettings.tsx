@@ -31,12 +31,7 @@ const avatars = Array.from({ length: 7 }, (_, i) => `/images/profile/avatar-0${i
 const Icon = ({ name }: { name: string }) => <img src={`/icons/account/${name}.svg`} alt="" aria-hidden="true" />;
 
 // 아이콘 파일이 아직 없는 것 (? · 더보기)은 같은 선 굵기로 그림
-const HelpIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="9.25" />
-        <path d="M9.5 9.25a2.5 2.5 0 1 1 3.5 2.3c-.6.27-1 .86-1 1.52v.43M12 17h.01" />
-    </svg>
-);
+const HelpIcon = () => <img src="/icons/ui/help.svg" alt="" aria-hidden="true" />;
 const MoreIcon = () => (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <circle cx="5" cy="12" r="1.75" />
