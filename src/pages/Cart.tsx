@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "../store/useCartStore";
 import { CheckoutItem, CheckoutSummary } from "./CheckoutLayout";
@@ -9,6 +9,8 @@ import { PageHeading } from "./info/PageLayout";
 export function Cart() {
     const { items, removeItem, updateCount } = useCartStore();
     const [excluded, setExcluded] = useState<number[]>([]);
+    const [showSummary, setShowSummary] = useState(true);
+    const summaryId = useId();
     const selection = items.filter(({ id, price }) => price !== null && !excluded.includes(id));
     const available = items.filter(({ price }) => price !== null);
     const amount = subtotal(selection);
@@ -39,8 +41,16 @@ export function Cart() {
             </div>)}
             <p className="design-cart__total"><strong>총 결제 금액</strong><strong>{money(amount)}</strong></p>
         </section>
-        <aside className="design-stack">
-            <CheckoutSummary amount={amount} title="주문 금액" />
+        <aside className="design-stack design-cart__checkout">
+            <button type="button" className="design-cart__summary-toggle" aria-expanded={showSummary}
+                aria-controls={summaryId} onClick={() => setShowSummary((expanded) => !expanded)}>
+                <img src="/icons/chevron-down.svg" alt="" />
+                <span className="design-visually-hidden">주문 금액 상세</span>
+            </button>
+            <div id={summaryId} className="design-cart__summary-details" data-expanded={showSummary}>
+                <CheckoutSummary amount={amount} title="주문 금액" />
+            </div>
+            <p className="design-cart__mobile-total"><strong>총 주문 금액</strong><strong>{money(amount)}</strong></p>
             {selection.length ? <Link className="btn btn--primary" to="/checkout" state={{ ids: selection.map(({ id }) => id) }}>주문하기</Link> :
                 <button className="btn btn--primary" disabled>주문하기</button>}
         </aside>

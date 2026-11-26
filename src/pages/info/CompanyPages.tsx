@@ -5,7 +5,6 @@ import {
     razerCarePlans, sustainabilityNote, sustainabilityPillars, zventuresFocus, type InfoCard,
 } from "../../data/companyData";
 import { aboutImages, supportImages, warrantyImages } from "../../data/pageImages";
-import { PageHeading } from "./PageLayout";
 
 // 예전 외부 링크(razer.com · careers · zVentures · RazerCare)를 대신하는 사이트 안 페이지
 

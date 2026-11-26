@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getProductById, getSeriesProducts } from "../../data/productData";
 import { getProductPreview } from "../../data/keyboardPreview";
@@ -277,11 +277,27 @@ function ProductViewer({ product }: { product: Product }) {
     );
 }
 
+const mobileQuery = "(max-width: 720px)";
+function subscribeToMobile(onChange: () => void) {
+    const media = window.matchMedia(mobileQuery);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+}
+const isMobileViewport = () => window.matchMedia(mobileQuery).matches;
+
 export function ProductCustomize() {
     const { category, productId } = useParams();
+    const isMobile = useSyncExternalStore(subscribeToMobile, isMobileViewport);
     const product = /^\d+$/.test(productId ?? "") ? getProductById(Number(productId)) : undefined;
     if (!product || product.category !== category || (category !== "keyboards" && !getProductPreview(product))) {
         return <section className="keyboard-customize"><h1>3D로 볼 수 있는 상품을 찾을 수 없어요.</h1><Link to="/search">전체 상품 보기</Link></section>;
     }
+    if (isMobile) return <section className="product-customize-unavailable" aria-label="상품 커스텀">
+        <div className="product-customize-unavailable__art">
+            <img src="/images/product-customize/mobile-unavailable.png" alt="" />
+        </div>
+        <p>모바일에서는 <strong>지원하지 않는 기능</strong>입니다.</p>
+        <p><strong>PC버전</strong>을 이용해주세요.</p>
+    </section>;
     return <ProductViewer key={product.id} product={product} />;
 }

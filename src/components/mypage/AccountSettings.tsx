@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Modal } from "../common/Modal";
@@ -771,6 +771,8 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
     const { user, onLogout } = useAuthStore();
     const navigate = useNavigate();
     const [loggingOut, setLoggingOut] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuId = useId();
     if (!user) return null;
     const current = accountSections.find((s) => s.key === section) ?? accountSections[0];
 
@@ -782,14 +784,20 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
     return (
         <div className="account">
             <nav className="account__nav" aria-label="계정 관리 메뉴">
-                <ul>
+                <button type="button" className="account__mobile-toggle" aria-expanded={menuOpen}
+                    aria-controls={menuId} onClick={() => setMenuOpen(!menuOpen)}>
+                    <Icon name={current.icon} />
+                    <span><small>계정 관리</small><strong>{current.label}</strong></span>
+                    <img src="/icons/chevron-down.svg" alt="" />
+                </button>
+                <ul id={menuId} data-expanded={menuOpen}>
                     {accountSections.map((s) => (
                         <li key={s.key}>
                             <button
                                 type="button"
                                 className={`account__nav-item ${s.key === current.key ? "is-active" : ""}`}
                                 aria-current={s.key === current.key ? "page" : undefined}
-                                onClick={() => onSection(s.key)}
+                                onClick={() => { onSection(s.key); setMenuOpen(false); }}
                             >
                                 <span className="account__nav-icon">
                                     <Icon name={s.icon} />

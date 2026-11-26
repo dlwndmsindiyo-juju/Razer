@@ -154,29 +154,32 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
                     <div className="product-detail__bottom">
                         <GiftList gifts={detailGifts} />
+                        <div className="product-detail__purchase-panel">
+                            <div className="product-detail__buy">
+                                <div className="pd-qty" aria-label="수량">
+                                    <button type="button" aria-label="수량 줄이기" disabled={count <= 1} onClick={() => setCount((n) => Math.max(1, n - 1))}>
+                                        -
+                                    </button>
+                                    <span aria-live="polite">{count}</span>
+                                    <button type="button" aria-label="수량 늘리기" disabled={count >= 99} onClick={() => setCount((n) => Math.min(99, n + 1))}>
+                                        +
+                                    </button>
+                                </div>
+                                <p className="product-detail__total" aria-label="총 가격">
+                                    <span className="product-detail__total-label">총 주문 금액</span>
+                                    <strong>{total}</strong>
+                                </p>
+                            </div>
 
-                        <div className="product-detail__buy">
-                            <div className="pd-qty" aria-label="수량">
-                                <button type="button" aria-label="수량 줄이기" disabled={count <= 1} onClick={() => setCount((n) => Math.max(1, n - 1))}>
-                                    -
+                            <div className="product-detail__actions">
+                                <button type="button" className="product-detail__cart" disabled={purchaseDisabled} onClick={addToCart}>
+                                    <span>장바구니에 추가</span>
+                                    <img src="/icons/cart-mobile.svg" alt="" />
                                 </button>
-                                <span aria-live="polite">{count}</span>
-                                <button type="button" aria-label="수량 늘리기" disabled={count >= 99} onClick={() => setCount((n) => Math.min(99, n + 1))}>
-                                    +
+                                <button type="button" className="product-detail__purchase" disabled={purchaseDisabled} onClick={buyNow}>
+                                    {unverified ? "판매 정보 미확인" : soldOut ? "품절" : product.stockStatus === "preOrderStock" ? "예약 구매하기" : "구매하기"}
                                 </button>
                             </div>
-                            <p className="product-detail__total" aria-label="총 가격">
-                                <strong>{total}</strong>
-                            </p>
-                        </div>
-
-                        <div className="product-detail__actions">
-                            <button type="button" className="product-detail__cart" disabled={purchaseDisabled} onClick={addToCart}>
-                                장바구니에 추가
-                            </button>
-                            <button type="button" className="product-detail__purchase" disabled={purchaseDisabled} onClick={buyNow}>
-                                {unverified ? "판매 정보 미확인" : soldOut ? "품절" : product.stockStatus === "preOrderStock" ? "예약 구매하기" : "구매하기"}
-                            </button>
                         </div>
                     </div>
                 </div>

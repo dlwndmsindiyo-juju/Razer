@@ -1,4 +1,5 @@
 @use "./variables" as *;
+@use "./style/mobile";
 
 // 펼침 (메뉴 · FAQ · 아코디언) 공통 속도
 $reveal-duration: 0.4s;
@@ -2542,6 +2543,8 @@ $auth-error-color: #FF4646; // 입력 에러 문구
         margin-left: auto;
     }
 
+    &__profile-btn--mobile, &__order-back { display: none; }
+
     // ---------- 탭 ----------
     &__tabs {
         border-bottom: 0.0625rem solid $neutral-color-700;
@@ -2919,6 +2922,8 @@ $auth-error-color: #FF4646; // 입력 에러 문구
     display: grid;
     grid-template-columns: 15rem 1fr;
     gap: 4rem;
+
+    &__mobile-toggle { display: none; }
 
     // ---------- 왼쪽 메뉴 ----------
     &__nav ul {
@@ -3375,6 +3380,8 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
 
 .product-detail {
     padding-top: 4.25rem;
+
+    &__total-label, &__cart img { display: none; }
 
     // [이미지(세로 썸네일 + 큰 이미지) | 상품 정보]
     &__top {
@@ -5870,34 +5877,6 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
 // 태블릿 · 모바일 (1024px 이하) · 헤더 · 푸터 공용 디자인
 // 가로로 나열되던 목록은 아래로 떨어지지 않고 드래그 슬라이드 (스크롤바 없음)
 // =========================================================
-// 가로 드래그 슬라이드 (마우스 드래그는 useDragScroll · 터치는 손가락으로)
-@mixin drag-slider($item: min(70%, 20rem)) {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: none;
-    grid-template-rows: none;
-    grid-auto-columns: $item;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    cursor: grab;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    >* {
-        scroll-snap-align: start;
-    }
-
-    &.is-dragging {
-        scroll-snap-type: none;
-        cursor: grabbing;
-        user-select: none;
-    }
-}
-
 // 햄버거 · 모바일 메뉴 · 흐르는 프로모션 문구 사본은 PC 에서 숨김
 .header__burger,
 .header__promo-copy,
@@ -5918,423 +5897,10 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
     display: none;
 }
 
-@media (max-width: 1024px) {
+@include mobile.product-and-community;
+@include mobile.account-and-orders;
 
-    // 화면 밖으로 가로 스크롤바가 생기지 않게
-    html:has(main > :is(.home, .design-page, .auth)),
-    body:has(main > :is(.home, .design-page, .auth)) {
-        overflow-x: clip;
-    }
-
-    body:has(main > .home) {
-        min-width: 0;
-    }
-
-    // ---------- 헤더 (햄버거 · 로고 가운데 · 검색 · 장바구니) ----------
-    body .header {
-        .header__gnb {
-            height: 3rem;
-        }
-
-        .header__inner {
-            width: calc(100% - 2rem);
-            max-width: none;
-        }
-
-        .header__nav,
-        .header__utils>.user-menu,
-        .header__utils>a[aria-label="로그인"] {
-            display: none;
-        }
-
-        .header__logo {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-
-            img {
-                height: 2rem;
-            }
-        }
-
-        .header__utils {
-            gap: 1rem;
-            margin-left: auto;
-        }
-
-        .header__icon {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-
-        // 프로모션 바: 한 줄 · 글자가 옆으로 흘러감
-        .header__promo {
-            justify-content: flex-start;
-            height: 2.25rem;
-            min-height: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .header__promo-track {
-            display: flex;
-            width: max-content;
-            animation: promo-flow 18s linear infinite;
-        }
-
-        .header__promo-text {
-            @include caption-12-r;
-            padding-right: 3rem;
-            white-space: nowrap;
-        }
-
-        .header__promo-copy {
-            display: block;
-        }
-
-        .search-overlay__inner {
-            width: calc(100% - 2rem);
-            padding: 1.5rem 0 2rem;
-        }
-
-        .search-overlay__close {
-            top: 2.25rem;
-        }
-
-        .search-overlay__form,
-        .search-overlay__popular {
-            margin-right: 2.5rem;
-        }
-    }
-
-    .header__burger {
-        display: grid;
-        align-content: center;
-        gap: 0.3125rem;
-        width: 1.5rem;
-        height: 1.5rem;
-
-        span {
-            display: block;
-            height: 0.0625rem;
-            background-color: $neutral-color-white;
-        }
-    }
-
-    // ---------- 모바일 메뉴 (왼쪽에서 스르륵) ----------
-    .mobile-menu {
-        position: fixed;
-        inset: 0;
-        z-index: 300;
-        display: block;
-        visibility: hidden;
-        transition: visibility 0s $reveal-duration;
-
-        &.is-open {
-            visibility: visible;
-            transition: visibility 0s;
-        }
-
-        &__dim {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            opacity: 0;
-            transition: opacity $reveal-duration ease;
-        }
-
-        &.is-open &__dim {
-            opacity: 1;
-        }
-
-        &__panel {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            width: min(85%, 22.5rem);
-            padding: 0 1rem 2rem;
-            background-color: $neutral-color-panel;
-            overflow-y: auto;
-            transform: translateX(-100%);
-            transition: transform $reveal-duration $reveal-ease;
-        }
-
-        &.is-open &__panel {
-            transform: none;
-        }
-
-        &__head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 3rem;
-
-            img {
-                height: 2rem;
-            }
-        }
-
-        &__close img {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-
-        &__groups>li {
-            border-bottom: 0.0625rem solid $neutral-color-500;
-        }
-
-        &__group {
-            @include heading-20-sb;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 1.25rem 0;
-            color: $neutral-color-white;
-        }
-
-        &__links {
-            display: grid;
-            gap: 1rem;
-            padding: 0 0 1.5rem;
-
-            a {
-                @include body-16-r;
-                color: $neutral-color-100;
-
-                &:hover {
-                    color: $main-primary-color;
-                }
-            }
-        }
-
-        &__account {
-            @include body-16-m;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-
-            img {
-                width: 1.25rem;
-            }
-        }
-    }
-
-    // ---------- 푸터 (그룹은 + 를 누르면 스르륵 · 아래 링크 → 카피라이트) ----------
-    body .footer {
-        .footer__inner {
-            width: calc(100% - 2rem);
-            max-width: none;
-            padding: 1.5rem 0 2.5rem;
-        }
-
-        .footer__bg-logo {
-            left: -1rem;
-            width: 22rem;
-            height: 15.5rem;
-        }
-
-        .footer__top {
-            display: block;
-            min-height: 0;
-        }
-
-        .footer__groups {
-            display: block;
-            width: 100%;
-            margin: 0;
-        }
-
-        .footer__group {
-            width: 100%;
-            border-bottom: 0.0625rem solid $neutral-color-500;
-        }
-
-        .footer__group-title {
-            margin: 0;
-
-            button {
-                @include heading-20-sb;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                padding: 1.25rem 0;
-                cursor: pointer;
-                pointer-events: auto;
-            }
-        }
-
-        .footer__plus {
-            display: block;
-        }
-
-        // 링크 목록: 높이 0 ↔ 내용 높이 (스르륵)
-        .footer__panel {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows $reveal-duration $reveal-ease;
-
-            >ul {
-                min-height: 0;
-                overflow: hidden;
-            }
-        }
-
-        .footer__group.is-open .footer__panel {
-            grid-template-rows: 1fr;
-        }
-
-        .footer__submenu {
-            gap: 0.75rem;
-
-            li:last-child {
-                padding-bottom: 1.25rem;
-            }
-
-            a {
-                color: $neutral-color-100;
-            }
-        }
-
-        .footer__bottom {
-            flex-direction: column-reverse;
-            gap: 2rem;
-            padding-top: 4rem;
-            border-top: 0;
-            text-align: center;
-        }
-
-        .footer__copyright {
-            @include body-14-r;
-            flex: none;
-        }
-
-        .footer__links {
-            gap: 2rem;
-
-            a {
-                color: $neutral-color-200;
-            }
-        }
-    }
-
-    // ---------- 메인 ----------
-    .home-section,
-    .home-category,
-    .home-features {
-        width: calc(100% - 2rem);
-    }
-
-    .home-hero {
-        height: clamp(22rem, 62vw, 47.5rem);
-        padding-bottom: 2rem;
-        gap: 1.5rem;
-
-        &__title {
-            @include display-32-b;
-            font-size: clamp(1.375rem, 6vw, 2rem);
-            line-height: 1.3;
-            text-align: center;
-            word-break: keep-all;
-        }
-    }
-
-    // 신상품 탭: 줄바꿈 없이 옆으로 드래그
-    .home-new__tabs {
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        li {
-            flex: none;
-        }
-    }
-
-    .home-slider {
-        &__track {
-            grid-auto-columns: calc((100% - #{$grid-gutter} * 2) / 3);
-        }
-
-        &__btn {
-            display: none;
-        }
-    }
-
-    .home-section__products {
-        @include drag-slider(calc((100% - #{$grid-gutter} * 2) / 3));
-    }
-
-    .home-pick__grid {
-        @include drag-slider(min(85%, 36rem));
-        grid-template-rows: 15rem;
-    }
-
-    .home-pick__card {
-        grid-template-columns: 40% 1fr 30%;
-
-        &.is-large {
-            grid-row: auto;
-            grid-template-columns: 45% 1fr;
-        }
-    }
-
-    .home-category__grid {
-        @include drag-slider(min(45%, 22rem));
-        grid-template-rows: 19.75rem;
-    }
-
-    .home-category__item.is-large {
-        grid-row: auto;
-    }
-
-    .home-promo {
-        height: clamp(12rem, 25vw, 29.75rem);
-    }
-
-    .home-setup__body {
-        grid-template-columns: 1fr;
-    }
-
-    .home-setup__visual {
-        height: clamp(14rem, 45vw, 30rem);
-    }
-
-    .home-features__list {
-        @include drag-slider(min(45%, 18rem));
-        gap: 1rem;
-    }
-
-    .promotion__cards {
-        @include drag-slider(min(70%, 26rem));
-    }
-}
-
-@media (max-width: 720px) {
-    .home-slider__track {
-        grid-auto-columns: 42%;
-    }
-
-    .home-section__products {
-        grid-auto-columns: 42%;
-    }
-
-    .home-category__grid {
-        grid-auto-columns: 75%;
-    }
-
-    .home-features__list {
-        grid-auto-columns: 60%;
-    }
-}
+@include mobile.site-shell($reveal-duration, $reveal-ease);
 
 @keyframes promo-flow {
     to {
