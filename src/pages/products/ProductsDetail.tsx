@@ -175,6 +175,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             {isSpecOpen && <SpecModal product={product} onClose={closeSpec} />}
             {toast && (
                 <div className="pd-toast" role="status">
+                    {toast.cart && <img className="pd-toast__icon" src="/icons/check.svg" alt="" />}
                     {toast.text}
                     {toast.cart && <Link to="/cart">장바구니 보기</Link>}
                 </div>

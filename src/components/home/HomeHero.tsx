@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { homeImages } from "../../data/homeData";
+import { heroCustomizeProductId, homeImages } from "../../data/homeData";
+import { keyboardActions } from "../../data/detailData";
 
 // 히어로 (풀폭 1920 x 760) · 커스터마이징 유도
 // 영상 → 이미지 → 텍스트 순으로 표시
@@ -26,7 +27,7 @@ export const HomeHero = () => {
             )}
 
             <h2 className="home-hero__title">나만의 키보드, 나만의 규칙</h2>
-            <Link to="/" className="home-hero__btn">커스터마이징 시작</Link>
+            <Link to={keyboardActions.customizeTo(heroCustomizeProductId)} className="home-hero__btn">커스터마이징 시작</Link>
         </section>
     );
 };

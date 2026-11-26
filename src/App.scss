@@ -751,11 +751,27 @@ main {
 
     &__more {
         @include body-14-r;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
         color: $neutral-color-100;
 
         &:hover {
             color: $main-primary-color;
         }
+    }
+
+    // 이동 화살표 (public/icons/arrow-right.svg · 글자색을 따라감)
+    &__more-icon {
+        width: 1rem;
+        height: 1rem;
+        background-color: currentColor;
+        mask: url("/icons/arrow-right.svg") center / contain no-repeat;
+        transition: transform 0.2s ease;
+    }
+
+    &__more:hover &__more-icon {
+        transform: translateX(0.125rem);
     }
 
     &__products {
@@ -1208,7 +1224,7 @@ main {
         color: $neutral-color-white;
     }
 
-    // 화살표 (아이콘 파일 없음 → 텍스트)
+    // 화살표 (public/icons/arrow-right.svg)
     &__arrow {
         position: relative;
         display: flex;
@@ -1221,6 +1237,11 @@ main {
         background-color: rgba(0, 0, 0, 0.7);
         font-size: 1.25rem;
         color: $neutral-color-white;
+
+        img {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
     }
 }
 
@@ -4232,6 +4253,14 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
     background-color: $neutral-color-700;
     transform: translateX(-50%);
     animation: pd-toast-in 0.25s ease-out;
+
+    // 완료 체크 (public/icons/check.svg)
+    &__icon {
+        flex: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: -0.5rem;
+    }
 
     a {
         @include label-14-sb;
