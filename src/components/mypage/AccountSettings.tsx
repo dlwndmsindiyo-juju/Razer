@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Modal } from "../common/Modal";
@@ -31,12 +31,7 @@ const avatars = Array.from({ length: 7 }, (_, i) => `/images/profile/avatar-0${i
 const Icon = ({ name }: { name: string }) => <img src={`/icons/account/${name}.svg`} alt="" aria-hidden="true" />;
 
 // 아이콘 파일이 아직 없는 것 (? · 더보기)은 같은 선 굵기로 그림
-const HelpIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="9.25" />
-        <path d="M9.5 9.25a2.5 2.5 0 1 1 3.5 2.3c-.6.27-1 .86-1 1.52v.43M12 17h.01" />
-    </svg>
-);
+const HelpIcon = () => <img src="/icons/ui/help.svg" alt="" aria-hidden="true" />;
 const MoreIcon = () => (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <circle cx="5" cy="12" r="1.75" />
@@ -771,8 +766,6 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
     const { user, onLogout } = useAuthStore();
     const navigate = useNavigate();
     const [loggingOut, setLoggingOut] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const menuId = useId();
     if (!user) return null;
     const current = accountSections.find((s) => s.key === section) ?? accountSections[0];
 
@@ -784,20 +777,14 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
     return (
         <div className="account">
             <nav className="account__nav" aria-label="계정 관리 메뉴">
-                <button type="button" className="account__mobile-toggle" aria-expanded={menuOpen}
-                    aria-controls={menuId} onClick={() => setMenuOpen(!menuOpen)}>
-                    <Icon name={current.icon} />
-                    <span><small>계정 관리</small><strong>{current.label}</strong></span>
-                    <img src="/icons/chevron-down.svg" alt="" />
-                </button>
-                <ul id={menuId} data-expanded={menuOpen}>
+                <ul>
                     {accountSections.map((s) => (
                         <li key={s.key}>
                             <button
                                 type="button"
                                 className={`account__nav-item ${s.key === current.key ? "is-active" : ""}`}
                                 aria-current={s.key === current.key ? "page" : undefined}
-                                onClick={() => { onSection(s.key); setMenuOpen(false); }}
+                                onClick={() => onSection(s.key)}
                             >
                                 <span className="account__nav-icon">
                                     <Icon name={s.icon} />

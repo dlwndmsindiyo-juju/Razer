@@ -41,7 +41,7 @@ export const Header = () => {
                     {/* 태블릿 · 모바일: 햄버거 (왼쪽) */}
                     <button type="button" className="header__burger" aria-label="전체 메뉴 열기"
                         aria-expanded={mobileOpen} onClick={() => setMobileOpen(true)}>
-                        <span /><span /><span />
+                        <img src="/icons/ui/menu.svg" alt="" />
                     </button>
                     <h1 className="header__logo">
                         <Link to="/">

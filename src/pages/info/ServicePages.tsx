@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { useAuthStore } from "../../store/useAuthStore";
 import { ConfirmModal, RegisterModal, serialOnlyText, toSerial } from "../../components/mypage/MypageModals";
 import { registerProductNames, useRegisterProduct, type RegisterValues } from "../../types/useRegisterProduct";
-import { accountHelp, orderHelp, privacyHelp, restorifyHelp, returnsHelp, shippingHelp, warrantyHelp } from "../../data/customerFaq";
+import { accountHelp, orderHelp, privacyHelp, restorifyHelp, returnsHelp, shippingHelp, silverHelp, termsHelp, warrantyHelp } from "../../data/customerFaq";
 import { supportCards } from "../../data/editorialData";
 import { warrantyBenefits, warrantyFaq } from "../../data/warrantyData";
 import { faqImages, supportImages, warrantyImages } from "../../data/pageImages";
@@ -17,8 +17,8 @@ const tabs = [
     ["privacy", "개인 정보 처리 방침"], ["returns", "교환 및 환불"],
 ] as const;
 const faqTopics = {
-    questions: [...orderHelp, ...shippingHelp, ...warrantyHelp, ...restorifyHelp],
-    terms: warrantyHelp.filter(({ id }) => id === "warranty-7"),
+    questions: [...orderHelp, ...shippingHelp, ...warrantyHelp, ...silverHelp, ...restorifyHelp],
+    terms: [...termsHelp, ...warrantyHelp.filter(({ id }) => id === "warranty-7")],
     contact: [],
     privacy: [...privacyHelp, ...accountHelp],
     returns: returnsHelp,
@@ -90,7 +90,7 @@ export function SupportPage() {
             {supportCards.map(([title, description], index) => {
                 const path = supportPaths[index];
                 const content = <><h2>{title}</h2><p>{description}</p>{path && <span className="design-support__arrow">
-                    <img src={index === 0 ? supportImages.arrowPrimary : supportImages.arrow} alt="" />
+                    <img src={supportImages.arrow} alt="" />
                 </span>}</>;
                 return path ?
                     <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
