@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { withoutPersonImages } from "../../data/personImages";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getBadgeLabel, getProductById, getSeriesTitle, productData } from "../../data/productData";
+import { getBadgeLabel, getProductById, getSeriesTitle, isInCollection, productData } from "../../data/productData";
 import { detailGifts, keyboardActions } from "../../data/detailData";
 import { useCartStore } from "../../store/useCartStore";
 import type { Product } from "../../types/product";
 import { ImageOrText } from "../../components/common/ImageOrText";
 import { ProductGallery } from "../../components/product/detail/ProductGallery";
 import { ProductOptions } from "../../components/product/detail/ProductOptions";
-import { GiftList, RecommendedProducts } from "../../components/product/detail/RecommendedProducts";
+import { GiftList } from "../../components/product/detail/RecommendedProducts";
+import { ProductRail } from "../info/PageLayout";
 import { ProductDetailContent } from "../../components/product/detail/ProductDetailContent";
-import { SpecModal } from "../../components/product/detail/SpecModal";
 
 const isSoldOut = (product: Product) => product.stockStatus === "outOfStock" || !!product.soldOut;
 
@@ -25,21 +25,40 @@ const uniqueSeries = (products: Product[]) => {
     });
 };
 
-// 추천 상품: 다른 카테고리의 구매 가능한 상품 (같이 쓰기 좋은 장비)
-const getRecommended = (product: Product) =>
-    uniqueSeries(productData.filter((item) => item.category !== product.category && !isSoldOut(item) && item.price && item.summary)).slice(0, 6);
-
-// 제목 옆 배지 (독점 · 신규 · 사은품 증정 · 품절)
-const getBadges = (product: Product) => {
-    const label = isSoldOut(product) ? "품절" : getBadgeLabel(product.badge);
-    return label ? [label] : [];
+// 추천 상품: 다른 카테고리의 구매 가능한 상품 (같이 쓰기 좋은 장비) · 카테고리를 번갈아 섞어서
+const getRecommended = (product: Product) => {
+    const pool = uniqueSeries(productData.filter((item) => item.category !== product.category && !isSoldOut(item) && item.price && item.summary));
+    const byCategory = new Map<string, Product[]>();
+    pool.forEach((item) => byCategory.set(item.category, [...(byCategory.get(item.category) ?? []), item]));
+    const lists = [...byCategory.values()];
+    const mixed: Product[] = [];
+    for (let i = 0; mixed.length < 10 && lists.some((list) => list[i]); i += 1) {
+        lists.forEach((list) => list[i] && mixed.push(list[i]));
+    }
+    return mixed.slice(0, 10);
 };
+
+// 제목 옆 배지 (Razer 독점 · 커스터마이징 · 사은품 증정 · 신규 · 품절) · 실제 데이터에 있는 것만
+const getBadges = (product: Product) => {
+    const labels: string[] = [];
+    const badge = getBadgeLabel(product.badge);
+    if (badge === "독점" || isInCollection(product, "exclusive")) labels.push("Razer 독점");
+    if (product.category === "keyboards") labels.push("커스터마이징");
+    if (badge && badge !== "독점") labels.push(badge);
+    if (isSoldOut(product)) labels.push("품절");
+    return [...new Set(labels)];
+};
+
+// 할인율 (할인 전 가격이 있을 때만)
+const getDiscount = (product: Product) =>
+    product.price != null && product.originalPrice && product.originalPrice > product.price
+        ? Math.round((1 - product.price / product.originalPrice) * 100)
+        : null;
 
 const ProductDetails = ({ product }: { product: Product }) => {
     const navigate = useNavigate();
     const addItem = useCartStore((state) => state.addItem);
     const [count, setCount] = useState(1);
-    const [isSpecOpen, setIsSpecOpen] = useState(false);
     const [toast, setToast] = useState<{ text: string; cart?: boolean } | null>(null);
     const soundRef = useRef<HTMLAudioElement | null>(null);
 
@@ -57,6 +76,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const soldOut = isSoldOut(product);
     const unverified = product.stockStatus === "unverified";
     const purchaseDisabled = soldOut || unverified;
+    const discount = getDiscount(product);
     const total = unverified ? "판매 정보 미확인" : product.price == null ? "가격 미정" : `${(product.price * count).toLocaleString("ko-KR")}원`;
 
     // 옵션을 바꿔 다른 상품으로 이동하면 수량 초기화 · 타건음 정지
@@ -90,8 +110,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
         audio.play().catch(() => setToast({ text: "타건음을 준비 중이에요." }));
     };
 
-    const closeSpec = useCallback(() => setIsSpecOpen(false), []);
-
     return (
         <div className="product-detail">
             <div className="product-detail__top">
@@ -114,15 +132,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </ProductGallery>
                 </div>
 
-                {/* 왼쪽 아래: 요약 · 모든 사양 보기 */}
-                <div className="product-detail__about">
-                    {product.summary && <p className="product-detail__summary">{product.summary}</p>}
-                    <button type="button" className="product-detail__spec-link" onClick={() => setIsSpecOpen(true)}>
-                        모든 사양 보기 &gt;
-                    </button>
-                </div>
-
-                {/* 오른쪽: 위(상품명 · 옵션) / 아래(사은품 · 추천 · 수량 · 구매)는 썸네일 아래 선에 맞춤 */}
+                {/* 오른쪽: 위(상품명 · 가격 · 옵션) / 아래(사은품 · 수량 · 구매) */}
                 <div className="product-detail__right">
                     <div className="product-detail__head">
                         <h1 className="product-detail__title">{title}</h1>
@@ -131,13 +141,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         ))}
                     </div>
 
+                    {/* 가격 (할인 중이면 할인율 · 할인가 · 원래 가격) */}
+                    {!unverified && product.price != null && (
+                        <p className="product-detail__price">
+                            {discount && <span className="product-detail__discount">{discount}%</span>}
+                            <strong>{product.price.toLocaleString("ko-KR")}원</strong>
+                            {discount && <del>{product.originalPrice!.toLocaleString("ko-KR")}원</del>}
+                        </p>
+                    )}
+
                     <ProductOptions product={product} />
 
                     <div className="product-detail__bottom">
-                        <div className="product-detail__extras">
-                            <GiftList gifts={detailGifts} />
-                            <RecommendedProducts products={recommended} />
-                        </div>
+                        <GiftList gifts={detailGifts} />
 
                         <div className="product-detail__buy">
                             <div className="pd-qty" aria-label="수량">
@@ -149,8 +165,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
                                     +
                                 </button>
                             </div>
-                            <p className="product-detail__total">
-                                가격 <strong>{total}</strong>
+                            <p className="product-detail__total" aria-label="총 가격">
+                                <strong>{total}</strong>
                             </p>
                         </div>
 
@@ -166,13 +182,20 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
             </div>
 
+            {/* 추천 상품 (다른 카테고리 · 카드 슬라이드) */}
+            {recommended.length > 0 && (
+                <section className="product-detail__recommend">
+                    <h2 className="product-detail__recommend-title">추천 상품</h2>
+                    <ProductRail products={recommended} title="추천 상품" />
+                </section>
+            )}
+
             {/* 상품 상세 (사양 + 이미지) */}
             <section className="product-detail__content">
                 <h2 className="product-detail__content-title">상품 상세</h2>
                 <ProductDetailContent product={product} title={title} images={images} />
             </section>
 
-            {isSpecOpen && <SpecModal product={product} onClose={closeSpec} />}
             {toast && (
                 <div className="pd-toast" role="status">
                     {toast.cart && <img className="pd-toast__icon" src="/icons/check.svg" alt="" />}

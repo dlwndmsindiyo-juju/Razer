@@ -1,17 +1,25 @@
 import { useEffect } from "react";
 
-// 가로로 넘치는 목록은 마우스로 잡아 끌어서 옆으로 (터치는 원래 손가락으로 밀림)
+// 넘치는 목록(가로 · 세로)은 마우스로 잡아 끌어서 스크롤 (터치는 원래 손가락으로 밀림)
 // 페이지 전체에 한 번만 걸어 둠 (App) · 끌고 난 뒤의 클릭은 무시
 const isScrollableX = (el: HTMLElement) => {
     const style = getComputedStyle(el);
     return /(auto|scroll)/.test(style.overflowX) && el.scrollWidth > el.clientWidth + 1;
 };
+// 세로는 페이지 본문이 아닌 안쪽 목록만 (상세 세로 썸네일 등)
+const isScrollableY = (el: HTMLElement) => {
+    const style = getComputedStyle(el);
+    return /(auto|scroll)/.test(style.overflowY) && el.scrollHeight > el.clientHeight + 1;
+};
+const isScrollable = (el: HTMLElement) => isScrollableX(el) || isScrollableY(el);
 
 export const useDragScroll = () => {
     useEffect(() => {
         let target: HTMLElement | null = null;
         let startX = 0;
-        let startScroll = 0;
+        let startY = 0;
+        let startLeft = 0;
+        let startTop = 0;
         let moved = false;
 
         const onDown = (e: PointerEvent) => {
@@ -20,22 +28,26 @@ export const useDragScroll = () => {
             let el = e.target as HTMLElement | null;
             // 입력칸 · 직접 드래그를 쓰는 곳(data-no-drag)은 건드리지 않음
             if (el?.closest("input, textarea, select, [data-no-drag]")) return;
-            while (el && el !== document.body && !isScrollableX(el)) el = el.parentElement;
-            if (!el || el === document.body) return;
+            while (el && el !== document.body && el !== document.documentElement && !isScrollable(el)) el = el.parentElement;
+            if (!el || el === document.body || el === document.documentElement) return;
             target = el;
             startX = e.clientX;
-            startScroll = el.scrollLeft;
+            startY = e.clientY;
+            startLeft = el.scrollLeft;
+            startTop = el.scrollTop;
             moved = false;
         };
         const onMove = (e: PointerEvent) => {
             if (!target) return;
             const dx = e.clientX - startX;
-            if (!moved && Math.abs(dx) < 5) return;
+            const dy = e.clientY - startY;
+            if (!moved && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
             if (!moved) {
                 moved = true;
                 target.classList.add("is-dragging");
             }
-            target.scrollLeft = startScroll - dx;
+            target.scrollLeft = startLeft - dx;
+            target.scrollTop = startTop - dy;
             e.preventDefault();
         };
         const onUp = () => {

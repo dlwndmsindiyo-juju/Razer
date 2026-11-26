@@ -5,6 +5,13 @@ import type { Product } from "../../../types/product";
 
 const won = (price?: number | null) => (price == null ? "가격 미정" : `${price.toLocaleString("ko-KR")}원`);
 
+// 지금 상품과의 가격 차이 (+ 96,000 원 · - 10,000 원 · 같으면 표시 안 함)
+const priceDiff = (price?: number | null, base?: number | null) => {
+    if (price == null || base == null || price === base) return null;
+    const diff = price - base;
+    return `${diff > 0 ? "+" : "-"} ${Math.abs(diff).toLocaleString("ko-KR")} 원`;
+};
+
 // 색상 / 디자인(동그라미) · 모델 등(버튼) 옵션 선택 → 같은 모델의 다른 상품 페이지로 이동
 export const ProductOptions = ({ product }: { product: Product }) => {
     const navigate = useNavigate();
@@ -28,6 +35,7 @@ export const ProductOptions = ({ product }: { product: Product }) => {
                                 const variant = findVariant(product, label, value);
                                 const isActive = selected[label] === value;
                                 const color = swatchColors[value];
+                                const diff = priceDiff(variant?.price, product.price);
                                 const select = () => {
                                     if (variant && variant.id !== product.id) {
                                         // 옵션만 바꾸는 이동은 스크롤 위치 유지
@@ -47,9 +55,14 @@ export const ProductOptions = ({ product }: { product: Product }) => {
                                             onClick={select}
                                         >
                                             {isSwatch ? (
-                                                <span className="pd-swatch__dot" style={color ? { backgroundColor: color } : undefined}>
-                                                    {!color && variant && <img src={variant.image} alt="" loading="lazy" />}
-                                                </span>
+                                                <>
+                                                    {/* 색이 정해진 값은 색으로 · 에디션은 그 상품 이미지로 */}
+                                                    <span className="pd-swatch__thumb" style={color ? { backgroundColor: color } : undefined}>
+                                                        {!color && variant && <img src={variant.image} alt="" loading="lazy" />}
+                                                    </span>
+                                                    <span className="pd-swatch__name">{optionValueNames[value] ?? value}</span>
+                                                    {diff && <span className="pd-swatch__price">{diff}</span>}
+                                                </>
                                             ) : (
                                                 optionValueNames[value] ?? value
                                             )}
