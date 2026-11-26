@@ -188,70 +188,96 @@ main {
         top: calc(100% + 1.25rem);
         right: -1rem;
         z-index: 120;
-        width: 16.5rem;
-        padding: 1.5rem 0 1rem;
+        width: 20rem;
+        padding: 1.5rem 0 0.75rem;
         border-radius: $radius-md;
         background-color: $neutral-color-panel;
         box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
         animation: user-menu-in 0.2s ease-out;
     }
 
-    // 프로필 (이미지 · 별명 > · 아이디)
+    // 프로필 (이미지 · 별명님 · 프로필 설정)
     &__profile {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        margin: 0 1.875rem 0.875rem;
-        padding: 0 0 1.25rem;
-        border-bottom: 0.0625rem solid $neutral-color-300;
-
-        &:hover strong {
-            color: $main-primary-color;
-        }
+        gap: 1rem;
+        margin: 0 1.25rem 0.75rem;
+        padding: 0 0 1.5rem;
+        border-bottom: 0.0625rem solid $neutral-color-500;
     }
 
     &__who {
         display: flex;
         flex-direction: column;
-        gap: 0.125rem;
+        align-items: flex-start;
+        gap: 0.25rem;
         min-width: 0;
 
         strong {
-            @include body-16-m;
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-            color: $neutral-color-white;
-            transition: color 0.2s;
-        }
-
-        span {
-            @include caption-12-r;
+            @include body-16-sb;
+            max-width: 100%;
             overflow: hidden;
-            color: $neutral-color-200;
+            color: $neutral-color-white;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
     }
 
-    // 별명 옆 > (down-arrow.svg 회전)
-    &__chevron {
-        width: 0.875rem;
-        height: 0.875rem;
-        transform: rotate(-90deg);
-    }
-
-    &__item {
-        @include body-14-r;
-        display: block;
-        width: 100%;
-        padding: 0.5625rem 1.875rem;
-        color: $neutral-color-white;
-        text-align: left;
-        transition: color 0.2s;
+    // 프로필 설정 (메인 컬러 작은 글자)
+    &__profile-link {
+        @include caption-12-r;
+        color: $main-primary-color;
 
         &:hover {
-            color: $main-primary-color;
+            text-decoration: underline;
+        }
+    }
+
+    // 메뉴: 아이콘 · 이름 · >
+    &__item {
+        @include body-14-r;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.75rem 1.25rem;
+        color: $neutral-color-white;
+        text-align: left;
+        transition: background-color 0.2s;
+
+        span {
+            flex: 1;
+        }
+
+        &:hover {
+            background-color: $neutral-color-700;
+            color: $neutral-color-white;
+        }
+    }
+
+    &__icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    &__arrow {
+        width: 1.25rem;
+        height: 1.25rem;
+        opacity: 0.7;
+    }
+
+    // 로그아웃 위 구분선
+    &__item--logout {
+        position: relative;
+        margin-top: 0.75rem;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: -0.375rem;
+            right: 1.25rem;
+            left: 1.25rem;
+            border-top: 0.0625rem solid $neutral-color-500;
         }
     }
 }
@@ -278,6 +304,11 @@ main {
         width: 60%;
         height: 60%;
         object-fit: contain;
+    }
+
+    &--md {
+        width: 2.75rem;
+        height: 2.75rem;
     }
 
     &--lg {

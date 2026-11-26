@@ -3,9 +3,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { ConfirmModal } from "../mypage/MypageModals";
 
+// 내 계정 메뉴 (모바일 "내 계정"과 같은 워딩 · 아이콘: public/icons/ui)
+const menuItems = [
+    { label: "마이페이지", to: "/mypage", icon: "/icons/ui/account.svg" },
+    { label: "주문 내역", to: "/mypage?tab=orders", icon: "/icons/ui/order.svg" },
+    { label: "등록 제품·보증", to: "/mypage?tab=warranty", icon: "/icons/ui/warranty.svg" },
+    { label: "위시리스트", to: "/mypage?view=wishlist", icon: "/icons/ui/wishlist.svg" },
+    { label: "계정 관리", to: "/mypage?tab=account", icon: "/icons/ui/settings.svg" },
+];
+
 // 헤더 유저 아이콘
 // - 로그아웃 상태: 누르면 로그인 페이지
-// - 로그인 상태: 누르면 마이페이지 · 장바구니 · 로그아웃 메뉴
+// - 로그인 상태: 누르면 프로필 + 내 계정 메뉴 + 로그아웃
 export const UserMenu = () => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
@@ -66,19 +75,32 @@ export const UserMenu = () => {
 
             {isOpen && (
                 <div className="user-menu__panel" role="menu">
+                    {/* 프로필: 이미지 · 별명님 · 프로필 설정 (모바일 내 계정과 같은 구성) */}
                     <div className="user-menu__profile">
-                        <strong>{user.nickname || user.name || "Razer 회원"}</strong>
-                        {user.email && <span>{user.email}</span>}
+                        <span className={`user-avatar user-avatar--md ${user.profile ? "" : "is-default"}`}>
+                            {user.profile ? <img src={user.profile} alt="" /> : <img src="/icons/user.svg" alt="" className="user-avatar__icon" />}
+                        </span>
+                        <div className="user-menu__who">
+                            <strong>{user.nickname || user.name || "Razer 회원"}님</strong>
+                            <Link to="/mypage?tab=account&section=profile" className="user-menu__profile-link" role="menuitem">프로필 설정</Link>
+                        </div>
                     </div>
-                    <Link to="/mypage?tab=orders" className="user-menu__item" role="menuitem">나의 주문</Link>
-                    <Link to="/mypage?tab=account&section=address" className="user-menu__item" role="menuitem">배송지 및 결제 관리</Link>
-                    <Link to="/mypage?view=wishlist" className="user-menu__item" role="menuitem">위시리스트</Link>
-                    <Link to="/mypage?tab=account&section=profile" className="user-menu__item" role="menuitem">프로필 관리</Link>
+
+                    {menuItems.map((item) => (
+                        <Link key={item.label} to={item.to} className="user-menu__item" role="menuitem">
+                            <img src={item.icon} alt="" className="user-menu__icon" />
+                            <span>{item.label}</span>
+                            <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
+                        </Link>
+                    ))}
+
                     <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={() => {
                             setIsOpen(false);
                             setConfirmLogout(true);
                         }}>
-                        로그아웃
+                        <img src="/icons/ui/logout.svg" alt="" className="user-menu__icon" />
+                        <span>로그아웃</span>
+                        <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
                     </button>
                 </div>
             )}
