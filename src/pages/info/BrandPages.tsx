@@ -24,9 +24,9 @@ const awards = [
 ] as const;
 // [id, 제목, 배너 이미지, 본문, 버튼, 링크, 제목을 디스플레이 서체로]
 const brandSections = [
-    ["sustainability", "지속가능성", aboutImages.sustainabilityBanner, aboutCopy[7], "자세히 보기", "https://www.razer.com/go-green", false],
-    ["careers", "채용", aboutImages.careersBanner, aboutCopy.slice(11, 13).join(" "), "지원하기", "https://careers.razer.com/", false],
-    ["ventures", "zVENTURES", aboutImages.city, "zVentures는 Razer의 기업 벤처 투자 조직으로, Razer 생태계와 함께 성장할 스타트업과 새로운 기술에 투자합니다.", "자세히 보기", "https://www.zvntrs.com/", true],
+    ["sustainability", "지속가능성", aboutImages.sustainabilityBanner, aboutCopy[7], "자세히 보기", "/info/company/sustainability", false],
+    ["careers", "채용", aboutImages.careersBanner, aboutCopy.slice(11, 13).join(" "), "채용 공고 보기", "/info/company/careers", false],
+    ["ventures", "zVENTURES", aboutImages.city, "zVentures는 Razer의 기업 벤처 투자 조직으로, Razer 생태계와 함께 성장할 스타트업과 새로운 기술에 투자합니다.", "자세히 보기", "/info/company/zventures", true],
 ] as const;
 
 // #GoGreenWithRazer 를 초록 밑줄 링크로
@@ -175,7 +175,7 @@ function BrandSection({ section: [id, title, banner, description, action, href, 
                 <h2 className={"design-about__heading" + (display ? " design-display" : "")}>{title}</h2>
                 <p className="design-display-text">{description}</p>
             </div>
-            <a className="design-about__button" href={href} target="_blank" rel="noreferrer">{action}</a>
+            <Link className="design-about__button" to={href}>{action}</Link>
         </div>
     </section>;
 }

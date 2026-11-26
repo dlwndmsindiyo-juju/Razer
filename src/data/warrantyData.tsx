@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 // 등록 및 보증 페이지 내용 (Razer 공식 보증 안내 그대로)
 
@@ -10,8 +11,8 @@ export const warrantyBenefits = [
     ["피드백 제공 및 보상", ["등록된 제품에 대한 의견 및 피드백은 언제든 환영합니다.", "의견을 공유해 주시면 보상을 받으실 수 있습니다."]],
 ] as const;
 
-const Ext = ({ href, children }: { href: string; children: ReactNode }) =>
-    <a href={href} target="_blank" rel="noreferrer">{children}</a>;
+// 안내 문구 속 링크는 모두 사이트 안 페이지로
+const Go = ({ to, children }: { to: string; children: ReactNode }) => <Link to={to}>{children}</Link>;
 const Mark = ({ children }: { children: ReactNode }) => <em className="warranty-answer__mark">{children}</em>;
 
 // 보증 기간 표 · ^ 표시는 아래 각주 번호
@@ -155,7 +156,7 @@ export const warrantyFaq: { q: string; a: ReactNode }[] = [
     },
     {
         q: "어디에서 제한 보증 지원을 받을 수 있나요?",
-        a: <p>일반적인 질문과 문제에 대한 답변은 지식 베이스에서 찾아볼 수 있습니다. 지식 베이스 항목에서 문제 해결 방법을 찾을 수 없다면 당사 지원팀으로 문의하십시오. 지원팀으로 문의할 수 있는 링크는 각 지식 베이스 항목의 맨 아래에 있습니다. 지식 베이스와 추가 지원 정보는 <Ext href="https://mysupport.razer.com/">mysupport.razer.com</Ext> 에서 확인하십시오.</p>,
+        a: <p>일반적인 질문과 문제에 대한 답변은 지식 베이스에서 찾아볼 수 있습니다. 지식 베이스 항목에서 문제 해결 방법을 찾을 수 없다면 당사 지원팀으로 문의하십시오. 지원팀으로 문의할 수 있는 링크는 각 지식 베이스 항목의 맨 아래에 있습니다. 지식 베이스와 추가 지원 정보는 <Go to="/info/service/support">지원 페이지</Go>에서 확인하십시오.</p>,
     },
     {
         q: "제한 보증의 약관은 무엇이며, 보상 범위는 어떻게 되나요?",
@@ -179,14 +180,14 @@ export const warrantyFaq: { q: string; a: ReactNode }[] = [
             <p>특별, 한정 또는 콜라보레이션 에디션. 모든 특별, 한정 및/또는 콜라보레이션 에디션 제품은 한정 수량으로 생산됩니다. 해당 제품의 수리 또는 교체는 재고 상황에 따라 달라질 수 있습니다. 모든 특별, 한정 및/또는 콜라보레이션 에디션 제품과 관련하여 해당 보증 기간 내에 적격한 클레임이 Razer에 접수된 경우, 재고 상황에 따라 Razer는 교체 또는 수리 대신 기능적으로 동등한 대체품을 귀하에게 제공할 수 있습니다. 이러한 기능적으로 동등한 대체품은 현재 제품군의 표준 에디션 버전일 수 있습니다.</p>
             <p>전체 제한 보증. 상품성 또는 특정 목적에의 적합성에 대한 모든 묵시적인 보증이나 조건은 해당 보증 기간 동안으로 제한됩니다. 침해하지 않음에 대한 모든 묵시적 보증을 포함하여 진술 및 보증 등 기타 명시적 또는 묵시적 조건은 모두 부인합니다. 일부 관할 구역에서는 묵시적 보증 기간의 제한을 허용하지 않으므로 상기 제한이 귀하에게 적용되지 않을 수도 있습니다. 이 제한 보증은 귀하에게 구체적인 법적 권리를 부여하며 관할 구역에 따라 다른 다양한 기타 권리를 보유할 수도 있습니다. 어떠한 Razer 공급자, 대리점, 대리인 또는 직원도 이 제한 보증의 조건을 변경 또는 연장하거나 진술할 권한이 없습니다. Razer는 사전 통고 없이 언제든지 본 제한 보증의 조건을 수정할 권리를 보유합니다.</p>
             <p>책임의 한계. 법률로 금지되지 않는 범위 내에서 RAZER는 모든 데이터 손실, 이익 손실 또는 특수적, 간접적, 필연적, 우발적 또는 징벌적 손해에 대한(개인의 신체 상해 손해를 제외하고) 책임 이론과 관계없이 어떤 상황에서도 이를 책임지지 않습니다. RAZER가 그러한 손해의 가능성을 사전에 알고 있던 경우에도 제품을 사용하거나 사용하지 못함으로 인해 발생하거나 이와 관련한 손해에 대해 책임지지 않습니다. 어떤 상황에서도 RAZER의 책임은 귀하가 제품에 대해 지급한 금액을 초과하지 않습니다. 이 계약에 따라 제공되는 보증이나 구제책이 본질적인 목적을 달성하지 못하는 경우에도 전술한 제한이 적용됩니다. 일부 관할 구역에서는 우발적 또는 필연적 손해의 면책이나 제한을 허용하지 않으므로 상기 제한이나 면책이 귀하에게 적용되지 않을 수도 있습니다.</p>
-            <p>도움말 리소스. 제한 보증을 청구하기 전 <Ext href="https://mysupport.razer.com/">mysupport.razer.com</Ext>의 온라인 도움말 리소스를 검토해보십시오. 리소스를 참고한 후에도 제품이 제대로 작동하지 않으면 <Ext href="https://mysupport.razer.com/">mysupport.razer.com</Ext>, 공인 유통업체 또는 대리점을 통해 Razer에 문의하십시오. 진단 프로세스의 도움을 받아 제품에 발생 가능한 문제를 확인해야 할 수 있습니다. 서비스 옵션, 부품 가용성, 답변 시간 등은 제한 보증 청구가 제기된 국가에 따라 다를 수 있습니다.</p>
+            <p>도움말 리소스. 제한 보증을 청구하기 전 <Go to="/info/service/support">지원 페이지</Go>의 온라인 도움말 리소스를 검토해보십시오. 리소스를 참고한 후에도 제품이 제대로 작동하지 않으면 <Go to="/info/service/faq?topic=contact">1 : 1 문의</Go>, 공인 유통업체 또는 대리점을 통해 Razer에 문의하십시오. 진단 프로세스의 도움을 받아 제품에 발생 가능한 문제를 확인해야 할 수 있습니다. 서비스 옵션, 부품 가용성, 답변 시간 등은 제한 보증 청구가 제기된 국가에 따라 다를 수 있습니다.</p>
             <p><strong>제한 보증 청구는 어떻게 합니까?.</strong></p>
             <p>RAZER 리셀러에게서 제품을 구매한 경우에는 리셀러에게 제한 보증 청구에 관해 문의하십시오. 해당 Razer 리셀러가 미국 또는 캐나다에 소재할 경우, 리셀러는 제품 구매일로부터 30일 이내에 제한 보증 청구를 했을 경우에만 도움을 드립니다. 구매일로부터 30일을 초과한 경우에는 하기 절차를 따르십시오.</p>
-            <p>어떠한 이유로든 제품을 Razer 리셀러에게 반품할 수 없거나 <Ext href="https://www.razer.com/kr-kr">www.razer.com/kr-kr</Ext>에서 Razer 제품을 직접 구매한 경우에는 다음 절차를 따르십시오.</p>
+            <p>어떠한 이유로든 제품을 Razer 리셀러에게 반품할 수 없거나 <Go to="/">Razer 스토어</Go>에서 Razer 제품을 직접 구매한 경우에는 다음 절차를 따르십시오.</p>
             <ul className="warranty-answer__indent">
-                <li><Ext href="https://mysupport.razer.com/contact-us/">mysupport.razer.com/contact-us/</Ext> 로 이동하여 반품 승인 번호(이하 "RMA 번호") 및 Razer 지원 주소를 확인하십시오.</li>
+                <li><Go to="/info/service/faq?topic=contact">1 : 1 문의</Go>로 이동하여 반품 승인 번호(이하 "RMA 번호") 및 Razer 지원 주소를 확인하십시오.</li>
                 <li>RMA 번호는 포장 외부의 눈에 잘 띄는 곳에 기입해야 합니다.</li>
-                <li>유효한 구매 증거물과 반품 사유를 포장 내에 동봉하십시오. 유효한 구매 증거물의 예를 보려면 <Ext href="https://www.razer.com/warranty">www.razer.com/warranty</Ext> 를 방문하십시오.</li>
+                <li>유효한 구매 증거물과 반품 사유를 포장 내에 동봉하십시오. 유효한 구매 증거물의 예를 보려면 <Go to="/info/service/registration-warranty">등록 및 보증 페이지</Go>를 방문하십시오.</li>
                 <li>제품과 RMA 번호 및 유효한 구매 증거물을 Razer 고객 지원팀에서 제공한 Razer 지원 주소로 보내십시오.</li>
             </ul>
             <p><strong>유효한 RMA 번호가 없는 제품은 RAZER로 보내지 마십시오..</strong></p>
@@ -200,10 +201,10 @@ export const warrantyFaq: { q: string; a: ReactNode }[] = [
     },
     {
         q: "만약 보유하고있는 제품이 레거시 제품이 되거나 단종되면 어떻게 해야하나요?",
-        a: <p>Razer 제품을 소유하신 분들은 Razer 수리 서비스를 통해 일부 더 이상 생산되지 않는 제품에 대해 수리를 받으실 수 있습니다. 어떤 Razer 제품들이 해당되는지 확인하시기 <Ext href="https://mysupport.razer.com/">바랍니다</Ext>.</p>,
+        a: <p>Razer 제품을 소유하신 분들은 Razer 수리 서비스를 통해 일부 더 이상 생산되지 않는 제품에 대해 수리를 받으실 수 있습니다. 어떤 Razer 제품들이 해당되는지 확인하시기 <Go to="/info/service/support">바랍니다</Go>.</p>,
     },
     {
         q: "Razer에서는 Razer 제품의 서비스 기간을 늘리기 위한 프로텍션 플랜을 제공하나요?",
-        a: <p>예. 제품을 구입하신 후 11개월 이내라면, Razer.com을 방문하셔서 RazerCare 프로텍션 플랜으로 Razer 장비들을 구입하실 수 있습니다. 옵션으로 사고로 인한 손상에 대해 보상을 지원하지 않는 프로텍션 플랜을 선택하실 수 있습니다. 지금 <Ext href="https://www.razer.com/razercare">RazerCare 프로텍션 플랜</Ext>에 대해서 더 알아보세요.</p>,
+        a: <p>예. 제품을 구입하신 후 11개월 이내라면, Razer 스토어에서 RazerCare 프로텍션 플랜으로 Razer 장비들을 구입하실 수 있습니다. 옵션으로 사고로 인한 손상에 대해 보상을 지원하지 않는 프로텍션 플랜을 선택하실 수 있습니다. 지금 <Go to="/info/service/razercare">RazerCare 프로텍션 플랜</Go>에 대해서 더 알아보세요.</p>,
     },
 ];

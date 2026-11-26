@@ -26,6 +26,7 @@ import { AboutPage, EsportsPage } from "./pages/info/BrandPages";
 import { NikoPage } from "./pages/info/NikoPage";
 import { EsportsGreenPage } from "./pages/info/EsportsGreenPage";
 import { FaqPage, SupportPage, WarrantyPage } from "./pages/info/ServicePages";
+import { CareersPage, ContactPage, RazerCarePage, SustainabilityPage, ZVenturesPage } from "./pages/info/CompanyPages";
 import { BuyingGuidePage, ExclusivesPage, MembershipPage } from "./pages/info/StorePages";
 import { TechnologyPage } from "./pages/info/TechnologyPage";
 
@@ -87,6 +88,11 @@ function App() {
           <Route path="/info/service/registration-warranty" element={<WarrantyPage />} />
           <Route path="/info/service/support" element={<SupportPage />} />
           <Route path="/info/company/about" element={<AboutPage />} />
+          <Route path="/info/company/sustainability" element={<SustainabilityPage />} />
+          <Route path="/info/company/careers" element={<CareersPage />} />
+          <Route path="/info/company/zventures" element={<ZVenturesPage />} />
+          <Route path="/info/company/contact" element={<ContactPage />} />
+          <Route path="/info/service/razercare" element={<RazerCarePage />} />
           <Route path="/promotion/collab/:collabSlug" element={<CollabPage />} />
           <Route path="/info/:group/:page" element={<InfoPage />} />
         </Routes>
