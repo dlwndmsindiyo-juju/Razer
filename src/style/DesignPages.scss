@@ -5324,3 +5324,46 @@ a.design-support:hover {
 .collection-product__actions > button {
     position: relative;
 }
+
+// 제품 카드 인터랙션 (홈 · 검색 제품 카드와 같게): 올리면 제품 이미지가 살짝 커지며 나옴 · 누르면 카드가 살짝 눌림
+// 추천 상품(design-recommendation) · 프로모션 제품(promotion__card) · 컬렉션 제품(collection-product)
+.design-recommendation,
+.promotion__card,
+.collection-product {
+    transition: transform .3s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &:active {
+        transform: scale(.98);
+    }
+}
+
+.design-recommendation__art img,
+.promotion__card .promotion__card-img img,
+.collection-product__image img {
+    transition: transform .5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.design-recommendation:hover .design-recommendation__art img,
+.design-recommendation:focus-within .design-recommendation__art img,
+.promotion__card:hover .promotion__card-img img,
+.promotion__card:focus-visible .promotion__card-img img,
+.collection-product:hover .collection-product__image img,
+.collection-product:focus-within .collection-product__image img {
+    transform: scale(1.08);
+}
+
+// 프로모션 제품: 초록 테두리 대신 같은 스케일 인터랙션만
+.promotion__card:hover .promotion__card-img {
+    border-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .design-recommendation,
+    .promotion__card,
+    .collection-product,
+    .design-recommendation__art img,
+    .promotion__card .promotion__card-img img,
+    .collection-product__image img {
+        transition: none;
+    }
+}
