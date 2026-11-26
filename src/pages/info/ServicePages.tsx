@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { ConfirmModal, RegisterModal, serialOnlyText, toSerial } from "../../components/mypage/MypageModals";
@@ -43,18 +43,37 @@ export function FaqPage() {
     const pageResults = results.slice((currentPage - 1) * FAQ_PAGE_SIZE, currentPage * FAQ_PAGE_SIZE);
     const goPage = (next: number) => { setPage(next); setActive(undefined); };
 
+    // 다른 페이지에서 ?topic=탭&open=질문id 로 들어오면: 그 질문이 있는 페이지 · 펼친 채로 · FAQ 칸까지 스크롤
+    const panel = useRef<HTMLElement>(null);
+    const openId = params.get("open");
+    useEffect(() => {
+        if (!params.get("topic") && !openId) return;
+        const list = faqTopics[tab];
+        const index = openId ? list.findIndex(({ id }) => id === openId) : -1;
+        if (index >= 0) {
+            setPage(Math.floor(index / FAQ_PAGE_SIZE) + 1);
+            setActive(openId!);
+        }
+        const timer = window.setTimeout(() => {
+            const target = (index >= 0 && document.getElementById("faq-item-" + openId)) || panel.current;
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 80);
+        return () => window.clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tab, openId]);
+
     return <div className="design-page design-faq-page">
         <PageHeading title="FAQ" description="고객 가이드" />
         <input className="design-search" type="search" aria-label="도움말 검색"
             placeholder="궁금하신 점이 있다면 검색 또는 도움말 카테고리를 선택하세요."
             value={query} onChange={(event) => { setQuery(event.target.value); setActive(undefined); setPage(1); }} />
-        <section className="design-panel design-faq">
+        <section className="design-panel design-faq" ref={panel}>
             <nav className="design-tabs" aria-label="고객 가이드">
                 {tabs.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key}
                     onClick={() => { setParams({ topic: key }); setQuery(""); setActive(undefined); setPage(1); }}>{label}</button>)}
             </nav>
             {results.length ? <ol className="design-questions">
-                {pageResults.map(({ id, question, answer }, index) => <li key={id} className={active === id ? "is-open" : ""}>
+                {pageResults.map(({ id, question, answer }, index) => <li key={id} id={"faq-item-" + id} className={active === id ? "is-open" : ""}>
                     <button type="button" aria-expanded={active === id} aria-controls={"faq-answer-" + id}
                         onClick={() => setActive(active === id ? undefined : id)}>
                         <span>{String((currentPage - 1) * FAQ_PAGE_SIZE + index + 1).padStart(2, "0")}</span><strong>{question}</strong>

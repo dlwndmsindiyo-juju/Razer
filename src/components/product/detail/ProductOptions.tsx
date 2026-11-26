@@ -56,9 +56,9 @@ export const ProductOptions = ({ product }: { product: Product }) => {
                                         >
                                             {isSwatch ? (
                                                 <>
-                                                    {/* 색이 정해진 값은 색으로 · 에디션은 그 상품 이미지로 */}
-                                                    <span className="pd-swatch__thumb" style={color ? { backgroundColor: color } : undefined}>
-                                                        {!color && variant && <img src={variant.image} alt="" loading="lazy" />}
+                                                    {/* 공식 사이트처럼 그 옵션 상품의 공식 이미지 · 이미지가 없을 때만 색으로 */}
+                                                    <span className="pd-swatch__thumb" style={!variant?.image && color ? { backgroundColor: color } : undefined}>
+                                                        {variant?.image && <img src={variant.image} alt="" loading="lazy" />}
                                                     </span>
                                                     <span className="pd-swatch__name">{optionValueNames[value] ?? value}</span>
                                                     {diff && <span className="pd-swatch__price">{diff}</span>}

@@ -1479,6 +1479,17 @@ main {
         padding-top: 2rem;
         border-radius: $radius-md;
         background-color: $neutral-color-700;
+        color: $neutral-color-white;
+        transition: background-color 0.2s;
+
+        // 누르면 FAQ 해당 질문으로 · 호버하면 제목만 메인 컬러
+        &:hover {
+            background-color: $neutral-color-canvas;
+
+            .home-features__title {
+                color: $main-primary-color;
+            }
+        }
     }
 
     // 아이콘 (public/icons/delivery · exchange · service · inquiry .svg)
@@ -1641,9 +1652,11 @@ main {
         background-color: $neutral-color-white;
         color: $neutral-color-black;
 
+        // 흰 아이콘 → 흰 버튼 위에서는 검정으로 반전
         img {
             width: 1rem;
             height: 1rem;
+            filter: brightness(0);
         }
     }
 
@@ -1879,9 +1892,36 @@ main {
     }
 }
 
+// 제품 카드 인터랙션: 제품명 색은 그대로 · 카드에 올리면 제품 이미지가 살짝 커지며 나옴 (부드럽게)
+.product-card__name[href],
 .product-card__name[href]:hover,
 .product-card__name[href]:focus-visible {
-    color: $main-primary-color;
+    color: $neutral-color-white;
+}
+
+.product-card {
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .product-card__image {
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    &:hover .product-card__image,
+    &:focus-within .product-card__image {
+        transform: scale(1.08);
+    }
+
+    // 누르는 순간 카드가 살짝 눌림
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .product-card,
+    .product-card .product-card__image {
+        transition: none;
+    }
 }
 
 .product-card__price del {
@@ -3465,6 +3505,12 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
         }
     }
 
+    // "총 주문 금액" 글자 · 장바구니 아이콘은 모바일 하단 바에서만 (데스크톱은 금액 · 글자 버튼)
+    &__total-label,
+    &__cart img {
+        display: none;
+    }
+
     &__actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -3822,7 +3868,7 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
     &__thumb {
         display: block;
         width: 100%;
-        height: 2.375rem;
+        height: 4rem; // 제품 이미지가 보이게 (공식 사이트 옵션 칸)
         border: 0.0625rem solid $neutral-color-500;
         border-radius: $radius-sm;
         background-color: $neutral-color-700;
@@ -3832,7 +3878,8 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; // 공식 사이트처럼 제품 전체가 보이게
+            padding: 0.125rem;
         }
     }
 
@@ -6303,8 +6350,10 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
         grid-template-columns: 1fr;
     }
 
+    // 이미지 비율 그대로 줄여서 + 버튼이 제품 위에 그대로 있게
     .home-setup__visual {
-        height: clamp(14rem, 45vw, 30rem);
+        height: auto;
+        aspect-ratio: 1112 / 480;
     }
 
     .home-features__list {

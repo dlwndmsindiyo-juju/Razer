@@ -102,10 +102,11 @@ export const setupShowcase = {
     moreLink: { label: "모든 컬렉션 보기", to: "/products/collab" },
     collectionTitle: "은랑의 감각으로\n완성하는 셋업.", // \n = 줄바꿈
     subtitle: "Razer | 붕괴: 스타레일 컬렉션",
-    image: "/images/home/setup/honkai-star-rail.webp", // 배경 + 마우스 · 헤드셋 합성 (1112 x 480)
+    image: "/images/home/setup/honkai-star-rail.webp", // 키보드 · 헤드셋 · 마우스 데스크 셋업 (1909 x 824 · 화면 비율 1112 x 480과 같음)
     hotspots: [
-        { x: 49.06, y: 27.6, productId: 2003, variant: "붕괴 에디션" }, // Viper V3 Pro SE - Honkai: Star Rail Edition
-        { x: 83.68, y: 36.77, productId: 4001, variant: "붕괴 에디션" }, // BlackShark V3 X HyperSpeed - Honkai: Star Rail Edition
+        { x: 31, y: 42, productId: 1001, variant: "붕괴 에디션" }, // BlackWidow V4 Tenkeyless HyperSpeed - Honkai: Star Rail Edition
+        { x: 75.5, y: 22, productId: 4001, variant: "붕괴 에디션" }, // BlackShark V3 X HyperSpeed - Honkai: Star Rail Edition
+        { x: 77.5, y: 58, productId: 2003, variant: "붕괴 에디션" }, // Viper V3 Pro SE - Honkai: Star Rail Edition
     ] as SetupHotspot[],
     collectionButton: { label: "스타레일 컬렉션 보기", to: "/search?q=Honkai" },
 };
