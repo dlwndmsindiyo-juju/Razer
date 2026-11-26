@@ -13,6 +13,32 @@ const isScrollableY = (el: HTMLElement) => {
 };
 const isScrollable = (el: HTMLElement) => isScrollableX(el) || isScrollableY(el);
 
+// 칸 맞춤(scroll-snap)이 있는 목록: 놓은 위치에서 가장 가까운 칸으로 부드럽게 이동
+const snapTarget = (el: HTMLElement) => {
+    const style = getComputedStyle(el);
+    if (!style.scrollSnapType || style.scrollSnapType === "none") return null;
+    const box = el.getBoundingClientRect();
+    const padLeft = parseFloat(style.scrollPaddingLeft) || 0;
+    const padTop = parseFloat(style.scrollPaddingTop) || 0;
+    let best: { left: number; top: number; distance: number } | null = null;
+    Array.from(el.children).forEach((child) => {
+        const align = getComputedStyle(child).scrollSnapAlign;
+        if (!align || align === "none") return;
+        const rect = child.getBoundingClientRect();
+        let left = el.scrollLeft + rect.left - box.left - padLeft;
+        let top = el.scrollTop + rect.top - box.top - padTop;
+        if (align.includes("center")) {
+            left = el.scrollLeft + rect.left - box.left - (el.clientWidth - rect.width) / 2;
+            top = el.scrollTop + rect.top - box.top - (el.clientHeight - rect.height) / 2;
+        }
+        left = Math.max(0, Math.min(left, el.scrollWidth - el.clientWidth));
+        top = Math.max(0, Math.min(top, el.scrollHeight - el.clientHeight));
+        const distance = Math.abs(left - el.scrollLeft) + Math.abs(top - el.scrollTop);
+        if (!best || distance < best.distance) best = { left, top, distance };
+    });
+    return best as { left: number; top: number; distance: number } | null;
+};
+
 export const useDragScroll = () => {
     useEffect(() => {
         let target: HTMLElement | null = null;
@@ -21,8 +47,51 @@ export const useDragScroll = () => {
         let startLeft = 0;
         let startTop = 0;
         let moved = false;
+        // 놓은 뒤 관성으로 조금 더 미끄러짐 (손을 뗄 때의 속도)
+        let lastX = 0;
+        let lastY = 0;
+        let lastTime = 0;
+        let velocityX = 0;
+        let velocityY = 0;
+        let glideFrame = 0;
+        let settleTimer = 0;
+        let gliding: HTMLElement | null = null;
+
+        const finish = (el: HTMLElement) => {
+            const snap = snapTarget(el);
+            if (snap && snap.distance > 1) {
+                el.scrollTo({ left: snap.left, top: snap.top, behavior: "smooth" });
+                settleTimer = window.setTimeout(() => el.classList.remove("is-dragging"), 450);
+            } else {
+                el.classList.remove("is-dragging");
+            }
+            gliding = null;
+        };
+        const stopGlide = () => {
+            cancelAnimationFrame(glideFrame);
+            clearTimeout(settleTimer);
+            if (gliding) gliding.classList.remove("is-dragging");
+            gliding = null;
+        };
+        const glide = (el: HTMLElement) => {
+            gliding = el;
+            let prev = performance.now();
+            const step = (now: number) => {
+                const dt = Math.min(32, now - prev);
+                prev = now;
+                el.scrollLeft -= velocityX * dt;
+                el.scrollTop -= velocityY * dt;
+                const friction = Math.pow(0.94, dt / 16);
+                velocityX *= friction;
+                velocityY *= friction;
+                if (Math.abs(velocityX) < 0.02 && Math.abs(velocityY) < 0.02) return finish(el);
+                glideFrame = requestAnimationFrame(step);
+            };
+            glideFrame = requestAnimationFrame(step);
+        };
 
         const onDown = (e: PointerEvent) => {
+            stopGlide();
             moved = false;
             if (e.pointerType !== "mouse" || e.button !== 0) return;
             let el = e.target as HTMLElement | null;
@@ -35,6 +104,11 @@ export const useDragScroll = () => {
             startY = e.clientY;
             startLeft = el.scrollLeft;
             startTop = el.scrollTop;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            lastTime = e.timeStamp;
+            velocityX = 0;
+            velocityY = 0;
             moved = false;
         };
         const onMove = (e: PointerEvent) => {
@@ -48,11 +122,30 @@ export const useDragScroll = () => {
             }
             target.scrollLeft = startLeft - dx;
             target.scrollTop = startTop - dy;
+            const dt = e.timeStamp - lastTime;
+            if (dt > 0) {
+                // 최근 움직임 쪽에 무게를 두고 속도 계산
+                velocityX = velocityX * 0.2 + ((e.clientX - lastX) / dt) * 0.8;
+                velocityY = velocityY * 0.2 + ((e.clientY - lastY) / dt) * 0.8;
+            }
+            lastX = e.clientX;
+            lastY = e.clientY;
+            lastTime = e.timeStamp;
             e.preventDefault();
         };
-        const onUp = () => {
-            target?.classList.remove("is-dragging");
+        const onUp = (e: PointerEvent) => {
+            if (!target) return;
+            const el = target;
             target = null;
+            if (!moved) return;
+            // 멈췄다 놓으면 관성 없음
+            if (e.timeStamp - lastTime > 80) {
+                velocityX = 0;
+                velocityY = 0;
+            }
+            if (!isScrollableX(el)) velocityX = 0;
+            if (!isScrollableY(el)) velocityY = 0;
+            glide(el);
         };
         const onClick = (e: MouseEvent) => {
             if (!moved) return;
@@ -70,7 +163,11 @@ export const useDragScroll = () => {
         document.addEventListener("pointercancel", onUp);
         document.addEventListener("click", onClick, true);
         document.addEventListener("dragstart", onDragStart);
+        const onWheel = () => gliding && stopGlide(); // 휠을 굴리면 관성 멈춤
+        document.addEventListener("wheel", onWheel, { passive: true });
         return () => {
+            stopGlide();
+            document.removeEventListener("wheel", onWheel);
             document.removeEventListener("pointerdown", onDown);
             document.removeEventListener("pointermove", onMove);
             document.removeEventListener("pointerup", onUp);

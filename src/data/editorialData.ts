@@ -199,3 +199,146 @@ export const esportsCopy = [
     "VCT EMEA 2026",
     "EVO JAPAN 2026"
 ];
+// ---------- Razer 소개 > Razer 역사 (연도별 주요 성과 · 시안 문구) ----------
+// 2023년 문단은 aboutCopy[6] · [15] 를 그대로 사용
+// product: 그 해 내용에 나오는 제품 계열 → 실제 상품 이미지 (없으면 이미지 자리에 연도 글자)
+export type AboutMilestone = { year: number; paragraphs: string[]; product?: string };
+
+export const aboutMilestones: AboutMilestone[] = [
+    {
+        year: 2022,
+        paragraphs: [
+            "Razer는 10년 연속 Best of CES를 수상하며 기술력을 인정받았습니다. Razer Enki HyperSense 인수와 HyperPolling Wireless Dongle 출시로 게이밍 기술을 강화했으며, #GoGreenWithRazer 캠페인을 통해 탄소 중립 결제 솔루션과 친환경 게이밍 제품을 선보였습니다.",
+            "또한 RazerCon 2022에서 Panerai, Lamborghini 등과의 협업 제품을 공개하며 브랜드 영역을 확장했습니다.",
+        ],
+    },
+    {
+        year: 2021,
+        paragraphs: [
+            "Razer는 9년 연속 Best of CES를 수상하며 기술력을 인정받았습니다. Viper 8KHz 마우스와 Blade 14 게이밍 노트북을 출시하며 제품 경쟁력을 강화했습니다.",
+            "또한 #GoGreenWithRazer 캠페인을 통해 지속 가능성 10년 로드맵을 발표하고, 첫 Razer DevCon 개최와 E3 쇼케이스를 통해 기술 혁신과 글로벌 게이밍 생태계 확장을 이어갔습니다.",
+        ],
+        product: "Razer Viper",
+    },
+    {
+        year: 2020,
+        paragraphs: [
+            "Razer는 8년 연속 Best of CES를 수상하며 기술력을 인정받았습니다. Razer Kishi 모바일 컨트롤러와 Blade 게이밍 노트북을 선보이고, THX Spatial Audio 기술과 생산성 중심의 제품군을 확대했습니다.",
+            "또한 RazerCon과 Razer Invitational을 개최하며 글로벌 게이밍 커뮤니티를 확장하고, 코로나19 대응을 위한 마스크 생산 및 기부 활동을 펼쳤습니다. 2020년에는 연간 매출 10억 달러를 돌파하는 성과를 거두었습니다.",
+        ],
+        product: "Razer Kishi",
+    },
+    {
+        year: 2019,
+        paragraphs: [
+            "Razer는 Viper, Viper Ultimate, Basilisk Ultimate 등 혁신적인 게이밍 마우스와 Blade Studio Edition을 출시하며 제품 경쟁력을 강화했습니다.",
+            "DeathAdder 누적 판매량 1,000만 대를 돌파하고, Razer Chroma Connect를 통해 RGB 조명 생태계를 확장했습니다.",
+            "또한 Razer Gold 서비스를 130개국 이상으로 확대하고, Razer Pay와 핀테크 사업을 강화했습니다. e스포츠 지원과 글로벌 RazerStore 확장을 통해 브랜드 영향력을 높였습니다.",
+        ],
+        product: "Razer DeathAdder",
+    },
+    {
+        year: 2018,
+        paragraphs: [
+            "Razer는 Project Linda와 HyperFlux 기술로 CES 2018에서 20개 이상의 상을 수상하며 혁신성을 인정받았습니다. Blade 15 게이밍 노트북, Huntsman 키보드, Razer Phone 2 등을 출시하며 제품군을 확대했습니다.",
+            "또한 Razer Chroma 생태계를 글로벌 파트너사로 확장하고, Razer Pay 전자지갑 서비스를 출시했습니다. e스포츠 분야에서는 This is Esports 캠페인을 통해 브랜드 영향력을 강화했습니다.",
+        ],
+        product: "Razer Huntsman",
+    },
+    {
+        year: 2017,
+        paragraphs: [
+            "Razer는 Project Ariana로 7년 연속 Best of CES를 수상하며 기술력을 인정받았습니다. Lancehead 무선 게이밍 마우스를 출시하고, Nextbit 인수를 통해 사업 영역을 확장했습니다.",
+            "또한 zGold와 zSilver(현 Razer Gold·Silver) 서비스를 출시하고 글로벌 기업들과 전략적 제휴를 맺으며 결제 서비스와 글로벌 유통망을 강화했습니다.",
+        ],
+    },
+    {
+        year: 2016,
+        paragraphs: [
+            "Razer는 Blade Stealth 노트북으로 6년 연속 Best of CES를 수상하며 기술력을 인정받았습니다. Razer Ornata 키보드, Raiju 컨트롤러, Panthera 아케이드 스틱 등 다양한 게이밍 제품을 출시했습니다.",
+            "또한 THX 인수와 zVentures 출범을 통해 기술 및 투자 사업을 확대하고, 샌프란시스코와 상하이에 RazerStore를 개점하며 글로벌 시장에서의 입지를 강화했습니다.",
+        ],
+        product: "Razer Ornata",
+    },
+    {
+        year: 2015,
+        paragraphs: [
+            "Razer는 Forge TV로 5년 연속 CES 혁신상을 수상하며 기술력을 인정받았습니다. 대만, 필리핀, 태국에 RazerStore를 개점하며 글로벌 유통망을 확장했습니다.",
+            "또한 Team Razer를 통해 주요 e스포츠 팀을 후원하고, Razer Music 프로젝트를 선보이며 게이밍을 넘어 음악과 엔터테인먼트 분야로 활동 영역을 넓혔습니다.",
+        ],
+    },
+    {
+        year: 2014,
+        paragraphs: [
+            "Razer는 모듈형 PC 콘셉트 Project Christine으로 CES 최고 PC상을 수상하며 4년 연속 혁신성을 인정받았습니다. 스마트 웨어러블 Razer Nabu와 스트리밍용 마이크 Razer Seiren을 선보이며 제품군을 확대했습니다.",
+            "또한 NZXT와의 협업을 통해 게이밍 하드웨어 시장을 확장하고, Team Razer는 280회 이상 시상대에 올라 총 400만 달러의 상금을 기록하며 e스포츠 분야에서 입지를 강화했습니다.",
+        ],
+        product: "Razer Seiren",
+    },
+    {
+        year: 2013,
+        paragraphs: [
+            "Razer는 고성능 게이밍 태블릿 Razer Edge로 CES에서 최고 제품상을 수상하며 기술력을 인정받았습니다.",
+            "또한 KT 롤스터와 Evil Geniuses 등 세계적인 e스포츠 팀을 후원하며 경쟁력을 강화했습니다. Team Razer는 연간 180회 이상 시상대에 오르고 총 350만 달러의 상금을 기록하며 글로벌 e스포츠 시장에서 영향력을 확대했습니다.",
+        ],
+    },
+    {
+        year: 2012,
+        paragraphs: [
+            "Razer는 초슬림 게이밍 노트북 Razer Blade와 클라우드 기반 설정 프로그램 Razer Synapse를 선보이며 기술 혁신을 이끌었습니다. 또한 Project Fiona와 Kraken 헤드셋을 공개하며 게이밍 제품군을 확대했습니다.",
+            "e스포츠 분야에서는 Team Razer가 35개국 50여 개 팀, 400명 이상의 선수로 성장했으며, 후원팀 Taipei Assassins의 우승을 통해 글로벌 경쟁력을 입증했습니다.",
+        ],
+        product: "Razer Kraken",
+    },
+    {
+        year: 2011,
+        paragraphs: [
+            "Razer는 Razer Switchblade 콘셉트로 CES 최고 혁신상을 수상하며 기술력을 인정받았습니다. 또한 Xbox 360용 Razer Onza 컨트롤러를 출시하고, 미국과 대만에 연구개발센터를 설립하며 기술 개발 역량을 강화했습니다.",
+            "e스포츠 분야에서는 Team Liquid, SlayerS_BoxeR, LGD 등 세계적인 선수와 팀을 후원하며 글로벌 e스포츠 시장에서 영향력을 확대했습니다.",
+        ],
+    },
+    {
+        year: 2010,
+        paragraphs: [
+            "Razer는 최초의 기계식 게이밍 키보드 BlackWidow와 7.1 채널 게이밍 헤드셋 Megalodon을 선보이며 제품 경쟁력을 강화했습니다.",
+            "또한 중국 상하이에 지역본부를 설립하고, WeMade FOX 등 주요 e스포츠 팀을 후원하며 글로벌 시장에서의 입지를 확대했습니다.",
+        ],
+        product: "Razer BlackWidow",
+    },
+    {
+        year: 2009,
+        paragraphs: [
+            "Razer는 세계 최초의 게이밍 등급 무선 기술을 적용한 Razer Mamba를 선보이며 게이밍 마우스 기술력을 강화했습니다.",
+            "또한 공동 본사를 샌프란시스코로 이전하고, 주요 e스포츠 팀과 협업해 Razer Sphex Esports Edition 마우스 패드를 출시하며 글로벌 시장에서의 입지를 확대했습니다.",
+        ],
+        product: "Razer Sphex",
+    },
+    {
+        year: 2008,
+        paragraphs: [
+            "Razer는 샌프란시스코에 연구개발센터를 설립하며 기술 개발 기반을 강화했습니다.",
+            "또한 Evil Geniuses, Team Liquid 등 세계적인 e스포츠 팀을 후원하고, 2008 베이징 올림픽에서 Team Razer 소속 선수들이 금메달을 획득하며 글로벌 e스포츠 시장에서 영향력을 확대했습니다.",
+        ],
+    },
+    {
+        year: 2007,
+        paragraphs: [
+            "Razer는 독일 함부르크에 유럽 지역본부를 설립하며 글로벌 시장 진출을 확대했습니다. 또한 Lycosa 게이밍 키보드와 THX 오디오 기술을 적용한 Mako 2.1 스피커를 선보이며 게이밍 주변기기 시장에서 제품 경쟁력을 강화했습니다.",
+        ],
+    },
+    {
+        year: 2006,
+        paragraphs: [
+            "Razer는 Microsoft와 협업하여 Habu 게이밍 마우스와 Reclusa 키보드를 출시하며 제품 경쟁력을 강화했습니다.",
+            "또한 대표 제품인 DeathAdder 게이밍 마우스를 선보이고, 세계적인 e스포츠 팀 Fnatic을 후원하며 글로벌 게이밍 시장에서 입지를 확대했습니다.",
+        ],
+        product: "Razer DeathAdder",
+    },
+    {
+        year: 2005,
+        paragraphs: [
+            "Razer는 Min-Liang Tan과 Robert Krakoff가 공동 설립한 글로벌 게이밍 브랜드로, 미국 샌디에이고와 싱가포르에 본사를 설립했습니다.",
+            "또한 Diamondback 게이밍 마우스를 출시하며 고성능 게이밍 주변기기 시장에서 혁신의 첫걸음을 내디뎠습니다.",
+        ],
+    },
+];

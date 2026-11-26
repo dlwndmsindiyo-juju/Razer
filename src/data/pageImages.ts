@@ -102,6 +102,8 @@ export const supportImages = {
 
 // ---------- 회사 > Razer 소개 ----------
 export const aboutImages = {
+    heroVideo: "/videos/about/razer-hero.mp4", // 히어로 영상 (소리 없음 · 10초 반복)
+    heroPoster: img("about/hero-poster.webp"), // 영상 2초 장면 (불러오기 전 · 동작 줄이기 설정)
     city: img("about/razer-city.webp"),
     chromaBanner: img("about/chroma-banner.webp"),
     milestones2023: img("about/milestones-2023.webp"),

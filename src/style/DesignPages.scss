@@ -955,15 +955,28 @@ a.design-support:hover {
         scroll-margin-top: 8rem;
     }
 
+    // 히어로: 16:9 영상 + 아래 About Me 띠
     &__hero {
+        position: relative;
         display: grid;
         align-items: end;
         text-align: center;
         min-height: clamp(14rem, 56.25vw, 67.5rem);
         background: v.$neutral-color-black;
+        overflow: hidden;
+    }
+
+    &__hero-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
     }
 
     &__hero h1 {
+        position: relative;
         padding: 1.25rem 1rem;
         background: v.$neutral-color-700;
         font-family: v.$font-family-display;
@@ -1059,8 +1072,13 @@ a.design-support:hover {
         display: flex;
         gap: 2.5rem;
         overflow-x: auto;
-        padding: 0 50vw 2rem; // 연도 ↔ 아래 슬라이드바 간격
-        scrollbar-gutter: stable;
+        padding: 0 50% 0 clamp(1.5rem, 4.4vw, 5.3125rem); // 2023 은 왼쪽(시안 85) · 나머지는 가운데 · 마지막 연도도 가운데까지
+        scrollbar-width: none; // 드래그로 넘김 (스크롤바 없음)
+        cursor: grab;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         button {
             flex: none;
@@ -1097,6 +1115,25 @@ a.design-support:hover {
             object-fit: cover;
             border-radius: v.$radius-sm;
         }
+
+        // 제품 사진은 잘리지 않게 패널 안에
+        img.is-product {
+            padding: 3rem;
+            background-color: v.$neutral-color-700;
+            object-fit: contain;
+        }
+    }
+
+    // 사진이 없는 해: 같은 자리에 연도 글자
+    &__milestone-fallback {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        aspect-ratio: 600 / 480;
+        border-radius: v.$radius-sm;
+        background-color: v.$neutral-color-700;
+        font-size: clamp(3rem, 7vw, 7.5rem);
+        color: v.$neutral-color-500;
     }
 
     &__empty {
@@ -1114,8 +1151,18 @@ a.design-support:hover {
         overflow-x: auto;
         // 오른쪽은 화면 끝까지 이어지게 (시안처럼 다음 카드가 걸쳐 보임)
         margin: 2.5rem calc((100% - 100vw) / 2) 0 0;
-        padding: 0 calc((100vw - 100%) / 2) 2.5rem 0; // 카드 ↔ 아래 슬라이드바 간격
+        padding: 0 calc((100vw - 100%) / 2) 0 0;
         scroll-snap-type: x mandatory;
+        scrollbar-width: none; // 드래그로 넘김 (스크롤바 없음)
+        cursor: grab;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        img {
+            -webkit-user-drag: none;
+        }
     }
 
     &__award {

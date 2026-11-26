@@ -6347,3 +6347,11 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
         animation: none !important;
     }
 }
+
+// 마우스로 끄는 중인 목록 (useDragScroll): 칸 맞춤 · 부드러운 스크롤을 잠시 끄고 손을 그대로 따라가게
+.is-dragging {
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+    cursor: grabbing !important;
+    user-select: none;
+}
