@@ -246,8 +246,14 @@ const OrderDetail = ({ order }: { order: Order }) => {
     const receiver = order.receiver;
 
     return (
-        <section className="mypage__section">
-            <SectionHead title="주문 상세" />
+        <section className="mypage__section mypage__order-detail">
+            <div className="mypage__section-head">
+                <h2 className="mypage__section-title">주문 상세</h2>
+                <Link className="mypage__order-back" to="/mypage?tab=orders">
+                    <span className="mypage__chevron" aria-hidden="true"><ChevronIcon /></span>
+                    주문 내역
+                </Link>
+            </div>
             <p className="mypage__meta">
                 {formatOrderDate(order.date)} · 주문번호 {formatOrderNumber(order.id)}
             </p>
@@ -435,12 +441,10 @@ export const MyPage = () => {
                         {user.profile ? <img src={user.profile} alt="" /> : <img src="/icons/user.svg" alt="" className="mypage__avatar-default" />}
                     </span>
                     <h1 className="mypage__name">{name}님</h1>
-                    {/* 프로필 설정은 마이페이지 첫 화면에만 */}
-                    {tab === "home" && !isWishlist && (
-                        <button type="button" className="mypage__line-btn mypage__profile-btn" onClick={() => setSearchParams({ tab: "account", section: "profile" })}>
-                            프로필 설정
-                        </button>
-                    )}
+                    <button type="button" className={`mypage__line-btn mypage__profile-btn${tab !== "home" || isWishlist ? " mypage__profile-btn--mobile" : ""}`}
+                        onClick={() => setSearchParams({ tab: "account", section: "profile" })}>
+                        프로필 설정
+                    </button>
                 </div>
             </section>
 

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { Link } from "react-router-dom";
-import { aboutCopy, esportsCopy } from "../../data/editorialData";
+import { aboutCopy, aboutMilestones, esportsCopy } from "../../data/editorialData";
 import { aboutImages, esportsImages } from "../../data/pageImages";
 import { productData } from "../../data/productData";
 import { CatalogCard, PageHeading, PageHero } from "./PageLayout";
@@ -24,9 +24,9 @@ const awards = [
 ] as const;
 // [id, 제목, 배너 이미지, 본문, 버튼, 링크, 제목을 디스플레이 서체로]
 const brandSections = [
-    ["sustainability", "지속가능성", aboutImages.sustainabilityBanner, aboutCopy[7], "자세히 보기", "https://www.razer.com/go-green", false],
-    ["careers", "채용", aboutImages.careersBanner, aboutCopy.slice(11, 13).join(" "), "지원하기", "https://careers.razer.com/", false],
-    ["ventures", "zVENTURES", aboutImages.city, "zVentures는 Razer의 기업 벤처 투자 조직으로, Razer 생태계와 함께 성장할 스타트업과 새로운 기술에 투자합니다.", "자세히 보기", "https://www.zvntrs.com/", true],
+    ["sustainability", "지속가능성", aboutImages.sustainabilityBanner, aboutCopy[7], "자세히 보기", "/info/company/sustainability", false],
+    ["careers", "채용", aboutImages.careersBanner, aboutCopy.slice(11, 13).join(" "), "채용 공고 보기", "/info/company/careers", false],
+    ["ventures", "zVENTURES", aboutImages.city, "zVentures는 Razer의 기업 벤처 투자 조직으로, Razer 생태계와 함께 성장할 스타트업과 새로운 기술에 투자합니다.", "자세히 보기", "/info/company/zventures", true],
 ] as const;
 
 // #GoGreenWithRazer 를 초록 밑줄 링크로
@@ -37,7 +37,20 @@ const withGreenTag = (text: string) => text.split(/(#GoGreenWithRazer)/).map((pa
 
 export function AboutPage() {
     return <div className="design-page design-about">
-        <header className="design-about__hero"><h1>About Me</h1></header>
+        <div className="design-about__hero">
+            <video
+                className="design-about__hero-video"
+                src={aboutImages.heroVideo}
+                poster={aboutImages.heroPoster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+            />
+            <h1>About Me</h1>
+        </div>
         <section className="design-about__intro" id="overview">
             <img src={aboutImages.city} alt="" loading="lazy" />
             <h2 className="design-about__title"><span className="design-display">RAZER</span> 소개</h2>
@@ -78,20 +91,53 @@ export function AboutPage() {
     </div>;
 }
 
+// 연도별 내용 (2023: 기존 문단 · 사진 / 나머지: aboutMilestones + 그 해 제품 계열의 실제 상품 이미지)
+const getMilestone = (year: number) => {
+    if (year === 2023) return { paragraphs: [aboutCopy[6], aboutCopy[15]], image: aboutImages.milestones2023, isProduct: false };
+    const milestone = aboutMilestones.find((item) => item.year === year);
+    const family = milestone?.product;
+    const matches = family ? productData.filter((item) => item.title.startsWith(family) && item.image) : [];
+    const product = matches.length ? matches[year % matches.length] : undefined; // 같은 계열이 두 해에 나와도 다른 사진
+    return { paragraphs: milestone?.paragraphs ?? [], image: product?.image, isProduct: true, alt: product?.title ?? "" };
+};
+
 // 연도 탭: 선택한 연도가 가운데로 오고, 좌우로 스크롤
 function YearTimeline() {
     const [year, setYear] = useState(years[0]);
     const track = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    // 선택한 연도를 목록 가운데로 (처음 · 글꼴 로드 후 · 창 크기 변경 시에도 다시 맞춤)
+    const centerYear = useCallback((smooth: boolean) => {
         const list = track.current;
         const active = list?.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
         if (!list || !active) return;
+        const listBox = list.getBoundingClientRect();
+        const activeBox = active.getBoundingClientRect();
         list.scrollTo({
-            left: active.offsetLeft - (list.clientWidth - active.offsetWidth) / 2,
-            behavior: year === years[0] ? "auto" : "smooth",
+            left: list.scrollLeft + activeBox.left - listBox.left - (list.clientWidth - activeBox.width) / 2,
+            behavior: smooth ? "smooth" : "auto",
         });
-    }, [year]);
+    }, []);
+    const first = useRef(true);
+
+    useLayoutEffect(() => {
+        centerYear(!first.current);
+        first.current = false;
+    }, [year, centerYear]);
+
+    useEffect(() => {
+        let alive = true;
+        document.fonts?.ready.then(() => alive && centerYear(false));
+        const list = track.current;
+        const observer = new ResizeObserver(() => centerYear(false));
+        if (list) observer.observe(list);
+        return () => {
+            alive = false;
+            observer.disconnect();
+        };
+    }, [centerYear]);
+
+    const milestone = getMilestone(year);
 
     return <section className="design-about__timeline" aria-label="Razer 주요 성과">
         <div className="design-about__years" ref={track} aria-label="연도 선택">
@@ -101,13 +147,16 @@ function YearTimeline() {
             <div>
                 <h2 className="design-about__heading design-about__heading--light">
                     <span className="design-display">{year}</span>년
-                    {year === 2023 && <><br /><span className="design-display">Razer</span> 주요 성과</>}
+                    <br /><span className="design-display">Razer</span> 주요 성과
                 </h2>
-                {year === 2023
-                    ? <div className="design-display-text"><p>{aboutCopy[6]}</p><p>{aboutCopy[15]}</p></div>
+                {milestone.paragraphs.length
+                    ? <div className="design-display-text">{milestone.paragraphs.map((text) => <p key={text}>{text}</p>)}</div>
                     : <p className="design-about__empty">등록된 주요 성과가 없습니다.</p>}
             </div>
-            {year === 2023 && <img src={aboutImages.milestones2023} alt="" loading="lazy" />}
+            {/* 사진: 2023 은 행사 사진 · 나머지는 그 해 제품 · 없으면 연도 글자 */}
+            {milestone.image
+                ? <img key={milestone.image} src={milestone.image} alt={milestone.isProduct ? milestone.alt : ""} loading="lazy" className={milestone.isProduct ? "is-product" : undefined} />
+                : <div className="design-about__milestone-fallback" aria-hidden="true"><span className="design-display">{year}</span></div>}
         </div>
     </section>;
 }
@@ -126,7 +175,7 @@ function BrandSection({ section: [id, title, banner, description, action, href, 
                 <h2 className={"design-about__heading" + (display ? " design-display" : "")}>{title}</h2>
                 <p className="design-display-text">{description}</p>
             </div>
-            <a className="design-about__button" href={href} target="_blank" rel="noreferrer">{action}</a>
+            <Link className="design-about__button" to={href}>{action}</Link>
         </div>
     </section>;
 }
