@@ -198,7 +198,7 @@ $promo-bar-height: 2.5rem; // 헤더 아래 프로모션 바 (62px)
 $header-height: 4rem; // GNB (69px)
 
 @mixin container {
-    width: 100%;
+    width: calc(100% - 2.5rem); // 화면이 좁아져도 좌우 최소 1.25rem 여백 (1920 에서는 max-width 로 120 여백)
     max-width: $container-width;
     margin: 0 auto;
 }

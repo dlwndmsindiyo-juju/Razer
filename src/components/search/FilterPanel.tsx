@@ -41,8 +41,6 @@ export const FilterPanel = ({ isOpen, groups, selected, onToggle, onClose, onCle
                     </button>
                 </div>
 
-                <button type="button" className="filter-panel__reset" onClick={onClear}>선택 초기화</button>
-
                 {groups.map((group) => (
                     <section key={group.id} className="filter-panel__group">
                         <h3 className="filter-panel__group-title">{group.title}</h3>
@@ -65,6 +63,11 @@ export const FilterPanel = ({ isOpen, groups, selected, onToggle, onClose, onCle
                         </ul>
                     </section>
                 ))}
+
+                {/* 선택 초기화 (시안의 필터 목록 아래) */}
+                <div className="filter-panel__foot">
+                    <button type="button" className="filter-panel__reset" onClick={onClear}>선택 초기화</button>
+                </div>
             </aside>
         </div>
     );

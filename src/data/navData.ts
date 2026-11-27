@@ -35,4 +35,6 @@ export const productMenu = {
 export const getCategoryPath = (slug: string) => `/products/${slug}`;
 
 // 헤더 아래 프로모션 바 문구
+// 모바일(360) 프로모션 바: 짧은 한 줄 (흐르지 않음)
+export const promoBarShortText = "139,900원 이상 주문 시 국내 무료 표준 배송";
 export const promoBarText = "동안 ₩139,900 이상의 모든 주문은 대한민국으로의 무료 표준 배송 혜택을 누릴 수 있습니다.";

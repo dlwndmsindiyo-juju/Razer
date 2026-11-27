@@ -5,7 +5,7 @@ import { getCategoryPath, productMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
 import { UserMenu } from "./UserMenu";
 import { MobileMenu } from "./MobileMenu";
-import { promoBarText } from "../../data/navData";
+import { promoBarShortText, promoBarText } from "../../data/navData";
 
 export const Header = () => {
     const { pathname, key } = useLocation();
@@ -96,6 +96,7 @@ export const Header = () => {
                     <p className="header__promo-text">{promoBarText}</p>
                     <p className="header__promo-text header__promo-copy" aria-hidden="true">{promoBarText}</p>
                 </div>
+                <p className="header__promo-short">{promoBarShortText}</p>
             </div>
             <MobileMenu open={mobileOpen} onClose={closeMobile} />
 
