@@ -1075,3 +1075,45 @@ export const SupportModal = ({
         </Modal>
     );
 };
+
+// =========================================================
+// 카드 정보 변경 (카드사 · 유효기간 · 할부만 · 카드번호는 바꿀 수 없음)
+// =========================================================
+export const CardEditModal = ({ card, onClose, onSave }: { card: PaymentCard; onClose: () => void; onSave: (card: PaymentCard) => Promise<void> }) => {
+    const [issuer, setIssuer] = useState(card.issuer ?? "");
+    const [expiry, setExpiry] = useState(card.expiry ?? "");
+    const [installment, setInstallment] = useState(card.installment ?? installments[0]);
+    const { busy, error, setError, run } = useSubmit();
+
+    const submit = () => {
+        const [mm, yy] = expiry.split("/").map(Number);
+        const expired = !mm || mm > 12 || !yy || new Date(2000 + yy, mm) < new Date();
+        if (!issuer) return setError("카드사를 선택해 주세요.");
+        if (expiry.length !== 5 || expired) return setError("유효기간을 MM/YY 형식으로 정확히 입력해 주세요.");
+        run(() => onSave({ ...card, issuer, expiry, installment }));
+    };
+
+    return (
+        <Modal title="카드 정보 변경" onClose={onClose} actions={<Actions onClose={onClose} label="저장" busy={busy} onConfirm={submit} />}>
+            <p className="modal__strong">
+                {card.brand} · •••• {card.last4}
+            </p>
+            <ModalSelect label="카드사" placeholder="카드사를 선택하세요" options={cardIssuers} value={issuer} onChange={(v) => { setIssuer(v); setError(""); }} />
+            <ModalField
+                label="유효기간"
+                inputMode="numeric"
+                autoComplete="cc-exp"
+                placeholder="MM/YY"
+                value={expiry}
+                onChange={(e) => {
+                    const d = e.target.value.replace(/\D/g, "").slice(0, 4);
+                    setExpiry(d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d);
+                    setError("");
+                }}
+            />
+            <ModalSelect label="할부" options={installments} value={installment} onChange={setInstallment} />
+            <ErrorText text={error} />
+        </Modal>
+    );
+};
+

@@ -26,7 +26,7 @@ export const Breadcrumb = ({ inline = false }: { inline?: boolean }) => {
         <div className="breadcrumb" aria-label="현재 위치">
             {crumbs.map((crumb, i) => (
                 <Fragment key={`${crumb.label}-${i}`}>
-                    {i > 0 && <span className="breadcrumb__sep" aria-hidden="true">&gt;</span>}
+                    {i > 0 && <img src="/icons/ui/chevron-right.svg" alt="" className="breadcrumb__sep" aria-hidden="true" />}
                     {crumb.to && i < crumbs.length - 1 ? (
                         <Link to={crumb.to} className="breadcrumb__link">{crumb.label}</Link>
                     ) : (

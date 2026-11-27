@@ -21,6 +21,16 @@ $grey-3: #828282;
 $grey-4: #BDBDBD;
 $gradient-primary: linear-gradient(90deg, $main-primary-color 0%, #00FFDD 100%); // 커스터마이징 버튼
 
+// 결제 카드 (모바일 · 카드사 색)
+$pay-card-visa-from: #2B5590;
+$pay-card-visa-to: #121C38;
+$pay-card-visa-line: #4A72AA;
+$pay-card-master-from: #463A48;
+$pay-card-master-to: #1C1820;
+$pay-card-master-line: #6A5F6C;
+$pay-card-chip: #D9BE7E;
+$pay-card-chip-line: #A88A4C;
+
 
 // ---------- Font weight ----------
 $font-weight-regular: 400; // Regular · 기본 정보와 편안하게 읽는 표현
