@@ -76,7 +76,7 @@ export function NikoPage() {
     return <div className="design-page collection-page niko">
         <div className="collection-hero">
             <picture>
-                <source srcSet={niko.hero.mobile} media="(max-width: 720px)" />
+                <source srcSet={niko.hero.mobile} media="(max-width: 699px)" />
                 <SafeImage src={niko.hero.image} alt="Team Razer NiKo" fallback="NIKO" />
             </picture>
         </div>

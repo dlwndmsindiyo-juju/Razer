@@ -52,18 +52,15 @@ const PickCard = ({ pick, isLarge = false }: { pick: ProPick; isLarge?: boolean 
 
             {/* 선수 · 상품 정보 */}
             <div className="home-pick__info">
-                {!isLarge && (
-                    <>
-                        <strong className="home-pick__name">{pick.player}</strong>
-                        <span className="home-pick__game">{pick.game}</span>
-                    </>
-                )}
+                {/* 큰 카드는 PC에서 사진 위 이름을 쓰고 이건 숨김 (모바일은 모든 카드가 이 이름) */}
+                <strong className="home-pick__name">{pick.player}</strong>
+                <span className="home-pick__game">{pick.game}</span>
                 {isLarge && productImage}
                 <strong className="home-pick__product">{pick.productName}</strong>
                 <span className="home-pick__variant">{pick.variant}</span>
                 <span className="home-pick__price">{price}</span>
                 <Link to={to} className="home-pick__btn">
-                    제품 자세히 보기
+                    <span className="home-pick__btn-prefix">제품 </span>자세히 보기
                 </Link>
             </div>
 

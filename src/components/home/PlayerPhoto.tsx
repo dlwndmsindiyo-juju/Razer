@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface PlayerPhotoProps {
     src: string;
@@ -58,37 +58,50 @@ export const PlayerPhoto = ({ src, alt }: PlayerPhotoProps) => {
         if (!motion.current.frame) motion.current.frame = requestAnimationFrame(tick);
     };
 
-    // 사진 안에서의 마우스 위치
-    const point = (e: PointerEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        return { x: e.clientX - rect.left, y: e.clientY - rect.top, size: Math.min(rect.width, rect.height) };
-    };
+    // 마우스 이벤트는 카드 전체에서 받음
+    // (카드 전체가 상세페이지 링크로 덮여 있어 사진이 직접 마우스를 못 받기 때문 · 위치는 사진 기준으로 계산)
+    useEffect(() => {
+        const box = boxRef.current;
+        if (!box) return;
+        const area = (box.closest(".home-pick__card") as HTMLElement | null) ?? box;
 
-    const onEnter = (e: PointerEvent<HTMLDivElement>) => {
-        if (e.pointerType === "touch") return;
-        const { x, y, size } = point(e);
-        const m = motion.current;
-        // 들어온 자리에서 바로 번지기 시작
-        Object.assign(m, { x, y, targetX: x, targetY: y, targetRadius: size * SPOT_SIZE });
-        start();
-    };
+        const point = (e: PointerEvent) => {
+            const rect = box.getBoundingClientRect();
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top, size: Math.min(rect.width, rect.height) };
+        };
+        const onEnter = (e: PointerEvent) => {
+            if (e.pointerType === "touch") return;
+            const { x, y, size } = point(e);
+            // 들어온 자리에서 바로 번지기 시작
+            Object.assign(motion.current, { x, y, targetX: x, targetY: y, targetRadius: size * SPOT_SIZE });
+            start();
+        };
+        const onMove = (e: PointerEvent) => {
+            if (e.pointerType === "touch") return;
+            const { x, y, size } = point(e);
+            Object.assign(motion.current, { targetX: x, targetY: y, targetRadius: size * SPOT_SIZE });
+            start();
+        };
+        const onLeave = () => {
+            motion.current.targetRadius = 0;
+            start();
+        };
 
-    const onMove = (e: PointerEvent<HTMLDivElement>) => {
-        if (e.pointerType === "touch") return;
-        const { x, y, size } = point(e);
-        Object.assign(motion.current, { targetX: x, targetY: y, targetRadius: size * SPOT_SIZE });
-        start();
-    };
-
-    const onLeave = () => {
-        motion.current.targetRadius = 0;
-        start();
-    };
+        area.addEventListener("pointerenter", onEnter);
+        area.addEventListener("pointermove", onMove);
+        area.addEventListener("pointerleave", onLeave);
+        return () => {
+            area.removeEventListener("pointerenter", onEnter);
+            area.removeEventListener("pointermove", onMove);
+            area.removeEventListener("pointerleave", onLeave);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [failed]);
 
     if (failed) return <span className="image-or-text home-pick__player-img">Player Image</span>;
 
     return (
-        <div className="player-photo" ref={boxRef} onPointerEnter={onEnter} onPointerMove={onMove} onPointerLeave={onLeave}>
+        <div className="player-photo" ref={boxRef}>
             <img className="player-photo__gray" src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
             <img className="player-photo__color" src={src} alt="" aria-hidden="true" loading="lazy" ref={colorRef} />
         </div>

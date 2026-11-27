@@ -109,4 +109,5 @@ export const setupShowcase = {
         { x: 77.5, y: 58, productId: 2003, variant: "붕괴 에디션" }, // Viper V3 Pro SE - Honkai: Star Rail Edition
     ] as SetupHotspot[],
     collectionButton: { label: "스타레일 컬렉션 보기", to: "/search?q=Honkai" },
+    copyright: "© miHoYo. All Rights Reserved.", // 모바일에서만 표시 (컬렉션 저작권)
 };

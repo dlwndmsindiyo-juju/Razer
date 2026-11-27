@@ -18,7 +18,7 @@ export function PageHeading({ title, description, as: Heading = "h1" }: {
 
 export function PageHero({ src, mobileSrc, children }: { src: string; mobileSrc?: string; children?: ReactNode }) {
     return <div className="design-hero">
-        <picture>{mobileSrc && <source srcSet={mobileSrc} media="(max-width: 720px)" />}<img src={src} alt="" /></picture>
+        <picture>{mobileSrc && <source srcSet={mobileSrc} media="(max-width: 699px)" />}<img src={src} alt="" /></picture>
         {children && <div className="design-hero__content design-container">{children}</div>}
     </div>;
 }

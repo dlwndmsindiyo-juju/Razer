@@ -5,7 +5,7 @@ body:has(main > :is(.design-page, .auth)) {
 }
 
 // PC 에서만 (태블릿 · 모바일 헤더 · 푸터는 App.scss 공용)
-@media (min-width: 1025px) {
+@media (min-width: 1400px) {
     body:has(main > :is(.design-page, .auth)) {
 
         .header__inner,
@@ -1439,7 +1439,7 @@ a.design-support:hover {
 
 }
 
-@media (max-width: 720px) {
+@media (max-width: 699px) {
     .design-esports {
         .design-hero img {
             height: max(12.5rem, 40vw);
@@ -1616,7 +1616,7 @@ a.design-support:hover {
 .design-cart__checkout {
     gap: 1.875rem;
 
-    @media (min-width: 1025px) {
+    @media (min-width: 1400px) {
         position: sticky;
         top: 6.5rem;
         align-self: start;
@@ -2312,7 +2312,7 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 699px) {
     .design-buying {
         padding-bottom: 3rem;
 
@@ -2572,8 +2572,8 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
-    // 모바일 푸터는 App.scss 공용 (1024px 이하)
+@media (max-width: 699px) {
+    // 모바일 푸터는 App.scss 공용 (1399 이하)
 
     .design-grid--three,
     .design-grid--four {
@@ -3005,10 +3005,10 @@ a.design-support:hover {
         }
     }
 
-    // 태블릿 · 모바일 헤더는 App.scss 공용 (1024px 이하)
+    // 태블릿 · 모바일 헤더는 App.scss 공용 (1399 이하)
 }
 
-@media (max-width: 720px) {
+@media (max-width: 699px) {
     #root:has(main > .auth)> :is(.header, .footer, .top-button) {
         display: none;
     }
@@ -3362,7 +3362,7 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 699px) {
     .design-esports__year {
         .design-heading h2 {
             @include v.heading-24-b;
@@ -4180,7 +4180,7 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 699px) {
     .collection-intro__title {
         font-size: 2rem;
         line-height: 2.5rem;
@@ -4228,7 +4228,7 @@ a.design-support:hover {
 }
 
 // =========================================================
-// 태블릿 · 모바일 (1024px 이하): 가로로 나열되던 카드 목록 → 드래그 슬라이드 (스크롤바 없음)
+// 태블릿 · 모바일 (1399 이하): 가로로 나열되던 카드 목록 → 드래그 슬라이드 (스크롤바 없음)
 // 마우스 드래그는 useDragScroll (App) · 터치는 손가락으로
 // =========================================================
 @mixin drag-slider($item: min(70%, 20rem)) {
@@ -4258,7 +4258,7 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
 
     .design-grid:not(.design-exclusive__featured),
     .design-about__leaders,
@@ -4305,7 +4305,7 @@ a.design-support:hover {
 }
 
 // 소개 페이지: 좁은 화면에서 글 · 이미지는 위아래로
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
     .design-about {
 
         &__title,
@@ -4614,7 +4614,7 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
     .design-company {
         &__title {
             font-size: clamp(2rem, 8vw, 3.75rem);
@@ -5269,7 +5269,7 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
     .pay {
         grid-template-columns: 1fr;
 
