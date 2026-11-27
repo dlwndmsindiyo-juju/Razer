@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { aboutCopy, aboutMilestones, esportsCopy } from "../../data/editorialData";
 import { aboutImages, esportsImages } from "../../data/pageImages";
 import { productData } from "../../data/productData";
@@ -37,7 +37,12 @@ const withGreenTag = (text: string) => text.split(/(#GoGreenWithRazer)/).map((pa
         : part);
 
 export function AboutPage() {
+    const navigate = useNavigate();
     return <div className="design-page design-about">
+        {/* 모바일: 뒤로가기 (PC 에서는 숨김) */}
+        <button type="button" className="design-about__back" onClick={() => navigate(-1)}>
+            <img src="/icons/ui/chevron-left.svg" alt="" />뒤로가기
+        </button>
         <div className="design-about__hero">
             <video
                 className="design-about__hero-video"

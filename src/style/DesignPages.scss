@@ -978,6 +978,11 @@ a.design-support:hover {
 .design-about {
     padding-bottom: 0;
 
+    // 뒤로가기: 모바일에서만 (style/mobile.scss about-phone)
+    &__back {
+        display: none;
+    }
+
     section[id] {
         scroll-margin-top: 8rem;
     }
