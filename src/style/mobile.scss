@@ -3444,3 +3444,230 @@ $phone: 699px;
         }
     }
 }
+
+// =========================================================
+// Razer 멤버십 (모바일 360 시안) · App.scss 맨 아래에서 @include mobile.membership-phone
+// 버튼은 모두 카드 안 "멤버십 가입하기" 와 같은 크기 (높이 2.4375rem · 12 세미볼드)
+// =========================================================
+@mixin membership-phone {
+    @media (max-width: $phone) {
+        .design-membership {
+            padding-bottom: 3rem;
+
+            .design-hero img {
+                height: auto;
+                aspect-ratio: 360 / 131;
+            }
+
+            >.design-container {
+                width: calc(100% - 2rem);
+            }
+
+            .design-heading {
+                padding: 1.75rem 0 1rem;
+
+                h1 {
+                    @include v.heading-24-b;
+                    font-size: 1.5rem;
+                    color: v.$main-primary-color;
+                }
+
+                h2 {
+                    @include v.heading-24-b;
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            // 태블릿 드래그 슬라이드 → 모바일 시안은 세로로 쌓음
+            // (태블릿 슬라이드가 !important 라 같은 방식으로 덮음)
+            >.design-container .design-grid.design-grid {
+                grid-auto-flow: row !important;
+                grid-auto-columns: auto !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                overflow: visible;
+                scroll-snap-type: none;
+                cursor: auto;
+            }
+
+            // 공통 버튼 (카드 버튼 크기)
+            .btn {
+                @include v.label-12-sb;
+                min-height: 0;
+                height: 2.4375rem;
+                border-radius: v.$radius-sm;
+            }
+
+            // RAZER SILVER 란? : 아이콘 왼쪽 · 제목 + 설명 (세로로 쌓음)
+            .design-member-benefits {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.375rem;
+
+                .design-support {
+                    display: grid;
+                    grid-template-columns: 3rem minmax(0, 1fr);
+                    gap: 0.125rem 0.75rem;
+                    align-items: center;
+                    min-height: 0;
+                    padding: 1rem;
+                    border-radius: v.$radius-sm;
+                    background-color: v.$neutral-color-700;
+                    text-align: left;
+                }
+
+                img {
+                    grid-row: span 2;
+                    width: 2.25rem;
+                    height: 2.25rem;
+                    margin: 0 auto;
+                }
+
+                h2 {
+                    @include v.label-16-sb;
+                    margin: 0;
+                }
+
+                p {
+                    @include v.caption-10-r;
+                    color: v.$neutral-color-100;
+                }
+            }
+
+            // RAZER ID 가입 혜택 카드 · 안내 목록 · 가입 버튼
+            &__signup {
+                margin: 1.25rem 0 2.25rem;
+            }
+
+            &__coupon {
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 1rem 1.25rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+                text-align: center;
+
+                >span {
+                    width: 3.6875rem;
+                }
+
+                img {
+                    width: 1.5rem;
+                }
+
+                p:first-child {
+                    @include v.label-12-sb;
+                    margin-top: 0.75rem;
+                    color: v.$neutral-color-100;
+                }
+
+                h2 {
+                    @include v.label-16-sb;
+                    margin: 0.5rem 0 1.25rem;
+                    color: v.$neutral-color-white;
+                }
+
+                p:last-child {
+                    @include v.caption-12-r;
+                }
+            }
+
+            &__signup ul {
+                margin: 0.75rem 0 1.25rem;
+            }
+
+            &__signup li {
+                @include v.body-14-r;
+                align-items: flex-start;
+                gap: 0.75rem;
+                margin-bottom: 0.625rem;
+
+                img {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                }
+            }
+
+            &__signup>.btn {
+                width: 100%;
+                min-height: 0;
+            }
+
+            &__signup>p {
+                @include v.caption-12-r;
+                margin-top: 0.5rem;
+                text-align: center;
+            }
+
+            // 카드 3개 (세로로)
+            &__rewards {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.625rem;
+            }
+
+            &__reward {
+                min-height: 0;
+                padding: 1.125rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+
+                >img {
+                    aspect-ratio: 292 / 218;
+                }
+
+                h2 {
+                    @include v.label-16-sb;
+                    margin: 1rem 0 0.5rem;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                }
+
+                small {
+                    @include v.caption-10-r;
+                    margin-top: 1.5rem;
+                }
+
+                >div {
+                    gap: 0.875rem;
+                    padding-top: 1rem;
+                }
+
+                .btn {
+                    min-height: 0;
+                }
+            }
+
+            &__reward>&__reward-pages {
+                padding-top: 3rem;
+            }
+
+            &__rewards+.design-heading {
+                padding: 2.25rem 0 1.5rem;
+            }
+
+            // 적립 방법: 원형 이미지 · 제목 · 설명 (세로로)
+            &__earning {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 2.25rem;
+
+                img {
+                    width: 5rem;
+                    margin-bottom: 1rem;
+                }
+
+                h3 {
+                    @include v.label-16-sb;
+                    font-size: 1rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                p {
+                    @include v.body-14-r;
+                }
+            }
+        }
+    }
+}
