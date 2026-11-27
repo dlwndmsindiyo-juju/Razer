@@ -63,7 +63,7 @@ export const proPicksMoreLink = "/info/promotion/esports"; // Team Razer 보기
 
 export const proPicks: ProPick[] = [
     {
-        player: "대상혁",
+        player: "페이커",
         game: "League of Legends",
         productId: 2018, // Razer Viper V4 Pro - Esports Green Edition
         productName: "Razer Viper V4 Pro",

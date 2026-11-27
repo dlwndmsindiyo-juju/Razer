@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { ConfirmModal, RegisterModal, serialOnlyText, toSerial } from "../../components/mypage/MypageModals";
@@ -97,23 +97,76 @@ export function FaqPage() {
 }
 
 const supportPaths = [
-    "/mypage", servicePath + "faq?topic=returns", undefined, "/info/product/how-to-buy",
-    undefined, "/mypage?tab=orders",
+    "/mypage", servicePath + "faq?topic=returns", "/info/company/contact", "/info/product/how-to-buy",
+    servicePath + "faq?topic=questions", "/mypage?tab=orders",
     servicePath + "faq?topic=terms", servicePath + "faq?topic=questions",
 ];
+// 모바일 순서 (시안): 내 계정 · 주문 상태 · 배송 안내 · 교환 및 환불 · 자주 묻는 질문 · 문의처 · 구매 이유 · 이용약관
+// PC 는 두 줄 배치 그대로 (supportCards 순서)
+const supportMobileOrder = [0, 5, 4, 1, 7, 2, 3, 6];
 
 export function SupportPage() {
+    const [active, setActive] = useState(0); // 지금 보고 있는 카드 (supportCards 번호)
+    const tabsRef = useRef<HTMLDivElement>(null);
+
+    // 스크롤 위치 → 화면 위쪽(고정 탭 바로 아래)에 걸친 카드를 지금 메뉴로
+    useEffect(() => {
+        const cards = supportMobileOrder.map((i) => document.getElementById(`support-${i}`)).filter(Boolean) as HTMLElement[];
+        const onScroll = () => {
+            const tabs = tabsRef.current;
+            if (!tabs || getComputedStyle(tabs).display === "none") return;
+            const line = tabs.getBoundingClientRect().bottom + 24;
+            let current = cards[0];
+            for (const card of cards) if (card.getBoundingClientRect().top <= line) current = card;
+            // 맨 아래까지 내리면 마지막 카드
+            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = cards[cards.length - 1];
+            setActive(Number(current.id.replace("support-", "")));
+        };
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("resize", onScroll);
+        };
+    }, []);
+
+    // 지금 메뉴 버튼이 탭 줄 안에서 보이도록 옆으로 이동
+    useEffect(() => {
+        const tabs = tabsRef.current;
+        const button = tabs?.querySelector<HTMLElement>(`[data-index="${active}"]`);
+        if (!tabs || !button) return;
+        tabs.scrollTo({ left: button.offsetLeft - (tabs.clientWidth - button.offsetWidth) / 2, behavior: "smooth" });
+    }, [active]);
+
+    const go = (index: number) => {
+        document.getElementById(`support-${index}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        setActive(index);
+    };
+
     return <div className="design-page design-container design-support-page">
         <PageHeading title="RAZER STORE 지원" />
+        {/* 모바일: 위에 고정되는 메뉴 탭 (PC 에서는 숨김) */}
+        <div className="support-tabs" ref={tabsRef} role="group" aria-label="지원 메뉴">
+            {supportMobileOrder.map((index) => <button type="button" key={index} data-index={index}
+                aria-current={active === index ? "true" : undefined} onClick={() => go(index)}>
+                {supportCards[index][0]}
+            </button>)}
+        </div>
         <div className="design-grid design-grid--two">
             {supportCards.map(([title, description], index) => {
                 const path = supportPaths[index];
                 const content = <><h2>{title}</h2><p>{description}</p>{path && <span className="design-support__arrow">
                     <img src={supportImages.arrow} alt="" />
                 </span>}</>;
+                const props = {
+                    id: `support-${index}`,
+                    className: "design-panel design-support" + (active === index ? " is-active" : ""),
+                    style: { "--mobile-order": supportMobileOrder.indexOf(index) } as CSSProperties,
+                };
                 return path ?
-                    <Link className="design-panel design-support" to={path} key={title}>{content}</Link> :
-                    <div className="design-panel design-support" key={title}>{content}</div>;
+                    <Link {...props} to={path} key={title}>{content}</Link> :
+                    <div {...props} key={title}>{content}</div>;
             })}
         </div>
     </div>;

@@ -21,7 +21,7 @@ export function BuyingGuidePage() {
                 <div className="design-buying__number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
                 <div className="design-panel design-buying__program">
                     <img src={image} alt="" loading="lazy" />
-                    <div><h2>{title}</h2><p>{text}</p></div>
+                    <div><h2>{title}</h2>{text.split("\n").map((line) => <p key={line}>{line}</p>)}</div>
                 </div>
             </div>)}
         </div>
@@ -122,7 +122,11 @@ export function MembershipPage() {
                     <img src={membershipImages.rewardsEcosystem} alt="" loading="lazy" />
                     <h2>{copy[3]}</h2><p>{copy.slice(6, 8).join(" ")}</p>
                     <small>{copy.slice(8, 10).join(" ")}</small>
-                    <div><Link className="btn btn--primary" to="/search">Razer.com</Link></div>
+                    {/* Razer.com · RAZER GOLD (시안 · 결제 수단 안내는 구매 방법) */}
+                    <div>
+                        <Link className="btn btn--primary" to="/search">Razer.com</Link>
+                        <Link className="btn" to="/info/product/how-to-buy">RAZER GOLD</Link>
+                    </div>
                 </div>
                 <div className="design-panel design-membership__reward">
                     <img src={membershipImages.rewardsRedemption} alt="" loading="lazy" />
@@ -132,6 +136,7 @@ export function MembershipPage() {
                         {[0, 1].map((index) => <button type="button" key={index} aria-label={copy[31 + index]}
                             aria-pressed={reward === index} onClick={() => setReward(index)} />)}
                     </div>
+                    <div><Link className="btn btn--primary" to="/info/product/razer-exclusives">리워드 살펴보기</Link></div>
                 </div>
             </div>
             <PageHeading title={copy[1]} as="h2" />

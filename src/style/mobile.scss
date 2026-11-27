@@ -5,272 +5,6 @@
 $tablet: 1399px;
 $phone: 699px;
 
-@mixin account-and-orders {
-    @media (max-width: $tablet) {
-        body:has(main > .mypage) { min-width: 0; }
-
-        .mypage {
-            padding-bottom: 3rem;
-            &__profile-inner { gap: .625rem; padding: 1rem 0; }
-            &__avatar { width: 2.5rem; height: 2.5rem; }
-            &__name { @include v.body-16-sb; min-width: 0; overflow-wrap: anywhere; }
-            &__profile-btn { @include v.caption-12-r; width: auto; height: 2rem; padding: 0 .5rem; }
-            &__profile-btn--mobile { display: inline-flex; }
-            &__tabs-inner { justify-content: space-between; gap: .25rem; }
-            &__tab { @include v.caption-12-r; padding: 1rem .125rem .625rem; text-align: center; }
-            &__section { margin-top: 2rem; }
-            &__section-title { @include v.heading-20-sb; }
-            &__stats { gap: .375rem; margin-top: .75rem; padding: 0; border: 0; }
-            &__stat { align-items: start; min-width: 0; gap: .25rem; padding: .5rem; border-radius: v.$radius-sm; background: v.$neutral-color-panel; }
-            &__stat::after { display: none; }
-            &__stat-icon { display: none; }
-            &__stat-value { @include v.heading-20-sb; order: -1; }
-            &__stat-label { @include v.caption-12-r; }
-            &__orders, &__panels { gap: .75rem; margin-top: .75rem; }
-            &__panel { min-width: 0; padding: 1rem; }
-            &__panel-title { @include v.body-16-sb; }
-            &__order-detail &__panel { border: 0.0625rem solid v.$neutral-color-500; }
-            &__order-detail &__panel-btn { width: 100%; }
-            &__order-detail &__meta { margin-top: .5rem; }
-            &__order-back {
-                @include v.caption-12-r;
-                display: inline-flex;
-                align-items: center;
-                gap: .25rem;
-                color: v.$neutral-color-100;
-            }
-            &__order-back &__chevron { transform: rotate(180deg); width: 1rem; height: 1rem; }
-            &__order-item { gap: .75rem; }
-            &__item-thumb { width: 4.5rem; height: 4.5rem; }
-            &__item-name, &__item-price, &__status-line { @include v.body-16-sb; }
-            &__actions { flex-wrap: wrap; gap: .5rem; }
-            &__actions > * { flex: 1 1 8rem; }
-            &__best { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-        }
-
-        .order-card {
-            &__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .25rem; padding: .75rem 1rem; background: transparent; }
-            &__status { @include v.caption-12-r; grid-column: 1 / -1; width: auto; }
-            &__status-icon { display: none; }
-            &__date { @include v.body-16-sb; grid-column: 1; }
-            &__number { grid-column: 1 / -1; grid-row: 3; overflow-wrap: anywhere; }
-            .mypage &__detail { @include v.caption-12-r; grid-column: 2; grid-row: 2; }
-            &__body { padding: 0 1rem 1rem; gap: .75rem; }
-            &__thumb { width: 5rem; height: 5rem; background: transparent; }
-            &__name, &__price { @include v.body-16-sb; }
-            &__option { @include v.caption-12-r; }
-        }
-
-        .account {
-            grid-template-columns: minmax(0, 1fr);
-            gap: 1rem;
-            &__mobile-toggle {
-                display: grid;
-                grid-template-columns: auto minmax(0, 1fr) auto;
-                align-items: center;
-                gap: .75rem;
-                width: 100%;
-                padding: .75rem 1rem;
-                border: 0.0625rem solid v.$neutral-color-700;
-                border-radius: v.$radius-sm;
-                background: v.$neutral-color-panel;
-                text-align: left;
-                img, svg { width: 1rem; height: 1rem; }
-                small { @include v.caption-12-r; display: block; color: v.$neutral-color-100; }
-                strong { @include v.body-14-m; color: v.$main-primary-color; }
-                &[aria-expanded="true"] > img:last-child { transform: rotate(180deg); }
-            }
-            &__nav ul { margin-top: .5rem; }
-            &__nav ul[data-expanded="false"] { display: none; }
-            &__row { flex-wrap: wrap; min-height: 0; gap: .5rem; padding: .75rem; }
-            &__rows { gap: .75rem; margin-top: .75rem; }
-            &__row-text strong { @include v.body-16-m; }
-            &__row-text span { @include v.caption-12-r; overflow-wrap: anywhere; }
-            &__cards { grid-template-columns: minmax(0, 1fr); }
-        }
-
-        .mypage ~ .modal .modal__panel { max-height: calc(100dvh - 2rem); padding: 1rem; }
-    }
-}
-
-@mixin product-and-community {
-    @media (max-width: $phone) {
-        .design-checkout:has(.design-cart) {
-            padding-bottom: 9rem;
-        }
-        .design-cart__checkout {
-            position: fixed;
-            inset: auto 0 0;
-            z-index: 95;
-            gap: .625rem;
-            padding: .5rem 1rem calc(.75rem + env(safe-area-inset-bottom));
-            border-top: 0.0625rem solid v.$main-primary-color;
-            border-radius: v.$radius-sm v.$radius-sm 0 0;
-            background: v.$neutral-color-700;
-
-            .design-checkout__summary { padding: 0; background: transparent; }
-            .design-checkout__summary h2, .design-checkout__totals > li:last-child { display: none; }
-        }
-        .design-cart__checkout .design-cart__summary-toggle {
-            display: grid;
-            place-items: center;
-            min-height: 1.75rem;
-            img { width: 1rem; height: 1rem; transform: rotate(180deg); }
-            &[aria-expanded="true"] img { transform: none; }
-        }
-        .design-cart__summary-details[data-expanded="false"] { display: none; }
-        .design-cart__checkout .design-cart__mobile-total {
-            @include v.body-16-sb;
-            display: flex;
-            justify-content: space-between;
-            gap: .5rem;
-            strong:last-child { color: v.$main-primary-color; }
-        }
-        body:has(main .design-cart) .top-button { margin-bottom: 13rem; }
-
-        .product-detail {
-            padding-bottom: 11rem;
-
-            &__purchase-panel {
-                position: fixed;
-                inset: auto 0 0;
-                z-index: 95;
-                padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
-                border-top: 0.0625rem solid v.$main-primary-color;
-                border-radius: v.$radius-sm v.$radius-sm 0 0;
-                background: v.$neutral-color-700;
-            }
-            &__buy { display: grid; gap: .5rem; margin-top: 0; }
-            &__total { display: flex; justify-content: space-between; gap: .5rem; width: 100%; }
-            &__total-label { display: inline; color: v.$neutral-color-white; }
-            &__actions { grid-template-columns: minmax(0, 1fr) 4.5rem; gap: .75rem; margin-top: .75rem; }
-            &__actions button { height: 3rem; }
-            &__purchase { order: -1; }
-            &__cart { display: grid; place-items: center; border-color: v.$main-primary-color; }
-            &__cart img { display: block; width: 1.5rem; height: 1.5rem; }
-            &__cart span { position: absolute; width: 0.0625rem; height: 0.0625rem; overflow: hidden; clip-path: inset(50%); }
-        }
-
-        body:has(main > .product-detail) .top-button { margin-bottom: 10rem; }
-        .pd-toast { margin-bottom: 10rem; }
-    }
-
-    @media (max-width: $tablet) {
-        body:has(main > :is(.product-detail, .product-customize-unavailable, .promotion, .collab-page)) {
-            min-width: 0;
-        }
-
-        .product-detail {
-            padding-top: 1rem;
-
-            &__top {
-                width: calc(100% - 2rem);
-                grid-template-columns: minmax(0, 1fr);
-                gap: 1.5rem;
-                padding-bottom: 2rem;
-            }
-
-            &__gallery, &__right { min-width: 0; }
-            &__title { @include v.heading-24-b; }
-            &__recommend > * { width: calc(100% - 2rem); }
-            &__content { padding: 2rem 1rem 3rem; }
-        }
-
-        .pd-gallery {
-            grid-template-columns: minmax(0, 1fr);
-            gap: .5rem;
-
-            &__list {
-                order: 1;
-                flex-direction: row;
-                justify-content: safe center;
-                gap: .125rem;
-                height: auto;
-                min-height: 0;
-                overflow-x: auto;
-                overflow-y: hidden;
-            }
-            &__thumb {
-                display: grid;
-                place-items: center;
-                width: 1.375rem;
-                height: 1.375rem;
-                border: 0;
-                background: transparent;
-                opacity: 1;
-
-                img { display: none; }
-                &::after { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: v.$neutral-color-300; }
-                &.is-active::after { background: v.$main-primary-color; }
-            }
-            &__main { min-height: 0; aspect-ratio: 1; }
-            &__track img { object-fit: contain; }
-            &__actions { inset: auto .5rem .5rem; gap: .5rem; }
-        }
-
-        .pd-content {
-            max-width: 100%;
-            &__chips { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 1rem; }
-            &__band, &__notice { padding: 1rem; }
-            &__specs { padding: 1.25rem 1rem; }
-            &__spec-row { grid-template-columns: minmax(0, 1fr); gap: .5rem; margin-top: 1rem; }
-            &__spec-row &__spec-list > li { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: .5rem; }
-            &__spec-value { overflow-wrap: anywhere; }
-        }
-
-        .promotion {
-            padding-bottom: 4rem;
-            &__featured { padding-top: 2rem; }
-            &__card-img { height: auto; aspect-ratio: 2; }
-            &__card-title { @include v.heading-20-sb; margin-top: .5rem; }
-            &__card-desc { margin-top: .5rem; }
-            &__collabs, &__faq { margin-top: 3rem; }
-            &__title { @include v.heading-24-b; }
-            &__grid {
-                grid-template-columns: none;
-                grid-auto-columns: min(46%, 15rem);
-                grid-auto-flow: column;
-                gap: .75rem;
-                margin-top: 1.25rem;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                scrollbar-width: none;
-            }
-            &__grid > li { scroll-snap-align: start; }
-            &__collab-img { height: auto; aspect-ratio: 4 / 5; }
-            &__collab-name { @include v.body-16-m; margin-top: .5rem; overflow-wrap: anywhere; }
-            &__faq .faq { margin-top: 1.25rem; }
-        }
-
-        .collab-page {
-            padding-bottom: 4rem;
-            &__hero { margin-top: 0; }
-            &__faq { margin-top: 3rem; }
-            &__faq .faq { margin-top: 1.25rem; }
-            &__support { flex-wrap: wrap; gap: .5rem; }
-        }
-
-        .collab-block {
-            margin-top: 2rem;
-            &--center .collab-block__text, &--caption .collab-block__text { width: calc(100% - 2rem); }
-            &--right, &--left { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
-            &--right .collab-block__text, &--left .collab-block__text { padding: 0; align-items: center; text-align: center; }
-            &--right .collab-block__img, &--left .collab-block__img { height: auto; aspect-ratio: 2; order: 0; }
-            &__title { @include v.heading-20-sb; color: v.$main-primary-color; }
-            &__note { margin-top: .5rem; }
-        }
-
-        .collab-intro, .collab-stay {
-            grid-template-columns: minmax(0, 1fr);
-            margin-top: 2rem;
-            gap: 1rem;
-            &__text { padding-top: 0; }
-            &__title { @include v.heading-24-b; }
-            &__img { height: auto; aspect-ratio: 2; }
-        }
-    }
-}
-
 @mixin product-customize {
     .product-customize-unavailable {
         display: grid;
@@ -282,9 +16,18 @@ $phone: 699px;
         color: v.$neutral-color-white;
         text-align: center;
 
-        p { @include v.body-16-r; font-weight: v.$font-weight-bold; }
-        p + p { margin-top: .75rem; }
-        strong { color: v.$main-primary-color; }
+        p {
+            @include v.body-16-r;
+            font-weight: v.$font-weight-bold;
+        }
+
+        p+p {
+            margin-top: .75rem;
+        }
+
+        strong {
+            color: v.$main-primary-color;
+        }
     }
 
     .product-customize-unavailable__art {
@@ -302,11 +45,322 @@ $phone: 699px;
             max-width: none;
         }
     }
+
+    // 3D 커스터마이징 화면: 좁은 화면 (예전 ProductCustomize.scss 의 820 이하)
+    @media (max-width: 820px) {
+        .keyboard-customize__workspace {
+            min-height: 0;
+        }
+
+        .keyboard-customize__stage {
+            height: clamp(17.813rem, 65vw, 27.5rem);
+            min-height: 0;
+        }
+
+        .keyboard-customize__poster img {
+            max-height: 11.875rem;
+        }
+    }
 }
 
-@mixin editorial-phone {
+// =========================================================
+// 디자인 페이지 공용 태블릿 · 모바일 (예전 style/DesignPages.scss 의 1399 · 900 · 699 · 460 이하 규칙을 이리로 옮김)
+// 프로모션 · 콜라보 · e스포츠 · FAQ · 등록 및 보증 · 지원 · 회사 소개 · 멤버십 · 독점 · 구매 방법 · 장바구니 · 결제 · 로그인 계열
+// App.scss 맨 아래에서 가장 먼저 @include mobile.design-pages-responsive (뒤의 페이지별 mixin 이 덮어씀)
+//
+// 태블릿 · 모바일 (1399 이하): 가로로 나열되던 카드 목록 → 드래그 슬라이드 (스크롤바 없음)
+// 마우스 드래그는 useDragScroll (App) · 터치는 손가락으로
+// =========================================================
+@mixin drag-slider($item: min(70%, 20rem)) {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    grid-auto-columns: $item !important;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    cursor: grab;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    >* {
+        scroll-snap-align: start;
+    }
+
+    &.is-dragging {
+        scroll-snap-type: none;
+        cursor: grabbing;
+        user-select: none;
+    }
+}
+
+@mixin design-pages-responsive {
     @media (max-width: $phone) {
-        // 모바일 푸터는 app-tablet-phone 공용
+        .design-buying {
+            padding-bottom: 3rem;
+
+            >.design-stack {
+                gap: 1.5rem;
+            }
+
+            .design-heading h1 {
+                font-size: 1.5rem;
+            }
+
+            &__number {
+                @include v.heading-24-sb;
+            }
+
+            &__program {
+                grid-template-columns: 1fr;
+                padding: 1.25rem;
+                gap: 0.75rem;
+            }
+
+            &__program h2,
+            &__program a {
+                align-self: center;
+            }
+
+            &__program h2 {
+                font-size: 1.25rem;
+            }
+
+            &__program p,
+            &__program a {
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+        }
+
+        .design-recommendation {
+            min-height: 7.75rem;
+
+            &__art {
+                width: 82%;
+                height: 4.625rem;
+                margin: 0.5rem auto 0.5rem;
+            }
+
+            &__copy {
+                padding: 0 0.375rem 0.625rem;
+            }
+
+            h3 {
+                font-size: 0.5625rem;
+                line-height: 0.75rem;
+            }
+
+            p,
+            a {
+                font-size: 0.5rem;
+                line-height: 0.625rem;
+            }
+
+            p {
+                margin: 0.125rem 0;
+            }
+        }
+
+        .design-exclusive {
+            padding-bottom: 2.8125rem;
+
+            .design-hero img {
+                aspect-ratio: 360 / 200;
+            }
+
+            .design-heading {
+                padding: 1.5rem 0 0.875rem;
+            }
+
+            .design-heading :is(h1, h2) {
+                @include v.heading-24-sb;
+            }
+
+            .design-heading p {
+                font-size: 0.75rem;
+            }
+
+            .design-hero+.design-container>.design-heading:first-child {
+                padding: 1.25rem 0;
+            }
+
+            &__featured {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            &__featured .design-stack {
+                gap: 0.625rem;
+            }
+
+            &__label p {
+                font-size: 0.75rem;
+            }
+
+            &__label h2 {
+                margin-top: 0.1875rem;
+                font-size: 1rem;
+                line-height: 1.25rem;
+            }
+
+            .design-product-pair {
+                grid-template-columns: repeat(2, minmax(0, 6.25rem));
+                gap: 0.625rem;
+            }
+
+            .design-rail {
+                margin-top: 0.75rem;
+                grid-template-columns: 1.5rem minmax(0, 1fr) 1.5rem;
+                gap: 0.25rem;
+            }
+
+            .design-rail button {
+                width: 1.5rem;
+                font-size: 1rem;
+            }
+
+            .design-rail__track {
+                grid-auto-columns: 5.625rem;
+                gap: 0.375rem;
+            }
+
+            .design-tabs {
+                gap: 0.375rem;
+            }
+
+            .design-tabs button {
+                padding: 0.375rem 0.5625rem;
+                font-size: 0.6875rem;
+                min-width: 0;
+            }
+
+            .design-media-card h3 {
+                margin-top: 0;
+                font-size: 0.875rem;
+            }
+
+            .design-media-card p,
+            .design-media-card a {
+                font-size: 0.75rem;
+            }
+        }
+
+        .design-membership {
+            >.design-container {
+                width: calc(100% - 2rem);
+            }
+
+            .design-heading {
+                padding: 1.25rem 0 0.5625rem;
+            }
+
+            .design-heading h1 {
+                font-size: 1.5rem;
+            }
+
+            .design-member-benefits .design-support {
+                min-height: 3.875rem;
+                padding: 0.75rem 1rem;
+            }
+
+            .design-member-benefits img {
+                width: 1.5625rem;
+                height: 1.5625rem;
+            }
+
+            .design-member-benefits h2 {
+                font-size: 0.875rem;
+                margin: 0;
+            }
+
+            &__signup {
+                margin: 1.25rem 0 3rem;
+            }
+
+            &__coupon {
+                flex-direction: column;
+                text-align: center;
+                padding: 0.9375rem;
+                gap: 0.625rem;
+            }
+
+            &__coupon>span {
+                width: 3.6875rem;
+            }
+
+            &__coupon img {
+                width: 1.5625rem;
+            }
+
+            &__coupon h2 {
+                font-size: 1rem;
+            }
+
+            &__coupon p,
+            &__signup>p,
+            &__signup li {
+                font-size: 0.75rem;
+            }
+
+            &__signup ul {
+                margin: 0.625rem 0 1.25rem;
+            }
+
+            &__signup li {
+                margin-bottom: 0.375rem;
+            }
+
+            &__signup>.btn,
+            &__reward .btn {
+                min-height: 3rem;
+            }
+
+            &__rewards,
+            &__earning {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            &__reward {
+                min-height: 0;
+                padding: 1rem;
+            }
+
+            &__reward h2 {
+                font-size: 1rem;
+            }
+
+            &__reward p {
+                font-size: 0.8125rem;
+            }
+
+            &__rewards+.design-heading {
+                padding: 1.875rem 0;
+            }
+
+            &__earning img {
+                width: 6.5625rem;
+                margin-bottom: 0.75rem;
+            }
+
+            &__earning h3 {
+                font-size: 1rem;
+                margin-bottom: 0.375rem;
+            }
+
+            &__earning p {
+                font-size: 0.75rem;
+            }
+        }
+    }
+
+    @media (max-width: $phone) {
+        // 모바일 푸터는 App.scss 공용 (1399 이하)
 
         .design-grid--three,
         .design-grid--four {
@@ -352,6 +406,10 @@ $phone: 699px;
 
             .design-warranty__register {
                 margin-inline: auto;
+            }
+
+            .design-warranty__field {
+                background: v.$neutral-color-700;
             }
 
             .design-warranty__benefits {
@@ -496,12 +554,13 @@ $phone: 699px;
                 text-align: left;
                 justify-items: stretch;
                 align-content: start;
-                min-height: 7.5rem;
-                padding: .625rem;
+                min-height: 0;
+                padding: .875rem;
             }
 
             .design-support h2 {
-                @include v.caption-12-r;
+                font-size: .875rem;
+                line-height: 1.35;
                 color: v.$neutral-color-white;
                 margin: 0 1rem 0.5rem 0;
             }
@@ -515,7 +574,7 @@ $phone: 699px;
             }
 
             .design-support p {
-                @include v.caption-12-r;
+                font-size: .8125rem;
             }
         }
 
@@ -578,9 +637,7 @@ $phone: 699px;
             font-size: 0.75rem;
         }
     }
-}
 
-@mixin editorial-narrow-phone {
     @media (max-width: 460px) {
 
         .design-grid--two,
@@ -609,13 +666,129 @@ $phone: 699px;
             align-items: center;
         }
     }
-}
 
-@mixin shop-phone {
-    @media (max-width: $phone) {
-        #root:has(main > .auth)> :is(.header, .footer, .top-button) {
-            display: none;
+    @media (max-width: 900px) {
+        .auth:not(.design-password) {
+            padding: 3.75rem 1rem 6.75rem;
+
+            .auth__card {
+                width: min(100%, 31.25rem);
+                padding: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .auth__form,
+            .auth-divider {
+                width: 100%;
+            }
+
+            .auth__title {
+                margin-top: 1.375rem;
+            }
+
+            .auth__desc {
+                max-width: 15.375rem;
+            }
+
+            .auth__form {
+                margin-top: 1.75rem;
+            }
+
+            .auth-field {
+                padding-bottom: 1.25rem;
+            }
+
+            .auth-field.has-error .auth-field__input:not(:focus) {
+                border-color: transparent;
+            }
+
+            .auth-field__error {
+                position: static;
+                display: block;
+                margin-top: 0.5rem;
+            }
+
+            .auth-field__toggle {
+                right: 0.75rem;
+            }
+
+            .auth__links {
+                margin-top: 0;
+            }
+
+            .auth__submit {
+                margin-top: 1.25rem;
+            }
+
+            .auth-divider {
+                margin-top: 1.25rem;
+            }
+
+            .auth-social {
+                margin-top: 1.25rem;
+            }
+
+            // 기본은 모두 회색 칸 + 흰 아이콘 (누를 때만 초록 · App.scss .auth-social)
+            .auth-social__btn {
+                background: v.$neutral-color-700;
+            }
+
+            .auth__card--signup .auth__head+.auth-social {
+                margin-top: 1.25rem;
+            }
+
+            .auth__card--signup .auth-divider {
+                margin-top: 1.25rem;
+            }
+
+            .auth__card--signup .auth__form {
+                margin-top: 1.25rem;
+            }
+
+            .auth__required {
+                @include v.caption-12-r;
+                margin-bottom: 1.25rem;
+                color: v.$neutral-color-100;
+            }
+
+            .auth__submit-wrap {
+                margin-top: 2.5rem;
+            }
+
+            .auth__submit-wrap .auth__submit {
+                margin-top: 0;
+            }
+
+            .auth__form-error {
+                position: static;
+                margin-bottom: 0.625rem;
+            }
+
+            .auth__terms-title,
+            .auth__switch p {
+                color: v.$neutral-color-100;
+            }
+
+            .auth__switch p {
+                @include v.caption-12-r;
+            }
+
+            .auth__switch a {
+                @include v.caption-12-r;
+                margin-top: 0.625rem;
+            }
+
+            .auth-modal__panel {
+                width: min(100% - 2rem, 25rem);
+                padding-inline: 1.25rem;
+            }
         }
+
+        // 태블릿 · 모바일 헤더는 App.scss 공용 (1399 이하)
+    }
+
+    @media (max-width: $phone) {
 
         .auth.design-password {
             padding: 3.75rem 1rem 6.25rem;
@@ -824,145 +997,228 @@ $phone: 699px;
         }
     }
 
-    .design-esports {
-        padding-bottom: clamp(5rem, 16.35vw, 19.625rem);
-
-        &__year {
-            margin-top: clamp(3.5rem, 8vw, 9.625rem);
-
-            .design-heading {
-                padding-top: 0;
-                padding-bottom: clamp(1.125rem, 2vw, 2.5rem);
-            }
-
-            .design-heading h2 {
-                @include v.display-32-b;
-                color: v.$neutral-color-white;
-            }
-
-            .design-tabs {
-                gap: clamp(0.375rem, 1.04vw, 1.25rem);
-            }
-
-            .design-tabs button {
-                min-height: 3rem;
-            }
+    @media (max-width: $phone) {
+        .collection-intro__title {
+            font-size: 2rem;
+            line-height: 2.5rem;
         }
 
-    }
-
-    // 2026년을 돌아보며 · 큰 사진 (가운데 + 양옆 걸침)
-    .design-esports-gallery {
-        --slide-width: min(59rem, 62vw);
-        --slide-gap: 1.625rem;
-        margin-top: 2.25rem;
-
-        &__stage {
-            position: relative;
-            height: calc(var(--slide-width) * 2 / 3);
-            overflow: hidden;
-            touch-action: pan-y;
-            user-select: none;
-        }
-
-        // 가운데 기준으로 --offset 칸만큼 옆에 놓임 (넘길 때 스르륵 이동)
-        &__slide {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: var(--slide-width);
-            height: 100%;
-            transform: translateX(calc(-50% + var(--offset) * (var(--slide-width) + var(--slide-gap))));
-            transition: transform .5s cubic-bezier(.22, .61, .36, 1);
-            cursor: pointer;
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                pointer-events: none;
-            }
-
-            &.is-active {
-                border: 0.0625rem solid v.$main-primary-color;
-                cursor: default;
-            }
-        }
-
-        // 화살표: 가운데 사진 안쪽 양끝
-        &__arrow {
-            position: absolute;
-            top: 50%;
-            left: calc(50% - var(--slide-width) / 2 + 1.5rem);
-            z-index: 1;
-            display: grid;
-            place-items: center;
-            width: 2.375rem;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: v.$neutral-color-700;
-            transform: translateY(-50%);
-        }
-
-        &__arrow--next {
-            left: auto;
-            right: calc(50% - var(--slide-width) / 2 + 1.5rem);
-            background: v.$main-primary-color;
-        }
-
-        &__arrow:focus-visible,
-        &__thumbs button:focus-visible {
-            outline-offset: -0.1875rem;
-        }
-
-        // 썸네일: 드래그로 옆으로 넘김
-        &__thumbs {
-            display: flex;
+        .collection-intro__awards {
             gap: 1rem;
-            margin-top: 1.625rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-            cursor: grab;
-            user-select: none;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            &:active {
-                cursor: grabbing;
-            }
         }
 
-        &__thumbs button {
-            flex: 0 0 11rem;
+        .collection-award__seal {
+            width: 6rem;
         }
 
-        &__thumbs img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 177 / 117;
-            object-fit: cover;
-            transition: filter .2s;
+        .collection-lineup__grid,
+        .collection-features,
+        .niko__records ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        &__thumbs button:not([aria-pressed="true"]) img {
-            filter: brightness(.7);
+        .collection-section__media.is-split,
+        .niko__related {
+            grid-template-columns: minmax(0, 1fr);
         }
 
-        &__thumbs button:hover img {
-            filter: none;
+        .collection-colorways ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        &__thumbs button[aria-pressed="true"] img {
-            outline: 0.0625rem solid v.$main-primary-color;
-            outline-offset: -0.0625rem;
+        .niko__shop {
+            padding: .5rem 1rem;
+            font-size: .75rem;
+        }
+
+        .design-esports__athlete {
+            gap: 0.625rem;
+        }
+
+        .design-esports__athlete h3 {
+            @include v.display-32-b;
+        }
+
+        .design-esports__athlete p {
+            @include v.heading-20-sb;
         }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-        .design-esports-gallery__slide {
-            transition: none;
+    @media (max-width: $tablet) {
+
+        .design-grid:not(.design-exclusive__featured),
+        .design-about__leaders,
+        .design-warranty__benefits,
+        .collection-lineup__grid,
+        .collection-features,
+        .collection-colorways ul,
+        .collection-intro__awards,
+        .niko__records ul,
+        .niko__related {
+            @include drag-slider;
+        }
+
+        // 리더 · 혜택 · 기록처럼 글이 긴 카드는 조금 넓게
+        .design-about__leaders,
+        .design-warranty__benefits,
+        .design-grid--two:not(.design-product-pair) {
+            grid-auto-columns: min(85%, 28rem) !important;
+        }
+
+        .design-product-pair,
+        .collection-lineup__grid,
+        .design-esports__equipment {
+            grid-auto-columns: min(45%, 15rem) !important;
+        }
+
+        .collection-intro__awards {
+            grid-auto-columns: 9rem !important;
+            justify-content: safe center;
+        }
+
+        // 카본 · 독점 두 묶음은 위아래로 (안의 상품만 슬라이드)
+        .design-exclusive__featured {
+            grid-template-columns: 1fr;
+        }
+
+        .design-leader--wide {
+            grid-column: auto;
+        }
+
+        .design-support-page .design-grid {
+            grid-auto-flow: column;
+        }
+    }
+
+    // 소개 페이지: 좁은 화면에서 글 · 이미지는 위아래로
+    @media (max-width: $tablet) {
+        .design-about {
+
+            &__title,
+            &__heading.design-display,
+            &__heading--light,
+            &__years button {
+                font-size: clamp(2rem, 8vw, 3.75rem);
+                line-height: 1.15;
+            }
+
+            &__heading {
+                font-size: clamp(1.75rem, 6vw, 2.75rem);
+                line-height: 1.2;
+            }
+
+            &__timeline {
+                padding-top: 6rem;
+            }
+
+            &__milestone {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                min-height: 0;
+                margin-top: 2.5rem;
+
+                .design-display-text {
+                    margin-top: 2rem;
+                }
+            }
+
+            #awards,
+            #leadership {
+                margin-top: 6rem;
+            }
+        }
+
+        .design-display-text {
+            font-size: 1rem;
+            line-height: 1.625rem;
+        }
+
+        .design-brand-section {
+            margin-top: 6rem;
+
+            &__overlay {
+                left: 1.5rem;
+                font-size: clamp(1.25rem, 5vw, 2.75rem);
+            }
+
+            &__copy {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2.5rem 0 4rem;
+
+                .design-display-text {
+                    margin-top: 1.5rem;
+                }
+            }
+        }
+
+        .design-leader {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.25rem;
+            height: 100%;
+            padding: 1.75rem;
+
+            h3,
+            p {
+                font-size: 1.125rem;
+                line-height: 1.5rem;
+            }
+
+            p.design-leader__desc {
+                margin: 0;
+                font-size: .875rem;
+                line-height: 1.375rem;
+            }
+        }
+    }
+
+    @media (max-width: $tablet) {
+        .design-company {
+            &__title {
+                font-size: clamp(2rem, 8vw, 3.75rem);
+                line-height: 1.15;
+            }
+
+            &__section {
+                margin-top: 4rem;
+            }
+
+            &__heading {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+
+            &__cards--two {
+                grid-template-columns: 1fr;
+            }
+
+            &__facts {
+                gap: 3rem;
+            }
+
+            &__table li {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    }
+
+    @media (max-width: $tablet) {
+        .pay {
+            grid-template-columns: 1fr;
+
+            &__side {
+                position: static;
+            }
+        }
+
+        .pay-item {
+            grid-template-columns: 7.5rem minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        .pay-methods {
+            grid-template-columns: 1fr;
         }
     }
 }
@@ -995,74 +1251,34 @@ $phone: 699px;
     }
 }
 
-@mixin site-shell($reveal-duration, $reveal-ease) {
-    @media (max-width: $tablet) {
+// =========================================================
+// 메인 홈 · 모바일 360 시안 (699 이하) · App.scss 맨 아래에서 @include mobile.home-phone
+// 시안 px ÷ 16 = rem · 섹션 좌우 여백 1rem (360 기준 16)
+// =========================================================
+@mixin home-phone {
+    @media (max-width: $phone) {
 
-        // 화면 밖으로 가로 스크롤바가 생기지 않게
-        html:has(main > :is(.home, .design-page, .auth)),
-        body:has(main > :is(.home, .design-page, .auth)) {
-            overflow-x: clip;
-        }
-
-        body:has(main > .home) {
-            min-width: 0;
-        }
-
-        // ---------- 헤더 (햄버거 · 로고 가운데 · 검색 · 장바구니) ----------
+        // ---------- 프로모션 바: 긴 문구가 오른쪽 → 왼쪽으로 계속 흘러감 (사본을 이어 붙여 끊김 없이) ----------
         body .header {
-            .header__gnb {
-                height: 3rem;
-            }
-
-            .header__inner {
-                width: calc(100% - 2rem);
-                max-width: none;
-            }
-
-            .header__nav,
-            .header__utils>.user-menu,
-            .header__utils>a[aria-label="로그인"] {
-                display: none;
-            }
-
-            .header__logo {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-
-                img {
-                    height: 2rem;
-                }
-            }
-
-            .header__utils {
-                gap: 1rem;
-                margin-left: auto;
-            }
-
-            .header__icon {
-                width: 1.25rem;
-                height: 1.25rem;
-            }
-
-            // 프로모션 바: 한 줄 · 글자가 옆으로 흘러감
             .header__promo {
+                align-items: center;
                 justify-content: flex-start;
                 height: 2.25rem;
-                min-height: 0;
                 padding: 0;
                 overflow: hidden;
             }
 
             .header__promo-track {
                 display: flex;
+                flex-shrink: 0;
                 width: max-content;
-                animation: promo-flow 18s linear infinite;
+                animation: promo-flow 20s linear infinite;
             }
 
             .header__promo-text {
-                @include v.caption-12-r;
+                @include v.body-14-r;
                 padding-right: 3rem;
+                color: v.$neutral-color-white;
                 white-space: nowrap;
             }
 
@@ -1070,376 +1286,8 @@ $phone: 699px;
                 display: block;
             }
 
-            .search-overlay__inner {
-                width: calc(100% - 2rem);
-                padding: 1.5rem 0 2rem;
-            }
-
-            .search-overlay__close {
-                top: 2.25rem;
-            }
-
-            .search-overlay__form,
-            .search-overlay__popular {
-                margin-right: 2.5rem;
-            }
-        }
-
-        .header__burger {
-            display: grid;
-            align-content: center;
-            gap: 0.3125rem;
-            width: 1.5rem;
-            height: 1.5rem;
-
-            span {
-                display: block;
-                height: 0.0625rem;
-                background-color: v.$neutral-color-white;
-            }
-        }
-
-        // ---------- 모바일 메뉴 (왼쪽에서 스르륵) ----------
-        .mobile-menu {
-            position: fixed;
-            inset: 0;
-            z-index: 300;
-            display: block;
-            visibility: hidden;
-            transition: visibility 0s $reveal-duration;
-
-            &.is-open {
-                visibility: visible;
-                transition: visibility 0s;
-            }
-
-            &__dim {
-                position: absolute;
-                inset: 0;
-                background-color: rgba(0, 0, 0, 0.6);
-                opacity: 0;
-                transition: opacity $reveal-duration ease;
-            }
-
-            &.is-open &__dim {
-                opacity: 1;
-            }
-
-            &__panel {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                display: flex;
-                flex-direction: column;
-                width: min(85%, 22.5rem);
-                padding: 0 1rem 2rem;
-                background-color: v.$neutral-color-panel;
-                overflow-y: auto;
-                transform: translateX(-100%);
-                transition: transform $reveal-duration $reveal-ease;
-            }
-
-            &.is-open &__panel {
-                transform: none;
-            }
-
-            &__head {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                height: 3rem;
-
-                img {
-                    height: 2rem;
-                }
-            }
-
-            &__close img {
-                width: 1.5rem;
-                height: 1.5rem;
-            }
-
-            &__groups>li {
-                border-bottom: 0.0625rem solid v.$neutral-color-500;
-            }
-
-            &__group {
-                @include v.heading-20-sb;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                padding: 1.25rem 0;
-                color: v.$neutral-color-white;
-            }
-
-            &__links {
-                display: grid;
-                gap: 1rem;
-                padding: 0 0 1.5rem;
-
-                a {
-                    @include v.body-16-r;
-                    color: v.$neutral-color-100;
-
-                    &:hover {
-                        color: v.$main-primary-color;
-                    }
-                }
-            }
-
-            &__account {
-                @include v.body-16-m;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                margin-top: 2rem;
-
-                img {
-                    width: 1.25rem;
-                }
-            }
-        }
-
-        // ---------- 푸터 (그룹은 + 를 누르면 스르륵 · 아래 링크 → 카피라이트) ----------
-        body .footer {
-            .footer__inner {
-                width: calc(100% - 2rem);
-                max-width: none;
-                padding: 1.5rem 0 2.5rem;
-            }
-
-            .footer__bg-logo {
-                left: -1rem;
-                width: 22rem;
-                height: 15.5rem;
-            }
-
-            .footer__top {
-                display: block;
-                min-height: 0;
-            }
-
-            .footer__groups {
-                display: block;
-                width: 100%;
-                margin: 0;
-            }
-
-            .footer__group {
-                width: 100%;
-                border-bottom: 0.0625rem solid v.$neutral-color-500;
-            }
-
-            .footer__group-title {
-                margin: 0;
-
-                button {
-                    @include v.heading-20-sb;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    width: 100%;
-                    padding: 1.25rem 0;
-                    cursor: pointer;
-                    pointer-events: auto;
-                }
-            }
-
-            .footer__plus {
-                display: block;
-            }
-
-            // 링크 목록: 높이 0 ↔ 내용 높이 (스르륵)
-            .footer__panel {
-                display: grid;
-                grid-template-rows: 0fr;
-                transition: grid-template-rows $reveal-duration $reveal-ease;
-
-                >ul {
-                    min-height: 0;
-                    overflow: hidden;
-                }
-            }
-
-            .footer__group.is-open .footer__panel {
-                grid-template-rows: 1fr;
-            }
-
-            .footer__submenu {
-                gap: 0.75rem;
-
-                li:last-child {
-                    padding-bottom: 1.25rem;
-                }
-
-                a {
-                    color: v.$neutral-color-100;
-                }
-            }
-
-            .footer__bottom {
-                flex-direction: column-reverse;
-                gap: 2rem;
-                padding-top: 4rem;
-                border-top: 0;
-                text-align: center;
-            }
-
-            .footer__copyright {
-                @include v.body-14-r;
-                flex: none;
-            }
-
-            .footer__links {
-                gap: 2rem;
-
-                a {
-                    color: v.$neutral-color-200;
-                }
-            }
-        }
-
-        // ---------- 메인 ----------
-        .home-section,
-        .home-category,
-        .home-features {
-            width: calc(100% - 2rem);
-        }
-
-        .home-hero {
-            height: clamp(22rem, 62vw, 47.5rem);
-            padding-bottom: 2rem;
-            gap: 1.5rem;
-
-            &__title {
-                @include v.display-32-b;
-                font-size: clamp(1.375rem, 6vw, 2rem);
-                line-height: 1.3;
-                text-align: center;
-                word-break: keep-all;
-            }
-        }
-
-        // 신상품 탭: 줄바꿈 없이 옆으로 드래그
-        .home-new__tabs {
-            flex-wrap: nowrap !important;
-            overflow-x: auto;
-            scrollbar-width: none;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            li {
-                flex: none;
-            }
-        }
-
-        .home-slider {
-            &__track {
-                grid-auto-columns: calc((100% - #{v.$grid-gutter} * 2) / 3);
-            }
-
-            &__btn {
-                display: none;
-            }
-        }
-
-        .home-section__products {
-            @include shell-drag-slider(calc((100% - #{v.$grid-gutter} * 2) / 3));
-        }
-
-        .home-pick__grid {
-            @include shell-drag-slider(min(85%, 36rem));
-            grid-template-rows: 15rem;
-        }
-
-        .home-pick__card {
-            grid-template-columns: 40% 1fr 30%;
-
-            &.is-large {
-                grid-row: auto;
-                grid-template-columns: 45% 1fr;
-            }
-        }
-
-        .home-category__grid {
-            @include shell-drag-slider(min(45%, 22rem));
-            grid-template-rows: 19.75rem;
-        }
-
-        .home-category__item.is-large {
-            grid-row: auto;
-        }
-
-        .home-promo {
-            height: clamp(12rem, 25vw, 29.75rem);
-        }
-
-        .home-setup__body {
-            grid-template-columns: 1fr;
-        }
-
-        .home-setup__visual {
-            height: clamp(14rem, 45vw, 30rem);
-        }
-
-        .home-features__list {
-            @include shell-drag-slider(min(45%, 18rem));
-            gap: 1rem;
-        }
-
-        .promotion__cards {
-            @include shell-drag-slider(min(70%, 26rem));
-        }
-    }
-
-    @media (max-width: $phone) {
-        .home-slider__track {
-            grid-auto-columns: 42%;
-        }
-
-        .home-section__products {
-            grid-auto-columns: 42%;
-        }
-
-        .home-category__grid {
-            grid-auto-columns: 75%;
-        }
-
-        .home-features__list {
-            grid-auto-columns: 60%;
-        }
-    }
-}
-
-// =========================================================
-// 메인 홈 · 모바일 360 시안 (699 이하) · App.scss 맨 아래에서 @include mobile.home-phone
-// 시안 px ÷ 16 = rem · 섹션 좌우 여백 1rem (360 기준 16)
-// =========================================================
-@mixin home-phone {
-    @media (max-width: $phone) {
-        // ---------- 프로모션 바: 짧은 한 줄 고정 (흐르지 않음) ----------
-        body .header {
-            .header__promo {
-                align-items: center;
-                height: 1.75rem;
-                padding: 0 1rem;
-            }
-
-            .header__promo-track {
-                display: none;
-            }
-
             .header__promo-short {
-                @include v.body-14-r;
-                display: block;
-                overflow: hidden;
-                color: v.$neutral-color-white;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                display: none;
             }
         }
 
@@ -1511,7 +1359,6 @@ $phone: 699px;
         .home-new__tabs {
             gap: 0.25rem;
             margin-top: 2rem;
-            padding-left: 0.875rem;
         }
 
         .home-new__tab {
@@ -2000,6 +1847,7 @@ $phone: 699px;
         // 값은 699 → 1400 사이에서 화면 너비에 따라 이어지게 (clamp · vw): 1399 에서 PC 값과 같아 뚝 끊기지 않음
         // =========================================================
         body .header {
+
             // 메뉴는 PC 와 같이 가운데 (App.scss) · 간격만 줄임
             .header__menu {
                 gap: clamp(1rem, calc(12vw - 4.25rem), 6.25rem);
@@ -2171,6 +2019,7 @@ $phone: 699px;
 
     // 모바일 (699 이하): 햄버거 헤더 · 모바일 메뉴 · 푸터 펼침 (메인 홈은 style/mobile.scss home-phone)
     @media (max-width: $phone) {
+
         // ---------- 헤더 (햄버거 · 로고 가운데 · 검색 · 장바구니) ----------
         body .header {
             .header__gnb {
@@ -2261,7 +2110,7 @@ $phone: 699px;
             }
         }
 
-        // ---------- 모바일 메뉴 (왼쪽에서 스르륵) ----------
+        // ---------- 모바일 메뉴 (시안: 왼쪽 세로 메뉴 72 + 오른쪽 목록 · 전체 화면 · 왼쪽에서 스르륵) ----------
         .mobile-menu {
             position: fixed;
             inset: 0;
@@ -2275,29 +2124,13 @@ $phone: 699px;
                 transition: visibility 0s;
             }
 
-            &__dim {
-                position: absolute;
-                inset: 0;
-                background-color: rgba(0, 0, 0, 0.6);
-                opacity: 0;
-                transition: opacity $reveal-duration ease;
-            }
-
-            &.is-open &__dim {
-                opacity: 1;
-            }
-
             &__panel {
                 position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                display: flex;
-                flex-direction: column;
-                width: min(85%, 22.5rem);
-                padding: 0 1rem 2rem;
-                background-color: v.$neutral-color-panel;
-                overflow-y: auto;
+                inset: 0;
+                display: grid;
+                grid-template-columns: 4.5rem minmax(0, 1fr);
+                background-color: v.$body-bg;
+                overflow: hidden;
                 transform: translateX(-100%);
                 transition: transform $reveal-duration $reveal-ease;
             }
@@ -2306,14 +2139,70 @@ $phone: 699px;
                 transform: none;
             }
 
+            // 왼쪽 세로 메뉴
+            &__rail {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0.875rem 0.5rem 1.25rem;
+                background-color: v.$neutral-color-panel;
+                overflow-y: auto;
+            }
+
+            &__logo img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            &__tabs {
+                display: grid;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            &__tab {
+                @include v.caption-12-r;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                width: 3.5rem;
+                padding: 0.5rem 0;
+                border-radius: v.$radius-sm;
+                color: v.$neutral-color-100;
+                transition: background-color 0.2s, color 0.2s;
+
+                >img {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                }
+
+                &.is-active {
+                    background-color: v.$neutral-color-canvas;
+                    color: v.$main-primary-color;
+                }
+            }
+
+            &__tab--account {
+                margin-top: auto;
+                color: v.$neutral-color-white;
+            }
+
+            // 오른쪽 목록
+            &__content {
+                padding: 0 1rem 2rem;
+                overflow-y: auto;
+            }
+
             &__head {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                height: 3rem;
+                height: 4.75rem;
 
-                img {
-                    height: 2rem;
+                strong {
+                    @include v.heading-20-sb;
+                    color: v.$neutral-color-white;
                 }
             }
 
@@ -2322,45 +2211,119 @@ $phone: 699px;
                 height: 1.5rem;
             }
 
-            &__groups>li {
-                border-bottom: 0.0625rem solid v.$neutral-color-500;
+            &__section+&__section {
+                margin-top: 0.75rem;
+                padding-top: 0.75rem;
+                border-top: 0.0625rem solid v.$neutral-color-500;
             }
 
-            &__group {
-                @include v.heading-20-sb;
+            &__section-title {
+                @include v.caption-12-r;
+                margin: 0.25rem 0 0.5rem;
+                color: v.$neutral-color-100;
+            }
+
+            &__links a {
+                @include v.body-14-r;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                padding: 1.25rem 0;
+                gap: 0.75rem;
+                height: 2.75rem;
                 color: v.$neutral-color-white;
+
+                img {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                }
+
+                span {
+                    flex: 1;
+                }
+
+                &.is-current,
+                &:hover {
+                    color: v.$main-primary-color;
+                }
             }
 
-            &__links {
-                display: grid;
-                gap: 1rem;
-                padding: 0 0 1.5rem;
+            &__arrow {
+                opacity: 0.8;
+            }
 
-                a {
-                    @include v.body-16-r;
+            &__box {
+                margin-top: 1.5rem;
+                padding: 1rem 0.75rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-canvas;
+
+                strong {
+                    @include v.label-14-sb;
+                    color: v.$main-primary-color;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    margin-top: 0.75rem;
                     color: v.$neutral-color-100;
+                }
+            }
 
-                    &:hover {
+            // 계정 시트 (아래에서 올라옴)
+            &__sheet-dim {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+                background-color: rgba(0, 0, 0, 0.6);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity $reveal-duration ease;
+
+                &.is-open {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+
+            &__sheet {
+                position: absolute;
+                right: 1rem;
+                bottom: 0;
+                left: 1rem;
+                z-index: 2;
+                max-height: calc(100% - 4rem);
+                padding: 0.5rem 0 1rem;
+                border: 0.0625rem solid v.$neutral-color-500;
+                border-bottom: 0;
+                border-radius: v.$radius-md v.$radius-md 0 0;
+                background-color: v.$neutral-color-panel;
+                overflow-y: auto;
+                transform: translateY(100%);
+                transition: transform $reveal-duration $reveal-ease;
+
+                &.is-open {
+                    transform: none;
+                }
+
+                .user-menu__head {
+                    margin-top: 1rem;
+                }
+
+                .user-menu__welcome {
+                    font-size: 1.25rem;
+
+                    em {
                         color: v.$main-primary-color;
                     }
                 }
             }
 
-            &__account {
-                @include v.body-16-m;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                margin-top: 2rem;
-
-                img {
-                    width: 1.25rem;
-                }
+            &__handle {
+                display: block;
+                width: 2.25rem;
+                height: 0.25rem;
+                margin: 0 auto;
+                border-radius: v.$radius-pill;
+                background-color: v.$neutral-color-300;
             }
         }
 
@@ -2397,8 +2360,9 @@ $phone: 699px;
             .footer__group-title {
                 margin: 0;
 
+                // 모바일 시안: 그룹 이름 16 (레귤러)
                 button {
-                    @include v.heading-20-sb;
+                    @include v.body-16-r;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -2460,6 +2424,3068 @@ $phone: 699px;
                 a {
                     color: v.$neutral-color-200;
                 }
+            }
+        }
+    }
+}
+
+// =========================================================
+// 커뮤니티 (프로모션 알아보기 · 콜라보 상세) · 모바일 360 시안 (699 이하)
+// App.scss 맨 아래에서 @include mobile.community-phone
+// =========================================================
+@mixin community-phone {
+    @media (max-width: $phone) {
+        body:has(main > :is(.promotion, .collab-page)) {
+            min-width: 0;
+        }
+
+        // 경로 표시: 좌우 1rem · 작은 글자 (히어로 아래 · 없으면 페이지 맨 위)
+        .breadcrumb {
+            @include v.caption-12-r;
+            width: calc(100% - 2rem);
+            margin: 1rem auto 0.75rem;
+            gap: 0.25rem;
+        }
+
+        .breadcrumb__sep {
+            width: 0.875rem;
+            height: 0.875rem;
+        }
+
+        .promo-container {
+            width: calc(100% - 2rem);
+            max-width: none;
+        }
+
+        // ---------- 공통 FAQ (제목 가운데 20 · 회색 칸 · + 초록) ----------
+        // 시안 글자: 제목 16 · 본문 12 (PDF 기준)
+        .promotion__faq,
+        .collab-page__faq {
+            margin-top: 4.375rem;
+
+            .promotion__title {
+                @include v.label-16-sb;
+                text-align: center;
+            }
+
+            .faq {
+                margin-top: 1.125rem;
+            }
+        }
+
+        .faq {
+            &__text {
+                @include v.label-12-sb;
+            }
+
+            &__icon {
+                width: 1rem;
+                height: 1rem;
+                margin-left: 1rem;
+            }
+
+            &--boxed,
+            &--numbered {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+
+                .faq__item {
+                    border: 0;
+                    background-color: transparent;
+                }
+
+                .faq__question {
+                    min-height: 3.5rem;
+                    padding: 0 1.6875rem;
+                    background-color: v.$neutral-color-panel;
+                }
+            }
+
+            &--boxed .faq__answer {
+                @include v.caption-12-r;
+                padding: 0 1.6875rem 1rem;
+                background-color: v.$neutral-color-panel;
+            }
+
+            // 콜라보: 01 번호 초록 · 답변은 밝은 칸 (질문 아래 간격)
+            &--numbered {
+                .faq__num {
+                    @include v.label-16-sb;
+                    width: 2.75rem;
+                    flex: none;
+                }
+
+                .faq__answer {
+                    @include v.caption-12-r;
+                    margin: 0.5rem 0 0;
+                    padding: 1rem 1.5rem;
+                    border-radius: v.$radius-md;
+                    background-color: v.$neutral-color-canvas;
+                    color: v.$neutral-color-white;
+                }
+            }
+        }
+
+        // ---------- 프로모션 알아보기 ----------
+        .promotion {
+            padding-bottom: 2.75rem;
+
+            &__hero {
+                height: 11rem;
+            }
+
+            // 대표 컬렉션 상품: 한 장씩 옆으로 (초록 테두리 · 이미지 위에 글)
+            &__featured {
+                padding-top: 1.1875rem;
+            }
+
+            &__cards {
+                grid-auto-flow: column;
+                grid-template-columns: none;
+                grid-auto-columns: 100%;
+                gap: 0.75rem;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                >li {
+                    scroll-snap-align: start;
+                }
+            }
+
+            &__card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 11.75rem;
+                padding: 1.25rem 1.375rem;
+                border: 0.125rem solid v.$main-primary-color;
+                overflow: hidden;
+
+                &:hover img {
+                    transform: none;
+                }
+            }
+
+            // 이미지는 배경 (어둡게)
+            &__card-img {
+                position: absolute;
+                inset: 0;
+                height: auto;
+                border: 0;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-color: rgba(0, 0, 0, 0.55);
+                }
+            }
+
+            &__card-title,
+            &__card-desc {
+                position: relative;
+            }
+
+            &__card-title {
+                @include v.label-14-sb;
+                margin-top: 0;
+            }
+
+            &__card-desc {
+                @include v.caption-12-r;
+                margin-top: 0.75rem;
+            }
+
+            // 콜라보 제품: 제목 가운데 · 세로 카드 옆으로 (이름 · 더 보기 없이)
+            &__collabs {
+                margin-top: 1.5rem;
+            }
+
+            &__head {
+                justify-content: center;
+            }
+
+            &__title {
+                @include v.label-16-sb;
+            }
+
+            &__more {
+                display: none;
+            }
+
+            &__grid {
+                grid-auto-flow: column;
+                grid-template-columns: none;
+                grid-auto-columns: 9.875rem;
+                gap: 0.75rem;
+                margin: 0.75rem -1rem 0 0;
+                padding-right: 1rem;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                >li {
+                    scroll-snap-align: start;
+                }
+            }
+
+            &__collab-img {
+                height: 12.875rem;
+            }
+
+            &__collab-name {
+                display: none;
+            }
+        }
+
+        // 로고: 둥근 칸 (히어로 아래 가운데)
+        .collab-strip {
+            width: max-content;
+            height: 1.375rem;
+            margin: 1.625rem auto 0;
+            padding: 0 0.75rem;
+            border-radius: v.$radius-pill;
+            background-color: v.$neutral-color-canvas;
+
+            img {
+                max-height: 0.875rem;
+            }
+        }
+
+        // ---------- 콜라보 상세: 이미지(화면 너비) → 초록 제목 · 설명 · 참고 (가운데) ----------
+        .collab-page {
+            padding-bottom: 2.75rem;
+
+            &__hero {
+                width: 100%;
+                max-width: none;
+                margin-top: 0;
+            }
+
+            &__support {
+                display: none;
+            }
+        }
+
+        .collab-block,
+        .collab-block--center,
+        .collab-block--caption,
+        .collab-block--right,
+        .collab-block--left {
+            display: block;
+            width: 100%;
+            max-width: none;
+            margin: 4.75rem 0 0;
+            text-align: center;
+
+            .collab-block__img {
+                display: flex;
+                height: auto;
+                aspect-ratio: auto;
+                border-radius: 0;
+                background: none;
+
+                img {
+                    height: auto;
+                    object-fit: contain;
+                }
+            }
+
+            .collab-block__text {
+                display: block;
+                width: auto;
+                margin: 1.125rem 1rem 0;
+                padding: 0;
+                text-align: center;
+            }
+
+            .collab-block__title {
+                @include v.label-16-sb;
+                color: v.$main-primary-color;
+            }
+
+            .collab-block__desc {
+                @include v.caption-12-r;
+                max-width: none;
+                margin-top: 0.875rem;
+                color: v.$neutral-color-100;
+            }
+
+            .collab-block__note {
+                @include v.caption-12-r;
+                margin-top: 1rem;
+                color: v.$neutral-color-200;
+            }
+        }
+
+        // 히어로 바로 아래 블록은 붙여서
+        .collab-page__hero+.collab-block {
+            margin-top: 0;
+        }
+
+        // 컬렉션 소개는 모바일 시안에 없음
+        .collab-intro {
+            display: none;
+        }
+
+        // 대표 상품: 작은 이미지 → 초록 제목 → 설명 → 테두리 버튼 (가운데)
+        .collab-stay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin-top: 4.75rem;
+            text-align: center;
+
+            &__img,
+            &__info strong,
+            &__info p {
+                display: none;
+            }
+
+            &__text,
+            &__feature,
+            &__info {
+                display: contents;
+            }
+
+            &__thumb {
+                order: 1;
+                width: 9.625rem;
+                height: 9.625rem;
+                background: none;
+
+                img {
+                    object-fit: contain;
+                }
+            }
+
+            &__title {
+                @include v.label-16-sb;
+                order: 2;
+                margin-top: 1.25rem;
+                color: v.$main-primary-color;
+            }
+
+            &__desc {
+                @include v.caption-12-r;
+                order: 3;
+                margin-top: 1.25rem;
+                color: v.$neutral-color-100;
+            }
+
+            .collab-btn {
+                @include v.label-10-m;
+                order: 4;
+                height: 1.25rem;
+                margin-top: 1.25rem;
+                padding: 0 0.5rem;
+                border: 0.0625rem solid v.$main-primary-color;
+                background: none;
+                color: v.$main-primary-color;
+            }
+        }
+    }
+}
+
+// =========================================================
+// 커뮤니티 (프로모션 알아보기 · 콜라보 상세) · 태블릿 (700 ~ 1399)
+// PC 와 같은 구성 · 칸 너비는 비율 · 크기는 699 → 1400 사이에서 이어지게 (1400 에서 PC 값)
+// App.scss 맨 아래에서 @include mobile.community-tablet
+// =========================================================
+@mixin community-tablet {
+    @media (max-width: $tablet) {
+        body:has(main > :is(.promotion, .collab-page)) {
+            min-width: 0;
+        }
+
+        // ---------- 프로모션 알아보기 ----------
+        .promotion {
+            padding-bottom: clamp(6rem, calc(32vw - 8rem), 20rem);
+
+            &__featured {
+                padding-top: clamp(3rem, calc(7.1429vw - 0.125rem), 6.125rem);
+            }
+
+            &__cards {
+                gap: clamp(0.75rem, calc(1.7143vw + 0rem), 1.5rem);
+            }
+
+            &__card-img {
+                height: clamp(9rem, calc(17.7143vw + 1.25rem), 16.75rem);
+            }
+
+            &__card-title {
+                font-size: clamp(1.125rem, calc(0.8571vw + 0.75rem), 1.5rem);
+                line-height: 1.35;
+                margin-top: clamp(0.875rem, calc(1.4286vw + 0.25rem), 1.5rem);
+            }
+
+            &__card-desc {
+                margin-top: clamp(0.75rem, calc(2.2857vw - 0.25rem), 1.75rem);
+            }
+
+            &__collabs {
+                margin-top: clamp(5rem, calc(16.5714vw - 2.25rem), 12.25rem);
+            }
+
+            &__title {
+                font-size: clamp(1.75rem, calc(2.2857vw + 0.75rem), 2.75rem);
+                line-height: 1.2;
+            }
+
+            // 콜라보 카드: 이미지 비율 그대로 (342 x 448)
+            &__grid {
+                gap: clamp(1.75rem, calc(4.5714vw - 0.25rem), 3.75rem) clamp(0.75rem, calc(1.7143vw + 0rem), 1.5rem);
+                margin-top: clamp(2.5rem, calc(7.4286vw - 0.75rem), 5.75rem);
+            }
+
+            &__collab-img {
+                height: auto;
+                aspect-ratio: 342 / 448;
+            }
+
+            &__collab-name {
+                font-size: clamp(1.125rem, calc(0.8571vw + 0.75rem), 1.5rem);
+                line-height: 1.35;
+            }
+
+            &__faq {
+                margin-top: clamp(6rem, calc(32vw - 8rem), 20rem);
+
+                .faq {
+                    margin-top: clamp(2.5rem, calc(10.2857vw - 2rem), 7rem);
+                }
+            }
+        }
+
+        // ---------- FAQ ----------
+        .faq {
+            &__text {
+                font-size: clamp(1.125rem, calc(0.8571vw + 0.75rem), 1.5rem);
+                line-height: 1.35;
+            }
+
+            &--boxed {
+                gap: clamp(1rem, calc(3.4286vw - 0.5rem), 2.5rem);
+
+                .faq__question {
+                    min-height: clamp(4.5rem, calc(6.5714vw + 1.625rem), 7.375rem);
+                    padding: 0 clamp(1.5rem, calc(14.8571vw - 5rem), 8rem) 0 clamp(1.5rem, calc(14vw - 4.625rem), 7.625rem);
+                }
+
+                .faq__answer {
+                    padding: 0 clamp(1.5rem, calc(14.8571vw - 5rem), 8rem) clamp(1.5rem, calc(2.2857vw + 0.5rem), 2.5rem) clamp(1.5rem, calc(14vw - 4.625rem), 7.625rem);
+                }
+            }
+
+            &--numbered {
+                .faq__question {
+                    min-height: clamp(4.5rem, calc(6.8571vw + 1.5rem), 7.5rem);
+                    padding: 0 clamp(1.5rem, calc(9.1429vw - 2.5rem), 5.5rem) 0 clamp(1.5rem, calc(8.8571vw - 2.375rem), 5.375rem);
+                }
+
+                .faq__num {
+                    width: clamp(3rem, calc(3.4286vw + 1.5rem), 4.5rem);
+                    font-size: clamp(1.125rem, calc(0.8571vw + 0.75rem), 1.5rem);
+                }
+
+                .faq__answer {
+                    font-size: clamp(1rem, calc(0.5714vw + 0.75rem), 1.25rem);
+                    padding: clamp(1rem, calc(1.1429vw + 0.5rem), 1.5rem) clamp(1.5rem, calc(6.7143vw - 1.4375rem), 4.4375rem);
+                }
+            }
+        }
+
+        // ---------- 콜라보 상세 ----------
+        .collab-page {
+            padding-bottom: clamp(6rem, calc(25.1429vw - 5rem), 17rem);
+
+            &__faq {
+                margin-top: clamp(5rem, calc(12.5714vw - 0.5rem), 10.5rem);
+
+                .faq {
+                    margin-top: clamp(2rem, calc(3.4286vw + 0.5rem), 3.5rem);
+                }
+            }
+        }
+
+        .collab-block {
+            margin-top: clamp(5rem, calc(16vw - 2rem), 12rem);
+
+            &__title {
+                font-size: clamp(1.375rem, calc(1.8571vw + 0.5625rem), 2.1875rem);
+                line-height: 1.2;
+            }
+
+            &__note {
+                margin-top: clamp(2rem, calc(6.8571vw - 1rem), 5rem);
+            }
+
+            &--center {
+                margin-top: clamp(3rem, calc(8.2857vw - 0.625rem), 6.625rem);
+            }
+
+            &--caption {
+                margin-top: clamp(2rem, calc(4.5714vw + 0rem), 4rem);
+            }
+
+            &--right,
+            &--left {
+                gap: clamp(1rem, calc(1.1429vw + 0.5rem), 1.5rem);
+
+                .collab-block__img {
+                    height: clamp(16rem, calc(35.7143vw + 0.375rem), 31.625rem);
+                }
+
+                .collab-block__text {
+                    padding: clamp(1rem, calc(3.7143vw - 0.625rem), 2.625rem) 0 clamp(1.5rem, calc(8.8571vw - 2.375rem), 5.375rem);
+                }
+            }
+
+            // 이미지 칸: 컨테이너(1440) 의 830 = 57.6%
+            &--right {
+                grid-template-columns: 57.6% minmax(0, 1fr);
+            }
+
+            &--left {
+                grid-template-columns: minmax(0, 1fr) 57.6%;
+
+                .collab-block__img {
+                    height: clamp(14rem, calc(29.4286vw + 1.125rem), 26.875rem);
+                }
+            }
+        }
+
+        // 컬렉션 소개: 글 | 이미지 (810 / 1440 = 56.25%)
+        .collab-intro {
+            grid-template-columns: minmax(0, 1fr) 56.25%;
+            gap: clamp(1rem, calc(1.1429vw + 0.5rem), 1.5rem);
+            margin-top: clamp(5rem, calc(13.4286vw - 0.875rem), 10.875rem);
+
+            &__text {
+                padding-top: clamp(1.5rem, calc(10.8571vw - 3.25rem), 6.25rem);
+            }
+
+            &__title {
+                font-size: clamp(1.625rem, calc(3.1429vw + 0.25rem), 3rem);
+                line-height: 1.22;
+            }
+
+            &__desc {
+                margin: clamp(1.25rem, calc(3.4286vw - 0.25rem), 2.75rem) 0 clamp(1.25rem, calc(2.8571vw + 0rem), 2.5rem);
+            }
+
+            &__img {
+                height: clamp(16rem, calc(34.5714vw + 0.875rem), 31.125rem);
+            }
+        }
+
+        // 플레이 뒤에도 남는 …: 이미지 | 글 (808 / 1440 = 56.1%)
+        .collab-stay {
+            grid-template-columns: 56.1% minmax(0, 1fr);
+            gap: clamp(1.5rem, calc(8.8571vw - 2.375rem), 5.375rem);
+            margin-top: clamp(5rem, calc(13.7143vw - 1rem), 11rem);
+
+            &__img {
+                height: clamp(16rem, calc(33.1429vw + 1.5rem), 30.5rem);
+            }
+
+            &__text {
+                padding-top: clamp(0.5rem, calc(4vw - 1.25rem), 2.25rem);
+            }
+
+            &__title {
+                font-size: clamp(1.375rem, calc(2vw + 0.5rem), 2.25rem);
+                line-height: 1.2;
+            }
+
+            &__desc {
+                margin-top: clamp(1rem, calc(2.8571vw - 0.25rem), 2.25rem);
+            }
+
+            &__feature {
+                gap: clamp(1rem, calc(2.2857vw + 0rem), 2rem);
+                margin-top: clamp(1rem, calc(1.7143vw + 0.25rem), 1.75rem);
+            }
+
+            &__thumb {
+                width: clamp(6rem, calc(18.2857vw - 2rem), 14rem);
+                height: clamp(6rem, calc(18.2857vw - 2rem), 14rem);
+            }
+        }
+    }
+}
+
+// =========================================================
+// 검색 (모바일 360 시안): 전체 화면 · ← + 검색칸 → 인기 검색 TOP 5 → 카테고리로 찾기
+// 검색칸: 기본 테두리 없음 · 포커스 초록 테두리 · 입력 중 X (지우기)
+// App.scss 맨 아래에서 @include mobile.nav-phone
+// =========================================================
+@mixin nav-phone {
+    @media (max-width: $phone) {
+        body .header .search-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 310;
+            border-top: 0;
+            background-color: v.$body-bg;
+            overflow-y: auto;
+
+            .search-overlay__inner {
+                width: 100%;
+                padding: 0 0 2rem;
+            }
+
+            .search-overlay__form {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                max-width: none;
+                height: 5rem;
+                margin: 0;
+                padding: 0 1rem;
+                border-bottom: 0.0625rem solid v.$neutral-color-500;
+            }
+
+            .search-overlay__back {
+                display: grid;
+                place-items: center;
+                flex: none;
+                width: 1.5rem;
+                height: 1.5rem;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            .search-overlay__bar {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .search-overlay__input {
+                @include v.body-16-r;
+                height: 3rem;
+                padding: 0 3rem 0 1rem;
+                border-color: v.$neutral-color-500;
+                background-color: v.$neutral-color-panel;
+
+                &:focus {
+                    border-color: v.$main-primary-color;
+                }
+            }
+
+            .search-overlay__submit {
+                right: 0.75rem;
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+
+            .search-overlay__close {
+                display: none;
+            }
+
+            // 인기 검색
+            .search-overlay__popular {
+                max-width: none;
+                margin: 1.5rem 1rem 0;
+
+                ul {
+                    gap: 0;
+                    margin-top: 0.75rem;
+                }
+
+                a {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    height: 2.75rem;
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            .search-overlay__popular-head {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .search-overlay__popular-title {
+                @include v.heading-20-sb;
+            }
+
+            .search-overlay__top {
+                @include v.label-12-sb;
+                display: block;
+                color: v.$main-primary-color;
+            }
+
+            .search-overlay__rank {
+                @include v.caption-12-r;
+                display: block;
+                width: 1rem;
+                color: v.$main-primary-color;
+            }
+
+            .search-overlay__word {
+                @include v.body-16-r;
+                flex: 1;
+            }
+
+            .search-overlay__arrow {
+                display: block;
+                width: 1.25rem;
+                height: 1.25rem;
+            }
+
+            // 카테고리로 찾기
+            .search-overlay__categories {
+                display: block;
+                margin: 1.5rem 1rem 0;
+                padding-top: 1.5rem;
+                border-top: 0.0625rem solid v.$neutral-color-500;
+
+                strong {
+                    @include v.label-14-sb;
+                    color: v.$neutral-color-white;
+                }
+
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                    margin-top: 1rem;
+                }
+
+                a {
+                    @include v.body-14-r;
+                    display: inline-flex;
+                    align-items: center;
+                    height: 2.5rem;
+                    padding: 0 1rem;
+                    border-radius: v.$radius-sm;
+                    background-color: v.$neutral-color-canvas;
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            ~.search-overlay__dim {
+                display: none;
+            }
+        }
+    }
+}
+
+// =========================================================
+// Razer 멤버십 (모바일 360 시안) · App.scss 맨 아래에서 @include mobile.membership-phone
+// 버튼은 모두 카드 안 "멤버십 가입하기" 와 같은 크기 (높이 2.4375rem · 12 세미볼드)
+// =========================================================
+@mixin membership-phone {
+    @media (max-width: $phone) {
+        .design-membership {
+            padding-bottom: 3rem;
+
+            .design-hero img {
+                height: auto;
+                aspect-ratio: 360 / 131;
+            }
+
+            >.design-container {
+                width: calc(100% - 2rem);
+            }
+
+            .design-heading {
+                padding: 1.75rem 0 1rem;
+
+                h1 {
+                    @include v.heading-24-b;
+                    font-size: 1.5rem;
+                    color: v.$main-primary-color;
+                }
+
+                h2 {
+                    @include v.heading-24-b;
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            // 태블릿 드래그 슬라이드 → 모바일 시안은 세로로 쌓음
+            // (태블릿 슬라이드가 !important 라 같은 방식으로 덮음)
+            >.design-container .design-grid.design-grid {
+                grid-auto-flow: row !important;
+                grid-auto-columns: auto !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                overflow: visible;
+                scroll-snap-type: none;
+                cursor: auto;
+            }
+
+            // 공통 버튼 (카드 버튼 크기)
+            .btn {
+                @include v.label-12-sb;
+                min-height: 0;
+                height: 2.4375rem;
+                border-radius: v.$radius-sm;
+            }
+
+            // RAZER SILVER 란? : 아이콘 왼쪽 · 제목 + 설명 (세로로 쌓음)
+            .design-member-benefits {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.375rem;
+
+                .design-support {
+                    display: grid;
+                    grid-template-columns: 3rem minmax(0, 1fr);
+                    gap: 0.125rem 0.75rem;
+                    align-items: center;
+                    min-height: 0;
+                    padding: 1rem;
+                    border-radius: v.$radius-sm;
+                    background-color: v.$neutral-color-700;
+                    text-align: left;
+                }
+
+                img {
+                    grid-row: span 2;
+                    width: 2.25rem;
+                    height: 2.25rem;
+                    margin: 0 auto;
+                }
+
+                h2 {
+                    @include v.label-16-sb;
+                    margin: 0;
+                }
+
+                p {
+                    @include v.caption-10-r;
+                    color: v.$neutral-color-100;
+                }
+            }
+
+            // RAZER ID 가입 혜택 카드 · 안내 목록 · 가입 버튼
+            &__signup {
+                margin: 1.25rem 0 2.25rem;
+            }
+
+            &__coupon {
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 1rem 1.25rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+                text-align: center;
+
+                >span {
+                    width: 3.6875rem;
+                }
+
+                img {
+                    width: 1.5rem;
+                }
+
+                p:first-child {
+                    @include v.label-12-sb;
+                    margin-top: 0.75rem;
+                    color: v.$neutral-color-100;
+                }
+
+                h2 {
+                    @include v.label-16-sb;
+                    margin: 0.5rem 0 1.25rem;
+                    color: v.$neutral-color-white;
+                }
+
+                p:last-child {
+                    @include v.caption-12-r;
+                }
+            }
+
+            &__signup ul {
+                margin: 0.75rem 0 1.25rem;
+            }
+
+            &__signup li {
+                @include v.body-14-r;
+                align-items: flex-start;
+                gap: 0.75rem;
+                margin-bottom: 0.625rem;
+
+                img {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                }
+            }
+
+            &__signup>.btn {
+                width: 100%;
+                min-height: 0;
+            }
+
+            &__signup>p {
+                @include v.caption-12-r;
+                margin-top: 0.5rem;
+                text-align: center;
+            }
+
+            // 카드 3개 (세로로)
+            &__rewards {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.625rem;
+            }
+
+            &__reward {
+                min-height: 0;
+                padding: 1.125rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+
+                >img {
+                    aspect-ratio: 292 / 218;
+                }
+
+                h2 {
+                    @include v.label-16-sb;
+                    margin: 1rem 0 0.5rem;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                }
+
+                small {
+                    @include v.caption-10-r;
+                    margin-top: 1.5rem;
+                }
+
+                >div {
+                    gap: 0.875rem;
+                    padding-top: 1rem;
+                }
+
+                .btn {
+                    min-height: 0;
+                }
+            }
+
+            &__reward>&__reward-pages {
+                padding-top: 3rem;
+            }
+
+            &__rewards+.design-heading {
+                padding: 2.25rem 0 1.5rem;
+            }
+
+            // 적립 방법: 원형 이미지 · 제목 · 설명 (세로로)
+            &__earning {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 2.25rem;
+
+                img {
+                    width: 5rem;
+                    margin-bottom: 1rem;
+                }
+
+                h3 {
+                    @include v.label-16-sb;
+                    font-size: 1rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                p {
+                    @include v.body-14-r;
+                }
+            }
+        }
+    }
+}
+
+// =========================================================
+// Razer 소개 (모바일 360 시안) · App.scss 맨 아래에서 @include mobile.about-phone
+// 뒤로가기 → About Me 띠 → 이미지 · 소개 → 배너 → 연도 · 주요 성과 → 지속가능성 → 수상 → LEADERSHIP → 채용 → zVENTURES
+// 글자는 모두 기본 서체 (Pretendard) · 왼쪽 정렬 · 좌우 1rem
+// =========================================================
+@mixin about-phone {
+    @media (max-width: $phone) {
+        .design-page.design-about {
+
+            // 공통 본문
+            .design-display-text,
+            .design-about__intro p,
+            .design-about__award .design-display-text {
+                @include v.body-14-r;
+                font-family: v.$font-family-base;
+                color: v.$neutral-color-100;
+
+                p+p {
+                    margin-top: 1rem;
+                }
+            }
+
+            .design-display {
+                font-family: v.$font-family-base;
+                font-weight: inherit;
+            }
+
+            // ---------- 뒤로가기 · About Me 띠 (영상 대신) ----------
+            .design-about__back {
+                @include v.label-16-sb;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                width: 100%;
+                height: 2.875rem;
+                padding: 0 1.5rem;
+                color: v.$neutral-color-white;
+
+                img {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                }
+            }
+
+            .design-about__hero {
+                display: block;
+                min-height: 0;
+                background: none;
+
+                h1 {
+                    @include v.label-14-sb;
+                    padding: 0.625rem 1rem;
+                    background-color: v.$neutral-color-700;
+                    font-family: v.$font-family-base;
+                }
+            }
+
+            .design-about__hero-video {
+                display: none;
+            }
+
+            // ---------- 소개 ----------
+            .design-about__intro {
+                width: calc(100% - 2rem);
+                padding-top: 1.5rem;
+                text-align: left;
+
+                img {
+                    width: 100%;
+                    margin: 0 0 1.5rem;
+                    aspect-ratio: 328 / 230;
+                    border-radius: v.$radius-md;
+                }
+            }
+
+            .design-about__intro--after {
+                padding-top: 3.75rem;
+            }
+
+            .design-about__title {
+                @include v.display-32-b;
+                margin-bottom: 1.5rem;
+                color: v.$main-primary-color;
+            }
+
+            p.design-about__lead {
+                @include v.label-16-sb;
+                margin-bottom: 1rem;
+                line-height: 1.375rem;
+                color: v.$neutral-color-white;
+            }
+
+            .design-about__tag {
+                color: inherit;
+            }
+
+            .design-about__banner {
+                height: auto;
+                aspect-ratio: 360 / 89;
+                margin-top: 2.5rem;
+            }
+
+            // ---------- 연도 · 주요 성과 (제목 → 사진 → 글) ----------
+            .design-about__timeline {
+                padding-top: 4.25rem;
+            }
+
+            .design-about__years {
+                gap: 2.75rem;
+                padding: 0 50% 0 1.5rem;
+
+                button {
+                    @include v.label-16-sb;
+                    color: v.$neutral-color-100;
+
+                    &[aria-pressed="true"] {
+                        color: v.$main-primary-color;
+                    }
+                }
+            }
+
+            .design-about__milestone {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                width: calc(100% - 2rem);
+                min-height: 0;
+                margin-top: 1.5rem;
+
+                >div {
+                    display: contents;
+                }
+
+                h2 {
+                    order: 1;
+                }
+
+                img,
+                .design-about__milestone-fallback {
+                    order: 2;
+                    margin-top: 1.25rem;
+                    aspect-ratio: 328 / 210;
+                    border-radius: v.$radius-md;
+                }
+
+                img.is-product {
+                    padding: 1.5rem;
+                }
+
+                .design-display-text,
+                .design-about__empty {
+                    order: 3;
+                    max-width: none;
+                    margin-top: 1.25rem;
+                }
+            }
+
+            .design-about__heading.design-about__heading--light {
+                @include v.heading-24-b;
+                font-family: v.$font-family-base;
+                color: v.$neutral-color-white;
+
+                br {
+                    display: none;
+                }
+
+                .design-display:last-of-type::before {
+                    content: " ";
+                }
+            }
+
+            // ---------- 섹션 제목 (지속가능성 · 수상 · 채용 24 / LEADERSHIP · zVENTURES 28) ----------
+            .design-about__heading {
+                @include v.heading-24-b;
+                color: v.$main-primary-color;
+
+                &.design-display {
+                    @include v.heading-24-b;
+                    font-size: 1.75rem;
+                    line-height: 2.25rem;
+                }
+            }
+
+            .design-about__block {
+                width: calc(100% - 2rem);
+            }
+
+            // ---------- 배너 + 제목 · 글 · 버튼 (지속가능성 · 채용 · zVENTURES) ----------
+            .design-brand-section {
+                margin-top: 1.75rem;
+
+                &__banner img {
+                    height: auto;
+                    aspect-ratio: 360 / 170;
+                }
+
+                // 배너 위 글자 (#GOGREENWITHRAZER) → 배너 아래 작은 초록 글자
+                &__banner:has(.design-brand-section__overlay) {
+                    padding-bottom: 2.5rem;
+                }
+
+                &__overlay {
+                    @include v.label-12-sb;
+                    top: auto;
+                    bottom: 0;
+                    left: 1rem;
+                    transform: none;
+                    color: v.$main-primary-color;
+                }
+
+                &__copy {
+                    display: block;
+                    padding: 2rem 0 0;
+
+                    .design-display-text {
+                        margin-top: 1.25rem;
+                    }
+                }
+
+                &__banner:has(.design-brand-section__overlay)+.design-brand-section__copy {
+                    padding-top: 1rem;
+                }
+            }
+
+            // 버튼: 회색 테두리 · 흰 글자 · 꽉 차게
+            .design-about__button {
+                @include v.label-14-sb;
+                width: 100%;
+                min-width: 0;
+                height: 2.75rem;
+                margin-top: 2.25rem;
+                border-color: v.$neutral-color-500;
+                color: v.$neutral-color-white;
+            }
+
+            // ---------- 수상 (세로로) ----------
+            #awards,
+            #leadership {
+                margin-top: 3.75rem;
+            }
+
+            .design-about__awards {
+                grid-auto-flow: row;
+                grid-auto-columns: auto;
+                gap: 1rem;
+                margin: 1.25rem 0 0;
+                padding: 0;
+                overflow: visible;
+                scroll-snap-type: none;
+                cursor: auto;
+            }
+
+            .design-award-image img {
+                aspect-ratio: 328 / 164;
+                border-radius: v.$radius-md;
+            }
+
+            .design-about__award h3 {
+                @include v.label-16-sb;
+                margin: 0.875rem 0 0.75rem;
+                font-family: v.$font-family-base;
+                color: v.$main-primary-color;
+            }
+
+            // ---------- LEADERSHIP (카드 세로로 · 동그란 사진) ----------
+            .design-about__leaders {
+                display: grid !important;
+                grid-auto-flow: row !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                grid-auto-columns: auto !important;
+                gap: 1rem;
+                margin-top: 1.25rem;
+                overflow: visible;
+                scroll-snap-type: none;
+                cursor: auto;
+            }
+
+            .design-leader {
+                display: grid;
+                grid-template-columns: 2.75rem minmax(0, 1fr);
+                align-items: center;
+                gap: 0 0.75rem;
+                height: auto;
+                padding: 0.75rem;
+                border-radius: v.$radius-md;
+
+                img {
+                    width: 2.75rem;
+                    border-radius: 50%;
+                }
+
+                h3 {
+                    @include v.label-14-sb;
+                }
+
+                p {
+                    @include v.body-14-r;
+                    margin-top: 0.125rem;
+                    color: v.$main-primary-color;
+                }
+
+                p.design-leader__desc {
+                    @include v.body-14-r;
+                    grid-column: 1 / -1;
+                    margin: 0.75rem 0 0;
+                    max-width: none;
+                    color: v.$neutral-color-100;
+                }
+            }
+
+            >.design-brand-section:last-child {
+                padding-bottom: 1.5rem;
+            }
+        }
+    }
+}
+
+// =========================================================
+// 마이페이지 · 태블릿 (700 ~ 1399): 화면 너비만큼 줄어듦 (구성은 PC 와 같음)
+// App.scss 맨 아래에서 @include mobile.mypage-tablet
+// =========================================================
+@mixin mypage-tablet {
+    @media (max-width: $tablet) {
+        body:has(main > .mypage) {
+            min-width: 0;
+        }
+
+        .mypage {
+            &__container {
+                width: calc(100% - 2.5rem);
+            }
+
+            &__stats {
+                grid-auto-flow: row;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                overflow: visible;
+            }
+
+            &__best {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        .order-card__status {
+            width: auto;
+        }
+    }
+}
+
+// =========================================================
+// 마이페이지 · 모바일 360 시안 (홈 · 주문 내역 · 주문 상세)
+// App.scss 맨 아래에서 @include mobile.mypage-phone
+// =========================================================
+@mixin mypage-phone {
+    @media (max-width: $phone) {
+        .mypage {
+            padding-bottom: 2.5rem;
+
+            &__container {
+                width: calc(100% - 2rem);
+            }
+
+            // ---------- 프로필 띠 ----------
+            &__profile-inner {
+                gap: 0.75rem;
+                padding: 0.9375rem 0;
+            }
+
+            &__avatar {
+                width: 2.375rem;
+                height: 2.375rem;
+            }
+
+            &__name {
+                @include v.label-16-sb;
+                min-width: 0;
+                overflow-wrap: anywhere;
+            }
+
+            // 프로필 설정: 모든 탭에서 보임 (작은 테두리 버튼)
+            &__profile-btn,
+            &__profile-btn--mobile {
+                @include v.caption-12-r;
+                display: inline-flex;
+                width: auto;
+                height: 2rem;
+                padding: 0 0.5rem;
+            }
+
+            // ---------- 탭 (글자 아래 초록 밑줄) ----------
+            &__tabs {
+                border-bottom: 0;
+            }
+
+            &__tabs-inner {
+                justify-content: space-between;
+                gap: 0;
+                padding: 0 0.5rem;
+            }
+
+            &__tab {
+                @include v.caption-12-r;
+                padding: 1.5rem 0.5rem 0.5rem;
+                color: v.$neutral-color-white;
+
+                &.is-active {
+                    color: v.$main-primary-color;
+                }
+            }
+
+            // ---------- 섹션 ----------
+            &__section {
+                margin-top: 2.25rem;
+            }
+
+            &__section+&__section {
+                margin-top: 2rem;
+            }
+
+            &__section-title {
+                @include v.heading-20-sb;
+            }
+
+            // "최근 주문 내역 >" : 제목 바로 옆 화살표만
+            &__section-head {
+                justify-content: flex-start;
+                gap: 0.25rem;
+            }
+
+            &__more-label {
+                display: none;
+            }
+
+            &__more .mypage__chevron {
+                width: 1.25rem;
+                height: 1.25rem;
+            }
+
+            // 함께 둘러볼 장비 · 홈 주문 필터는 모바일 시안에 없음
+            &__section--best,
+            &__section--recent .mypage__filters {
+                display: none;
+            }
+
+            // ---------- 나의 쇼핑 현황 (작은 칸 4개) ----------
+            &__stats {
+                grid-auto-flow: row;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 0.375rem;
+                margin-top: 0.875rem;
+                padding: 0;
+                border: 0;
+                overflow: visible;
+            }
+
+            &__stat {
+                align-items: flex-start;
+                gap: 0.25rem;
+                padding: 0.375rem 0.375rem 0.5rem;
+                border-radius: v.$radius-md;
+                background-color: v.$neutral-color-panel;
+
+                &+& {
+                    border-left: 0;
+                }
+            }
+
+            &__stat-icon {
+                display: none;
+            }
+
+            &__stat-value {
+                @include v.heading-20-sb;
+                order: -1;
+            }
+
+            &__stat-label {
+                @include v.caption-12-r;
+            }
+
+            // ---------- 주문 내역 (가운데 제목 · 필터 4칸) ----------
+            &__section--orders>.mypage__section-head {
+                justify-content: center;
+
+                .mypage__section-title {
+                    @include v.heading-24-b;
+                }
+            }
+
+            &__filters {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 0;
+                margin-top: 1.25rem;
+                border-bottom: 0.0625rem solid v.$neutral-color-500;
+            }
+
+            &__filter {
+                @include v.body-14-r;
+                padding: 0 0 0.625rem;
+                margin-bottom: -0.0625rem;
+                white-space: nowrap;
+
+                &.is-active {
+                    @include v.label-14-sb;
+                }
+            }
+
+            &__orders {
+                gap: 0.75rem;
+                margin-top: 1.25rem;
+            }
+
+            &__section--recent .mypage__orders {
+                margin-top: 0.875rem;
+            }
+
+            // 버튼 (테두리 · 꽉 차게)
+            &__line-btn {
+                height: 2.75rem;
+            }
+
+            &__actions {
+                gap: 0.5rem;
+                margin-top: 1.25rem;
+
+                >* {
+                    flex: 1;
+                    width: auto;
+                }
+            }
+
+            // ---------- 주문 상세 ----------
+            &__order-detail .mypage__section-head {
+                justify-content: space-between;
+
+                .mypage__section-title {
+                    @include v.heading-24-b;
+                }
+            }
+
+            &__order-back {
+                @include v.body-14-r;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
+                color: v.$neutral-color-100;
+
+                .mypage__chevron {
+                    width: 1rem;
+                    height: 1rem;
+                    transform: rotate(180deg);
+                }
+            }
+
+            &__meta {
+                margin-top: 0.75rem;
+            }
+
+            &__meta-date {
+                @include v.label-14-sb;
+                display: block;
+                color: v.$neutral-color-white;
+            }
+
+            &__meta-sep {
+                display: none;
+            }
+
+            &__meta-date+&__meta-sep+span {
+                @include v.caption-12-r;
+                display: block;
+                margin-top: 0.5rem;
+            }
+
+            &__panels {
+                gap: 1.25rem;
+                margin-top: 1.25rem;
+            }
+
+            &__panel {
+                min-width: 0;
+                padding: 1rem;
+                border: 0.0625rem solid v.$neutral-color-500;
+                border-radius: v.$radius-md;
+            }
+
+            &__panel-title {
+                @include v.label-16-sb;
+            }
+
+            &__panel-btn {
+                width: 100%;
+                margin-top: 1.25rem;
+            }
+
+            &__order-items {
+                margin-top: 0.75rem;
+            }
+
+            &__order-item {
+                gap: 1rem;
+            }
+
+            &__item-thumb {
+                width: 5.5rem;
+                height: 5.5rem;
+            }
+
+            &__item-name {
+                @include v.label-16-sb;
+            }
+
+            &__item-option {
+                @include v.caption-12-r;
+                margin-top: 0.25rem;
+            }
+
+            &__item-price {
+                @include v.label-16-sb;
+                margin-top: 0.5rem;
+            }
+
+            &__status-line {
+                @include v.label-16-sb;
+                margin-top: 0.75rem;
+            }
+
+            &__sub {
+                @include v.caption-12-r;
+                margin-top: 0.75rem;
+            }
+
+            &__pay {
+                @include v.label-14-sb;
+                margin-top: 0.75rem;
+            }
+        }
+
+        // 위 줄 "주문 상세 >" 는 아래 버튼으로 대신
+        .mypage .order-card__detail {
+            display: none;
+        }
+
+        // ---------- 주문 카드: 날짜 · 상태 → 주문번호 → 상품 → 버튼 2개 ----------
+        .order-card {
+            display: grid;
+            grid-template-columns: 5.5rem minmax(0, 1fr);
+            grid-template-areas:
+                "date status"
+                "number number"
+                "thumb info"
+                "actions actions";
+            column-gap: 1rem;
+            padding: 1rem;
+            border-color: v.$neutral-color-500;
+
+            &__head,
+            &__body {
+                display: contents;
+            }
+
+            &__date {
+                @include v.label-16-sb;
+                grid-area: date;
+            }
+
+            &__status {
+                @include v.label-12-sb;
+                grid-area: status;
+                justify-self: end;
+                align-self: center;
+                width: auto;
+                margin-right: 0.75rem;
+            }
+
+            &__status-icon {
+                display: none;
+            }
+
+            // 배송 완료는 회색 (시안)
+            &__status.is-done {
+                color: v.$neutral-color-100;
+            }
+
+            &__number {
+                @include v.caption-12-r;
+                grid-area: number;
+                margin: 0.25rem 0 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 0.0625rem solid v.$neutral-color-500;
+                color: v.$neutral-color-100;
+            }
+
+            &__thumb {
+                grid-area: thumb;
+                width: 5.5rem;
+                height: 5.5rem;
+                background: none;
+            }
+
+            &__info {
+                grid-area: info;
+                justify-content: center;
+            }
+
+            &__name {
+                @include v.label-16-sb;
+            }
+
+            &__option {
+                @include v.caption-12-r;
+                margin-top: 0.25rem;
+            }
+
+            &__price {
+                @include v.label-16-sb;
+                margin-top: 0.5rem;
+            }
+
+            &__actions {
+                display: grid;
+                grid-area: actions;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.75rem;
+                margin-top: 1rem;
+
+                .mypage__line-btn {
+                    width: 100%;
+                }
+            }
+
+            &__detail-btn {
+                display: inline-flex;
+            }
+        }
+    }
+}
+
+// =========================================================
+// 마이페이지 계정 관리 · 팝업 (모바일 360 시안)
+// 메뉴: 펼침 버튼 (아이콘 · "계정 관리" · 지금 메뉴 · ∨) → 누르면 목록이 스르륵
+// 각 메뉴 칸: 아이콘 + 제목 → 내용 → 꽉 찬 버튼 · 로그아웃은 맨 아래
+// App.scss 맨 아래에서 @include mobile.account-phone
+// =========================================================
+@mixin account-phone($reveal-duration: 0.4s, $reveal-ease: cubic-bezier(0.22, 0.61, 0.36, 1)) {
+    @media (max-width: $phone) {
+        .account {
+            display: block;
+
+            // ---------- 메뉴 펼침 ----------
+            &__mobile-toggle {
+                display: grid;
+                grid-template-columns: auto minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 1.25rem;
+                width: 100%;
+                padding: 0.875rem 1.25rem 0.875rem 1.125rem;
+                border: 0.0625rem solid v.$neutral-color-500;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-panel;
+                text-align: left;
+
+                small {
+                    @include v.body-14-r;
+                    display: block;
+                    color: v.$neutral-color-100;
+                }
+
+                strong {
+                    @include v.label-16-sb;
+                    display: block;
+                    margin-top: 0.125rem;
+                    color: v.$main-primary-color;
+                }
+            }
+
+            &__mobile-chevron {
+                width: 1.25rem;
+                height: 1.25rem;
+                transition: transform $reveal-duration $reveal-ease;
+            }
+
+            &__mobile-toggle[aria-expanded="true"] &__mobile-chevron {
+                transform: rotate(180deg);
+            }
+
+            // 목록: 높이 0 ↔ 내용 높이 (스르륵)
+            &__nav-list {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows $reveal-duration $reveal-ease;
+
+                >ul {
+                    min-height: 0;
+                    overflow: hidden;
+                }
+
+                &[data-expanded="true"] {
+                    grid-template-rows: 1fr;
+
+                    >ul {
+                        padding-top: 0.5rem;
+                    }
+                }
+            }
+
+            &__nav ul {
+                gap: 0.25rem;
+            }
+
+            &__nav-item {
+                @include v.body-14-r;
+                height: 2.75rem;
+            }
+
+            // 로그아웃: 메뉴 아래 대신 내용 맨 아래 (꽉 차게)
+            &__nav>.account__logout {
+                display: none;
+            }
+
+            &__leave {
+                width: 100%;
+            }
+
+            &__logout--mobile {
+                display: inline-flex;
+                width: 100%;
+                margin-top: 1.25rem;
+            }
+
+            // ---------- 내용 ----------
+            &__content {
+                margin-top: 1.75rem;
+
+                >.mypage__section-title {
+                    @include v.heading-24-b;
+                }
+            }
+
+            &__rows {
+                gap: 1rem;
+                margin-top: 1.25rem;
+            }
+
+            // 칸: 아이콘 + 제목 → 내용 (제목 아래) → 꽉 찬 테두리 버튼
+            &__row {
+                display: grid;
+                grid-template-columns: 1.5rem minmax(0, 1fr);
+                gap: 0.5rem 0.75rem;
+                align-items: center;
+                min-height: 0;
+                padding: 1rem 0.75rem 0.75rem;
+                background-color: v.$neutral-color-panel;
+            }
+
+            &__row-text {
+                display: contents;
+
+                strong {
+                    @include v.label-16-sb;
+                    grid-column: 2;
+                }
+
+                span {
+                    @include v.body-14-r;
+                    grid-column: 2;
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            &__btn {
+                @include v.label-14-sb;
+                grid-column: 1 / -1;
+                width: 100%;
+                margin-top: 0.75rem;
+                border: 0.0625rem solid v.$neutral-color-500;
+                background-color: transparent;
+
+                &:hover {
+                    background-color: transparent;
+                    border-color: v.$neutral-color-100;
+                }
+            }
+
+            // ---------- 알림 설정: 칸 배경 없이 · 제목 옆 스위치 ----------
+            &__row:has(.account__toggle),
+            &__row--notice {
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 0.5rem 1rem;
+                padding: 0;
+                background: none;
+
+                .account__row-icon {
+                    display: none;
+                }
+
+                strong {
+                    @include v.label-16-sb;
+                    grid-column: 1;
+                }
+
+                span {
+                    @include v.body-14-r;
+                    grid-column: 1;
+                    color: v.$neutral-color-100;
+                }
+
+                .account__toggle {
+                    grid-column: 2;
+                    grid-row: 1 / span 2;
+                }
+            }
+
+            // 필수 안내: 스위치 없음 → 한 칸 꽉 차게 · 제목은 보통 굵기
+            &__row--notice {
+                grid-template-columns: minmax(0, 1fr);
+
+                .account__row-text strong {
+                    @include v.body-16-r;
+                }
+
+                .account__row-text span {
+                    @include v.caption-12-r;
+                }
+            }
+
+            &__toggle {
+                width: 2.125rem;
+                height: 1.25rem;
+                background-color: v.$neutral-color-500;
+
+                &::after {
+                    top: 0.125rem;
+                    left: 0.125rem;
+                    width: 1rem;
+                    height: 1rem;
+                }
+
+                &.is-on::after {
+                    transform: translateX(0.875rem);
+                }
+            }
+
+            // ---------- 프로필 설정: 큰 미리보기 (네모 · 초록 테두리) → 작은 칸 ----------
+            &__profile {
+                display: block;
+                margin-top: 1.25rem;
+                padding: 0.75rem;
+                border-radius: v.$radius-md;
+                background-color: v.$neutral-color-panel;
+            }
+
+            &__preview {
+                width: 7rem;
+                height: 7rem;
+                border: 0.0625rem solid v.$main-primary-color;
+                border-radius: v.$radius-sm;
+            }
+
+            &__avatars {
+                grid-template-columns: repeat(auto-fill, 2.625rem);
+                gap: 0.5rem;
+                margin-top: 0.75rem;
+            }
+
+            &__avatar {
+                width: 2.625rem;
+                height: 2.625rem;
+                padding: 0;
+                border: 0.0625rem solid transparent;
+                border-radius: v.$radius-sm;
+
+                img {
+                    border-radius: v.$radius-sm;
+                }
+            }
+
+            &__actions {
+                margin-top: 1rem;
+            }
+
+            // ---------- 배송지 · 결제 ----------
+            &__panels {
+                gap: 1rem;
+                margin-top: 1.25rem;
+
+                .mypage__panel {
+                    padding: 1rem 0.75rem 0.75rem;
+                    border: 0;
+                    background-color: v.$neutral-color-panel;
+                }
+
+                .mypage__panel-title {
+                    @include v.label-16-sb;
+                }
+
+                // 버튼: 세로로 꽉 차게 (높이 유지)
+                .mypage__actions {
+                    flex-direction: column;
+                    gap: 0.5rem;
+                    margin-top: 0.75rem;
+
+                    >* {
+                        flex: none;
+                        width: 100%;
+                    }
+                }
+            }
+
+            &__default {
+                @include v.body-14-r;
+                margin-top: 1rem;
+            }
+
+            &__address-name {
+                @include v.label-16-sb;
+                margin-top: 0.75rem;
+
+                +.mypage__sub {
+                    @include v.caption-12-r;
+                    margin-top: 0.75rem;
+                    color: v.$neutral-color-100;
+                }
+            }
+
+            &__danger-btn {
+                border-color: v.$sale-color;
+                color: v.$sale-color;
+            }
+
+            // 결제 수단: 제목 → 카드 추가 (꽉 차게) → 카드 세로로
+            &__panel-head {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+
+                >.mypage__line-btn {
+                    width: 100%;
+                }
+            }
+
+            &__cards {
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 0.75rem;
+
+                >li {
+                    width: 100%;
+                }
+            }
+        }
+
+        // ---------- 결제 카드: 카드사 색 그라데이션 · IC 칩 ----------
+        .pay-card {
+            width: 100%;
+            height: auto;
+            padding: 1.25rem 1rem 0.875rem;
+            border-color: v.$neutral-color-300;
+            background: linear-gradient(135deg, v.$neutral-color-500 0%, v.$neutral-color-700 100%);
+
+            &--visa {
+                border-color: v.$pay-card-visa-line;
+                background: linear-gradient(135deg, v.$pay-card-visa-from 0%, v.$pay-card-visa-to 100%);
+            }
+
+            &--mastercard {
+                border-color: v.$pay-card-master-line;
+                background: linear-gradient(135deg, v.$pay-card-master-from 0%, v.$pay-card-master-to 100%);
+            }
+
+            &__head>.pay-card__logo {
+                display: none;
+            }
+
+            &__brand {
+                @include v.label-16-sb;
+            }
+
+            &__default {
+                @include v.body-14-r;
+                margin-right: 0.75rem;
+            }
+
+            &__chip-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 1rem;
+            }
+
+            // IC 칩 (금색 네모 + 가는 선)
+            &__chip {
+                width: 1.875rem;
+                height: 1.375rem;
+                border: 0.0625rem solid v.$pay-card-chip-line;
+                border-radius: 0.25rem;
+                background:
+                    linear-gradient(v.$pay-card-chip-line, v.$pay-card-chip-line) center / 100% 0.0625rem no-repeat,
+                    linear-gradient(v.$pay-card-chip-line, v.$pay-card-chip-line) center / 0.0625rem 100% no-repeat,
+                    v.$pay-card-chip;
+            }
+
+            &__logo--row {
+                width: 1.875rem;
+                height: 1.125rem;
+
+                &::before,
+                &::after {
+                    width: 1.125rem;
+                    height: 1.125rem;
+                }
+            }
+
+            &:not(.pay-card--mastercard) .pay-card__logo--row {
+                visibility: hidden;
+            }
+
+            &__number {
+                @include v.label-16-sb;
+                margin-top: 0.75rem;
+                font-weight: v.$font-weight-medium;
+            }
+
+            // 가린 번호 점: 넓게 띄워서
+            &__dots {
+                @include v.caption-12-r;
+                margin-right: 0.25rem;
+                letter-spacing: 0.3em;
+                word-spacing: 0.25rem;
+            }
+
+            &__foot {
+                @include v.caption-12-r;
+                justify-content: flex-start;
+                gap: 6rem;
+                margin-top: 0.5rem;
+            }
+        }
+
+        // 카드 … 메뉴: 카드 위 목록 대신 카드 아래로 스르륵 펼침
+        .pay-card__menu {
+            display: none;
+        }
+
+        .pay-card__sheet {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows $reveal-duration $reveal-ease;
+
+            &[data-expanded="true"] {
+                grid-template-rows: 1fr;
+            }
+        }
+
+        .pay-card__sheet-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            min-height: 0;
+            padding: 0 0.75rem;
+            overflow: hidden;
+        }
+
+        .pay-card__sheet-label {
+            @include v.body-14-r;
+            margin: 1.25rem 0 0.125rem;
+            color: v.$neutral-color-100;
+        }
+
+        .pay-card__menu-btn {
+            @include v.label-14-sb;
+            flex-shrink: 0;
+            height: 2.75rem;
+            border-radius: v.$radius-sm;
+            background-color: v.$neutral-color-canvas;
+            color: v.$neutral-color-white;
+
+            &--danger {
+                border: 0.0625rem solid v.$sale-color;
+                background-color: transparent;
+                color: v.$sale-color;
+            }
+
+            &:last-child {
+                margin-bottom: 1rem;
+            }
+        }
+
+        // ---------- 저장 · 변경 안내 상자 (✓ 문구 · X) ----------
+        .inline-toast {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+            padding: 1.3125rem 1rem;
+            border-radius: v.$radius-sm;
+            background-color: v.$neutral-color-canvas;
+
+            &--success::before {
+                content: "";
+                flex-shrink: 0;
+                width: 1.25rem;
+                height: 1.25rem;
+                background-color: v.$main-primary-color;
+                mask: url("/icons/ui/check.svg") center / contain no-repeat;
+            }
+
+            &__text {
+                @include v.label-16-sb;
+                flex: 1;
+                min-width: 0;
+                color: v.$neutral-color-white;
+                word-break: keep-all;
+            }
+
+            &--info &__text {
+                @include v.body-14-r;
+                color: v.$neutral-color-50;
+            }
+
+            &__close {
+                display: inline-flex;
+                flex-shrink: 0;
+                width: 1.5rem;
+                height: 1.5rem;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+        // ---------- 팝업 (닉네임 변경 · 반품 신청 등): 좌우 1rem · 버튼 두 개 꽉 차게 ----------
+        .modal {
+            &__panel {
+                max-width: calc(100% - 2rem);
+                padding: 1rem;
+                border-radius: v.$radius-md;
+            }
+
+            &__title {
+                @include v.heading-20-sb;
+            }
+
+            &__body {
+                gap: 0.75rem;
+                margin-top: 1.25rem;
+            }
+
+            &__field {
+                gap: 0.5rem;
+            }
+
+            &__strong {
+                @include v.body-16-r;
+            }
+
+            &__label {
+                @include v.body-14-r;
+            }
+
+            &__input {
+                height: 2.75rem;
+                background-color: v.$neutral-color-canvas;
+            }
+
+            &__actions {
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            &__btn {
+                flex: 1;
+                width: auto;
+            }
+        }
+    }
+}
+
+// =========================================================
+// e스포츠 (모바일 360) · PC 디자인 그대로, 배치만 세로로
+// 제목 2줄 균형 → 지원 카드 2개 위아래 (회색 칸 · 아이콘 가운데) → 프로 장비 옆으로 넘기기
+// (예전 DesignPages.scss 의 699 이하 e스포츠 규칙을 이리로 옮김)
+// App.scss 맨 아래에서 @include mobile.esports-phone
+// =========================================================
+@mixin esports-phone {
+    @media (max-width: $phone) {
+        .design-page.design-esports {
+            .design-hero img {
+                height: max(12.5rem, 40vw);
+            }
+
+            // ---------- 제목 · 설명 ----------
+            .design-heading {
+                padding: 2rem 0 1.25rem;
+
+                h1 {
+                    word-break: keep-all;
+                }
+
+                h2 {
+                    word-break: keep-all;
+                    text-wrap: balance;
+                }
+
+                p {
+                    @include v.body-14-r;
+                    margin-top: 0.75rem;
+                    word-break: keep-all;
+                }
+            }
+
+            .design-hero+.design-container>.design-heading:first-child {
+                padding-top: 1.5rem;
+
+                // "우리는 승리하기 위해 / 플레이 합니다" (단어 단위로 줄바꿈)
+                h1 {
+                    @include v.heading-24-b;
+                    font-size: 1.75rem;
+                    line-height: 1.3;
+                }
+            }
+
+            .design-heading h2 {
+                @include v.heading-20-sb;
+            }
+
+            .design-heading:has(+ .design-esports__athlete) h2 {
+                @include v.heading-24-b;
+                color: v.$main-primary-color;
+            }
+
+            // ---------- 지원 카드 2개: 옆으로 넘기기 대신 위아래 ----------
+            .design-grid--two {
+                grid-auto-flow: row !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                grid-auto-columns: auto !important;
+                gap: 0.5rem;
+                overflow: visible;
+                cursor: auto;
+            }
+
+            .design-support {
+                gap: 0.5rem;
+                min-height: 0;
+                padding: 1.5rem 1rem 1.25rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+
+                img {
+                    width: 5rem;
+                    max-width: 5rem;
+                    height: 5rem;
+                    max-height: 5rem;
+                    margin-bottom: 1rem;
+                }
+
+                h3 {
+                    @include v.label-16-sb;
+                    word-break: keep-all;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    color: v.$neutral-color-100;
+                    word-break: keep-all;
+                }
+            }
+
+            // ---------- 프로 장비: 2장 + 다음 카드 살짝 ----------
+            .design-esports__gear-link {
+                @include v.body-14-r;
+            }
+
+            .design-esports__equipment {
+                grid-auto-columns: 8.5rem !important;
+                gap: 0.75rem;
+            }
+
+            .design-esports__equipment .design-recommendation {
+                min-height: 11.875rem;
+
+                &__badge {
+                    @include v.label-10-sb;
+                    top: 0.5rem;
+                    left: 0.5rem;
+                    padding: 0.1875rem 0.5rem;
+                }
+
+                &__art {
+                    width: 70%;
+                    height: 5.5rem;
+                    margin: 2rem auto 0.75rem;
+                }
+
+                &__copy {
+                    padding: 0 0.75rem 0.75rem;
+                }
+
+                h3 {
+                    @include v.label-12-sb;
+                    display: -webkit-box;
+                    line-clamp: 2;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+
+                p {
+                    @include v.caption-10-r;
+                    margin: 0.125rem 0 0;
+                }
+
+                .design-explore {
+                    @include v.label-10-sb;
+                    padding-top: 0.5rem;
+                }
+            }
+
+            // ---------- 선수 카드: 꽉 찬 너비 · 글씨 · 화살표 작게 ----------
+            .design-esports__athlete {
+                width: 100%;
+                margin-bottom: 2.5rem;
+                border-radius: v.$radius-sm;
+            }
+
+            .design-esports__athlete-arrow {
+                top: 1rem;
+                right: 1rem;
+                width: 2rem;
+                height: 2rem;
+
+                img {
+                    width: 1.125rem;
+                    height: 1.125rem;
+                }
+            }
+
+            .design-esports__athlete-info {
+                bottom: 1.125rem;
+                gap: 0.25rem;
+
+                strong {
+                    @include v.heading-24-b;
+                }
+
+                span {
+                    @include v.body-14-r;
+                }
+            }
+
+            // ---------- 2026년을 돌아보며: 큰 사진 좌우 화살표 (작게) ----------
+            .design-esports-gallery__arrow {
+                width: 1.75rem;
+            }
+
+            // ---------- 2026년을 돌아보며: 행사 버튼 ----------
+            // 한 줄 고정 · 시안(Figma) 값: 글자 5.6/8.4 · 안 여백 위아래 4.2 / 좌우 8.4 · 사이 3.5 (px ÷ 16 = rem)
+            // 화면보다 길면 손가락으로 옆으로 밀어서 봄 (넘치지 않으면 가운데)
+            .design-tabs {
+                flex-wrap: nowrap;
+                justify-content: safe center;
+                gap: 0.21875rem;
+                // 화면 끝까지 밀리도록 좌우 여백만큼 넓힘 (첫 · 마지막 버튼은 1rem 안쪽)
+                width: 100%;
+                margin-inline: 0;
+                padding-inline: 1rem;
+                overflow-x: auto;
+                overscroll-behavior-x: contain;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+
+            .design-tabs button {
+                @include v.caption-5-6-r;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                min-height: 0;
+                padding: 0.2625rem 0.525rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+                color: v.$neutral-color-white;
+                white-space: nowrap;
+
+                &[aria-pressed="true"] {
+                    background-color: v.$main-primary-color;
+                    color: v.$neutral-color-black;
+                }
+            }
+        }
+    }
+}
+
+// =========================================================
+// 지원 (모바일 360) · 위에 고정되는 메뉴 탭 + 카드 한 줄씩
+// 탭을 누르면 그 카드로 이동 · 스크롤하면 지금 카드가 초록 테두리 + 탭도 따라 바뀜
+// App.scss 맨 아래에서 @include mobile.support-phone
+// =========================================================
+@mixin support-phone {
+    @media (max-width: $phone) {
+        .design-page.design-support-page {
+            width: calc(100% - 2.5rem);
+            padding-bottom: 2.5rem;
+
+            .design-heading {
+                padding: 2rem 0 1.75rem;
+
+                h1 {
+                    @include v.heading-24-b;
+                }
+            }
+
+            // ---------- 고정 탭 (헤더 바로 아래로 따라 내려옴) ----------
+            .support-tabs {
+                position: sticky;
+                top: 5.25rem; // 모바일 헤더 3rem + 프로모션 바 2.25rem
+                z-index: 20;
+                display: flex;
+                gap: 0.75rem;
+                margin: 0 0.1875rem 0.625rem;
+                padding: 0.5rem 0.65rem;
+                overflow-x: auto;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-canvas;
+                box-shadow: 0 0 0 0.375rem v.$body-bg; // 고정됐을 때 뒤 카드가 비치지 않게
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                button {
+                    @include v.caption-12-r;
+                    flex-shrink: 0;
+                    padding: 0.1875rem 0.375rem;
+                    border-radius: v.$radius-sm;
+                    color: v.$neutral-color-100;
+                    white-space: nowrap;
+                    transition: background-color 0.25s, color 0.25s;
+
+                    &[aria-current="true"] {
+                        @include v.label-12-sb;
+                        background-color: v.$neutral-color-50;
+                        color: v.$neutral-color-black;
+                    }
+                }
+            }
+
+            // ---------- 카드: 한 줄씩 · 시안 순서 ----------
+            .design-grid {
+                display: flex !important;
+                flex-direction: column;
+                gap: 0.625rem;
+                overflow: visible;
+                cursor: auto;
+            }
+
+            .design-support {
+                order: var(--mobile-order);
+                display: block;
+                min-height: 6rem;
+                padding: 0.875rem 2.5rem 1.25rem 0.625rem;
+                border: 0.0625rem solid transparent;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-panel;
+                text-align: left;
+                // 고정 탭에 가려지지 않게 (헤더 + 탭 높이만큼)
+                scroll-margin-top: 8.5rem;
+                transition: border-color 0.25s, background-color 0.25s;
+
+                h2 {
+                    @include v.body-14-r;
+                    color: v.$neutral-color-white;
+                    transition: color 0.25s;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    margin-top: 0.5rem;
+                    color: v.$neutral-color-100;
+                    word-break: keep-all;
+                }
+
+                &.is-active {
+                    border-color: v.$main-primary-color;
+                    background-color: v.$neutral-color-700;
+
+                    h2 {
+                        color: v.$main-primary-color;
+                    }
+
+                    .design-support__arrow {
+                        background-color: v.$main-primary-color;
+
+                        img {
+                            filter: none;
+                        }
+                    }
+                }
+            }
+
+            // 화살표: 회색 원 + 흰 화살표 (지금 카드는 초록 원 + 검정 화살표)
+            .design-support__arrow {
+                top: 0.75rem;
+                right: 0.625rem;
+                bottom: auto;
+                width: 1.0625rem;
+                height: 1.0625rem;
+                background-color: v.$neutral-color-300;
+
+                img {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    filter: invert(1);
+                }
+            }
+        }
+    }
+}
+
+// =========================================================
+// Razer 독점 (모바일 360) · PC 카드 디자인 그대로, 배치만 시안대로
+// 카본 · 독점 템: 가운데 두 칸 / PC 관련 기기: 탭 + 옆으로 넘기기 (화살표 카드 위) / 콜라보: 세로 목록
+// App.scss 맨 아래에서 @include mobile.exclusive-phone
+// =========================================================
+@mixin exclusive-phone {
+    @media (max-width: $phone) {
+        .design-page.design-exclusive {
+            padding-bottom: 3rem;
+
+            .design-hero img {
+                height: 12.5rem;
+                aspect-ratio: auto;
+                object-fit: cover;
+            }
+
+            .design-heading {
+                padding: 2.25rem 0 1.5rem;
+
+                :is(h1, h2) {
+                    @include v.heading-24-b;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    margin-top: 0.5rem;
+                    word-break: keep-all;
+                }
+            }
+
+            .design-hero+.design-container>.design-heading:first-child {
+                padding: 1.5rem 0 1.75rem;
+            }
+
+            // ---------- 카본 파이버 · 독점 템: 라벨 + 카드 두 칸 (가운데) ----------
+            .design-exclusive__featured {
+                gap: 1.6875rem;
+            }
+
+            .design-exclusive__featured>section {
+                width: 11.71875rem;
+                margin: 0 auto;
+                gap: 1.125rem;
+            }
+
+            .design-exclusive__label {
+                p {
+                    @include v.caption-12-r;
+                    color: v.$neutral-color-100;
+                }
+
+                h2 {
+                    @include v.body-14-r;
+                    margin-top: 0.5rem;
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            .design-product-pair {
+                grid-auto-columns: 5.625rem !important;
+                gap: 0.46875rem;
+                overflow: visible;
+                cursor: auto;
+            }
+
+            .design-recommendation {
+                min-height: 7.8125rem;
+            }
+
+            // ---------- PC 관련 기기: 탭 ----------
+            .design-tabs {
+                flex-wrap: nowrap;
+                gap: 0.625rem;
+            }
+
+            .design-tabs button {
+                @include v.label-12-m;
+                min-width: 0;
+                padding: 0.375rem 0.625rem;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+                color: v.$neutral-color-white;
+                white-space: nowrap;
+
+                &[aria-pressed="true"] {
+                    background-color: v.$main-primary-color;
+                    color: v.$neutral-color-black;
+                }
+            }
+
+            // ---------- PC 관련 기기: 카드 줄 (화살표는 카드 위에 겹침) ----------
+            .design-rail {
+                position: relative;
+                display: block;
+                margin: 0.875rem 0 0;
+            }
+
+            .design-rail__track {
+                grid-auto-columns: 5.625rem;
+                gap: 0.46875rem;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+
+            .design-rail>button {
+                position: absolute;
+                top: 50%;
+                z-index: 2;
+                width: 1.5625rem;
+                height: 1.5625rem;
+                transform: translateY(-50%);
+
+                img {
+                    width: 1rem;
+                    height: 1rem;
+                }
+
+                // 왼쪽: 배경 없이 화살표만 · 오른쪽: 초록 원 + 검정 화살표
+                &:first-child {
+                    left: 0.25rem;
+                    background-color: transparent;
+                }
+
+                &:last-child {
+                    right: 0;
+                    background-color: v.$main-primary-color;
+
+                    img {
+                        filter: brightness(0);
+                    }
+                }
+            }
+
+            // ---------- 콜라보: 세로 목록 (사진 → 제목 → 한 줄 설명 → EXPLORE) ----------
+            .design-container>.design-grid--two:last-child {
+                display: flex !important;
+                flex-direction: column;
+                gap: 1.75rem;
+                overflow: visible;
+                cursor: auto;
+            }
+
+            .design-media-card {
+                gap: 0;
+
+                >img {
+                    aspect-ratio: 328 / 190;
+                    border-radius: v.$radius-sm;
+                }
+
+                h3 {
+                    @include v.body-14-r;
+                    margin-top: 0.75rem;
+                    color: v.$neutral-color-white;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    margin-top: 0.375rem;
+                    overflow: hidden;
+                    color: v.$neutral-color-100;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                a {
+                    @include v.body-14-r;
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+    }
+}
+
+// =========================================================
+// 구매 방법 (모바일 360) · 번호 → 회색 카드 (사진 · 가운데 제목 · 본문 · 문단 한 줄 띄움)
+// App.scss 맨 아래에서 @include mobile.buying-phone
+// =========================================================
+@mixin buying-phone {
+    @media (max-width: $phone) {
+        .design-page.design-buying {
+            padding-bottom: 3rem;
+
+            .design-heading {
+                padding: 2rem 1rem 0;
+
+                h1 {
+                    @include v.heading-24-b;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    margin-top: 0.25rem;
+                    word-break: keep-all;
+                }
+            }
+
+            >.design-stack {
+                width: calc(100% - 2rem);
+                gap: 1.75rem;
+                margin-top: 2.5rem;
+            }
+
+            .design-buying__number {
+                @include v.heading-24-b;
+                margin-bottom: 1.25rem;
+            }
+
+            .design-buying__program {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1.25rem;
+                border-radius: v.$radius-md;
+                background-color: v.$neutral-color-700;
+
+                >img {
+                    aspect-ratio: 288 / 145;
+                }
+
+                >div {
+                    align-items: stretch;
+                }
+
+                h2 {
+                    @include v.heading-20-sb;
+                    font-weight: v.$font-weight-bold;
+                    align-self: center;
+                    margin-bottom: 0.5rem;
+                }
+
+                p {
+                    @include v.caption-12-r;
+                    margin-top: 0;
+                    color: v.$neutral-color-white;
+                    white-space: normal;
+                }
+
+                p+p {
+                    margin-top: 1rem;
+                }
+            }
+        }
+    }
+}
+
+// =========================================================
+// 로그인 · 회원가입 · 비밀번호 찾기 (모바일 360 시안)
+// 입력칸 · 버튼 글자 14 / 위치 선택은 회색 칸 (테두리 없음) / 에러 문구는 칸 바로 아래 · 빨간 테두리 없음
+// 아이콘은 그대로 (크기만 시안대로)
+// App.scss 맨 아래에서 @include mobile.auth-phone
+// =========================================================
+@mixin auth-phone {
+    @media (max-width: $phone) {
+        section.auth {
+
+            .auth-field__input,
+            .auth-select__button {
+                @include v.body-14-r;
+            }
+
+            .auth-field.has-error .auth-field__input:not(:focus),
+            .auth-field.has-error .auth-select__button {
+                border-color: transparent;
+            }
+
+            .auth-field__error {
+                @include v.caption-12-r;
+                position: static;
+                display: block;
+                margin-top: 0.5rem;
+            }
+
+            // 위치: 다른 칸과 같은 회색 칸
+            .auth-select__button {
+                padding: 0 1.25rem;
+                border-color: transparent;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+                color: v.$neutral-color-white;
+
+                &.is-empty {
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            .auth__desc,
+            .design-reset__help li {
+                word-break: keep-all;
+            }
+
+            .auth__submit,
+            .design-reset .auth__form>.btn {
+                @include v.label-14-sb;
+                height: 3.125rem;
+                min-height: 3.125rem;
+            }
+
+            .auth__links {
+                gap: 1.25rem;
+                margin-top: 0.25rem;
+            }
+
+            // 회원가입: 약관 → (에러 문구) → 버튼
+            .auth__terms {
+                @include v.caption-12-r;
+                color: v.$neutral-color-100;
+            }
+
+            .auth__terms-title {
+                @include v.body-14-r;
+                margin-bottom: 0.75rem;
+            }
+
+            .auth__submit-wrap {
+                margin-top: 3rem;
+            }
+
+            .auth__form-error {
+                @include v.caption-12-r;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+            .auth__switch {
+                margin-top: 1rem;
+            }
+
+            // ---------- 비밀번호 찾기 ----------
+            .design-reset__help {
+                @include v.caption-12-r;
+                width: fit-content;
+                margin: 0.75rem auto 0;
+
+                li {
+                    gap: 0.625rem;
+                    margin-top: 0.75rem;
+
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                }
+
+                img {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                }
+            }
+
+            .design-reset .auth__title {
+                margin-top: 1.375rem;
+            }
+
+            .design-reset .auth__form {
+                margin-top: 1.75rem;
+            }
+
+            .design-reset .auth-field {
+                padding-bottom: 1.25rem;
+            }
+
+            // 안내 문구는 회색 칸 위 (가운데) · 칸 안에는 받기 방법 두 개
+            .design-reset__methods {
+                gap: 0;
+                margin-top: 0.625rem;
+                padding: 0;
+                background: none;
+
+                legend {
+                    @include v.caption-12-r;
+                    gap: 0.5rem;
+                    float: left; // 칸 안 첫 줄로 (테두리 위에 걸치지 않게)
+                    grid-column: 1 / -1;
+                    width: 100%;
+                    margin: 0 0 0.75rem;
+                    text-align: center;
+                }
+
+                legend img {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                }
+
+                label {
+                    @include v.caption-12-r;
+                    flex: 1;
+                    height: 3.125rem;
+                    padding-left: 1.25rem;
+                }
+
+                // 동그라미: 테두리만 · 고르면 초록 테두리 + 초록 점
+                input {
+                    appearance: none;
+                    display: grid;
+                    place-items: center;
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    margin: 0;
+                    border: 0.0625rem solid v.$neutral-color-100;
+                    border-radius: 50%;
+
+                    &::after {
+                        content: "";
+                        width: 0.375rem;
+                        height: 0.375rem;
+                        border-radius: 50%;
+                    }
+
+                    &:checked {
+                        border-color: v.$main-primary-color;
+
+                        &::after {
+                            background-color: v.$main-primary-color;
+                        }
+                    }
+                }
+            }
+
+            .design-reset__methods-box {
+                justify-content: flex-start;
+                gap: 0;
+            }
+
+            // 안내 문구: 시안처럼 짧게 (앞 글 숨김 · 굵게 없음)
+            .design-reset__lead {
+                display: none;
+            }
+
+            .design-reset__help strong {
+                font-weight: v.$font-weight-regular;
+                color: inherit;
+            }
+
+            .design-reset__links {
+                margin-top: 1.25rem;
+                color: v.$neutral-color-white;
+            }
+
+            .design-reset .auth__form>.btn {
+                margin-top: 2rem;
             }
         }
     }

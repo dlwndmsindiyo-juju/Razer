@@ -18,6 +18,7 @@ import type { Product } from "../types/product";
 import { ImageOrText } from "../components/common/ImageOrText";
 import { CollabHero } from "../components/promotion/CollabHero";
 import { FaqList } from "../components/promotion/FaqList";
+import { Breadcrumb } from "../components/common/Breadcrumb";
 
 type Layout = "caption" | "center" | "left" | "right"; // caption: 히어로 영상 바로 아래 글만
 
@@ -41,7 +42,8 @@ const ProductBlock = ({ block, layout }: { block: Block; layout: Layout }) => {
     const image = <ImageOrText src={block.image} alt={title} label="Product Image" />;
     return (
         <section className={`collab-block collab-block--${layout}`}>
-            {layout === "caption" ? null : to ? (
+            {/* 캡션 블록 이미지는 PC 에서 숨김 (모바일 시안은 모든 블록이 이미지 + 글) */}
+            {to ? (
                 <Link to={to} className="collab-block__img" aria-label={`${title} 상세 보기`}>
                     {image}
                 </Link>
@@ -198,6 +200,7 @@ export const CollabPage = () => {
             <div className="collab-page__hero promo-container">
                 <CollabHero collab={collab} />
             </div>
+            <Breadcrumb inline />
 
             {main ? (
                 blocks.map((block, i) => (
