@@ -153,9 +153,41 @@ $font-family-display: "Stalinist One", $font-family-base; // 영문 디스플레
     letter-spacing: 0;
 }
 
+@mixin label-12-sb {
+    font-family: $font-family-base;
+    font-size: 0.75rem;
+    font-weight: $font-weight-semibold;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin label-10-m {
+    font-family: $font-family-base;
+    font-size: 0.625rem;
+    font-weight: $font-weight-medium;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin label-10-sb {
+    font-family: $font-family-base;
+    font-size: 0.625rem;
+    font-weight: $font-weight-semibold;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
 @mixin caption-12-r {
     font-family: $font-family-base;
     font-size: 0.75rem;
+    font-weight: $font-weight-regular;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin caption-10-r {
+    font-family: $font-family-base;
+    font-size: 0.625rem;
     font-weight: $font-weight-regular;
     line-height: 1rem;
     letter-spacing: 0;

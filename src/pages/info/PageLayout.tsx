@@ -4,6 +4,7 @@ import { categoryLabels } from "../../data/productData";
 import type { Product } from "../../types/product";
 import "../../style/DesignPages.scss";
 import { commonImages } from "../../data/pageImages";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 
 export function PageHeading({ title, description, as: Heading = "h1" }: {
     title: string;
@@ -17,10 +18,13 @@ export function PageHeading({ title, description, as: Heading = "h1" }: {
 }
 
 export function PageHero({ src, mobileSrc, children }: { src: string; mobileSrc?: string; children?: ReactNode }) {
-    return <div className="design-hero">
+    return <><div className="design-hero">
         <picture>{mobileSrc && <source srcSet={mobileSrc} media="(max-width: 699px)" />}<img src={src} alt="" /></picture>
         {children && <div className="design-hero__content design-container">{children}</div>}
-    </div>;
+    </div>
+        {/* 경로 표시: 히어로 바로 아래 */}
+        <Breadcrumb inline />
+    </>;
 }
 
 export function CatalogCard({ product, featured = false, badge, description }: {

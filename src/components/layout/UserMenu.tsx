@@ -45,15 +45,6 @@ export const UserMenu = () => {
         };
     }, [isOpen]);
 
-    if (!user) {
-        return (
-            // 로그인 후 지금 보던 페이지로 돌아오도록 경로 전달
-            <Link to="/login" state={{ from: pathname }} className="header__icon" aria-label="로그인">
-                <img src="/icons/user.svg" alt="" />
-            </Link>
-        );
-    }
-
     const handleLogout = async () => {
         await onLogout();
         setConfirmLogout(false);
@@ -75,33 +66,14 @@ export const UserMenu = () => {
 
             {isOpen && (
                 <div className="user-menu__panel" role="menu">
-                    {/* 프로필: 이미지 · 별명님 · 프로필 설정 (모바일 내 계정과 같은 구성) */}
-                    <div className="user-menu__profile">
-                        <span className={`user-avatar user-avatar--md ${user.profile ? "" : "is-default"}`}>
-                            {user.profile ? <img src={user.profile} alt="" /> : <img src="/icons/user.svg" alt="" className="user-avatar__icon" />}
-                        </span>
-                        <div className="user-menu__who">
-                            <strong>{user.nickname || user.name || "Razer 회원"}님</strong>
-                            <Link to="/mypage?tab=account&section=profile" className="user-menu__profile-link" role="menuitem">프로필 설정</Link>
-                        </div>
+                    <div className="user-menu__head">
+                        <strong>내 계정</strong>
+                        <button type="button" className="user-menu__close" aria-label="내 계정 닫기" onClick={() => setIsOpen(false)}>
+                            <img src="/icons/ui/close.svg" alt="" />
+                        </button>
                     </div>
-
-                    {menuItems.map((item) => (
-                        <Link key={item.label} to={item.to} className="user-menu__item" role="menuitem">
-                            <img src={item.icon} alt="" className="user-menu__icon" />
-                            <span>{item.label}</span>
-                            <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
-                        </Link>
-                    ))}
-
-                    <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={() => {
-                            setIsOpen(false);
-                            setConfirmLogout(true);
-                        }}>
-                        <img src="/icons/ui/logout.svg" alt="" className="user-menu__icon" />
-                        <span>로그아웃</span>
-                        <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
-                    </button>
+                    {user ? <AccountLinks user={user} onLogout={() => { setIsOpen(false); setConfirmLogout(true); }} />
+                        : <GuestPanel from={pathname} />}
                 </div>
             )}
 
@@ -111,3 +83,52 @@ export const UserMenu = () => {
         </div>
     );
 };
+
+// 비회원: 환영 문구 · 로그인 · 회원가입 · 도움말 (모바일 내 계정과 같은 구성)
+export const GuestPanel = ({ from, onNavigate }: { from: string; onNavigate?: () => void }) => (
+    <>
+        <p className="user-menu__welcome"><em>RAZER</em>에 오신 것을<br />환영합니다.</p>
+        <p className="user-menu__desc">로그인하고 주문과 등록 제품을<br />한곳에서 관리하세요.</p>
+        <Link to="/login" state={{ from }} className="user-menu__btn user-menu__btn--primary" role="menuitem" onClick={onNavigate}>로그인</Link>
+        <Link to="/signup" className="user-menu__btn" role="menuitem" onClick={onNavigate}>회원가입</Link>
+        <Link to="/info/service/support" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={onNavigate}>
+            <img src="/icons/ui/help.svg" alt="" className="user-menu__icon" />
+            <span>도움이 필요하세요?</span>
+            <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
+        </Link>
+    </>
+);
+
+// 회원: 프로필 · 메뉴 · 로그아웃
+export const AccountLinks = ({ user, onLogout, onNavigate }: {
+    user: { profile?: string | null; nickname?: string | null; name?: string | null };
+    onLogout: () => void;
+    onNavigate?: () => void;
+}) => (
+    <>
+        {/* 프로필: 이미지 · 별명님 · 프로필 설정 (모바일 내 계정과 같은 구성) */}
+        <div className="user-menu__profile">
+            <span className={`user-avatar user-avatar--md ${user.profile ? "" : "is-default"}`}>
+                {user.profile ? <img src={user.profile} alt="" /> : <img src="/icons/user.svg" alt="" className="user-avatar__icon" />}
+            </span>
+            <div className="user-menu__who">
+                <strong>{user.nickname || user.name || "Razer 회원"}님</strong>
+                <Link to="/mypage?tab=account&section=profile" className="user-menu__profile-link" role="menuitem" onClick={onNavigate}>프로필 설정</Link>
+            </div>
+        </div>
+
+        {menuItems.map((item) => (
+            <Link key={item.label} to={item.to} className="user-menu__item" role="menuitem" onClick={onNavigate}>
+                <img src={item.icon} alt="" className="user-menu__icon" />
+                <span>{item.label}</span>
+                <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
+            </Link>
+        ))}
+
+        <button type="button" className="user-menu__item user-menu__item--logout" role="menuitem" onClick={onLogout}>
+            <img src="/icons/ui/logout.svg" alt="" className="user-menu__icon" />
+            <span>로그아웃</span>
+            <img src="/icons/ui/chevron-right.svg" alt="" className="user-menu__arrow" />
+        </button>
+    </>
+);

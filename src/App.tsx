@@ -29,6 +29,7 @@ import { FaqPage, SupportPage, WarrantyPage } from "./pages/info/ServicePages";
 import { CareersPage, ContactPage, RazerCarePage, SustainabilityPage, ZVenturesPage } from "./pages/info/CompanyPages";
 import { BuyingGuidePage, ExclusivesPage, MembershipPage } from "./pages/info/StorePages";
 import { TechnologyPage } from "./pages/info/TechnologyPage";
+import { Breadcrumb } from "./components/common/Breadcrumb";
 
 const ProductCustomize = lazy(() => import("./pages/products/ProductCustomize")
   .then(({ ProductCustomize }) => ({ default: ProductCustomize })));
@@ -51,6 +52,8 @@ function App() {
 
       {/* 주소에 따라 메인 영역의 페이지만 변경 */}
       <main>
+        {/* 경로 표시 (히어로가 있는 페이지는 페이지 안 히어로 아래) */}
+        <Breadcrumb />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

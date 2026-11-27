@@ -4,6 +4,7 @@ import { aboutCopy, aboutMilestones, esportsCopy } from "../../data/editorialDat
 import { aboutImages, esportsImages } from "../../data/pageImages";
 import { productData } from "../../data/productData";
 import { CatalogCard, PageHeading, PageHero } from "./PageLayout";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 
 const years = Array.from({ length: 19 }, (_, index) => 2023 - index);
 // [이름, 직책, 사진, 소개] · 첫 번째는 넓은 카드
@@ -51,6 +52,7 @@ export function AboutPage() {
             />
             <h1>About Me</h1>
         </div>
+        <Breadcrumb inline />
         <section className="design-about__intro" id="overview">
             <img src={aboutImages.city} alt="" loading="lazy" />
             <h2 className="design-about__title"><span className="design-display">RAZER</span> 소개</h2>

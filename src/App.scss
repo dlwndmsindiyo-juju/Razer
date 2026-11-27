@@ -185,26 +185,109 @@ main {
 .user-menu {
     position: relative;
 
+    // 시안: 320 너비 · 얇은 테두리 · 위 "내 계정" + 닫기
     &__panel {
         position: absolute;
-        top: calc(100% + 1.25rem);
-        right: -1rem;
+        top: calc(100% + 1.75rem);
+        right: -1.25rem;
         z-index: 120;
         width: 20rem;
-        padding: 1.5rem 0 0.75rem;
-        border-radius: $radius-md;
+        padding: 1rem 0 0.5rem;
+        border: 0.0625rem solid $neutral-color-500;
+        border-radius: $radius-sm;
         background-color: $neutral-color-panel;
         box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
         animation: user-menu-in 0.2s ease-out;
+    }
+
+    &__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 1rem 1.25rem;
+
+        strong {
+            @include label-14-sb;
+            color: $neutral-color-white;
+        }
+    }
+
+    &__close {
+        width: 1.25rem;
+        height: 1.25rem;
+        opacity: 0.8;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    // 비회원: 환영 문구 · 로그인 · 회원가입
+    &__welcome {
+        @include heading-20-sb;
+        margin: 0 1rem;
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color: $neutral-color-white;
+
+        em {
+            font-style: normal;
+        }
+    }
+
+    &__desc {
+        @include caption-12-r;
+        margin: 0.625rem 1rem 0;
+        line-height: 1.375rem;
+        color: $neutral-color-100;
+    }
+
+    &__btn {
+        @include label-12-sb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.75rem;
+        margin: 0.5rem 1rem 0;
+        border: 0.0625rem solid $neutral-color-500;
+        border-radius: $radius-sm;
+        color: $neutral-color-white;
+        transition: border-color 0.2s, filter 0.2s;
+
+        &:hover {
+            border-color: $neutral-color-100;
+            color: $neutral-color-white;
+        }
+    }
+
+    &__btn--primary {
+        margin-top: 0.75rem;
+        border-color: $main-primary-color;
+        background-color: $main-primary-color;
+
+        &,
+        &:hover {
+            color: $neutral-color-black;
+        }
+
+        &:hover {
+            border-color: $main-primary-color;
+            filter: brightness(1.1);
+        }
     }
 
     // 프로필 (이미지 · 별명님 · 프로필 설정)
     &__profile {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin: 0 1.25rem 0.75rem;
-        padding: 0 0 1.5rem;
+        gap: 0.875rem;
+        margin: 0 1rem 0.75rem;
+        padding: 0 0 1.25rem;
         border-bottom: 0.0625rem solid $neutral-color-500;
     }
 
@@ -242,7 +325,7 @@ main {
         align-items: center;
         gap: 0.75rem;
         width: 100%;
-        padding: 0.75rem 1.25rem;
+        padding: 0.625rem 1rem;
         color: $neutral-color-white;
         text-align: left;
         transition: background-color 0.2s;
@@ -277,8 +360,8 @@ main {
             content: "";
             position: absolute;
             top: -0.375rem;
-            right: 1.25rem;
-            left: 1.25rem;
+            right: 1rem;
+            left: 1rem;
             border-top: 0.0625rem solid $neutral-color-500;
         }
     }
@@ -306,6 +389,11 @@ main {
         width: 60%;
         height: 60%;
         object-fit: contain;
+    }
+
+    &--sm {
+        width: 2.5rem;
+        height: 2.5rem;
     }
 
     &--md {
@@ -354,12 +442,11 @@ main {
         overflow: hidden;
     }
 
+    // 시안 (1920): 제목 줄 → 제품은 카드 3 x 2 + 오른쪽 링크 · 프로모션 · 서비스는 칼럼 2 + 안내 박스
     &__inner {
         @include container;
         position: relative;
-        display: flex;
-        gap: 6.75rem;
-        padding: 3.5rem 0 4rem;
+        padding: 2.25rem 0 2.25rem;
         opacity: 0;
         transform: translateY(-0.75rem);
         transition: opacity $reveal-duration ease, transform $reveal-duration $reveal-ease;
@@ -370,48 +457,75 @@ main {
         transform: none;
     }
 
-    // 프로모션 · 서비스: 타이틀 아래 링크
-    &__inner--links {
-        flex-direction: column;
-        gap: 0;
-    }
-
-    &__inner--links &__links {
-        padding-top: 1.75rem;
+    &__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     &__title {
         @include heading-20-sb;
         display: block;
+        color: $neutral-color-white;
     }
 
+    &__close {
+        width: 1.5rem;
+        height: 1.5rem;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(16rem, 29.25rem);
+        gap: 3rem;
+        margin-top: 1.25rem;
+    }
+
+    &__col-title {
+        @include label-16-sb;
+        display: block;
+        font-size: 1.125rem;
+        line-height: 1.625rem;
+        color: $neutral-color-white;
+    }
+
+    // 제품 카드 (이미지 위 · 이름 + → 아래)
     &__grid {
         display: grid;
-        grid-template-columns: repeat(3, 17.5rem);
-        gap: 1.125rem;
-        margin-top: 1.75rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
     }
 
-    // 제품 이미지 카드 (누끼 + 배경색)
     &__tile {
         display: flex;
         flex-direction: column;
-        height: 18.25rem;
-        border: 0.0625rem solid transparent;
-        border-radius: 1rem;
-        background: radial-gradient(circle at 50% 40%, #333333 0%, $neutral-color-700 70%);
+        height: 11.25rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-canvas;
         overflow: hidden;
-        transition: border-color 0.2s;
+        transition: background-color 0.2s;
 
         &:hover {
-            border-color: $main-primary-color;
-
-            .mega-menu__label {
-                color: $main-primary-color;
-            }
+            background-color: #303030;
 
             .mega-menu__thumb img {
-                transform: scale(1.05);
+                transform: scale(1.06);
+            }
+
+            .mega-menu__label img {
+                transform: translateX(0.25rem);
             }
         }
     }
@@ -422,12 +536,11 @@ main {
         align-items: center;
         justify-content: center;
         min-height: 0;
-        padding: 1.75rem 1.75rem 0;
+        padding: 1rem 1rem 0;
 
-        // 제품 크기를 고르게 (가로형 · 세로형 모두 이 박스 안에 맞춤)
         img {
-            max-width: 13rem;
-            max-height: 8rem;
+            max-width: 7.5rem;
+            max-height: 6.5rem;
             object-fit: contain;
             transition: transform 0.3s;
         }
@@ -439,43 +552,101 @@ main {
     }
 
     &__label {
-        @include body-16-m;
-        padding: 1rem 0 1.5rem;
-        text-align: center;
+        @include body-16-sb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem 1.25rem 1rem;
+        color: $neutral-color-white;
+
+        img {
+            width: 1.25rem;
+            height: 1.25rem;
+            transition: transform 0.2s;
+        }
     }
 
-    // 오른쪽 링크 (카드에 없는 판매 제품)
+    // 오른쪽 "RAZER 더 알아보기"
+    &__more {
+        padding-top: 2.75rem;
+    }
+
+    &__eyebrow {
+        @include caption-12-r;
+        display: block;
+        color: $main-primary-color;
+        font-weight: $font-weight-semibold;
+    }
+
+    // 링크 줄: 이름 · > (줄 높이 44 · 프로모션 · 서비스는 60)
     &__links {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        padding-top: 3.75rem;
+        margin-top: 0.75rem;
 
         a {
-            @include body-16-r;
-            color: $neutral-color-100;
+            @include body-14-r;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 2.75rem;
+            color: $neutral-color-white;
+            transition: color 0.2s;
+
+            img {
+                width: 1rem;
+                height: 1rem;
+                transition: transform 0.2s;
+            }
 
             &:hover {
                 color: $main-primary-color;
+
+                img {
+                    transform: translateX(0.25rem);
+                }
             }
         }
     }
 
-    &__close {
-        position: absolute;
-        top: 1.5rem;
-        right: 0;
-        width: 1.5rem;
-        height: 1.5rem;
-        opacity: 0.7;
+    &__links--tall {
+        margin-top: 1rem;
 
-        &:hover {
-            opacity: 1;
+        a {
+            height: 3.75rem;
+        }
+    }
+
+    &__note {
+        @include body-14-r;
+        margin-top: 1.25rem;
+        padding-top: 1.25rem;
+        border-top: 0.0625rem solid $neutral-color-500;
+        color: $neutral-color-100;
+    }
+
+    // 프로모션 · 서비스: 칼럼 2 (각 400) + 안내 박스
+    &__body--columns {
+        grid-template-columns: minmax(0, 25rem) minmax(0, 25rem) minmax(0, 1fr);
+        gap: 3rem;
+    }
+
+    &__box {
+        align-self: start;
+        margin-top: -0.75rem;
+        padding: 1.5rem 1.5rem 1.75rem;
+        border-radius: $radius-sm;
+        background-color: $neutral-color-canvas;
+
+        strong {
+            @include heading-24-sb;
+            display: block;
+            color: $main-primary-color;
         }
 
-        img {
-            width: 100%;
-            height: 100%;
+        p {
+            @include body-16-r;
+            margin-top: 0.75rem;
+            color: $neutral-color-100;
+            white-space: pre-line;
         }
     }
 
@@ -576,6 +747,15 @@ main {
     &__popular-title {
         @include heading-20-sb;
         display: block;
+    }
+
+    // 모바일 전용 (뒤로 · 순위 · 화살표 · TOP · 카테고리로 찾기) → PC 에서는 숨김
+    &__back,
+    &__top,
+    &__rank,
+    &__arrow,
+    &__categories {
+        display: none;
     }
 
     // 뒤 어두운 배경
@@ -4801,10 +4981,14 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
         }
     }
 
-    // 히어로 영상 바로 아래 글만 (가운데)
+    // 히어로 영상 바로 아래 글만 (가운데 · 이미지는 모바일에서만)
     &--caption {
         margin-top: 4rem;
         text-align: center;
+
+        .collab-block__img {
+            display: none;
+        }
 
         .collab-block__text {
             width: 38rem;
@@ -4843,7 +5027,7 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
 
     // 이미지 왼쪽 · 글 오른쪽(오른쪽 정렬)
     &--right {
-        grid-template-columns: 51.875rem 1fr;
+        grid-template-columns: min(51.875rem, 57.6%) minmax(0, 1fr); // 1920 에서 830 · 좁아지면 비율
 
         .collab-block__text {
             align-items: flex-end;
@@ -4853,7 +5037,7 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
 
     // 글 왼쪽 · 이미지 오른쪽
     &--left {
-        grid-template-columns: 1fr 51.875rem;
+        grid-template-columns: minmax(0, 1fr) min(51.875rem, 57.6%);
 
         .collab-block__img {
             order: 2;
@@ -4865,7 +5049,7 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
 // 컬렉션 소개 (글 왼쪽 · 이미지 오른쪽)
 .collab-intro {
     display: grid;
-    grid-template-columns: 1fr 50.625rem;
+    grid-template-columns: minmax(0, 1fr) min(50.625rem, 56.25%);
     gap: 1.5rem;
     margin-top: 10.875rem;
 
@@ -4898,7 +5082,7 @@ $pd-green: $main-primary-color; // 구매하기 · 선택 테두리
 // 플레이 뒤에도 남는 … (이미지 왼쪽 · 글 오른쪽)
 .collab-stay {
     display: grid;
-    grid-template-columns: 50.5rem 1fr;
+    grid-template-columns: min(50.5rem, 56.1%) minmax(0, 1fr);
     gap: 5.375rem;
     margin-top: 11rem;
 
@@ -6002,8 +6186,41 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
     margin-right: 0.25em;
 }
 
+// 경로 표시 (예: 제품 > 키보드 > 제품명) · 컨테이너 왼쪽 · 히어로가 있으면 히어로 아래
+.breadcrumb {
+    @include container;
+    @include body-14-r;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: $neutral-color-100;
+
+    &__link {
+        color: $neutral-color-100;
+        transition: color 0.2s;
+
+        &:hover {
+            color: $neutral-color-white;
+        }
+    }
+
+    &__sep {
+        color: $neutral-color-200;
+    }
+
+    &__current {
+        color: $neutral-color-100;
+    }
+}
+
 // =========================================================
 // 태블릿 · 모바일은 전부 style/mobile.scss (이 파일은 PC 1400 ~ 1920 전용)
 // =========================================================
 @include mobile.app-tablet-phone($reveal-duration, $reveal-ease);
 @include mobile.home-phone;
+@include mobile.community-tablet;
+@include mobile.community-phone;
+@include mobile.nav-phone;

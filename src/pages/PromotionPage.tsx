@@ -16,6 +16,7 @@ import type { Product } from "../types/product";
 import { ImageOrText } from "../components/common/ImageOrText";
 import { CollabStrip } from "../components/promotion/CollabStrip";
 import { FaqList } from "../components/promotion/FaqList";
+import { Breadcrumb } from "../components/common/Breadcrumb";
 
 // 프로모션 알아보기 (/info/promotion/promotions · 왼쪽 메뉴의 "프로모션 알아보기"를 누르면 이 화면)
 // 대표 이미지 → 로고 띠 → 대표 컬렉션 상품 3개 → 콜라보 제품(8개 + 더 보기) → FAQ
@@ -33,6 +34,7 @@ export const PromotionPage = () => {
             <Link to={getCollabPath(featured.slug)} className="promotion__hero" aria-label={`${featured.name} 컬렉션 보기`}>
                 <ImageOrText src={featuredCollab.hero} alt={featured.name} label="Promotion Image" />
             </Link>
+            <Breadcrumb inline />
             <CollabStrip collab={featured} />
 
             {/* 대표 컬렉션 상품 3개 */}
