@@ -227,12 +227,17 @@ export function EsportsPage() {
                 })}
             </div>
             <PageHeading title={esportsCopy[1]} description={esportsCopy[13]} as="h2" />
-            <div className="design-esports__athlete">
+            {/* 선수 카드: 사진 위에 이름 · 기록 + 오른쪽 위 화살표 · 카드 전체를 누르면 선수 페이지 */}
+            <Link className="design-esports__athlete" to="/info/promotion/esports/niko" aria-label="NiKo 선수 프로필 보기">
                 <img className="design-esports__player" src={esportsImages.player} alt="Team Razer의 NiKo 선수" loading="lazy" />
-                <h3>NIKO</h3>
-                <p>IEM COLOGNE 2026 메이저 챔피언</p>
-                <Link to="/info/promotion/esports/niko">프로필 보기 <span aria-hidden="true">›</span></Link>
-            </div>
+                <span className="design-esports__athlete-arrow" aria-hidden="true">
+                    <img src="/icons/ui/arrow-right-primary.svg" alt="" />
+                </span>
+                <span className="design-esports__athlete-info">
+                    <strong>NiKo</strong>
+                    <span>IEM COLOGNE 2026 메이저 챔피언</span>
+                </span>
+            </Link>
         </div>
         {/* 팀 아이콘: 화면 끝까지 풀로 흘러감 · 마우스를 올리면 멈춤 */}
         <section className="design-team-logos" aria-label="Team Razer 선수와 팀">

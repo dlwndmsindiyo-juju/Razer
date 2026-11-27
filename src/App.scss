@@ -6274,3 +6274,7 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
 @include mobile.mypage-tablet;
 @include mobile.mypage-phone;
 @include mobile.account-phone($reveal-duration, $reveal-ease);
+@include mobile.esports-phone;
+@include mobile.support-phone;
+@include mobile.exclusive-phone;
+@include mobile.buying-phone;

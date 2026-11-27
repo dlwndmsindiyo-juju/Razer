@@ -65,7 +65,7 @@ body:has(main > :is(.design-page, .auth)) {
   min-width: 0;
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1400px) {
   body:has(main > :is(.design-page, .auth)) .header__inner,
   body:has(main > :is(.design-page, .auth)) .footer__inner {
     width: min(100% - 2rem, 105rem);
@@ -528,6 +528,10 @@ a.design-support:hover {
   transform: translateX(0.25rem);
 }
 
+.support-tabs {
+  display: none;
+}
+
 .design-search {
   display: block;
   width: min(100% - 3rem, 58rem);
@@ -978,6 +982,9 @@ a.design-support:hover {
 .design-about {
   padding-bottom: 0;
 }
+.design-about__back {
+  display: none;
+}
 .design-about section[id] {
   scroll-margin-top: 8rem;
 }
@@ -1397,59 +1404,13 @@ a.design-support:hover {
   line-height: 2rem;
   letter-spacing: 0;
 }
+.design-esports .design-support :is(h3, p) {
+  word-break: keep-all;
+}
 .design-esports__equipment {
   grid-template-columns: repeat(4, minmax(0, 18.8125rem));
 }
 
-@media (max-width: 720px) {
-  .design-esports .design-hero img {
-    height: max(12.5rem, 40vw);
-  }
-  .design-esports .design-heading {
-    padding: 1.625rem 0 0.875rem;
-  }
-  .design-esports .design-heading p {
-    font-size: 0.75rem;
-  }
-  .design-esports .design-grid--two {
-    grid-template-columns: 1fr;
-  }
-  .design-esports .design-support {
-    min-height: 10.8125rem;
-    padding: 0.875rem;
-  }
-  .design-esports .design-support img {
-    max-width: 4.5rem;
-    max-height: 4.5rem;
-  }
-  .design-esports .design-support h3 {
-    font-size: 1rem;
-  }
-  .design-esports .design-support p {
-    font-size: 0.75rem;
-  }
-  .design-esports__equipment {
-    grid-template-columns: none;
-    grid-auto-columns: 6.5625rem;
-    grid-auto-flow: column;
-    overflow-x: auto;
-    gap: 0.625rem;
-  }
-  .design-esports__equipment .design-recommendation__badge {
-    top: 0.375rem;
-    left: 0.375rem;
-    padding: 0.1875rem 0.375rem;
-    font-size: 0.5625rem;
-    line-height: 0.75rem;
-  }
-  .design-esports .design-tabs {
-    gap: 0.25rem;
-  }
-  .design-esports .design-tabs button {
-    padding: 0.3125rem;
-    font-size: 0.5625rem;
-  }
-}
 .design-empty {
   text-align: center;
 }
@@ -1549,7 +1510,7 @@ a.design-support:hover {
 .design-cart__checkout {
   gap: 1.875rem;
 }
-@media (min-width: 1025px) {
+@media (min-width: 1400px) {
   .design-cart__checkout {
     position: sticky;
     top: 6.5rem;
@@ -1621,13 +1582,10 @@ a.design-support:hover {
   margin-block: 1.25rem;
 }
 .design-cart__price {
-  font-family: "Pretendard", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.75rem;
-  letter-spacing: 0;
   display: block;
   margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
 }
 .design-cart .design-checkout__product {
   align-items: stretch;
@@ -1834,6 +1792,9 @@ a.design-support:hover {
   font-weight: 400;
   line-height: 1.5rem;
   letter-spacing: 0;
+}
+.design-buying__program p + p {
+  margin-top: 0;
 }
 .design-buying__program a {
   color: #AEFF00;
@@ -2192,7 +2153,7 @@ a.design-support:hover {
     flex: 0 1 19.4375rem;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: 699px) {
   .design-buying {
     padding-bottom: 3rem;
   }
@@ -2397,7 +2358,7 @@ a.design-support:hover {
     font-size: 0.75rem;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: 699px) {
   .design-grid--three,
   .design-grid--four {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2748,7 +2709,7 @@ a.design-support:hover {
     padding-inline: 1.25rem;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: 699px) {
   #root:has(main > .auth) > :is(.header, .footer, .top-button) {
     display: none;
   }
@@ -3086,47 +3047,81 @@ a.design-support:hover {
     transition: none;
   }
 }
-@media (max-width: 720px) {
-  .design-esports__year .design-heading h2 {
-    font-family: "Pretendard", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    letter-spacing: 0;
-  }
-  .design-esports__year .design-tabs button {
-    min-height: 2rem;
-    padding-inline: 0.3125rem;
-  }
-}
 .design-esports__athlete {
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  gap: 1rem;
-  margin-bottom: clamp(2.5rem, 6vw, 6.25rem);
+  position: relative;
+  display: block;
+  width: min(100%, 31.25rem);
+  margin: 0 auto clamp(2.5rem, 6vw, 6.25rem);
+  overflow: hidden;
+  border-radius: 0.5rem;
 }
 .design-esports__athlete .design-esports__player {
-  margin-bottom: 0.5rem;
+  width: 100%;
+  margin: 0;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
-.design-esports__athlete h3 {
+.design-esports__athlete::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+}
+.design-esports__athlete:is(:hover, :focus-visible) .design-esports__player {
+  transform: scale(1.03);
+}
+.design-esports__athlete:is(:hover, :focus-visible) .design-esports__athlete-arrow {
+  transform: translateX(0.25rem);
+}
+
+.design-esports__athlete-arrow {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background-color: #000000;
+  transition: transform 0.25s ease;
+}
+.design-esports__athlete-arrow img {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.design-esports__athlete-info {
+  position: absolute;
+  right: 1rem;
+  bottom: 1.75rem;
+  left: 1rem;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+.design-esports__athlete-info strong {
   font-family: "Pretendard", sans-serif;
-  font-size: 2.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 3.25rem;
+  line-height: 2.5rem;
   letter-spacing: 0;
   color: #AEFF00;
 }
-.design-esports__athlete p {
+.design-esports__athlete-info span {
   font-family: "Pretendard", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.75rem;
   letter-spacing: 0;
-}
-.design-esports__athlete a {
-  color: #AEFF00;
-  margin-top: 0.75rem;
+  font-weight: 500;
+  color: #ffffff;
+  word-break: keep-all;
 }
 
 .design-esports__gear-link {
@@ -3953,7 +3948,7 @@ a.design-support:hover {
     animation: none;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: 699px) {
   .collection-intro__title {
     font-size: 2rem;
     line-height: 2.5rem;
@@ -3998,7 +3993,7 @@ a.design-support:hover {
     letter-spacing: 0;
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
   .design-grid:not(.design-exclusive__featured),
   .design-about__leaders,
   .design-warranty__benefits,
@@ -4078,7 +4073,7 @@ a.design-support:hover {
     grid-auto-flow: column;
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
   .design-about__title, .design-about__heading.design-display, .design-about__heading--light, .design-about__years button {
     font-size: clamp(2rem, 8vw, 3.75rem);
     line-height: 1.15;
@@ -4367,7 +4362,7 @@ a.design-support:hover {
   margin-top: 3rem;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
   .design-company__title {
     font-size: clamp(2rem, 8vw, 3.75rem);
     line-height: 1.15;
@@ -5076,7 +5071,7 @@ a.design-support:hover {
   cursor: default;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1399px) {
   .pay {
     grid-template-columns: 1fr;
   }
@@ -5120,4 +5115,45 @@ a.design-support:hover {
 
 .collection-product__actions > button {
   position: relative;
+}
+
+.design-recommendation,
+.promotion__card,
+.collection-product {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.design-recommendation:active,
+.promotion__card:active,
+.collection-product:active {
+  transform: scale(0.98);
+}
+
+.design-recommendation__art img,
+.promotion__card .promotion__card-img img,
+.collection-product__image img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.design-recommendation:hover .design-recommendation__art img,
+.design-recommendation:focus-within .design-recommendation__art img,
+.promotion__card:hover .promotion__card-img img,
+.promotion__card:focus-visible .promotion__card-img img,
+.collection-product:hover .collection-product__image img,
+.collection-product:focus-within .collection-product__image img {
+  transform: scale(1.08);
+}
+
+.promotion__card:hover .promotion__card-img {
+  border-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .design-recommendation,
+  .promotion__card,
+  .collection-product,
+  .design-recommendation__art img,
+  .promotion__card .promotion__card-img img,
+  .collection-product__image img {
+    transition: none;
+  }
 }

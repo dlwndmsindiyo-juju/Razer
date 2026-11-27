@@ -21,7 +21,7 @@ export function BuyingGuidePage() {
                 <div className="design-buying__number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
                 <div className="design-panel design-buying__program">
                     <img src={image} alt="" loading="lazy" />
-                    <div><h2>{title}</h2><p>{text}</p></div>
+                    <div><h2>{title}</h2>{text.split("\n").map((line) => <p key={line}>{line}</p>)}</div>
                 </div>
             </div>)}
         </div>
