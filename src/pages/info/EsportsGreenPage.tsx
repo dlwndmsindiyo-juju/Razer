@@ -5,6 +5,7 @@ import { SafeImage } from "../../components/common/SafeImage";
 import { greenAxon, greenColorways, greenFaq, greenHero, greenLineup, greenSections } from "../../data/esportsCollectionData";
 import { faqImages } from "../../data/pageImages";
 import { AwardSeal, CollectionProduct, FeatureList, productPath } from "./CollectionParts";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 
 type Platform = keyof typeof greenLineup.tabs;
 const platforms = Object.keys(greenLineup.tabs) as Platform[];
@@ -16,6 +17,7 @@ export function EsportsGreenPage() {
 
     return <div className="design-page collection-page esports-green">
         <GreenHero />
+        <Breadcrumb inline />
 
         <section className="collection-intro">
             <span className="collection-intro__exclusive">{greenHero.exclusive}</span>

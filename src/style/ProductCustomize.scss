@@ -1,8 +1,6 @@
 @use "../variables" as *;
 @use "./mobile";
 
-@include mobile.product-customize;
-
 .keyboard-customize {
     width: min($container-width, calc(100% - 2 * clamp(1rem, 6.25vw, $page-margin)));
     margin: 0 auto;
@@ -299,19 +297,7 @@
         clip-path: inset(50%);
     }
 
-    @media (max-width: 820px) {
-        &__workspace {
-            min-height: 0;
-        }
-
-        &__stage {
-            height: clamp(17.813rem, 65vw, 27.5rem);
-            min-height: 0;
-        }
-
-        &__poster img {
-            max-height: 11.875rem;
-        }
-
-    }
 }
+
+// 태블릿 · 모바일 (style/mobile.scss product-customize) · 기본 규칙 뒤에 두어 덮어쓰게
+@include mobile.product-customize;

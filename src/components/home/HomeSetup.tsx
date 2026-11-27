@@ -16,8 +16,11 @@ const stockLabel = (status?: string) => {
 // 취향으로 완성하는 셋업
 // 처음엔 오른쪽에 타이틀 · 서브타이틀만 → + 를 누르면 x 로 돌면서 그 상품 정보가 나타남 → x 를 누르면 사라짐
 export const HomeSetup = () => {
-    const { title, moreLink, collectionTitle, subtitle, image, hotspots, collectionButton } = setupShowcase;
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const { title, moreLink, collectionTitle, subtitle, image, hotspots, collectionButton, copyright } = setupShowcase;
+    // 모바일(699 이하)은 처음부터 첫 상품 정보를 보여줌 (시안) · PC 는 + 를 눌렀을 때만
+    const [activeIndex, setActiveIndex] = useState<number | null>(() =>
+        typeof window !== "undefined" && window.matchMedia("(max-width: 699px)").matches ? 0 : null,
+    );
 
     const activeSpot = activeIndex !== null ? hotspots[activeIndex] : null;
     const product = activeSpot ? getProductById(activeSpot.productId) : undefined;
@@ -63,6 +66,7 @@ export const HomeSetup = () => {
                 {/* 오른쪽: 타이틀 · 서브타이틀 + (열렸을 때만) 상품 정보 */}
                 <div className="home-setup__side">
                     <div>
+                        {copyright && <p className="home-setup__copyright">{copyright}</p>}
                         <h3 className="home-setup__collection">{collectionTitle}</h3>
                         <p className="home-setup__subtitle">{subtitle}</p>
                     </div>
@@ -79,7 +83,7 @@ export const HomeSetup = () => {
                                     <span className="home-setup__product-price">{formatPrice(product)}</span>
                                     <span className="home-setup__product-stock">{stockLabel(product.stockStatus)}</span>
                                     <Link to={productPath} className="home-setup__product-btn">
-                                        제품 자세히 보기
+                                        <span className="home-setup__btn-prefix">제품 </span>자세히 보기
                                     </Link>
                                 </div>
                             </div>

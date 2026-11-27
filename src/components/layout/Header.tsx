@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { footerGroups, getFooterPath, type FooterGroup } from "../../data/footerData";
-import { getCategoryPath, productMenu } from "../../data/navData";
+import { footerGroups } from "../../data/footerData";
+import { getCategoryPath, gnbMenus, productMenu, productMore, type GnbMenu } from "../../data/navData";
 import { SearchOverlay } from "./SearchOverlay";
 import { UserMenu } from "./UserMenu";
 import { MobileMenu } from "./MobileMenu";
-import { promoBarText } from "../../data/navData";
+import { promoBarShortText, promoBarText } from "../../data/navData";
 
 export const Header = () => {
     const { pathname, key } = useLocation();
     const [overlay, setOverlay] = useState<{ location: string; id: string }>();
     const openId = overlay?.location === key ? overlay.id : undefined;
-    const openGroup = footerGroups.find(({ slug }) => slug === openId);
+    const openGroup = gnbMenus.find(({ slug }) => slug === openId);
     const isSearchOpen = openId === "search";
     // 닫히는 동안에도 내용이 보이도록 마지막으로 연 메뉴를 기억
-    const [menuGroup, setMenuGroup] = useState<FooterGroup>();
+    const [menuGroup, setMenuGroup] = useState<GnbMenu>();
     const closeOverlay = () => setOverlay(undefined);
     const [mobileOpen, setMobileOpen] = useState(false); // 태블릿 · 모바일 햄버거 메뉴
     const closeMobile = useCallback(() => setMobileOpen(false), []);
     const toggleOverlay = (id: string) => {
-        const group = footerGroups.find(({ slug }) => slug === id);
+        const group = gnbMenus.find(({ slug }) => slug === id);
         if (group) setMenuGroup(group);
         setOverlay(openId === id ? undefined : { location: key, id });
     };
@@ -53,7 +53,7 @@ export const Header = () => {
                         {/* GNB 메뉴 = 푸터 그룹 타이틀 (footerData 공용) */}
                         <ul className="header__menu">
                             {footerGroups.map((group) => {
-                                const expanded = openGroup === group;
+                                const expanded = openGroup?.slug === group.slug;
                                 const isCurrent = pathname === `/info/${group.slug}`
                                     || pathname.startsWith(`/info/${group.slug}/`)
                                     || (group.slug === "product" && pathname.startsWith("/products/"));
@@ -96,6 +96,7 @@ export const Header = () => {
                     <p className="header__promo-text">{promoBarText}</p>
                     <p className="header__promo-text header__promo-copy" aria-hidden="true">{promoBarText}</p>
                 </div>
+                <p className="header__promo-short">{promoBarShortText}</p>
             </div>
             <MobileMenu open={mobileOpen} onClose={closeMobile} />
 
@@ -105,53 +106,77 @@ export const Header = () => {
                     <div id="gnb-submenu" className={"mega-menu" + (openGroup ? " is-open" : "")}
                         inert={!openGroup} aria-hidden={!openGroup}>
                         <div className="mega-menu__clip">
-                            <div className={menuGroup.slug === "product" ? "mega-menu__inner" : "mega-menu__inner mega-menu__inner--links"}>
+                            <div className={`mega-menu__inner mega-menu__inner--${menuGroup.slug}`}>
+                                <div className="mega-menu__head">
+                                    <strong className="mega-menu__title">{menuGroup.title}</strong>
+                                    <button type="button" className="mega-menu__close" aria-label="메뉴 닫기" onClick={closeOverlay}>
+                                        <img src="/icons/ui/close.svg" alt="" />
+                                    </button>
+                                </div>
+
                                 {menuGroup.slug === "product" ? (
-                                    <div className="mega-menu__main">
-                                        <strong className="mega-menu__title">{productMenu.title}</strong>
-                                        <ul className="mega-menu__grid">
-                                            {productMenu.categories.map((category) => (
-                                                <li key={category.slug}>
-                                                    <Link to={getCategoryPath(category.slug)} className="mega-menu__tile" onClick={closeOverlay}>
-                                                        <span className="mega-menu__thumb">
-                                                            {category.image ? (
-                                                                <img src={category.image} alt="" />
-                                                            ) : (
-                                                                <span className="mega-menu__no-image">Image</span>
-                                                            )}
-                                                        </span>
-                                                        <span className="mega-menu__label">{category.label}</span>
-                                                    </Link>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                    <div className="mega-menu__body">
+                                        {/* 카테고리 카드: 이미지 · 이름 · → */}
+                                        <div className="mega-menu__main">
+                                            <strong className="mega-menu__col-title">{productMenu.title}</strong>
+                                            <ul className="mega-menu__grid">
+                                                {productMenu.categories.map((category) => (
+                                                    <li key={category.slug}>
+                                                        <Link to={getCategoryPath(category.slug)} className="mega-menu__tile" onClick={closeOverlay}>
+                                                            <span className="mega-menu__thumb">
+                                                                {category.image ? <img src={category.image} alt="" /> : <span className="mega-menu__no-image">{category.label}</span>}
+                                                            </span>
+                                                            <span className="mega-menu__label">
+                                                                {category.label}
+                                                                <img src="/icons/ui/arrow-right.svg" alt="" />
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        {/* RAZER 더 알아보기 */}
+                                        <div className="mega-menu__more">
+                                            <strong className="mega-menu__eyebrow">{productMore.title}</strong>
+                                            <ul className="mega-menu__links">
+                                                {productMore.links.map((link) => (
+                                                    <li key={link.to}>
+                                                        <Link to={link.to} onClick={closeOverlay}>
+                                                            {link.label}
+                                                            <img src="/icons/ui/chevron-right.svg" alt="" />
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            <p className="mega-menu__note">{productMore.note}</p>
+                                        </div>
                                     </div>
                                 ) : (
-                                    // 프로모션 · 서비스: 메뉴 이름을 타이틀로 표시 (헤더 버튼은 페이지 이동 없이 열기만)
-                                    <strong className="mega-menu__title">{menuGroup.title}</strong>
+                                    // 프로모션 · 서비스: 칼럼 2개 + 오른쪽 안내 박스
+                                    <div className="mega-menu__body mega-menu__body--columns">
+                                        {menuGroup.columns.map((column) => (
+                                            <div key={column.title} className="mega-menu__col">
+                                                <strong className="mega-menu__col-title">{column.title}</strong>
+                                                <ul className="mega-menu__links mega-menu__links--tall">
+                                                    {column.links.map((link) => (
+                                                        <li key={link.to}>
+                                                            <Link to={link.to} onClick={closeOverlay}>
+                                                                {link.label}
+                                                                <img src="/icons/ui/chevron-right.svg" alt="" />
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        ))}
+                                        {menuGroup.box && (
+                                            <div className="mega-menu__box">
+                                                <strong>{menuGroup.box.pc.title}</strong>
+                                                <p>{menuGroup.box.pc.text}</p>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
-
-                                <ul className="mega-menu__links" aria-label={menuGroup.title + " 서브메뉴"}>
-                                    {menuGroup.pages.map((page) => (
-                                        <li key={page.slug}>
-                                            <Link to={getFooterPath(menuGroup.slug, page.slug)} onClick={closeOverlay}>{page.label}</Link>
-                                        </li>
-                                    ))}
-                                    {menuGroup.slug === "product" && productMenu.links.map((link) => (
-                                        <li key={link.slug}>
-                                            <Link to={getCategoryPath(link.slug)} onClick={closeOverlay}>{link.label}</Link>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <button
-                                    type="button"
-                                    className="mega-menu__close"
-                                    aria-label="메뉴 닫기"
-                                    onClick={closeOverlay}
-                                >
-                                    <img src="/icons/close.svg" alt="" />
-                                </button>
                             </div>
                         </div>
                     </div>

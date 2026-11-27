@@ -4,6 +4,7 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { Modal } from "../common/Modal";
 import {
     AddressModal,
+    CardEditModal,
     CardModal,
     ConfirmModal,
     DeviceModal,
@@ -13,6 +14,7 @@ import {
     authErrorText,
 } from "./MypageModals";
 import { maskPhone } from "../../types/mypageData";
+import { InlineToast } from "../common/InlineToast";
 import type { Address, AppUser, PaymentCard } from "../../types/auth";
 
 // 계정 관리 메뉴 (/mypage?tab=account&section=…)
@@ -300,10 +302,10 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
                 />
                 <SettingRow icon={<HelpIcon />} title="Razer ID" value={user.nickname || user.name || "-"} />
             </div>
-            {message && <p className="account__message">{message}</p>}
             <button type="button" className="mypage__line-btn account__leave" onClick={() => setLeaving(true)}>
                 회원 탈퇴 안내
             </button>
+            <InlineToast text={message} tone={/했습니다$/.test(message) ? "success" : "info"} onClose={() => setMessage("")} />
 
             {leaving && (
                 <ConfirmModal
@@ -335,7 +337,7 @@ const BasicInfo = ({ user }: { user: AppUser }) => {
                     onClose={() => setEditing(false)}
                     onSaved={() => {
                         setEditing(false);
-                        setMessage("닉네임을 변경했어요.");
+                        setMessage("저장했습니다");
                     }}
                 />
             )}
@@ -367,7 +369,7 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
     const save = async () => {
         try {
             await onUpdateProfile({ profile: selected });
-            setMessage("프로필 이미지를 저장했어요.");
+            setMessage("프로필을 저장했습니다");
         } catch {
             setMessage("저장하지 못했어요. 잠시 후 다시 시도해 주세요.");
         }
@@ -406,7 +408,6 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
                 </ul>
                 <input ref={cameraRef} type="file" accept="image/*" capture="user" hidden onChange={handleFile} />
             </div>
-            {message && <p className="account__message">{message}</p>}
             {uploading && (
                 <ImageUploadModal
                     onClose={() => setUploading(false)}
@@ -425,6 +426,7 @@ const ProfileSetting = ({ user }: { user: AppUser }) => {
                     저장하기
                 </button>
             </div>
+            <InlineToast text={message} tone={/했습니다$/.test(message) ? "success" : "info"} onClose={() => setMessage("")} />
         </>
     );
 };
@@ -459,10 +461,10 @@ const Security = ({ user }: { user: AppUser }) => {
                 <SettingRow
                     icon={<Icon name="shield-check" />}
                     title="2단계 인증"
-                    value={user.twoFactor ? "설정됨" : "설정 안 됨"}
+                    value={user.twoFactor ? "사용 중 · 이메일 인증" : "설정 안 됨"}
                     action={
                         <button type="button" className="account__btn" onClick={() => setTwoFactor(true)}>
-                            {user.twoFactor ? "해제하기" : "설정하기"}
+                            {user.twoFactor ? "관리" : "설정하기"}
                         </button>
                     }
                 />
@@ -477,7 +479,7 @@ const Security = ({ user }: { user: AppUser }) => {
                     }
                 />
             </div>
-            {message && <p className="account__message">{message}</p>}
+            <InlineToast text={message} tone={/했습니다$/.test(message) ? "success" : "info"} onClose={() => setMessage("")} />
             {devices && <DeviceModal device={currentDevice()} onClose={() => setDevices(false)} />}
             {twoFactor &&
                 (user.twoFactor ? (
@@ -489,7 +491,7 @@ const Security = ({ user }: { user: AppUser }) => {
                         onConfirm={async () => {
                             await onUpdateProfile({ twoFactor: false });
                             setTwoFactor(false);
-                            setMessage("2단계 인증을 해제했어요.");
+                            setMessage("2단계 인증을 해제했습니다");
                         }}
                     />
                 ) : (
@@ -499,7 +501,7 @@ const Security = ({ user }: { user: AppUser }) => {
                         onSave={async () => {
                             await onUpdateProfile({ twoFactor: true });
                             setTwoFactor(false);
-                            setMessage("2단계 인증을 설정했어요.");
+                            setMessage("2단계 인증을 설정했습니다");
                         }}
                     />
                 ))}
@@ -508,7 +510,7 @@ const Security = ({ user }: { user: AppUser }) => {
                     onClose={() => setEditing(false)}
                     onSaved={() => {
                         setEditing(false);
-                        setMessage("비밀번호를 변경했어요.");
+                        setMessage("변경했습니다");
                     }}
                 />
             )}
@@ -518,56 +520,106 @@ const Security = ({ user }: { user: AppUser }) => {
 
 // ---------- 배송지·결제 관리 ----------
 // 카드 오른쪽 위 … 메뉴 (기본 결제수단으로 설정 · 삭제)
-const PaymentCardItem = ({ card, onDefault, onDelete }: { card: PaymentCard; onDefault: () => void; onDelete: () => void }) => {
+const PaymentCardItem = ({
+    card,
+    onDefault,
+    onEdit,
+    onDelete,
+}: {
+    card: PaymentCard;
+    onDefault: () => void;
+    onEdit: () => void;
+    onDelete: () => void;
+}) => {
     const [menu, setMenu] = useState(false);
+    // 메뉴 버튼 (PC: 카드 위 작은 목록 · 모바일: 카드 아래 펼침)
+    const items = (
+        <>
+            {!card.isDefault && (
+                <button
+                    type="button"
+                    role="menuitem"
+                    className="pay-card__menu-btn"
+                    onClick={() => {
+                        setMenu(false);
+                        onDefault();
+                    }}
+                >
+                    기본 결제수단으로 설정
+                </button>
+            )}
+            <button
+                type="button"
+                role="menuitem"
+                className="pay-card__menu-btn"
+                onClick={() => {
+                    setMenu(false);
+                    onEdit();
+                }}
+            >
+                카드 정보 변경
+            </button>
+            <button
+                type="button"
+                role="menuitem"
+                className="pay-card__menu-btn pay-card__menu-btn--danger"
+                onClick={() => {
+                    setMenu(false);
+                    onDelete();
+                }}
+            >
+                삭제
+            </button>
+        </>
+    );
+    // "VISA" → "Visa" (메뉴 위 작은 글씨)
+    const brandName = card.brand.charAt(0) + card.brand.slice(1).toLowerCase();
+
     return (
-        <li className="pay-card">
-            <div className="pay-card__head">
-                <span className="pay-card__logo" aria-hidden="true" />
-                <strong className="pay-card__brand">{card.brand}</strong>
-                {card.isDefault && <span className="pay-card__default">기본</span>}
-                <div className="pay-card__menu-wrap">
-                    <button
-                        type="button"
-                        className="pay-card__more"
-                        aria-label={`${card.brand} 카드 메뉴`}
-                        aria-expanded={menu}
-                        onClick={() => setMenu(!menu)}
-                    >
-                        <MoreIcon />
-                    </button>
-                    {menu && (
-                        <div className="pay-card__menu" role="menu" onMouseLeave={() => setMenu(false)}>
-                            {!card.isDefault && (
-                                <button
-                                    type="button"
-                                    role="menuitem"
-                                    onClick={() => {
-                                        setMenu(false);
-                                        onDefault();
-                                    }}
-                                >
-                                    기본 결제수단으로 설정
-                                </button>
-                            )}
-                            <button
-                                type="button"
-                                role="menuitem"
-                                onClick={() => {
-                                    setMenu(false);
-                                    onDelete();
-                                }}
-                            >
-                                삭제
-                            </button>
-                        </div>
-                    )}
+        <li className="pay-card-item">
+            <div className={`pay-card pay-card--${card.brand.toLowerCase().replace(/[^a-z]/g, "")}`}>
+                <div className="pay-card__head">
+                    <span className="pay-card__logo" aria-hidden="true" />
+                    <strong className="pay-card__brand">{card.brand}</strong>
+                    {card.isDefault && <span className="pay-card__default">기본</span>}
+                    <div className="pay-card__menu-wrap">
+                        <button
+                            type="button"
+                            className="pay-card__more"
+                            aria-label={`${card.brand} 카드 메뉴`}
+                            aria-expanded={menu}
+                            onClick={() => setMenu(!menu)}
+                        >
+                            <MoreIcon />
+                        </button>
+                        {menu && (
+                            <div className="pay-card__menu" role="menu" onMouseLeave={() => setMenu(false)}>
+                                {items}
+                            </div>
+                        )}
+                    </div>
+                </div>
+                {/* 모바일: IC 칩 + (마스터카드) 로고 줄 */}
+                <div className="pay-card__chip-row" aria-hidden="true">
+                    <span className="pay-card__chip" />
+                    <span className="pay-card__logo pay-card__logo--row" />
+                </div>
+                <p className="pay-card__number">
+                    <span className="pay-card__dots">•••• •••• ••••</span> {card.last4}
+                </p>
+                <div className="pay-card__foot">
+                    <span>{card.issuer ?? ""}</span>
+                    <span>{card.expiry ?? ""}</span>
                 </div>
             </div>
-            <p className="pay-card__number">•••• •••• •••• {card.last4}</p>
-            <div className="pay-card__foot">
-                <span>{card.issuer ?? ""}</span>
-                <span>{card.expiry ?? ""}</span>
+            {/* 모바일: 카드 아래로 스르륵 펼치는 메뉴 (PC 에서는 숨김) */}
+            <div className="pay-card__sheet" data-expanded={menu} inert={!menu}>
+                <div className="pay-card__sheet-inner" role="menu" aria-label={`${brandName} ${card.last4} 메뉴`}>
+                    <p className="pay-card__sheet-label">
+                        {brandName} · {card.last4}
+                    </p>
+                    {items}
+                </div>
             </div>
         </li>
     );
@@ -582,7 +634,7 @@ const keepOneDefault = <T extends { id: string; isDefault?: boolean }>(list: T[]
 // "(06234) 서울특별시 강남구 테헤란로 123, 101동" → "서울특별시 강남구 테헤란로 123" (상세 주소는 숨김)
 const publicAddress = (address: string) => address.split(", ")[0].replace(/^\(\d+\)\s*/, "");
 
-type AddressModalState = { type: "address"; target?: Address } | { type: "card" } | { type: "deleteAddress" } | { type: "deleteCard"; target: PaymentCard } | null;
+type AddressModalState = { type: "address"; target?: Address } | { type: "card" } | { type: "deleteAddress" } | { type: "deleteCard"; target: PaymentCard } | { type: "editCard"; target: PaymentCard } | null;
 
 const AddressPayment = ({ user }: { user: AppUser }) => {
     const { onUpdateProfile } = useAuthStore();
@@ -628,8 +680,10 @@ const AddressPayment = ({ user }: { user: AppUser }) => {
                         </p>
                         <p className="mypage__sub">
                             {publicAddress(address.address)}
-                            <br />
-                            상세 주소는 주문 시 다시 확인할 수 있습니다.
+                            <span className="account__address-note">
+                                <br />
+                                상세 주소는 주문 시 다시 확인할 수 있습니다.
+                            </span>
                         </p>
                     </>
                 ) : (
@@ -649,7 +703,7 @@ const AddressPayment = ({ user }: { user: AppUser }) => {
                         배송지 추가
                     </button>
                     {address && (
-                        <button type="button" className="mypage__line-btn" onClick={() => setModal({ type: "deleteAddress" })}>
+                        <button type="button" className="mypage__line-btn account__danger-btn" onClick={() => setModal({ type: "deleteAddress" })}>
                             삭제
                         </button>
                     )}
@@ -673,6 +727,7 @@ const AddressPayment = ({ user }: { user: AppUser }) => {
                                 key={card.id}
                                 card={card}
                                 onDefault={() => saveCards(cards, card.id)}
+                                onEdit={() => setModal({ type: "editCard", target: card })}
                                 onDelete={() => setModal({ type: "deleteCard", target: card })}
                             />
                         ))}
@@ -693,6 +748,13 @@ const AddressPayment = ({ user }: { user: AppUser }) => {
                     // 등록 · 기본 변경 후에도 팝업은 열어 둠 (슬라이드에서 바로 확인)
                     onSave={(card) => onUpdateProfile({ cards: keepOneDefault([...cards, card], card.isDefault ? card.id : undefined) })}
                     onDefault={(card) => onUpdateProfile({ cards: keepOneDefault(cards, card.id) })}
+                />
+            )}
+            {modal?.type === "editCard" && (
+                <CardEditModal
+                    card={modal.target}
+                    onClose={close}
+                    onSave={(next) => saveCards(cards.map((c) => (c.id === next.id ? next : c)))}
                 />
             )}
             {modal?.type === "deleteAddress" && address && (
@@ -766,6 +828,7 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
     const { user, onLogout } = useAuthStore();
     const navigate = useNavigate();
     const [loggingOut, setLoggingOut] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false); // 모바일: 계정 관리 메뉴 펼침
     if (!user) return null;
     const current = accountSections.find((s) => s.key === section) ?? accountSections[0];
 
@@ -777,6 +840,17 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
     return (
         <div className="account">
             <nav className="account__nav" aria-label="계정 관리 메뉴">
+                {/* 모바일: 지금 메뉴를 보여주는 버튼 → 누르면 메뉴 목록이 스르륵 (PC 에서는 숨김) */}
+                <button type="button" className="account__mobile-toggle" aria-expanded={menuOpen} aria-controls="account-menu"
+                    onClick={() => setMenuOpen((v) => !v)}>
+                    <span className="account__nav-icon"><Icon name={current.icon} /></span>
+                    <span>
+                        <small>계정 관리</small>
+                        <strong>{current.label}</strong>
+                    </span>
+                    <img src="/icons/ui/chevron-down.svg" alt="" className="account__mobile-chevron" />
+                </button>
+                <div className="account__nav-list" id="account-menu" data-expanded={menuOpen}>
                 <ul>
                     {accountSections.map((s) => (
                         <li key={s.key}>
@@ -784,7 +858,7 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
                                 type="button"
                                 className={`account__nav-item ${s.key === current.key ? "is-active" : ""}`}
                                 aria-current={s.key === current.key ? "page" : undefined}
-                                onClick={() => onSection(s.key)}
+                                onClick={() => { onSection(s.key); setMenuOpen(false); }}
                             >
                                 <span className="account__nav-icon">
                                     <Icon name={s.icon} />
@@ -794,6 +868,7 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
                         </li>
                     ))}
                 </ul>
+                </div>
                 <button type="button" className="mypage__line-btn account__logout" onClick={() => setLoggingOut(true)}>
                     로그아웃
                 </button>
@@ -807,6 +882,10 @@ export const AccountSettings = ({ section, onSection }: { section: AccountSectio
                 {current.key === "security" && <Security user={user} />}
                 {current.key === "address" && <AddressPayment user={user} />}
                 {current.key === "notify" && <Notify user={user} />}
+                {/* 모바일: 로그아웃은 내용 아래 */}
+                <button type="button" className="mypage__line-btn account__logout account__logout--mobile" onClick={() => setLoggingOut(true)}>
+                    로그아웃
+                </button>
             </section>
 
             {loggingOut && <ConfirmModal title="로그아웃할까요?" confirmLabel="로그아웃" onClose={() => setLoggingOut(false)} onConfirm={logout} />}

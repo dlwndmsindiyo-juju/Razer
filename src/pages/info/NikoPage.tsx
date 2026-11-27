@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { SafeImage } from "../../components/common/SafeImage";
 import { nikoProfile as niko } from "../../data/esportsCollectionData";
 import { CollectionProduct, productPath } from "./CollectionParts";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 
 function PlaybackIcon({ playing }: { playing: boolean }) {
     return <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -76,10 +77,11 @@ export function NikoPage() {
     return <div className="design-page collection-page niko">
         <div className="collection-hero">
             <picture>
-                <source srcSet={niko.hero.mobile} media="(max-width: 720px)" />
+                <source srcSet={niko.hero.mobile} media="(max-width: 699px)" />
                 <SafeImage src={niko.hero.image} alt="Team Razer NiKo" fallback="NIKO" />
             </picture>
         </div>
+        <Breadcrumb inline />
 
         <section className="collection-intro">
             <h1 className="niko__title">{niko.title}</h1>

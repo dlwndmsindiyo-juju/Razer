@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { productData } from "../data/productData";
 import type { Product } from "../types/product";
@@ -15,6 +15,7 @@ import {
 import { HomeProductList } from "../components/home/HomeProductList";
 import { FilterPanel } from "../components/search/FilterPanel";
 import { SortDropdown } from "../components/search/SortDropdown";
+import { Breadcrumb } from "../components/common/Breadcrumb";
 
 // 검색 결과 페이지 (헤더 검색창에서 엔터 → /search?q=검색어)
 const PAGE_SIZE = 24;
@@ -33,6 +34,14 @@ export const Search = ({ title, products = productData }: { title?: string; prod
         setLimit(PAGE_SIZE);
         setSearchParams(value ? { q: value } : {}, { replace: true });
     };
+
+    // 입력칸은 따로 들고 있음: 한글 조합 중(ㅁ → 마 → 망)에 주소를 바꾸면 입력칸이 다시 그려져서
+    // 조합이 끊기고 "ㅁ마망우웃스" 처럼 글자가 쌓임 → 조합이 끝났을 때만 검색어(주소)에 반영
+    const [text, setText] = useState(keyword);
+    const composing = useRef(false);
+    useEffect(() => {
+        if (!composing.current) setText(keyword); // 헤더 검색 등 밖에서 검색어가 바뀌면 입력칸도 맞춤
+    }, [keyword]);
     const [sortId, setSortId] = useState<SortId>("recommended");
     const [selected, setSelected] = useState<SelectedFilters>({});
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -81,13 +90,24 @@ export const Search = ({ title, products = productData }: { title?: string; prod
                     className="search-page__input"
                     placeholder="무엇을 찾으시나요?"
                     aria-label="검색어"
-                    value={keyword}
-                    onChange={(e) => changeKeyword(e.target.value)}
+                    value={text}
+                    onChange={(e) => {
+                        setText(e.target.value);
+                        if (!composing.current) changeKeyword(e.target.value);
+                    }}
+                    onCompositionStart={() => { composing.current = true; }}
+                    onCompositionEnd={(e) => {
+                        composing.current = false;
+                        changeKeyword(e.currentTarget.value);
+                    }}
                 />
                 <button type="submit" className="search-page__submit" aria-label="검색">
                     <img src="/icons/search.svg" alt="" />
                 </button>
             </form>
+
+            {/* 경로 표시: 검색창 아래 */}
+            <Breadcrumb inline />
 
             {/* 검색 결과 */}
             <section className="home-section search-page__results">

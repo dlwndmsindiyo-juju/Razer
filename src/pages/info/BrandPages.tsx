@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { aboutCopy, aboutMilestones, esportsCopy } from "../../data/editorialData";
 import { aboutImages, esportsImages } from "../../data/pageImages";
 import { productData } from "../../data/productData";
 import { CatalogCard, PageHeading, PageHero } from "./PageLayout";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 
 const years = Array.from({ length: 19 }, (_, index) => 2023 - index);
 // [이름, 직책, 사진, 소개] · 첫 번째는 넓은 카드
@@ -36,7 +37,12 @@ const withGreenTag = (text: string) => text.split(/(#GoGreenWithRazer)/).map((pa
         : part);
 
 export function AboutPage() {
+    const navigate = useNavigate();
     return <div className="design-page design-about">
+        {/* 모바일: 뒤로가기 (PC 에서는 숨김) */}
+        <button type="button" className="design-about__back" onClick={() => navigate(-1)}>
+            <img src="/icons/ui/chevron-left.svg" alt="" />뒤로가기
+        </button>
         <div className="design-about__hero">
             <video
                 className="design-about__hero-video"
@@ -51,6 +57,7 @@ export function AboutPage() {
             />
             <h1>About Me</h1>
         </div>
+        <Breadcrumb inline />
         <section className="design-about__intro" id="overview">
             <img src={aboutImages.city} alt="" loading="lazy" />
             <h2 className="design-about__title"><span className="design-display">RAZER</span> 소개</h2>
@@ -220,12 +227,17 @@ export function EsportsPage() {
                 })}
             </div>
             <PageHeading title={esportsCopy[1]} description={esportsCopy[13]} as="h2" />
-            <div className="design-esports__athlete">
+            {/* 선수 카드: 사진 위에 이름 · 기록 + 오른쪽 위 화살표 · 카드 전체를 누르면 선수 페이지 */}
+            <Link className="design-esports__athlete" to="/info/promotion/esports/niko" aria-label="NiKo 선수 프로필 보기">
                 <img className="design-esports__player" src={esportsImages.player} alt="Team Razer의 NiKo 선수" loading="lazy" />
-                <h3>NIKO</h3>
-                <p>IEM COLOGNE 2026 메이저 챔피언</p>
-                <Link to="/info/promotion/esports/niko">프로필 보기 <span aria-hidden="true">›</span></Link>
-            </div>
+                <span className="design-esports__athlete-arrow" aria-hidden="true">
+                    <img src="/icons/ui/arrow-right-primary.svg" alt="" />
+                </span>
+                <span className="design-esports__athlete-info">
+                    <strong>NiKo</strong>
+                    <span>IEM COLOGNE 2026 메이저 챔피언</span>
+                </span>
+            </Link>
         </div>
         {/* 팀 아이콘: 화면 끝까지 풀로 흘러감 · 마우스를 올리면 멈춤 */}
         <section className="design-team-logos" aria-label="Team Razer 선수와 팀">

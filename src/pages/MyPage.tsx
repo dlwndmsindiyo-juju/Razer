@@ -31,6 +31,7 @@ import type { Order, Product, RegisteredProduct } from "../types/product";
 import type { SupportRequest } from "../types/auth";
 import { ConfirmModal, RegisterModal, ReturnModal, SupportModal, TrackingModal, today } from "../components/mypage/MypageModals";
 import { registerProductNames, useRegisterProduct, type RegisterValues } from "../types/useRegisterProduct";
+import { InlineToast } from "../components/common/InlineToast";
 
 // 마이페이지 팝업 (어디서 눌러도 MyPage 가 띄움)
 type MypageModal =
@@ -47,8 +48,8 @@ const SectionHead = ({ title, more }: { title: string; more?: { to: string; labe
     <div className="mypage__section-head">
         <h2 className="mypage__section-title">{title}</h2>
         {more && (
-            <Link to={more.to} className="mypage__more">
-                {more.label}
+            <Link to={more.to} className="mypage__more" aria-label={more.label}>
+                <span className="mypage__more-label">{more.label}</span>
                 <span className="mypage__chevron">
                     <ChevronIcon />
                 </span>
@@ -136,11 +137,15 @@ const OrderCard = ({ order }: { order: Order }) => {
                         </p>
                         <strong className="order-card__price">{order.price.toLocaleString("ko-KR")}원</strong>
                     </div>
-                    <span className={`order-card__status ${isCancelStatus(order.status) ? "is-cancel" : ""}`}>
+                    <span className={`order-card__status ${isCancelStatus(order.status) ? "is-cancel" : ""} ${order.status === "배송 완료" ? "is-done" : ""}`}>
                         <span className="order-card__status-icon">{isShipping ? <TruckIcon /> : <BoxIcon />}</span>
                         {order.status}
                     </span>
-                    <OrderAction order={order} />
+                    {/* 버튼: 모바일은 주문 상세 + 상태 버튼 두 개 (PC 는 주문 상세가 위 줄 오른쪽) */}
+                    <div className="order-card__actions">
+                        <Link to={orderDetailPath(order.id)} className="mypage__line-btn order-card__detail-btn">주문 상세</Link>
+                        <OrderAction order={order} />
+                    </div>
                 </div>
             )}
         </div>
@@ -255,7 +260,9 @@ const OrderDetail = ({ order }: { order: Order }) => {
                 </Link>
             </div>
             <p className="mypage__meta">
-                {formatOrderDate(order.date)} · 주문번호 {formatOrderNumber(order.id)}
+                <span className="mypage__meta-date">{formatOrderDate(order.date)}</span>
+                <span className="mypage__meta-sep"> · </span>
+                <span>주문번호 {formatOrderNumber(order.id)}</span>
             </p>
 
             <div className="mypage__panels">
@@ -390,6 +397,7 @@ export const MyPage = () => {
     const { hearts, orderList, registeredList } = useProductStore();
     const [searchParams, setSearchParams] = useSearchParams();
     const [modal, setModal] = useState<MypageModal>(null);
+    const [toast, setToast] = useState(""); // 모바일 접수 안내 (지원 요청)
     const registerProduct = useRegisterProduct();
     const tabParam = searchParams.get("tab");
     const tab: MypageTab = mypageTabs.some((t) => t.key === tabParam) ? (tabParam as MypageTab) : "home";
@@ -418,6 +426,12 @@ export const MyPage = () => {
     const addRequest = async (request: Omit<SupportRequest, "id" | "createdAt">, done: { title: string; text: string }) => {
         const next: SupportRequest = { ...request, id: `${Date.now()}`, createdAt: today() };
         await onUpdateProfile({ requests: [...(user.requests ?? []), next] });
+        // 모바일 지원 요청: 팝업 대신 목록 아래 안내 상자 (시안)
+        if (request.type === "support" && window.matchMedia("(max-width: 699px)").matches) {
+            setModal(null);
+            setToast("지원 요청을 접수했습니다");
+            return;
+        }
         setModal({ type: "done", ...done });
     };
 
@@ -490,12 +504,12 @@ export const MyPage = () => {
                             <StatsBoard orders={orders} likes={hearts.length} />
                         </section>
 
-                        <section className="mypage__section">
+                        <section className="mypage__section mypage__section--recent">
                             <SectionHead title="최근 주문 내역" more={{ to: "/mypage?tab=orders", label: "전체 주문 보기" }} />
                             <OrderList orders={orders} limit={RECENT_ORDER_COUNT} />
                         </section>
 
-                        <section className="mypage__section">
+                        <section className="mypage__section mypage__section--best">
                             <SectionHead title="함께 둘러볼 장비" more={{ to: "/search", label: "전체 제품 보기" }} />
                             <ProductGrid products={bestProducts} />
                         </section>
@@ -506,7 +520,7 @@ export const MyPage = () => {
                     (detailOrder ? (
                         <OrderDetail order={detailOrder} />
                     ) : (
-                        <section className="mypage__section">
+                        <section className="mypage__section mypage__section--orders">
                             <SectionHead title="주문 내역" />
                             {orderParam && <p className="mypage__meta">주문을 찾을 수 없어요. 전체 주문 내역을 보여드려요.</p>}
                             <OrderList orders={orders} />
@@ -532,6 +546,7 @@ export const MyPage = () => {
                                 )}
                             </Panel>
                         </div>
+                        <InlineToast text={toast} onClose={() => setToast("")} />
                     </section>
                 )}
 

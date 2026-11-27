@@ -139,6 +139,7 @@ export const orderCompleteImages = {
 
 // ---------- 비밀번호 찾기 ----------
 export const passwordResetImages = {
-    check: ui("check"),
-    info: ui("info"),
+    // 초록 체크 · 안내 아이콘 (시안 · public/images/password-reset)
+    check: img("password-reset/check.svg"),
+    info: img("password-reset/info.svg"),
 };

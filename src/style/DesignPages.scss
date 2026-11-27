@@ -5,7 +5,7 @@ body:has(main > :is(.design-page, .auth)) {
 }
 
 // PC 에서만 (태블릿 · 모바일 헤더 · 푸터는 App.scss 공용)
-@media (min-width: 1025px) {
+@media (min-width: 1400px) {
     body:has(main > :is(.design-page, .auth)) {
 
         .header__inner,
@@ -87,112 +87,188 @@ body:has(main > :is(.design-page, .auth)) {
     }
 }
 
+// =========================================================
+// 비밀번호 찾기 · 아이디 찾기 (PC 1920 시안)
+// 카드 800 · 로고 → 제목 → 초록 체크 안내 두 줄 → 입력칸 (507 · 50) → 초록 안내 아이콘 + 문구
+// → 받기 방법 (회색 칸 · 가운데 두 개) → 로그인 | … | 회원가입 → 초록 버튼
+// 태블릿 · 모바일은 style/mobile.scss (auth-phone)
+// =========================================================
+.auth.design-password {
+    padding: 2.5rem 0 10rem;
+}
+
 .auth__card.design-reset {
     width: min(100% - 2rem, 50rem);
-    padding-inline: 1rem;
+    padding: 3.75rem 1rem;
+}
+
+.design-reset .auth__title {
+    margin-top: 1.875rem;
 }
 
 .design-reset .auth__form {
-    width: min(100%, 31.25rem);
+    width: min(100%, 31.6875rem);
+    margin-top: 1.5rem;
 }
 
-.design-reset .auth__head p {
-    margin-top: 1rem;
-    color: v.$neutral-color-100;
-}
-
-.design-reset .auth__form>.btn {
-    width: 100%;
-    min-height: 3rem;
-    margin-top: 1rem;
-}
-
-.design-reset .design-tabs {
-    margin-top: 1rem;
-}
-
-.auth.design-password {
-    padding-top: 2.5rem;
-}
-
-.auth__card.design-reset {
-    padding-bottom: 3.75rem;
-}
-
+// 초록 체크 + 안내 (강조 단어는 굵게)
 .design-reset__help {
-    @include v.body-14-r;
-    margin-top: 1rem;
+    @include v.caption-12-r;
+    width: fit-content;
+    margin: 1.25rem auto 0;
     color: v.$neutral-color-100;
     text-align: left;
+    word-break: keep-all;
 
     li {
-        margin-top: 0.5rem;
         display: flex;
         align-items: center;
-        gap: 0.625rem;
+        gap: 0.875rem;
+
+        +li {
+            margin-top: 0.25rem;
+        }
     }
 
     img {
         flex: none;
+        width: 1.15rem;
+        height: 1.15rem;
     }
 }
 
-.auth__form .design-reset__optional {
-    background: v.$neutral-color-700;
-    display: block;
-    border-radius: v.$radius-sm;
-    margin-bottom: 1.25rem;
+// 칸 사이 1.25rem · 에러 문구는 칸 바로 아래 (아래 칸을 밀어냄)
+.design-reset .auth-field {
+    padding-bottom: 1.25rem;
 }
 
+.design-reset .auth-field__input {
+    @include v.body-14-r;
+}
+
+.design-reset .auth-field.has-error .auth-field__input:not(:focus) {
+    border-color: transparent;
+}
+
+.design-reset .auth-field__error {
+    position: static;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+// 휴대폰으로 받기 · 아이디 찾기 안내 (초록 작은 글씨)
+.design-reset__notice {
+    @include v.caption-12-r;
+    margin-top: -0.5rem;
+    color: v.$main-primary-color;
+}
+
+// 받기 방법: 안내 문구는 칸 위 가운데 · 회색 칸 안에 두 개 가운데
 .design-reset__methods {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-    padding: 0.875rem;
-    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.625rem 0 0;
+    padding: 0;
     border: 0;
-    background: v.$neutral-color-700;
-    border-radius: v.$radius-sm;
 
     legend {
         @include v.body-14-r;
-        text-align: center;
-        margin: 0 auto 1.25rem;
+        float: left; // 칸 안 첫 줄로 (테두리 위에 걸치지 않게)
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        width: 100%;
+        margin-bottom: 1.875rem;
         color: v.$neutral-color-100;
     }
 
     legend img {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 0.375rem;
+        width: 1.375rem;
+        height: 1.375rem;
     }
 
     label {
-        @include v.body-14-r;
+        @include v.body-16-r;
         display: flex;
         align-items: center;
-        gap: 0.4375rem;
+        gap: 0.5rem;
+        height: 3.125rem;
         color: v.$neutral-color-100;
+        cursor: pointer;
     }
 
+    // 동그라미: 테두리만 · 고르면 초록 테두리 + 초록 점
     input {
-        accent-color: v.$main-primary-color;
+        appearance: none;
+        display: grid;
+        place-items: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0;
+        border: 0.0625rem solid v.$neutral-color-100;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &::after {
+            content: "";
+            width: 0.625rem;
+            height: 0.625rem;
+            border-radius: 50%;
+        }
+
+        &:checked {
+            border-color: v.$main-primary-color;
+
+            &::after {
+                background-color: v.$main-primary-color;
+            }
+        }
+
+        &:focus-visible {
+            outline: 0.125rem solid v.$main-primary-color;
+            outline-offset: 0.125rem;
+        }
     }
+}
+
+// 회색 칸: 라벨 두 개 뒤 배경 (fieldset 자체 배경은 안내 문구까지 덮어서 따로)
+.design-reset__methods-box {
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    width: 100%;
+    border-radius: v.$radius-sm;
+    background-color: v.$neutral-color-700;
 }
 
 .design-reset__links {
     @include v.caption-12-r;
     display: flex;
     justify-content: center;
-    margin-top: 1.5rem;
+    margin-top: 1.875rem;
 
     a {
-        padding: 0 0.875rem;
+        padding: 0 1.25rem;
+        color: v.$neutral-color-white;
+        transition: color 0.2s;
+
+        &:hover {
+            color: v.$main-primary-color;
+        }
     }
 
     a+a {
         border-left: 0.0625rem solid v.$neutral-color-200;
     }
+}
+
+.design-reset .auth__form>.btn {
+    @include v.label-14-sb;
+    width: 100%;
+    height: 3.125rem;
+    min-height: 3.125rem;
+    margin-top: 1.375rem;
 }
 
 .design-container {
@@ -319,7 +395,7 @@ body:has(main > :is(.design-page, .auth)) {
     }
 
     >[aria-pressed="true"] {
-        background: v.$neutral-color-white;
+        background: v.$main-primary-color;
         color: v.$body-bg;
     }
 }
@@ -497,6 +573,11 @@ a.design-support:hover {
         background: v.$main-primary-color;
         transform: translateX(0.25rem);
     }
+}
+
+// 지원 페이지 모바일 고정 탭 → PC · 태블릿에서는 숨김 (style/mobile.scss support-phone)
+.support-tabs {
+    display: none;
 }
 
 .design-search {
@@ -978,6 +1059,11 @@ a.design-support:hover {
 .design-about {
     padding-bottom: 0;
 
+    // 뒤로가기: 모바일에서만 (style/mobile.scss about-phone)
+    &__back {
+        display: none;
+    }
+
     section[id] {
         scroll-margin-top: 8rem;
     }
@@ -1433,73 +1519,15 @@ a.design-support:hover {
         @include v.heading-24-b;
     }
 
+    // 좁아져도 단어 중간에서 끊기지 않게 ("연마" 처럼)
+    .design-support :is(h3, p) {
+        word-break: keep-all;
+    }
+
     &__equipment {
         grid-template-columns: repeat(4, minmax(0, 18.8125rem));
     }
 
-}
-
-@media (max-width: 720px) {
-    .design-esports {
-        .design-hero img {
-            height: max(12.5rem, 40vw);
-        }
-
-        .design-heading {
-            padding: 1.625rem 0 0.875rem;
-        }
-
-        .design-heading p {
-            font-size: 0.75rem;
-        }
-
-        .design-grid--two {
-            grid-template-columns: 1fr;
-        }
-
-        .design-support {
-            min-height: 10.8125rem;
-            padding: 0.875rem;
-        }
-
-        .design-support img {
-            max-width: 4.5rem;
-            max-height: 4.5rem;
-        }
-
-        .design-support h3 {
-            font-size: 1rem;
-        }
-
-        .design-support p {
-            font-size: 0.75rem;
-        }
-
-        &__equipment {
-            grid-template-columns: none;
-            grid-auto-columns: 6.5625rem;
-            grid-auto-flow: column;
-            overflow-x: auto;
-            gap: 0.625rem;
-        }
-
-        &__equipment .design-recommendation__badge {
-            top: 0.375rem;
-            left: 0.375rem;
-            padding: 0.1875rem 0.375rem;
-            font-size: 0.5625rem;
-            line-height: 0.75rem;
-        }
-
-        .design-tabs {
-            gap: 0.25rem;
-        }
-
-        .design-tabs button {
-            padding: 0.3125rem;
-            font-size: 0.5625rem;
-        }
-    }
 }
 
 .design-empty {
@@ -1616,7 +1644,7 @@ a.design-support:hover {
 .design-cart__checkout {
     gap: 1.875rem;
 
-    @media (min-width: 1025px) {
+    @media (min-width: 1400px) {
         position: sticky;
         top: 6.5rem;
         align-self: start;
@@ -1674,6 +1702,7 @@ a.design-support:hover {
 }
 
 .design-cart {
+
     // 체크박스 (전체선택 · 상품별) · 결제하기와 같은 모양
     input[type="checkbox"] {
         @include check-box;
@@ -1924,6 +1953,11 @@ a.design-support:hover {
             margin-top: 0.75rem;
             white-space: pre-line;
             @include v.body-16-r;
+        }
+
+        // 문단 사이 (PC: 붙여서 · 모바일은 한 줄 띄움)
+        p+p {
+            margin-top: 0;
         }
 
         a {
@@ -2312,914 +2346,6 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
-    .design-buying {
-        padding-bottom: 3rem;
-
-        >.design-stack {
-            gap: 1.5rem;
-        }
-
-        .design-heading h1 {
-            font-size: 1.5rem;
-        }
-
-        &__number {
-            @include v.heading-24-sb;
-        }
-
-        &__program {
-            grid-template-columns: 1fr;
-            padding: 1.25rem;
-            gap: 0.75rem;
-        }
-
-        &__program h2,
-        &__program a {
-            align-self: center;
-        }
-
-        &__program h2 {
-            font-size: 1.25rem;
-        }
-
-        &__program p,
-        &__program a {
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
-    }
-
-    .design-recommendation {
-        min-height: 7.75rem;
-
-        &__art {
-            width: 82%;
-            height: 4.625rem;
-            margin: 0.5rem auto 0.5rem;
-        }
-
-        &__copy {
-            padding: 0 0.375rem 0.625rem;
-        }
-
-        h3 {
-            font-size: 0.5625rem;
-            line-height: 0.75rem;
-        }
-
-        p,
-        a {
-            font-size: 0.5rem;
-            line-height: 0.625rem;
-        }
-
-        p {
-            margin: 0.125rem 0;
-        }
-    }
-
-    .design-exclusive {
-        padding-bottom: 2.8125rem;
-
-        .design-hero img {
-            aspect-ratio: 360 / 200;
-        }
-
-        .design-heading {
-            padding: 1.5rem 0 0.875rem;
-        }
-
-        .design-heading :is(h1, h2) {
-            @include v.heading-24-sb;
-        }
-
-        .design-heading p {
-            font-size: 0.75rem;
-        }
-
-        .design-hero+.design-container>.design-heading:first-child {
-            padding: 1.25rem 0;
-        }
-
-        &__featured {
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-
-        &__featured .design-stack {
-            gap: 0.625rem;
-        }
-
-        &__label p {
-            font-size: 0.75rem;
-        }
-
-        &__label h2 {
-            margin-top: 0.1875rem;
-            font-size: 1rem;
-            line-height: 1.25rem;
-        }
-
-        .design-product-pair {
-            grid-template-columns: repeat(2, minmax(0, 6.25rem));
-            gap: 0.625rem;
-        }
-
-        .design-rail {
-            margin-top: 0.75rem;
-            grid-template-columns: 1.5rem minmax(0, 1fr) 1.5rem;
-            gap: 0.25rem;
-        }
-
-        .design-rail button {
-            width: 1.5rem;
-            font-size: 1rem;
-        }
-
-        .design-rail__track {
-            grid-auto-columns: 5.625rem;
-            gap: 0.375rem;
-        }
-
-        .design-tabs {
-            gap: 0.375rem;
-        }
-
-        .design-tabs button {
-            padding: 0.375rem 0.5625rem;
-            font-size: 0.6875rem;
-            min-width: 0;
-        }
-
-        .design-media-card h3 {
-            margin-top: 0;
-            font-size: 0.875rem;
-        }
-
-        .design-media-card p,
-        .design-media-card a {
-            font-size: 0.75rem;
-        }
-    }
-
-    .design-membership {
-        >.design-container {
-            width: calc(100% - 2rem);
-        }
-
-        .design-heading {
-            padding: 1.25rem 0 0.5625rem;
-        }
-
-        .design-heading h1 {
-            font-size: 1.5rem;
-        }
-
-        .design-member-benefits .design-support {
-            min-height: 3.875rem;
-            padding: 0.75rem 1rem;
-        }
-
-        .design-member-benefits img {
-            width: 1.5625rem;
-            height: 1.5625rem;
-        }
-
-        .design-member-benefits h2 {
-            font-size: 0.875rem;
-            margin: 0;
-        }
-
-        &__signup {
-            margin: 1.25rem 0 3rem;
-        }
-
-        &__coupon {
-            flex-direction: column;
-            text-align: center;
-            padding: 0.9375rem;
-            gap: 0.625rem;
-        }
-
-        &__coupon>span {
-            width: 3.6875rem;
-        }
-
-        &__coupon img {
-            width: 1.5625rem;
-        }
-
-        &__coupon h2 {
-            font-size: 1rem;
-        }
-
-        &__coupon p,
-        &__signup>p,
-        &__signup li {
-            font-size: 0.75rem;
-        }
-
-        &__signup ul {
-            margin: 0.625rem 0 1.25rem;
-        }
-
-        &__signup li {
-            margin-bottom: 0.375rem;
-        }
-
-        &__signup>.btn,
-        &__reward .btn {
-            min-height: 3rem;
-        }
-
-        &__rewards,
-        &__earning {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        &__reward {
-            min-height: 0;
-            padding: 1rem;
-        }
-
-        &__reward h2 {
-            font-size: 1rem;
-        }
-
-        &__reward p {
-            font-size: 0.8125rem;
-        }
-
-        &__rewards+.design-heading {
-            padding: 1.875rem 0;
-        }
-
-        &__earning img {
-            width: 6.5625rem;
-            margin-bottom: 0.75rem;
-        }
-
-        &__earning h3 {
-            font-size: 1rem;
-            margin-bottom: 0.375rem;
-        }
-
-        &__earning p {
-            font-size: 0.75rem;
-        }
-    }
-}
-
-@media (max-width: 720px) {
-    // 모바일 푸터는 App.scss 공용 (1024px 이하)
-
-    .design-grid--three,
-    .design-grid--four {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .design-checkout,
-    .design-program {
-        grid-template-columns: 1fr;
-    }
-
-    .design-program:nth-child(even) img {
-        order: 0;
-    }
-
-    .design-program h2 {
-        text-align: center;
-    }
-
-    .design-hero img {
-        height: auto;
-        aspect-ratio: 1920 / 700;
-    }
-
-    .design-rail {
-        gap: .5rem;
-
-        >button {
-            width: 2rem;
-        }
-    }
-
-    .design-warranty {
-        .design-hero img {
-            aspect-ratio: 360 / 138;
-            object-position: left center;
-        }
-
-        .design-hero__content {
-            position: static;
-            padding-top: 1rem;
-        }
-
-        .design-warranty__register {
-            margin-inline: auto;
-        }
-
-        .design-warranty__field {
-            background: v.$neutral-color-700;
-        }
-
-        .design-warranty__benefits {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .design-warranty__benefits>div {
-            gap: 1rem;
-        }
-
-        .design-warranty__benefits img {
-            width: 3rem;
-            height: 3rem;
-        }
-
-        .design-accordion__summary {
-            min-height: 0;
-            padding: 1rem;
-            font-size: 1rem;
-            line-height: 1.5rem;
-        }
-
-        .warranty-answer {
-            padding: 1rem;
-            font-size: .75rem;
-            line-height: 1.25rem;
-        }
-
-        .warranty-table {
-            font-size: .6875rem;
-        }
-
-        .warranty-table :is(th, td) {
-            padding: .25rem;
-        }
-
-        .design-heading h2 {
-            color: v.$neutral-color-white;
-        }
-    }
-
-    .design-page:has(.design-tech__nav) {
-        background: v.$neutral-color-700;
-    }
-
-    .design-tech__panel {
-        display: block;
-        min-height: auto;
-        padding: 0 1rem 1rem;
-
-        .design-container {
-            width: 100%;
-            padding-top: .625rem;
-        }
-
-        >img {
-            position: static;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1920 / 700;
-            display: block;
-        }
-
-        &::before {
-            display: none;
-        }
-
-        &[data-media="logo"]>img {
-            width: 4rem;
-            transform: none;
-            margin: 0 auto;
-            aspect-ratio: 1;
-        }
-
-        &[data-media="none"] {
-            padding-top: .5rem;
-        }
-
-        h2 {
-            font-size: 1rem;
-        }
-
-        p {
-            font-size: .875rem;
-            color: v.$neutral-color-100;
-        }
-    }
-
-    .design-faq .design-tabs {
-        flex-wrap: nowrap;
-        justify-content: start;
-        overflow-x: auto;
-        padding-bottom: 1.25rem; // 탭 ↔ 아래 슬라이드바 간격
-    }
-
-    .design-faq .design-tabs button {
-        flex: 0 0 auto;
-        font-size: .8125rem;
-        white-space: nowrap;
-    }
-
-    .design-questions button {
-        gap: .625rem;
-        min-height: 4rem;
-        font-size: .875rem;
-    }
-
-    .design-member-benefits {
-        grid-template-columns: 1fr;
-        gap: .5rem;
-
-        .design-support {
-            grid-template-columns: 2rem 1fr;
-            min-height: 0;
-            text-align: left;
-            justify-items: start;
-            gap: .25rem .75rem;
-        }
-
-        img {
-            grid-row: span 2;
-            max-width: 100%;
-            margin: auto;
-        }
-
-        h2 {
-            font-size: 1rem;
-        }
-
-        p {
-            font-size: .8125rem;
-        }
-    }
-
-    .design-support-page {
-        .design-grid {
-            gap: .75rem;
-        }
-
-        .design-support {
-            text-align: left;
-            justify-items: stretch;
-            align-content: start;
-            min-height: 0;
-            padding: .875rem;
-        }
-
-        .design-support h2 {
-            font-size: .875rem;
-            line-height: 1.35;
-            color: v.$neutral-color-white;
-            margin: 0 1rem 0.5rem 0;
-        }
-
-        .design-support__arrow {
-            top: 0.75rem;
-            right: 0.5625rem;
-            width: 1.125rem;
-            height: 1.125rem;
-            font-size: .75rem;
-        }
-
-        .design-support p {
-            font-size: .8125rem;
-        }
-    }
-
-    .design-faq-page {
-        .design-heading {
-            padding-bottom: 2rem;
-        }
-
-        .design-search {
-            margin-bottom: 1.875rem;
-        }
-
-        .design-faq {
-            padding-bottom: 0;
-        }
-
-        .design-tabs button {
-            min-height: 2.625rem;
-            padding-inline: 1rem;
-        }
-
-        .design-questions {
-            margin: 0 1.125rem;
-        }
-
-        .design-questions button {
-            min-height: 3.875rem;
-            gap: 0.625rem;
-            font-size: 0.75rem;
-        }
-
-        .design-questions button span:last-child {
-            font-size: 1rem;
-        }
-
-        .design-faq__answer {
-            padding: 0.875rem;
-            margin: 0;
-            font-size: 0.75rem;
-        }
-
-        .design-faq__pages {
-            background: v.$body-bg;
-            margin: 0;
-            padding-top: 1.25rem;
-        }
-
-        .design-faq__pages button {
-            width: 1.5rem;
-            height: 1.5rem;
-            font-size: 0.625rem;
-        }
-    }
-
-    .auth__card.design-reset {
-        box-shadow: none;
-    }
-
-    .design-reset__help {
-        font-size: 0.75rem;
-    }
-}
-
-@media (max-width: 460px) {
-
-    .design-grid--two,
-    .design-grid--three {
-        grid-template-columns: 1fr;
-    }
-
-    .design-product-pair,
-    .design-support-page .design-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .design-container,
-    .design-faq,
-    .design-search {
-        width: calc(100% - 2rem);
-    }
-
-    .design-cart__row {
-        grid-template-columns: auto minmax(0, 1fr);
-    }
-
-    .design-cart__end {
-        grid-column: 2;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-    }
-}
-
-@media (max-width: 900px) {
-    .auth:not(.design-password) {
-        padding: 3.75rem 1rem 6.75rem;
-
-        .auth__card {
-            width: min(100%, 31.25rem);
-            padding: 0;
-            border-radius: 0;
-            box-shadow: none;
-        }
-
-        .auth__form,
-        .auth-divider {
-            width: 100%;
-        }
-
-        .auth__title {
-            margin-top: 1.375rem;
-        }
-
-        .auth__desc {
-            max-width: 15.375rem;
-        }
-
-        .auth__form {
-            margin-top: 1.75rem;
-        }
-
-        .auth-field {
-            padding-bottom: 1.25rem;
-        }
-
-        .auth-field.has-error .auth-field__input:not(:focus) {
-            border-color: transparent;
-        }
-
-        .auth-field__error {
-            position: static;
-            display: block;
-            margin-top: 0.5rem;
-        }
-
-        .auth-field__toggle {
-            right: 0.75rem;
-        }
-
-        .auth__links {
-            margin-top: 0;
-        }
-
-        .auth__submit {
-            margin-top: 1.25rem;
-        }
-
-        .auth-divider {
-            margin-top: 1.25rem;
-        }
-
-        .auth-social {
-            margin-top: 1.25rem;
-        }
-
-        .auth-social__btn {
-            background: v.$neutral-color-700;
-        }
-
-        .auth-social__btn--discord {
-            background: v.$main-primary-color;
-        }
-
-        .auth-social__btn--discord img {
-            filter: brightness(0);
-        }
-
-        .auth__card--signup .auth__head+.auth-social {
-            margin-top: 1.25rem;
-        }
-
-        .auth__card--signup .auth-divider {
-            margin-top: 1.25rem;
-        }
-
-        .auth__card--signup .auth__form {
-            margin-top: 1.25rem;
-        }
-
-        .auth__required {
-            @include v.caption-12-r;
-            margin-bottom: 1.25rem;
-            color: v.$neutral-color-100;
-        }
-
-        .auth__submit-wrap {
-            margin-top: 2.5rem;
-        }
-
-        .auth__submit-wrap .auth__submit {
-            margin-top: 0;
-        }
-
-        .auth__form-error {
-            position: static;
-            margin-bottom: 0.625rem;
-        }
-
-        .auth__terms-title,
-        .auth__switch p {
-            color: v.$neutral-color-100;
-        }
-
-        .auth__switch p {
-            @include v.caption-12-r;
-        }
-
-        .auth__switch a {
-            @include v.caption-12-r;
-            margin-top: 0.625rem;
-        }
-
-        .auth-modal__panel {
-            width: min(100% - 2rem, 25rem);
-            padding-inline: 1.25rem;
-        }
-    }
-
-    // 태블릿 · 모바일 헤더는 App.scss 공용 (1024px 이하)
-}
-
-@media (max-width: 720px) {
-    #root:has(main > .auth)> :is(.header, .footer, .top-button) {
-        display: none;
-    }
-
-    .auth.design-password {
-        padding: 3.75rem 1rem 6.25rem;
-    }
-
-    .auth__card.design-reset {
-        width: min(100%, 31.25rem);
-        padding: 0;
-    }
-
-    .design-reset .auth__form {
-        margin-top: 1.875rem;
-    }
-
-    .design-reset .auth-field {
-        padding-bottom: 0;
-    }
-
-    .design-reset .auth-field__error {
-        position: static;
-        margin-top: 0.5rem;
-    }
-
-    .design-reset .auth__form>.btn {
-        margin-top: 1.875rem;
-        min-height: 3.125rem;
-    }
-
-    .design-page:has(.design-tech__nav) .design-heading {
-        padding: 1.5rem 1rem;
-    }
-
-    .design-tech__nav {
-        gap: clamp(0.4375rem, 3vw, 0.875rem);
-    }
-
-    .design-tech__nav .design-tech__icon {
-        width: clamp(2.75rem, 14vw, 3.5rem);
-    }
-
-    .design-tech__label {
-        position: absolute;
-        width: 0.0625rem;
-        height: 0.0625rem;
-        overflow: hidden;
-        clip-path: inset(50%);
-    }
-
-    .design-tech__panel>.design-container {
-        padding-block: 0.625rem 0;
-    }
-
-    .design-tech__panel h2 {
-        @include v.label-14-sb;
-    }
-
-    .design-tech__panel p {
-        @include v.caption-12-r;
-    }
-
-    .design-warranty__register {
-        width: min(100%, 17rem);
-    }
-
-    .design-warranty__field {
-        padding: 0.125rem;
-    }
-
-    .design-warranty__field input {
-        height: 1.75rem;
-        padding: 0.25rem 0.5rem;
-        @include v.caption-12-r;
-    }
-
-    .design-warranty__field .btn {
-        height: 1.75rem;
-        padding: 0.25rem 0.75rem;
-        @include v.caption-12-r;
-    }
-
-    .design-warranty .design-accordion {
-        gap: 0.5rem;
-    }
-
-    .design-warranty .design-accordion__summary {
-        @include v.caption-12-r;
-    }
-
-    .design-order-complete {
-        padding: 4rem 0 3.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .design-order-complete .design-heading {
-        padding: 1.875rem 0 0.625rem;
-    }
-
-    .design-order-complete .design-heading h1 {
-        @include v.heading-24-b;
-    }
-
-    .design-order-complete>p {
-        @include v.caption-12-r;
-    }
-
-    .design-order-complete+section .design-rail {
-        display: block;
-        position: relative;
-        margin-top: 0;
-    }
-
-    .design-order-complete+section .design-rail__track {
-        grid-auto-columns: calc((100% - 1rem) / 3);
-        gap: 0.5rem;
-        scrollbar-width: none;
-    }
-
-    .design-order-complete+section .design-rail>button {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 1;
-        width: 1.5rem;
-    }
-
-    .design-order-complete+section .design-rail>button:last-child {
-        left: auto;
-        right: 0;
-    }
-
-    .modal:has(.design-payment-preview) {
-        padding: 0;
-    }
-
-    .modal .modal__panel--card:has(.design-payment-preview) {
-        width: min(100%, 28.75rem);
-        max-width: 100%;
-        max-height: 100dvh;
-        padding: 1.25rem 1rem;
-
-        .modal__title {
-            @include v.heading-20-sb;
-        }
-
-        .modal__subtitle {
-            @include v.caption-12-r;
-            margin-top: 0.75rem;
-            color: v.$neutral-color-white;
-        }
-
-        .modal__close {
-            top: 1.25rem;
-            right: 1.25rem;
-        }
-
-        .modal__actions {
-            margin-top: 3.75rem;
-        }
-
-        .modal__actions .btn {
-            width: 100%;
-            min-height: 4.25rem;
-            @include v.heading-20-sb;
-        }
-    }
-
-    .design-payment-preview {
-        &__carousel {
-            gap: 1rem;
-            margin: 5rem 0 1.875rem;
-        }
-
-        &__carousel>span {
-            width: 1.875rem;
-            height: 1.875rem;
-            flex: none;
-        }
-
-        &__carousel>div {
-            width: min(100%, 14.6875rem);
-            min-width: 0;
-        }
-
-        &__fields,
-        &__fields>div {
-            gap: 0.625rem;
-        }
-
-        &__fields p {
-            padding: 1.25rem;
-            border-radius: v.$radius-sm;
-            @include v.body-16-r;
-        }
-
-        &__fields small {
-            @include v.caption-12-r;
-            margin-bottom: 0.625rem;
-        }
-
-        &__fields .design-payment-preview__installment {
-            @include v.caption-12-r;
-            align-items: center;
-            padding-block: 1rem;
-        }
-    }
-}
-
 .design-esports {
     padding-bottom: clamp(5rem, 16.35vw, 19.625rem);
 
@@ -3362,43 +2488,82 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
-    .design-esports__year {
-        .design-heading h2 {
-            @include v.heading-24-b;
-        }
-
-        .design-tabs button {
-            min-height: 2rem;
-            padding-inline: 0.3125rem;
-        }
-    }
-
-}
-
+// 선수 카드 (사진 500 정사각 · 아래 가운데 이름 · 기록 / 오른쪽 위 검정 원 화살표)
+// 태블릿 · 모바일 크기는 style/mobile.scss (esports-phone)
 .design-esports__athlete {
-    display: grid;
-    justify-items: center;
-    text-align: center;
-    gap: 1rem;
-    margin-bottom: clamp(2.5rem, 6vw, 6.25rem);
+    position: relative;
+    display: block;
+    width: min(100%, 31.25rem);
+    margin: 0 auto clamp(2.5rem, 6vw, 6.25rem);
+    overflow: hidden;
+    border-radius: v.$radius-md;
 
     .design-esports__player {
-        margin-bottom: 0.5rem;
+        width: 100%;
+        margin: 0;
+        aspect-ratio: 1;
+        object-fit: cover;
+        transition: transform 0.4s ease;
     }
 
-    h3 {
-        @include v.display-44-b;
+    // 글씨가 잘 보이도록 아래쪽만 살짝 어둡게
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 50% 0 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.55) 100%);
+        pointer-events: none;
+    }
+
+    &:is(:hover, :focus-visible) .design-esports__player {
+        transform: scale(1.03);
+    }
+
+    &:is(:hover, :focus-visible) .design-esports__athlete-arrow {
+        transform: translateX(0.25rem);
+    }
+}
+
+.design-esports__athlete-arrow {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background-color: v.$neutral-color-black;
+    transition: transform 0.25s ease;
+
+    img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+.design-esports__athlete-info {
+    position: absolute;
+    right: 1rem;
+    bottom: 1.75rem;
+    left: 1rem;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    text-align: center;
+
+    strong {
+        @include v.display-32-b;
         color: v.$main-primary-color;
     }
 
-    p {
-        @include v.heading-24-b;
-    }
-
-    a {
-        color: v.$main-primary-color;
-        margin-top: 0.75rem;
+    span {
+        @include v.heading-20-sb;
+        font-weight: v.$font-weight-medium;
+        color: v.$neutral-color-white;
+        word-break: keep-all;
     }
 }
 
@@ -4180,213 +3345,6 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 720px) {
-    .collection-intro__title {
-        font-size: 2rem;
-        line-height: 2.5rem;
-    }
-
-    .collection-intro__awards {
-        gap: 1rem;
-    }
-
-    .collection-award__seal {
-        width: 6rem;
-    }
-
-    .collection-lineup__grid,
-    .collection-features,
-    .niko__records ul {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .collection-section__media.is-split,
-    .niko__related {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .collection-colorways ul {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .niko__shop {
-        padding: .5rem 1rem;
-        font-size: .75rem;
-    }
-
-    .design-esports__athlete {
-        gap: 0.625rem;
-    }
-
-    .design-esports__athlete h3 {
-        @include v.display-32-b;
-    }
-
-    .design-esports__athlete p {
-        @include v.heading-20-sb;
-    }
-}
-
-// =========================================================
-// 태블릿 · 모바일 (1024px 이하): 가로로 나열되던 카드 목록 → 드래그 슬라이드 (스크롤바 없음)
-// 마우스 드래그는 useDragScroll (App) · 터치는 손가락으로
-// =========================================================
-@mixin drag-slider($item: min(70%, 20rem)) {
-    display: grid !important;
-    grid-auto-flow: column !important;
-    grid-template-columns: none !important;
-    grid-template-rows: none !important;
-    grid-auto-columns: $item !important;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    cursor: grab;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    >* {
-        scroll-snap-align: start;
-    }
-
-    &.is-dragging {
-        scroll-snap-type: none;
-        cursor: grabbing;
-        user-select: none;
-    }
-}
-
-@media (max-width: 1024px) {
-
-    .design-grid:not(.design-exclusive__featured),
-    .design-about__leaders,
-    .design-warranty__benefits,
-    .collection-lineup__grid,
-    .collection-features,
-    .collection-colorways ul,
-    .collection-intro__awards,
-    .niko__records ul,
-    .niko__related {
-        @include drag-slider;
-    }
-
-    // 리더 · 혜택 · 기록처럼 글이 긴 카드는 조금 넓게
-    .design-about__leaders,
-    .design-warranty__benefits,
-    .design-grid--two:not(.design-product-pair) {
-        grid-auto-columns: min(85%, 28rem) !important;
-    }
-
-    .design-product-pair,
-    .collection-lineup__grid,
-    .design-esports__equipment {
-        grid-auto-columns: min(45%, 15rem) !important;
-    }
-
-    .collection-intro__awards {
-        grid-auto-columns: 9rem !important;
-        justify-content: safe center;
-    }
-
-    // 카본 · 독점 두 묶음은 위아래로 (안의 상품만 슬라이드)
-    .design-exclusive__featured {
-        grid-template-columns: 1fr;
-    }
-
-    .design-leader--wide {
-        grid-column: auto;
-    }
-
-    .design-support-page .design-grid {
-        grid-auto-flow: column;
-    }
-}
-
-// 소개 페이지: 좁은 화면에서 글 · 이미지는 위아래로
-@media (max-width: 1024px) {
-    .design-about {
-
-        &__title,
-        &__heading.design-display,
-        &__heading--light,
-        &__years button {
-            font-size: clamp(2rem, 8vw, 3.75rem);
-            line-height: 1.15;
-        }
-
-        &__heading {
-            font-size: clamp(1.75rem, 6vw, 2.75rem);
-            line-height: 1.2;
-        }
-
-        &__timeline {
-            padding-top: 6rem;
-        }
-
-        &__milestone {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            min-height: 0;
-            margin-top: 2.5rem;
-
-            .design-display-text {
-                margin-top: 2rem;
-            }
-        }
-
-        #awards,
-        #leadership {
-            margin-top: 6rem;
-        }
-    }
-
-    .design-display-text {
-        font-size: 1rem;
-        line-height: 1.625rem;
-    }
-
-    .design-brand-section {
-        margin-top: 6rem;
-
-        &__overlay {
-            left: 1.5rem;
-            font-size: clamp(1.25rem, 5vw, 2.75rem);
-        }
-
-        &__copy {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 2.5rem 0 4rem;
-
-            .design-display-text {
-                margin-top: 1.5rem;
-            }
-        }
-    }
-
-    .design-leader {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.25rem;
-        height: 100%;
-        padding: 1.75rem;
-
-        h3,
-        p {
-            font-size: 1.125rem;
-            line-height: 1.5rem;
-        }
-
-        p.design-leader__desc {
-            margin: 0;
-            font-size: .875rem;
-            line-height: 1.375rem;
-        }
-    }
-}
-
 // =========================================================
 // 회사 · 서비스 안내 페이지 (지속가능성 · 채용 · zVentures · 연락처 · RazerCare)
 // 예전 외부 링크를 대신하는 사이트 안 페이지 · Razer 소개 페이지와 같은 톤
@@ -4611,36 +3569,6 @@ a.design-support:hover {
 
     &__cta {
         margin-top: 3rem;
-    }
-}
-
-@media (max-width: 1024px) {
-    .design-company {
-        &__title {
-            font-size: clamp(2rem, 8vw, 3.75rem);
-            line-height: 1.15;
-        }
-
-        &__section {
-            margin-top: 4rem;
-        }
-
-        &__heading {
-            font-size: clamp(1.5rem, 6vw, 2rem);
-        }
-
-        &__cards--two {
-            grid-template-columns: 1fr;
-        }
-
-        &__facts {
-            gap: 3rem;
-        }
-
-        &__table li {
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-        }
     }
 }
 
@@ -5269,25 +4197,6 @@ a.design-support:hover {
     }
 }
 
-@media (max-width: 1024px) {
-    .pay {
-        grid-template-columns: 1fr;
-
-        &__side {
-            position: static;
-        }
-    }
-
-    .pay-item {
-        grid-template-columns: 7.5rem minmax(0, 1fr);
-        gap: 1rem;
-    }
-
-    .pay-methods {
-        grid-template-columns: 1fr;
-    }
-}
-
 // =========================================================
 // 제품 카드 공통: 카드 아무 데나 눌러도 상세페이지로
 // (카드 안 대표 링크를 카드 전체 크기로 늘림 · 하트 · 구입 등 다른 버튼은 그 위에 그대로)
@@ -5304,7 +4213,7 @@ a.design-support:hover {
 
 .product-card__name,
 .design-recommendation .design-explore,
-.collection-product__actions > a,
+.collection-product__actions>a,
 .home-pick__card .home-pick__btn,
 .home-setup__product .home-setup__product-btn,
 .mypage__order-item .mypage__item-name {
@@ -5317,11 +4226,11 @@ a.design-support:hover {
 }
 
 .product-card__heart,
-.collection-product__actions > button {
+.collection-product__actions>button {
     z-index: 2;
 }
 
-.collection-product__actions > button {
+.collection-product__actions>button {
     position: relative;
 }
 
@@ -5358,6 +4267,7 @@ a.design-support:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .design-recommendation,
     .promotion__card,
     .collection-product,

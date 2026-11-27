@@ -21,6 +21,16 @@ $grey-3: #828282;
 $grey-4: #BDBDBD;
 $gradient-primary: linear-gradient(90deg, $main-primary-color 0%, #00FFDD 100%); // 커스터마이징 버튼
 
+// 결제 카드 (모바일 · 카드사 색)
+$pay-card-visa-from: #2B5590;
+$pay-card-visa-to: #121C38;
+$pay-card-visa-line: #4A72AA;
+$pay-card-master-from: #463A48;
+$pay-card-master-to: #1C1820;
+$pay-card-master-line: #6A5F6C;
+$pay-card-chip: #D9BE7E;
+$pay-card-chip-line: #A88A4C;
+
 
 // ---------- Font weight ----------
 $font-weight-regular: 400; // Regular · 기본 정보와 편안하게 읽는 표현
@@ -153,11 +163,52 @@ $font-family-display: "Stalinist One", $font-family-base; // 영문 디스플레
     letter-spacing: 0;
 }
 
+@mixin label-12-sb {
+    font-family: $font-family-base;
+    font-size: 0.75rem;
+    font-weight: $font-weight-semibold;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin label-10-m {
+    font-family: $font-family-base;
+    font-size: 0.625rem;
+    font-weight: $font-weight-medium;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin label-10-sb {
+    font-family: $font-family-base;
+    font-size: 0.625rem;
+    font-weight: $font-weight-semibold;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
 @mixin caption-12-r {
     font-family: $font-family-base;
     font-size: 0.75rem;
     font-weight: $font-weight-regular;
     line-height: 1rem;
+    letter-spacing: 0;
+}
+
+@mixin caption-10-r {
+    font-family: $font-family-base;
+    font-size: 0.625rem;
+    font-weight: $font-weight-regular;
+    line-height: 1rem;
+    letter-spacing: 0;
+}
+
+// 5.6 / 8.4 (e스포츠 모바일 행사 탭 버튼 · Figma Pretendard Regular)
+@mixin caption-5-6-r {
+    font-family: $font-family-base;
+    font-size: 0.5rem;
+    font-weight: $font-weight-regular;
+    line-height: 0.85rem;
     letter-spacing: 0;
 }
 
@@ -198,7 +249,7 @@ $promo-bar-height: 2.5rem; // 헤더 아래 프로모션 바 (62px)
 $header-height: 4rem; // GNB (69px)
 
 @mixin container {
-    width: 100%;
+    width: calc(100% - 2.5rem); // 화면이 좁아져도 좌우 최소 1.25rem 여백 (1920 에서는 max-width 로 120 여백)
     max-width: $container-width;
     margin: 0 auto;
 }
