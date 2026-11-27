@@ -2163,6 +2163,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .product-card,
     .product-card .product-card__image {
         transition: none;
@@ -2219,9 +2220,9 @@ $auth-error-color: #FF4646; // 입력 에러 문구
     }
 
     &__title {
-        @include body-14-r;
+        @include heading-20-sb;
         margin-top: 1.375rem;
-        color: $neutral-color-100;
+        color: $neutral-color-white;
     }
 
     &__desc {
@@ -2503,12 +2504,24 @@ $auth-error-color: #FF4646; // 입력 에러 문구
             transition: filter 0.2s;
         }
 
-        &:hover,
+        // 고를 때만 메인 컬러 (마우스 올림 · 누르는 중 · 키보드 선택)
+        // 터치 기기는 누른 뒤 색이 남지 않도록 hover 를 마우스 기기에서만
+        &:active,
         &:focus-visible {
             background-color: $main-primary-color;
 
             img {
                 filter: brightness(0); // 아이콘 검정
+            }
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background-color: $main-primary-color;
+
+                img {
+                    filter: brightness(0);
+                }
             }
         }
     }
@@ -3404,7 +3417,7 @@ $auth-error-color: #FF4646; // 입력 에러 문구
         margin-top: 1rem;
         font-weight: $font-weight-medium;
 
-        + .mypage__sub {
+        +.mypage__sub {
             margin-top: 1rem;
         }
     }
@@ -5216,6 +5229,7 @@ $top-green: $main-primary-color;
         object-fit: contain;
     }
 }
+
 // =========================================================
 // 공통 팝업 (Modal.tsx · MypageModals.tsx · 어두운 배경 55% + 가운데 상자)
 // =========================================================
@@ -5251,7 +5265,7 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
                 margin-top: 2.5rem;
             }
 
-            .modal__body + .modal__actions {
+            .modal__body+.modal__actions {
                 margin-top: 1.5rem;
             }
         }
@@ -5401,12 +5415,12 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
             pointer-events: none;
         }
 
-        input:focus-visible + .modal__check-box {
+        input:focus-visible+.modal__check-box {
             outline: 0.125rem solid $main-primary-color;
             outline-offset: 0.125rem;
         }
 
-        input:checked + .modal__check-box {
+        input:checked+.modal__check-box {
             border-color: $main-primary-color;
             background-color: $main-primary-color;
 
@@ -5815,6 +5829,7 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
 
 // 스크롤바 (드롭다운 목록 · 팝업) · 얇고 둥근 회색 막대
 @mixin thin-scrollbar($thumb: $neutral-color-300) {
+
     // Firefox 전용 (크롬은 이 값이 있으면 아래 둥근 모양을 무시해서 Firefox 에만)
     @supports (-moz-appearance: none) {
         scrollbar-width: thin;
@@ -6028,12 +6043,14 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
             color: $neutral-color-white;
         }
     }
+
     .pay-card__menu-btn--danger {
         color: $modal-danger;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .modal,
     .modal__panel {
         animation: none;
@@ -6183,8 +6200,8 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
 .header__promo-short,
 .footer__plus,
 .home-setup__copyright,
-.home-pick__card.is-large .home-pick__info > .home-pick__name,
-.home-pick__card.is-large .home-pick__info > .home-pick__game {
+.home-pick__card.is-large .home-pick__info>.home-pick__name,
+.home-pick__card.is-large .home-pick__info>.home-pick__game {
     display: none; // 모바일(360)에서만 보임 · style/mobile.scss home-phone
 }
 
@@ -6278,3 +6295,4 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
 @include mobile.support-phone;
 @include mobile.exclusive-phone;
 @include mobile.buying-phone;
+@include mobile.auth-phone;

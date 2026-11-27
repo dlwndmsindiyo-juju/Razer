@@ -33,7 +33,7 @@ export const getBreadcrumb = (pathname: string, search: string): Crumb[] => {
     const params = new URLSearchParams(search);
     const [first, second, third, fourth] = parts;
 
-    if (!first || ["login", "signup", "password-reset"].includes(first)) return [];
+    if (!first || ["login", "signup", "password-reset", "find-id"].includes(first)) return [];
 
     if (first === "search") {
         const q = params.get("q");

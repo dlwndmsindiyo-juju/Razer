@@ -6003,3 +6003,201 @@ $phone: 699px;
         }
     }
 }
+
+// =========================================================
+// 로그인 · 회원가입 · 비밀번호 찾기 (모바일 360 시안)
+// 입력칸 · 버튼 글자 14 / 위치 선택은 회색 칸 (테두리 없음) / 에러 문구는 칸 바로 아래 · 빨간 테두리 없음
+// 아이콘은 그대로 (크기만 시안대로)
+// App.scss 맨 아래에서 @include mobile.auth-phone
+// =========================================================
+@mixin auth-phone {
+    @media (max-width: $phone) {
+        section.auth {
+            .auth-field__input,
+            .auth-select__button {
+                @include v.body-14-r;
+            }
+
+            .auth-field.has-error .auth-field__input:not(:focus),
+            .auth-field.has-error .auth-select__button {
+                border-color: transparent;
+            }
+
+            .auth-field__error {
+                @include v.caption-12-r;
+                position: static;
+                display: block;
+                margin-top: 0.5rem;
+            }
+
+            // 위치: 다른 칸과 같은 회색 칸
+            .auth-select__button {
+                padding: 0 1.25rem;
+                border-color: transparent;
+                border-radius: v.$radius-sm;
+                background-color: v.$neutral-color-700;
+                color: v.$neutral-color-white;
+
+                &.is-empty {
+                    color: v.$neutral-color-white;
+                }
+            }
+
+            .auth__desc,
+            .design-reset__help li {
+                word-break: keep-all;
+            }
+
+            .auth__submit,
+            .design-reset .auth__form>.btn {
+                @include v.label-14-sb;
+                height: 3.125rem;
+                min-height: 3.125rem;
+            }
+
+            .auth__links {
+                gap: 1.25rem;
+                margin-top: 0.25rem;
+            }
+
+            // 회원가입: 약관 → (에러 문구) → 버튼
+            .auth__terms {
+                @include v.caption-12-r;
+                color: v.$neutral-color-100;
+            }
+
+            .auth__terms-title {
+                @include v.body-14-r;
+                margin-bottom: 0.75rem;
+            }
+
+            .auth__submit-wrap {
+                margin-top: 3rem;
+            }
+
+            .auth__form-error {
+                @include v.caption-12-r;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+            .auth__switch {
+                margin-top: 1rem;
+            }
+
+            // ---------- 비밀번호 찾기 ----------
+            .design-reset__help {
+                @include v.caption-12-r;
+                width: fit-content;
+                margin: 0.75rem auto 0;
+
+                li {
+                    gap: 0.625rem;
+                    margin-top: 0.75rem;
+
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                }
+
+                img {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                }
+            }
+
+            .design-reset .auth__title {
+                margin-top: 1.375rem;
+            }
+
+            .design-reset .auth__form {
+                margin-top: 1.75rem;
+            }
+
+            .design-reset .auth-field {
+                padding-bottom: 1.25rem;
+            }
+
+            // 안내 문구는 회색 칸 위 (가운데) · 칸 안에는 받기 방법 두 개
+            .design-reset__methods {
+                gap: 0;
+                margin-top: 0.625rem;
+                padding: 0;
+                background: none;
+
+                legend {
+                    @include v.caption-12-r;
+                    gap: 0.5rem;
+                    float: left; // 칸 안 첫 줄로 (테두리 위에 걸치지 않게)
+                    grid-column: 1 / -1;
+                    width: 100%;
+                    margin: 0 0 0.75rem;
+                    text-align: center;
+                }
+
+                legend img {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                }
+
+                label {
+                    @include v.caption-12-r;
+                    flex: 1;
+                    height: 3.125rem;
+                    padding-left: 1.25rem;
+                }
+
+                // 동그라미: 테두리만 · 고르면 초록 테두리 + 초록 점
+                input {
+                    appearance: none;
+                    display: grid;
+                    place-items: center;
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    margin: 0;
+                    border: 0.0625rem solid v.$neutral-color-100;
+                    border-radius: 50%;
+
+                    &::after {
+                        content: "";
+                        width: 0.375rem;
+                        height: 0.375rem;
+                        border-radius: 50%;
+                    }
+
+                    &:checked {
+                        border-color: v.$main-primary-color;
+
+                        &::after {
+                            background-color: v.$main-primary-color;
+                        }
+                    }
+                }
+            }
+
+            .design-reset__methods-box {
+                justify-content: flex-start;
+                gap: 0;
+            }
+
+            // 안내 문구: 시안처럼 짧게 (앞 글 숨김 · 굵게 없음)
+            .design-reset__lead {
+                display: none;
+            }
+
+            .design-reset__help strong {
+                font-weight: v.$font-weight-regular;
+                color: inherit;
+            }
+
+            .design-reset__links {
+                margin-top: 1.25rem;
+                color: v.$neutral-color-white;
+            }
+
+            .design-reset .auth__form>.btn {
+                margin-top: 2rem;
+            }
+        }
+    }
+}
