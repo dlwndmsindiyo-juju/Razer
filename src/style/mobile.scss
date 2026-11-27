@@ -5,702 +5,6 @@
 $tablet: 1399px;
 $phone: 699px;
 
-@mixin account-and-orders {
-    @media (max-width: $tablet) {
-        body:has(main > .mypage) {
-            min-width: 0;
-        }
-
-        .mypage {
-            padding-bottom: 3rem;
-
-            &__profile-inner {
-                gap: .625rem;
-                padding: 1rem 0;
-            }
-
-            &__avatar {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-
-            &__name {
-                @include v.body-16-sb;
-                min-width: 0;
-                overflow-wrap: anywhere;
-            }
-
-            &__profile-btn {
-                @include v.caption-12-r;
-                width: auto;
-                height: 2rem;
-                padding: 0 .5rem;
-            }
-
-            &__profile-btn--mobile {
-                display: inline-flex;
-            }
-
-            &__tabs-inner {
-                justify-content: space-between;
-                gap: .25rem;
-            }
-
-            &__tab {
-                @include v.caption-12-r;
-                padding: 1rem .125rem .625rem;
-                text-align: center;
-            }
-
-            &__section {
-                margin-top: 2rem;
-            }
-
-            &__section-title {
-                @include v.heading-20-sb;
-            }
-
-            &__stats {
-                gap: .375rem;
-                margin-top: .75rem;
-                padding: 0;
-                border: 0;
-            }
-
-            &__stat {
-                align-items: start;
-                min-width: 0;
-                gap: .25rem;
-                padding: .5rem;
-                border-radius: v.$radius-sm;
-                background: v.$neutral-color-panel;
-            }
-
-            &__stat::after {
-                display: none;
-            }
-
-            &__stat-icon {
-                display: none;
-            }
-
-            &__stat-value {
-                @include v.heading-20-sb;
-                order: -1;
-            }
-
-            &__stat-label {
-                @include v.caption-12-r;
-            }
-
-            &__orders,
-            &__panels {
-                gap: .75rem;
-                margin-top: .75rem;
-            }
-
-            &__panel {
-                min-width: 0;
-                padding: 1rem;
-            }
-
-            &__panel-title {
-                @include v.body-16-sb;
-            }
-
-            &__order-detail &__panel {
-                border: 0.0625rem solid v.$neutral-color-500;
-            }
-
-            &__order-detail &__panel-btn {
-                width: 100%;
-            }
-
-            &__order-detail &__meta {
-                margin-top: .5rem;
-            }
-
-            &__order-back {
-                @include v.caption-12-r;
-                display: inline-flex;
-                align-items: center;
-                gap: .25rem;
-                color: v.$neutral-color-100;
-            }
-
-            &__order-back &__chevron {
-                transform: rotate(180deg);
-                width: 1rem;
-                height: 1rem;
-            }
-
-            &__order-item {
-                gap: .75rem;
-            }
-
-            &__item-thumb {
-                width: 4.5rem;
-                height: 4.5rem;
-            }
-
-            &__item-name,
-            &__item-price,
-            &__status-line {
-                @include v.body-16-sb;
-            }
-
-            &__actions {
-                flex-wrap: wrap;
-                gap: .5rem;
-            }
-
-            &__actions>* {
-                flex: 1 1 8rem;
-            }
-
-            &__best {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: .75rem;
-            }
-        }
-
-        .order-card {
-            &__head {
-                display: grid;
-                grid-template-columns: minmax(0, 1fr) auto;
-                gap: .25rem;
-                padding: .75rem 1rem;
-                background: transparent;
-            }
-
-            &__status {
-                @include v.caption-12-r;
-                grid-column: 1 / -1;
-                width: auto;
-            }
-
-            &__status-icon {
-                display: none;
-            }
-
-            &__date {
-                @include v.body-16-sb;
-                grid-column: 1;
-            }
-
-            &__number {
-                grid-column: 1 / -1;
-                grid-row: 3;
-                overflow-wrap: anywhere;
-            }
-
-            .mypage &__detail {
-                @include v.caption-12-r;
-                grid-column: 2;
-                grid-row: 2;
-            }
-
-            &__body {
-                padding: 0 1rem 1rem;
-                gap: .75rem;
-            }
-
-            &__thumb {
-                width: 5rem;
-                height: 5rem;
-                background: transparent;
-            }
-
-            &__name,
-            &__price {
-                @include v.body-16-sb;
-            }
-
-            &__option {
-                @include v.caption-12-r;
-            }
-        }
-
-        .account {
-            grid-template-columns: minmax(0, 1fr);
-            gap: 1rem;
-
-            &__mobile-toggle {
-                display: grid;
-                grid-template-columns: auto minmax(0, 1fr) auto;
-                align-items: center;
-                gap: .75rem;
-                width: 100%;
-                padding: .75rem 1rem;
-                border: 0.0625rem solid v.$neutral-color-700;
-                border-radius: v.$radius-sm;
-                background: v.$neutral-color-panel;
-                text-align: left;
-
-                img,
-                svg {
-                    width: 1rem;
-                    height: 1rem;
-                }
-
-                small {
-                    @include v.caption-12-r;
-                    display: block;
-                    color: v.$neutral-color-100;
-                }
-
-                strong {
-                    @include v.body-14-m;
-                    color: v.$main-primary-color;
-                }
-
-                &[aria-expanded="true"]>img:last-child {
-                    transform: rotate(180deg);
-                }
-            }
-
-            &__nav ul {
-                margin-top: .5rem;
-            }
-
-            &__nav ul[data-expanded="false"] {
-                display: none;
-            }
-
-            &__row {
-                flex-wrap: wrap;
-                min-height: 0;
-                gap: .5rem;
-                padding: .75rem;
-            }
-
-            &__rows {
-                gap: .75rem;
-                margin-top: .75rem;
-            }
-
-            &__row-text strong {
-                @include v.body-16-m;
-            }
-
-            &__row-text span {
-                @include v.caption-12-r;
-                overflow-wrap: anywhere;
-            }
-
-            &__cards {
-                grid-template-columns: minmax(0, 1fr);
-            }
-        }
-
-        .mypage~.modal .modal__panel {
-            max-height: calc(100dvh - 2rem);
-            padding: 1rem;
-        }
-    }
-}
-
-@mixin product-and-community {
-    @media (max-width: $phone) {
-        .design-checkout:has(.design-cart) {
-            padding-bottom: 9rem;
-        }
-
-        .design-cart__checkout {
-            position: fixed;
-            inset: auto 0 0;
-            z-index: 95;
-            gap: .625rem;
-            padding: .5rem 1rem calc(.75rem + env(safe-area-inset-bottom));
-            border-top: 0.0625rem solid v.$main-primary-color;
-            border-radius: v.$radius-sm v.$radius-sm 0 0;
-            background: v.$neutral-color-700;
-
-            .design-checkout__summary {
-                padding: 0;
-                background: transparent;
-            }
-
-            .design-checkout__summary h2,
-            .design-checkout__totals>li:last-child {
-                display: none;
-            }
-        }
-
-        .design-cart__checkout .design-cart__summary-toggle {
-            display: grid;
-            place-items: center;
-            min-height: 1.75rem;
-
-            img {
-                width: 1rem;
-                height: 1rem;
-                transform: rotate(180deg);
-            }
-
-            &[aria-expanded="true"] img {
-                transform: none;
-            }
-        }
-
-        .design-cart__summary-details[data-expanded="false"] {
-            display: none;
-        }
-
-        .design-cart__checkout .design-cart__mobile-total {
-            @include v.body-16-sb;
-            display: flex;
-            justify-content: space-between;
-            gap: .5rem;
-
-            strong:last-child {
-                color: v.$main-primary-color;
-            }
-        }
-
-        body:has(main .design-cart) .top-button {
-            margin-bottom: 13rem;
-        }
-
-        .product-detail {
-            padding-bottom: 11rem;
-
-            &__purchase-panel {
-                position: fixed;
-                inset: auto 0 0;
-                z-index: 95;
-                padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
-                border-top: 0.0625rem solid v.$main-primary-color;
-                border-radius: v.$radius-sm v.$radius-sm 0 0;
-                background: v.$neutral-color-700;
-            }
-
-            &__buy {
-                display: grid;
-                gap: .5rem;
-                margin-top: 0;
-            }
-
-            &__total {
-                display: flex;
-                justify-content: space-between;
-                gap: .5rem;
-                width: 100%;
-            }
-
-            &__total-label {
-                display: inline;
-                color: v.$neutral-color-white;
-            }
-
-            &__actions {
-                grid-template-columns: minmax(0, 1fr) 4.5rem;
-                gap: .75rem;
-                margin-top: .75rem;
-            }
-
-            &__actions button {
-                height: 3rem;
-            }
-
-            &__purchase {
-                order: -1;
-            }
-
-            &__cart {
-                display: grid;
-                place-items: center;
-                border-color: v.$main-primary-color;
-            }
-
-            &__cart img {
-                display: block;
-                width: 1.5rem;
-                height: 1.5rem;
-            }
-
-            &__cart span {
-                position: absolute;
-                width: 0.0625rem;
-                height: 0.0625rem;
-                overflow: hidden;
-                clip-path: inset(50%);
-            }
-        }
-
-        body:has(main > .product-detail) .top-button {
-            margin-bottom: 10rem;
-        }
-
-        .pd-toast {
-            margin-bottom: 10rem;
-        }
-    }
-
-    @media (max-width: $tablet) {
-        body:has(main > :is(.product-detail, .product-customize-unavailable, .promotion, .collab-page)) {
-            min-width: 0;
-        }
-
-        .product-detail {
-            padding-top: 1rem;
-
-            &__top {
-                width: calc(100% - 2rem);
-                grid-template-columns: minmax(0, 1fr);
-                gap: 1.5rem;
-                padding-bottom: 2rem;
-            }
-
-            &__gallery,
-            &__right {
-                min-width: 0;
-            }
-
-            &__title {
-                @include v.heading-24-b;
-            }
-
-            &__recommend>* {
-                width: calc(100% - 2rem);
-            }
-
-            &__content {
-                padding: 2rem 1rem 3rem;
-            }
-        }
-
-        .pd-gallery {
-            grid-template-columns: minmax(0, 1fr);
-            gap: .5rem;
-
-            &__list {
-                order: 1;
-                flex-direction: row;
-                justify-content: safe center;
-                gap: .125rem;
-                height: auto;
-                min-height: 0;
-                overflow-x: auto;
-                overflow-y: hidden;
-            }
-
-            &__thumb {
-                display: grid;
-                place-items: center;
-                width: 1.375rem;
-                height: 1.375rem;
-                border: 0;
-                background: transparent;
-                opacity: 1;
-
-                img {
-                    display: none;
-                }
-
-                &::after {
-                    content: "";
-                    width: .375rem;
-                    height: .375rem;
-                    border-radius: 50%;
-                    background: v.$neutral-color-300;
-                }
-
-                &.is-active::after {
-                    background: v.$main-primary-color;
-                }
-            }
-
-            &__main {
-                min-height: 0;
-                aspect-ratio: 1;
-            }
-
-            &__track img {
-                object-fit: contain;
-            }
-
-            &__actions {
-                inset: auto .5rem .5rem;
-                gap: .5rem;
-            }
-        }
-
-        .pd-content {
-            max-width: 100%;
-
-            &__chips {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                margin: 1rem;
-            }
-
-            &__band,
-            &__notice {
-                padding: 1rem;
-            }
-
-            &__specs {
-                padding: 1.25rem 1rem;
-            }
-
-            &__spec-row {
-                grid-template-columns: minmax(0, 1fr);
-                gap: .5rem;
-                margin-top: 1rem;
-            }
-
-            &__spec-row &__spec-list>li {
-                grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-                gap: .5rem;
-            }
-
-            &__spec-value {
-                overflow-wrap: anywhere;
-            }
-        }
-
-        .promotion {
-            padding-bottom: 4rem;
-
-            &__featured {
-                padding-top: 2rem;
-            }
-
-            &__card-img {
-                height: auto;
-                aspect-ratio: 2;
-            }
-
-            &__card-title {
-                @include v.heading-20-sb;
-                margin-top: .5rem;
-            }
-
-            &__card-desc {
-                margin-top: .5rem;
-            }
-
-            &__collabs,
-            &__faq {
-                margin-top: 3rem;
-            }
-
-            &__title {
-                @include v.heading-24-b;
-            }
-
-            &__grid {
-                grid-template-columns: none;
-                grid-auto-columns: min(46%, 15rem);
-                grid-auto-flow: column;
-                gap: .75rem;
-                margin-top: 1.25rem;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                scrollbar-width: none;
-            }
-
-            &__grid>li {
-                scroll-snap-align: start;
-            }
-
-            &__collab-img {
-                height: auto;
-                aspect-ratio: 4 / 5;
-            }
-
-            &__collab-name {
-                @include v.body-16-m;
-                margin-top: .5rem;
-                overflow-wrap: anywhere;
-            }
-
-            &__faq .faq {
-                margin-top: 1.25rem;
-            }
-        }
-
-        .collab-page {
-            padding-bottom: 4rem;
-
-            &__hero {
-                margin-top: 0;
-            }
-
-            &__faq {
-                margin-top: 3rem;
-            }
-
-            &__faq .faq {
-                margin-top: 1.25rem;
-            }
-
-            &__support {
-                flex-wrap: wrap;
-                gap: .5rem;
-            }
-        }
-
-        .collab-block {
-            margin-top: 2rem;
-
-            &--center .collab-block__text,
-            &--caption .collab-block__text {
-                width: calc(100% - 2rem);
-            }
-
-            &--right,
-            &--left {
-                grid-template-columns: minmax(0, 1fr);
-                gap: .75rem;
-            }
-
-            &--right .collab-block__text,
-            &--left .collab-block__text {
-                padding: 0;
-                align-items: center;
-                text-align: center;
-            }
-
-            &--right .collab-block__img,
-            &--left .collab-block__img {
-                height: auto;
-                aspect-ratio: 2;
-                order: 0;
-            }
-
-            &__title {
-                @include v.heading-20-sb;
-                color: v.$main-primary-color;
-            }
-
-            &__note {
-                margin-top: .5rem;
-            }
-        }
-
-        .collab-intro,
-        .collab-stay {
-            grid-template-columns: minmax(0, 1fr);
-            margin-top: 2rem;
-            gap: 1rem;
-
-            &__text {
-                padding-top: 0;
-            }
-
-            &__title {
-                @include v.heading-24-b;
-            }
-
-            &__img {
-                height: auto;
-                aspect-ratio: 2;
-            }
-        }
-    }
-}
-
 @mixin product-customize {
     .product-customize-unavailable {
         display: grid;
@@ -741,11 +45,322 @@ $phone: 699px;
             max-width: none;
         }
     }
+
+    // 3D 커스터마이징 화면: 좁은 화면 (예전 ProductCustomize.scss 의 820 이하)
+    @media (max-width: 820px) {
+        .keyboard-customize__workspace {
+            min-height: 0;
+        }
+
+        .keyboard-customize__stage {
+            height: clamp(17.813rem, 65vw, 27.5rem);
+            min-height: 0;
+        }
+
+        .keyboard-customize__poster img {
+            max-height: 11.875rem;
+        }
+    }
 }
 
-@mixin editorial-phone {
+// =========================================================
+// 디자인 페이지 공용 태블릿 · 모바일 (예전 style/DesignPages.scss 의 1399 · 900 · 699 · 460 이하 규칙을 이리로 옮김)
+// 프로모션 · 콜라보 · e스포츠 · FAQ · 등록 및 보증 · 지원 · 회사 소개 · 멤버십 · 독점 · 구매 방법 · 장바구니 · 결제 · 로그인 계열
+// App.scss 맨 아래에서 가장 먼저 @include mobile.design-pages-responsive (뒤의 페이지별 mixin 이 덮어씀)
+//
+// 태블릿 · 모바일 (1399 이하): 가로로 나열되던 카드 목록 → 드래그 슬라이드 (스크롤바 없음)
+// 마우스 드래그는 useDragScroll (App) · 터치는 손가락으로
+// =========================================================
+@mixin drag-slider($item: min(70%, 20rem)) {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    grid-auto-columns: $item !important;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    cursor: grab;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    >* {
+        scroll-snap-align: start;
+    }
+
+    &.is-dragging {
+        scroll-snap-type: none;
+        cursor: grabbing;
+        user-select: none;
+    }
+}
+
+@mixin design-pages-responsive {
     @media (max-width: $phone) {
-        // 모바일 푸터는 app-tablet-phone 공용
+        .design-buying {
+            padding-bottom: 3rem;
+
+            >.design-stack {
+                gap: 1.5rem;
+            }
+
+            .design-heading h1 {
+                font-size: 1.5rem;
+            }
+
+            &__number {
+                @include v.heading-24-sb;
+            }
+
+            &__program {
+                grid-template-columns: 1fr;
+                padding: 1.25rem;
+                gap: 0.75rem;
+            }
+
+            &__program h2,
+            &__program a {
+                align-self: center;
+            }
+
+            &__program h2 {
+                font-size: 1.25rem;
+            }
+
+            &__program p,
+            &__program a {
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+        }
+
+        .design-recommendation {
+            min-height: 7.75rem;
+
+            &__art {
+                width: 82%;
+                height: 4.625rem;
+                margin: 0.5rem auto 0.5rem;
+            }
+
+            &__copy {
+                padding: 0 0.375rem 0.625rem;
+            }
+
+            h3 {
+                font-size: 0.5625rem;
+                line-height: 0.75rem;
+            }
+
+            p,
+            a {
+                font-size: 0.5rem;
+                line-height: 0.625rem;
+            }
+
+            p {
+                margin: 0.125rem 0;
+            }
+        }
+
+        .design-exclusive {
+            padding-bottom: 2.8125rem;
+
+            .design-hero img {
+                aspect-ratio: 360 / 200;
+            }
+
+            .design-heading {
+                padding: 1.5rem 0 0.875rem;
+            }
+
+            .design-heading :is(h1, h2) {
+                @include v.heading-24-sb;
+            }
+
+            .design-heading p {
+                font-size: 0.75rem;
+            }
+
+            .design-hero+.design-container>.design-heading:first-child {
+                padding: 1.25rem 0;
+            }
+
+            &__featured {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            &__featured .design-stack {
+                gap: 0.625rem;
+            }
+
+            &__label p {
+                font-size: 0.75rem;
+            }
+
+            &__label h2 {
+                margin-top: 0.1875rem;
+                font-size: 1rem;
+                line-height: 1.25rem;
+            }
+
+            .design-product-pair {
+                grid-template-columns: repeat(2, minmax(0, 6.25rem));
+                gap: 0.625rem;
+            }
+
+            .design-rail {
+                margin-top: 0.75rem;
+                grid-template-columns: 1.5rem minmax(0, 1fr) 1.5rem;
+                gap: 0.25rem;
+            }
+
+            .design-rail button {
+                width: 1.5rem;
+                font-size: 1rem;
+            }
+
+            .design-rail__track {
+                grid-auto-columns: 5.625rem;
+                gap: 0.375rem;
+            }
+
+            .design-tabs {
+                gap: 0.375rem;
+            }
+
+            .design-tabs button {
+                padding: 0.375rem 0.5625rem;
+                font-size: 0.6875rem;
+                min-width: 0;
+            }
+
+            .design-media-card h3 {
+                margin-top: 0;
+                font-size: 0.875rem;
+            }
+
+            .design-media-card p,
+            .design-media-card a {
+                font-size: 0.75rem;
+            }
+        }
+
+        .design-membership {
+            >.design-container {
+                width: calc(100% - 2rem);
+            }
+
+            .design-heading {
+                padding: 1.25rem 0 0.5625rem;
+            }
+
+            .design-heading h1 {
+                font-size: 1.5rem;
+            }
+
+            .design-member-benefits .design-support {
+                min-height: 3.875rem;
+                padding: 0.75rem 1rem;
+            }
+
+            .design-member-benefits img {
+                width: 1.5625rem;
+                height: 1.5625rem;
+            }
+
+            .design-member-benefits h2 {
+                font-size: 0.875rem;
+                margin: 0;
+            }
+
+            &__signup {
+                margin: 1.25rem 0 3rem;
+            }
+
+            &__coupon {
+                flex-direction: column;
+                text-align: center;
+                padding: 0.9375rem;
+                gap: 0.625rem;
+            }
+
+            &__coupon>span {
+                width: 3.6875rem;
+            }
+
+            &__coupon img {
+                width: 1.5625rem;
+            }
+
+            &__coupon h2 {
+                font-size: 1rem;
+            }
+
+            &__coupon p,
+            &__signup>p,
+            &__signup li {
+                font-size: 0.75rem;
+            }
+
+            &__signup ul {
+                margin: 0.625rem 0 1.25rem;
+            }
+
+            &__signup li {
+                margin-bottom: 0.375rem;
+            }
+
+            &__signup>.btn,
+            &__reward .btn {
+                min-height: 3rem;
+            }
+
+            &__rewards,
+            &__earning {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            &__reward {
+                min-height: 0;
+                padding: 1rem;
+            }
+
+            &__reward h2 {
+                font-size: 1rem;
+            }
+
+            &__reward p {
+                font-size: 0.8125rem;
+            }
+
+            &__rewards+.design-heading {
+                padding: 1.875rem 0;
+            }
+
+            &__earning img {
+                width: 6.5625rem;
+                margin-bottom: 0.75rem;
+            }
+
+            &__earning h3 {
+                font-size: 1rem;
+                margin-bottom: 0.375rem;
+            }
+
+            &__earning p {
+                font-size: 0.75rem;
+            }
+        }
+    }
+
+    @media (max-width: $phone) {
+        // 모바일 푸터는 App.scss 공용 (1399 이하)
 
         .design-grid--three,
         .design-grid--four {
@@ -791,6 +406,10 @@ $phone: 699px;
 
             .design-warranty__register {
                 margin-inline: auto;
+            }
+
+            .design-warranty__field {
+                background: v.$neutral-color-700;
             }
 
             .design-warranty__benefits {
@@ -935,12 +554,13 @@ $phone: 699px;
                 text-align: left;
                 justify-items: stretch;
                 align-content: start;
-                min-height: 7.5rem;
-                padding: .625rem;
+                min-height: 0;
+                padding: .875rem;
             }
 
             .design-support h2 {
-                @include v.caption-12-r;
+                font-size: .875rem;
+                line-height: 1.35;
                 color: v.$neutral-color-white;
                 margin: 0 1rem 0.5rem 0;
             }
@@ -954,7 +574,7 @@ $phone: 699px;
             }
 
             .design-support p {
-                @include v.caption-12-r;
+                font-size: .8125rem;
             }
         }
 
@@ -1017,9 +637,7 @@ $phone: 699px;
             font-size: 0.75rem;
         }
     }
-}
 
-@mixin editorial-narrow-phone {
     @media (max-width: 460px) {
 
         .design-grid--two,
@@ -1048,10 +666,130 @@ $phone: 699px;
             align-items: center;
         }
     }
-}
 
-@mixin shop-phone {
+    @media (max-width: 900px) {
+        .auth:not(.design-password) {
+            padding: 3.75rem 1rem 6.75rem;
+
+            .auth__card {
+                width: min(100%, 31.25rem);
+                padding: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .auth__form,
+            .auth-divider {
+                width: 100%;
+            }
+
+            .auth__title {
+                margin-top: 1.375rem;
+            }
+
+            .auth__desc {
+                max-width: 15.375rem;
+            }
+
+            .auth__form {
+                margin-top: 1.75rem;
+            }
+
+            .auth-field {
+                padding-bottom: 1.25rem;
+            }
+
+            .auth-field.has-error .auth-field__input:not(:focus) {
+                border-color: transparent;
+            }
+
+            .auth-field__error {
+                position: static;
+                display: block;
+                margin-top: 0.5rem;
+            }
+
+            .auth-field__toggle {
+                right: 0.75rem;
+            }
+
+            .auth__links {
+                margin-top: 0;
+            }
+
+            .auth__submit {
+                margin-top: 1.25rem;
+            }
+
+            .auth-divider {
+                margin-top: 1.25rem;
+            }
+
+            .auth-social {
+                margin-top: 1.25rem;
+            }
+
+            // 기본은 모두 회색 칸 + 흰 아이콘 (누를 때만 초록 · App.scss .auth-social)
+            .auth-social__btn {
+                background: v.$neutral-color-700;
+            }
+
+            .auth__card--signup .auth__head+.auth-social {
+                margin-top: 1.25rem;
+            }
+
+            .auth__card--signup .auth-divider {
+                margin-top: 1.25rem;
+            }
+
+            .auth__card--signup .auth__form {
+                margin-top: 1.25rem;
+            }
+
+            .auth__required {
+                @include v.caption-12-r;
+                margin-bottom: 1.25rem;
+                color: v.$neutral-color-100;
+            }
+
+            .auth__submit-wrap {
+                margin-top: 2.5rem;
+            }
+
+            .auth__submit-wrap .auth__submit {
+                margin-top: 0;
+            }
+
+            .auth__form-error {
+                position: static;
+                margin-bottom: 0.625rem;
+            }
+
+            .auth__terms-title,
+            .auth__switch p {
+                color: v.$neutral-color-100;
+            }
+
+            .auth__switch p {
+                @include v.caption-12-r;
+            }
+
+            .auth__switch a {
+                @include v.caption-12-r;
+                margin-top: 0.625rem;
+            }
+
+            .auth-modal__panel {
+                width: min(100% - 2rem, 25rem);
+                padding-inline: 1.25rem;
+            }
+        }
+
+        // 태블릿 · 모바일 헤더는 App.scss 공용 (1399 이하)
+    }
+
     @media (max-width: $phone) {
+
         .auth.design-password {
             padding: 3.75rem 1rem 6.25rem;
         }
@@ -1259,145 +997,228 @@ $phone: 699px;
         }
     }
 
-    .design-esports {
-        padding-bottom: clamp(5rem, 16.35vw, 19.625rem);
-
-        &__year {
-            margin-top: clamp(3.5rem, 8vw, 9.625rem);
-
-            .design-heading {
-                padding-top: 0;
-                padding-bottom: clamp(1.125rem, 2vw, 2.5rem);
-            }
-
-            .design-heading h2 {
-                @include v.display-32-b;
-                color: v.$neutral-color-white;
-            }
-
-            .design-tabs {
-                gap: clamp(0.375rem, 1.04vw, 1.25rem);
-            }
-
-            .design-tabs button {
-                min-height: 3rem;
-            }
+    @media (max-width: $phone) {
+        .collection-intro__title {
+            font-size: 2rem;
+            line-height: 2.5rem;
         }
 
-    }
-
-    // 2026년을 돌아보며 · 큰 사진 (가운데 + 양옆 걸침)
-    .design-esports-gallery {
-        --slide-width: min(59rem, 62vw);
-        --slide-gap: 1.625rem;
-        margin-top: 2.25rem;
-
-        &__stage {
-            position: relative;
-            height: calc(var(--slide-width) * 2 / 3);
-            overflow: hidden;
-            touch-action: pan-y;
-            user-select: none;
-        }
-
-        // 가운데 기준으로 --offset 칸만큼 옆에 놓임 (넘길 때 스르륵 이동)
-        &__slide {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: var(--slide-width);
-            height: 100%;
-            transform: translateX(calc(-50% + var(--offset) * (var(--slide-width) + var(--slide-gap))));
-            transition: transform .5s cubic-bezier(.22, .61, .36, 1);
-            cursor: pointer;
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                pointer-events: none;
-            }
-
-            &.is-active {
-                border: 0.0625rem solid v.$main-primary-color;
-                cursor: default;
-            }
-        }
-
-        // 화살표: 가운데 사진 안쪽 양끝
-        &__arrow {
-            position: absolute;
-            top: 50%;
-            left: calc(50% - var(--slide-width) / 2 + 1.5rem);
-            z-index: 1;
-            display: grid;
-            place-items: center;
-            width: 2.375rem;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: v.$neutral-color-700;
-            transform: translateY(-50%);
-        }
-
-        &__arrow--next {
-            left: auto;
-            right: calc(50% - var(--slide-width) / 2 + 1.5rem);
-            background: v.$main-primary-color;
-        }
-
-        &__arrow:focus-visible,
-        &__thumbs button:focus-visible {
-            outline-offset: -0.1875rem;
-        }
-
-        // 썸네일: 드래그로 옆으로 넘김
-        &__thumbs {
-            display: flex;
+        .collection-intro__awards {
             gap: 1rem;
-            margin-top: 1.625rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-            cursor: grab;
-            user-select: none;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            &:active {
-                cursor: grabbing;
-            }
         }
 
-        &__thumbs button {
-            flex: 0 0 11rem;
+        .collection-award__seal {
+            width: 6rem;
         }
 
-        &__thumbs img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 177 / 117;
-            object-fit: cover;
-            transition: filter .2s;
+        .collection-lineup__grid,
+        .collection-features,
+        .niko__records ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        &__thumbs button:not([aria-pressed="true"]) img {
-            filter: brightness(.7);
+        .collection-section__media.is-split,
+        .niko__related {
+            grid-template-columns: minmax(0, 1fr);
         }
 
-        &__thumbs button:hover img {
-            filter: none;
+        .collection-colorways ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        &__thumbs button[aria-pressed="true"] img {
-            outline: 0.0625rem solid v.$main-primary-color;
-            outline-offset: -0.0625rem;
+        .niko__shop {
+            padding: .5rem 1rem;
+            font-size: .75rem;
+        }
+
+        .design-esports__athlete {
+            gap: 0.625rem;
+        }
+
+        .design-esports__athlete h3 {
+            @include v.display-32-b;
+        }
+
+        .design-esports__athlete p {
+            @include v.heading-20-sb;
         }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-        .design-esports-gallery__slide {
-            transition: none;
+    @media (max-width: $tablet) {
+
+        .design-grid:not(.design-exclusive__featured),
+        .design-about__leaders,
+        .design-warranty__benefits,
+        .collection-lineup__grid,
+        .collection-features,
+        .collection-colorways ul,
+        .collection-intro__awards,
+        .niko__records ul,
+        .niko__related {
+            @include drag-slider;
+        }
+
+        // 리더 · 혜택 · 기록처럼 글이 긴 카드는 조금 넓게
+        .design-about__leaders,
+        .design-warranty__benefits,
+        .design-grid--two:not(.design-product-pair) {
+            grid-auto-columns: min(85%, 28rem) !important;
+        }
+
+        .design-product-pair,
+        .collection-lineup__grid,
+        .design-esports__equipment {
+            grid-auto-columns: min(45%, 15rem) !important;
+        }
+
+        .collection-intro__awards {
+            grid-auto-columns: 9rem !important;
+            justify-content: safe center;
+        }
+
+        // 카본 · 독점 두 묶음은 위아래로 (안의 상품만 슬라이드)
+        .design-exclusive__featured {
+            grid-template-columns: 1fr;
+        }
+
+        .design-leader--wide {
+            grid-column: auto;
+        }
+
+        .design-support-page .design-grid {
+            grid-auto-flow: column;
+        }
+    }
+
+    // 소개 페이지: 좁은 화면에서 글 · 이미지는 위아래로
+    @media (max-width: $tablet) {
+        .design-about {
+
+            &__title,
+            &__heading.design-display,
+            &__heading--light,
+            &__years button {
+                font-size: clamp(2rem, 8vw, 3.75rem);
+                line-height: 1.15;
+            }
+
+            &__heading {
+                font-size: clamp(1.75rem, 6vw, 2.75rem);
+                line-height: 1.2;
+            }
+
+            &__timeline {
+                padding-top: 6rem;
+            }
+
+            &__milestone {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                min-height: 0;
+                margin-top: 2.5rem;
+
+                .design-display-text {
+                    margin-top: 2rem;
+                }
+            }
+
+            #awards,
+            #leadership {
+                margin-top: 6rem;
+            }
+        }
+
+        .design-display-text {
+            font-size: 1rem;
+            line-height: 1.625rem;
+        }
+
+        .design-brand-section {
+            margin-top: 6rem;
+
+            &__overlay {
+                left: 1.5rem;
+                font-size: clamp(1.25rem, 5vw, 2.75rem);
+            }
+
+            &__copy {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2.5rem 0 4rem;
+
+                .design-display-text {
+                    margin-top: 1.5rem;
+                }
+            }
+        }
+
+        .design-leader {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.25rem;
+            height: 100%;
+            padding: 1.75rem;
+
+            h3,
+            p {
+                font-size: 1.125rem;
+                line-height: 1.5rem;
+            }
+
+            p.design-leader__desc {
+                margin: 0;
+                font-size: .875rem;
+                line-height: 1.375rem;
+            }
+        }
+    }
+
+    @media (max-width: $tablet) {
+        .design-company {
+            &__title {
+                font-size: clamp(2rem, 8vw, 3.75rem);
+                line-height: 1.15;
+            }
+
+            &__section {
+                margin-top: 4rem;
+            }
+
+            &__heading {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+
+            &__cards--two {
+                grid-template-columns: 1fr;
+            }
+
+            &__facts {
+                gap: 3rem;
+            }
+
+            &__table li {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    }
+
+    @media (max-width: $tablet) {
+        .pay {
+            grid-template-columns: 1fr;
+
+            &__side {
+                position: static;
+            }
+        }
+
+        .pay-item {
+            grid-template-columns: 7.5rem minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        .pay-methods {
+            grid-template-columns: 1fr;
         }
     }
 }
@@ -1427,538 +1248,6 @@ $phone: 699px;
         scroll-snap-type: none;
         cursor: grabbing;
         user-select: none;
-    }
-}
-
-@mixin site-shell($reveal-duration, $reveal-ease) {
-    @media (max-width: $tablet) {
-
-        // 화면 밖으로 가로 스크롤바가 생기지 않게
-        html:has(main > :is(.home, .design-page, .auth)),
-        body:has(main > :is(.home, .design-page, .auth)) {
-            overflow-x: clip;
-        }
-
-        body:has(main > .home) {
-            min-width: 0;
-        }
-
-        // ---------- 헤더 (햄버거 · 로고 가운데 · 검색 · 장바구니) ----------
-        body .header {
-            .header__gnb {
-                height: 3rem;
-            }
-
-            .header__inner {
-                width: calc(100% - 2rem);
-                max-width: none;
-            }
-
-            .header__nav,
-            .header__utils>.user-menu,
-            .header__utils>a[aria-label="로그인"] {
-                display: none;
-            }
-
-            .header__logo {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-
-                img {
-                    height: 2rem;
-                }
-            }
-
-            .header__utils {
-                gap: 1rem;
-                margin-left: auto;
-            }
-
-            .header__icon {
-                width: 1.25rem;
-                height: 1.25rem;
-            }
-
-            // 프로모션 바: 한 줄 · 글자가 옆으로 흘러감
-            .header__promo {
-                justify-content: flex-start;
-                height: 2.25rem;
-                min-height: 0;
-                padding: 0;
-                overflow: hidden;
-            }
-
-            .header__promo-track {
-                display: flex;
-                width: max-content;
-                animation: promo-flow 18s linear infinite;
-            }
-
-            .header__promo-text {
-                @include v.caption-12-r;
-                padding-right: 3rem;
-                white-space: nowrap;
-            }
-
-            .header__promo-copy {
-                display: block;
-            }
-
-            .search-overlay__inner {
-                width: calc(100% - 2rem);
-                padding: 1.5rem 0 2rem;
-            }
-
-            .search-overlay__close {
-                top: 2.25rem;
-            }
-
-            .search-overlay__form,
-            .search-overlay__popular {
-                margin-right: 2.5rem;
-            }
-        }
-
-        .header__burger {
-            display: grid;
-            align-content: center;
-            gap: 0.3125rem;
-            width: 1.5rem;
-            height: 1.5rem;
-
-            span {
-                display: block;
-                height: 0.0625rem;
-                background-color: v.$neutral-color-white;
-            }
-        }
-
-        // ---------- 모바일 메뉴 (시안: 왼쪽 세로 메뉴 72 + 오른쪽 목록 · 전체 화면 · 왼쪽에서 스르륵) ----------
-        .mobile-menu {
-            position: fixed;
-            inset: 0;
-            z-index: 300;
-            display: block;
-            visibility: hidden;
-            transition: visibility 0s $reveal-duration;
-
-            &.is-open {
-                visibility: visible;
-                transition: visibility 0s;
-            }
-
-            &__panel {
-                position: absolute;
-                inset: 0;
-                display: grid;
-                grid-template-columns: 4.5rem minmax(0, 1fr);
-                background-color: v.$body-bg;
-                overflow: hidden;
-                transform: translateX(-100%);
-                transition: transform $reveal-duration $reveal-ease;
-            }
-
-            &.is-open &__panel {
-                transform: none;
-            }
-
-            // 왼쪽 세로 메뉴
-            &__rail {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 0.875rem 0.5rem 1.25rem;
-                background-color: v.$neutral-color-panel;
-                overflow-y: auto;
-            }
-
-            &__logo img {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-
-            &__tabs {
-                display: grid;
-                gap: 0.5rem;
-                margin-top: 1rem;
-            }
-
-            &__tab {
-                @include v.caption-12-r;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.25rem;
-                width: 3.5rem;
-                padding: 0.5rem 0;
-                border-radius: v.$radius-sm;
-                color: v.$neutral-color-100;
-                transition: background-color 0.2s, color 0.2s;
-
-                >img {
-                    width: 1.5rem;
-                    height: 1.5rem;
-                }
-
-                &.is-active {
-                    background-color: v.$neutral-color-canvas;
-                    color: v.$main-primary-color;
-                }
-            }
-
-            &__tab--account {
-                margin-top: auto;
-                color: v.$neutral-color-white;
-            }
-
-            // 오른쪽 목록
-            &__content {
-                padding: 0 1rem 2rem;
-                overflow-y: auto;
-            }
-
-            &__head {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                height: 4.75rem;
-
-                strong {
-                    @include v.heading-20-sb;
-                    color: v.$neutral-color-white;
-                }
-            }
-
-            &__close img {
-                width: 1.5rem;
-                height: 1.5rem;
-            }
-
-            &__section+&__section {
-                margin-top: 0.75rem;
-                padding-top: 0.75rem;
-                border-top: 0.0625rem solid v.$neutral-color-500;
-            }
-
-            &__section-title {
-                @include v.caption-12-r;
-                margin: 0.25rem 0 0.5rem;
-                color: v.$neutral-color-100;
-            }
-
-            &__links a {
-                @include v.body-14-r;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                height: 2.75rem;
-                color: v.$neutral-color-white;
-
-                img {
-                    width: 1.25rem;
-                    height: 1.25rem;
-                }
-
-                span {
-                    flex: 1;
-                }
-
-                &.is-current,
-                &:hover {
-                    color: v.$main-primary-color;
-                }
-            }
-
-            &__arrow {
-                opacity: 0.8;
-            }
-
-            &__box {
-                margin-top: 1.5rem;
-                padding: 1rem 0.75rem;
-                border-radius: v.$radius-sm;
-                background-color: v.$neutral-color-canvas;
-
-                strong {
-                    @include v.label-14-sb;
-                    color: v.$main-primary-color;
-                }
-
-                p {
-                    @include v.caption-12-r;
-                    margin-top: 0.75rem;
-                    color: v.$neutral-color-100;
-                }
-            }
-
-            // 계정 시트 (아래에서 올라옴)
-            &__sheet-dim {
-                position: absolute;
-                inset: 0;
-                z-index: 1;
-                background-color: rgba(0, 0, 0, 0.6);
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity $reveal-duration ease;
-
-                &.is-open {
-                    opacity: 1;
-                    pointer-events: auto;
-                }
-            }
-
-            &__sheet {
-                position: absolute;
-                right: 1rem;
-                bottom: 0;
-                left: 1rem;
-                z-index: 2;
-                max-height: calc(100% - 4rem);
-                padding: 0.5rem 0 1rem;
-                border: 0.0625rem solid v.$neutral-color-500;
-                border-bottom: 0;
-                border-radius: v.$radius-md v.$radius-md 0 0;
-                background-color: v.$neutral-color-panel;
-                overflow-y: auto;
-                transform: translateY(100%);
-                transition: transform $reveal-duration $reveal-ease;
-
-                &.is-open {
-                    transform: none;
-                }
-
-                .user-menu__head {
-                    margin-top: 1rem;
-                }
-
-                .user-menu__welcome {
-                    font-size: 1.25rem;
-
-                    em {
-                        color: v.$main-primary-color;
-                    }
-                }
-            }
-
-            &__handle {
-                display: block;
-                width: 2.25rem;
-                height: 0.25rem;
-                margin: 0 auto;
-                border-radius: v.$radius-pill;
-                background-color: v.$neutral-color-300;
-            }
-        }
-
-        // ---------- 푸터 (그룹은 + 를 누르면 스르륵 · 아래 링크 → 카피라이트) ----------
-        body .footer {
-            .footer__inner {
-                width: calc(100% - 2rem);
-                max-width: none;
-                padding: 1.5rem 0 2.5rem;
-            }
-
-            .footer__bg-logo {
-                left: -1rem;
-                width: 22rem;
-                height: 15.5rem;
-            }
-
-            .footer__top {
-                display: block;
-                min-height: 0;
-            }
-
-            .footer__groups {
-                display: block;
-                width: 100%;
-                margin: 0;
-            }
-
-            .footer__group {
-                width: 100%;
-                border-bottom: 0.0625rem solid v.$neutral-color-500;
-            }
-
-            .footer__group-title {
-                margin: 0;
-
-                // 모바일 시안: 그룹 이름 16 (레귤러)
-                button {
-                    @include v.body-16-r;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    width: 100%;
-                    padding: 1.25rem 0;
-                    cursor: pointer;
-                    pointer-events: auto;
-                }
-            }
-
-            .footer__plus {
-                display: block;
-            }
-
-            // 링크 목록: 높이 0 ↔ 내용 높이 (스르륵)
-            .footer__panel {
-                display: grid;
-                grid-template-rows: 0fr;
-                transition: grid-template-rows $reveal-duration $reveal-ease;
-
-                >ul {
-                    min-height: 0;
-                    overflow: hidden;
-                }
-            }
-
-            .footer__group.is-open .footer__panel {
-                grid-template-rows: 1fr;
-            }
-
-            .footer__submenu {
-                gap: 0.75rem;
-
-                li:last-child {
-                    padding-bottom: 1.25rem;
-                }
-
-                a {
-                    color: v.$neutral-color-100;
-                }
-            }
-
-            .footer__bottom {
-                flex-direction: column-reverse;
-                gap: 2rem;
-                padding-top: 4rem;
-                border-top: 0;
-                text-align: center;
-            }
-
-            .footer__copyright {
-                @include v.body-14-r;
-                flex: none;
-            }
-
-            .footer__links {
-                gap: 2rem;
-
-                a {
-                    color: v.$neutral-color-200;
-                }
-            }
-        }
-
-        // ---------- 메인 ----------
-        .home-section,
-        .home-category,
-        .home-features {
-            width: calc(100% - 2rem);
-        }
-
-        .home-hero {
-            height: clamp(22rem, 62vw, 47.5rem);
-            padding-bottom: 2rem;
-            gap: 1.5rem;
-
-            &__title {
-                @include v.display-32-b;
-                font-size: clamp(1.375rem, 6vw, 2rem);
-                line-height: 1.3;
-                text-align: center;
-                word-break: keep-all;
-            }
-        }
-
-        // 신상품 탭: 줄바꿈 없이 옆으로 드래그
-        .home-new__tabs {
-            flex-wrap: nowrap !important;
-            overflow-x: auto;
-            scrollbar-width: none;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            li {
-                flex: none;
-            }
-        }
-
-        .home-slider {
-            &__track {
-                grid-auto-columns: calc((100% - #{v.$grid-gutter} * 2) / 3);
-            }
-
-            &__btn {
-                display: none;
-            }
-        }
-
-        .home-section__products {
-            @include shell-drag-slider(calc((100% - #{v.$grid-gutter} * 2) / 3));
-        }
-
-        .home-pick__grid {
-            @include shell-drag-slider(min(85%, 36rem));
-            grid-template-rows: 15rem;
-        }
-
-        .home-pick__card {
-            grid-template-columns: 40% 1fr 30%;
-
-            &.is-large {
-                grid-row: auto;
-                grid-template-columns: 45% 1fr;
-            }
-        }
-
-        .home-category__grid {
-            @include shell-drag-slider(min(45%, 22rem));
-            grid-template-rows: 19.75rem;
-        }
-
-        .home-category__item.is-large {
-            grid-row: auto;
-        }
-
-        .home-promo {
-            height: clamp(12rem, 25vw, 29.75rem);
-        }
-
-        .home-setup__body {
-            grid-template-columns: 1fr;
-        }
-
-        .home-setup__visual {
-            height: clamp(14rem, 45vw, 30rem);
-        }
-
-        .home-features__list {
-            @include shell-drag-slider(min(45%, 18rem));
-            gap: 1rem;
-        }
-
-    }
-
-    @media (max-width: $phone) {
-        .home-slider__track {
-            grid-auto-columns: 42%;
-        }
-
-        .home-section__products {
-            grid-auto-columns: 42%;
-        }
-
-        .home-category__grid {
-            grid-auto-columns: 75%;
-        }
-
-        .home-features__list {
-            grid-auto-columns: 60%;
-        }
     }
 }
 
@@ -5154,7 +4443,6 @@ $phone: 699px;
                 }
             }
 
-
             &__danger-btn {
                 border-color: v.$sale-color;
                 color: v.$sale-color;
@@ -5580,6 +4868,11 @@ $phone: 699px;
                 span {
                     @include v.body-14-r;
                 }
+            }
+
+            // ---------- 2026년을 돌아보며: 큰 사진 좌우 화살표 (작게) ----------
+            .design-esports-gallery__arrow {
+                width: 1.75rem;
             }
 
             // ---------- 2026년을 돌아보며: 행사 버튼 ----------

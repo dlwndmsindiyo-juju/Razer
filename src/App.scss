@@ -6281,6 +6281,7 @@ $modal-danger: #D63F46; // 삭제 · 탈퇴 버튼 (시안 값)
 // =========================================================
 // 태블릿 · 모바일은 전부 style/mobile.scss (이 파일은 PC 1400 ~ 1920 전용)
 // =========================================================
+@include mobile.design-pages-responsive;
 @include mobile.app-tablet-phone($reveal-duration, $reveal-ease);
 @include mobile.home-phone;
 @include mobile.community-tablet;
