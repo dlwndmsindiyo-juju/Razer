@@ -1052,10 +1052,6 @@ $phone: 699px;
 
 @mixin shop-phone {
     @media (max-width: $phone) {
-        #root:has(main > .auth)> :is(.header, .footer, .top-button) {
-            display: none;
-        }
-
         .auth.design-password {
             padding: 3.75rem 1rem 6.25rem;
         }
@@ -2074,7 +2070,6 @@ $phone: 699px;
         .home-new__tabs {
             gap: 0.25rem;
             margin-top: 2rem;
-            padding-left: 0.875rem;
         }
 
         .home-new__tab {
@@ -6013,6 +6008,7 @@ $phone: 699px;
 @mixin auth-phone {
     @media (max-width: $phone) {
         section.auth {
+
             .auth-field__input,
             .auth-select__button {
                 @include v.body-14-r;

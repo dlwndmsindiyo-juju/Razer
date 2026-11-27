@@ -3038,10 +3038,6 @@ a.design-support:hover {
 }
 
 @media (max-width: 699px) {
-    #root:has(main > .auth)> :is(.header, .footer, .top-button) {
-        display: none;
-    }
-
     .auth.design-password {
         padding: 3.75rem 1rem 6.25rem;
     }
